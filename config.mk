@@ -10,10 +10,10 @@ LIB_DIR = $(BUILD_PATH)/lib
 DEP_DIR = $(BUILD_PATH)/dep
 
 # INCLUDE AND LIBRARY PATHS
-INCLUDES = -I/usr/include \
-		   -I/usr/local/include/ \
+INCLUDES = -I/usr/local/include/ \
+		   -I/usr/include \
 		   -I/usr/include/eigen3 \
-		   -I$(PWD)/include \
+		   -I$(PWD)/include
 
 LIBS = -L/usr/local/lib \
 	   -L/usr/lib \

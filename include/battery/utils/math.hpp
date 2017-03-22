@@ -23,6 +23,7 @@ typedef Eigen::MatrixXd MatX;
 typedef Eigen::Quaterniond Quaternion;
 #endif
 
+int sign(double x);
 int randi(int ub, int lb);
 double randf(double ub, double lb);
 int fltcmp(double f1, double f2);

@@ -16,20 +16,20 @@ int main(void) {
   // setup
   retval = chessboard.configure(9, 6);
   if (retval != 0) {
-    LOG_ERROR("failed to configure chessboard!");
+    log_err("failed to configure chessboard!");
     return -1;
   }
 
   retval = calibration.configure("/tmp/calibration", chessboard,
                                  cv::Size(320, 240), 10);
   if (retval != 0) {
-    LOG_ERROR("failed to configure calibration!");
+    log_err("failed to configure calibration!");
     return -1;
   }
 
   retval = camera.configure(0, 320, 240);
   if (retval != 0) {
-    LOG_ERROR("failed to configure camera!");
+    log_err("failed to configure camera!");
     return -1;
   }
 
@@ -53,10 +53,10 @@ int main(void) {
   }
 
   // calibrate
-  LOG_INFO("calibrating... (this may take some time)");
+  log_err("calibrating... (this may take some time)");
   calibration.calibrate(image_points, image.size());
 
-  LOG_INFO("saving calibration!");
+  log_err("saving calibration!");
   calibration.saveCalibrationOutputs();
 
   // while (true) {

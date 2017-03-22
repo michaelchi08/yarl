@@ -2,6 +2,19 @@
 
 namespace battery {
 
+void rmtrailslash(std::string &path) {
+  // pre-check
+  if (path.length() <= 0) {
+    return;
+  }
+
+  // remove slash
+  std::string::iterator it = path.end() - 1;
+  if (*it == '/') {
+    path.erase(it);
+  }
+}
+
 bool file_exists(const std::string &fp) {
   FILE *file;
 
