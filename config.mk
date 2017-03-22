@@ -7,20 +7,16 @@ BUILD_PATH = $(PWD)/build
 BIN_DIR = $(BUILD_PATH)/bin
 OBJ_DIR = $(BUILD_PATH)/obj
 LIB_DIR = $(BUILD_PATH)/lib
-DEP_DIR = $(BUILD_PATH)/dep
 
 # INCLUDE AND LIBRARY PATHS
 INCLUDES = -I/usr/local/include/ \
 		   -I/usr/include \
 		   -I/usr/include/eigen3 \
 		   -I$(PWD)/include
-
 LIBS = -L/usr/local/lib \
 	   -L/usr/lib \
 	   -L$(LIB_DIR) \
-	   -lm \
-	   -lpthread \
-	   -lfs
+	   -lm
 
 # COMPILER FLAGS
 DEBUG_FLAGS = -g -gdwarf-2
@@ -43,7 +39,7 @@ MAKE_OBJ = \
 
 MAKE_STATIC_LIB = \
 	@echo "AR [$@]"; \
-	$(AR) $(ARFLAGS) $(LIB_DIR)/$@.a $(wildcard $(OBJ_DIR)/*.o);
+	$(AR) $(ARFLAGS) $(LIB_DIR)/$@.a $^;
 
 MAKE_TEST = \
 	echo "TEST [$@]"; \

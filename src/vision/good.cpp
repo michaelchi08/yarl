@@ -12,7 +12,10 @@ GoodDetector::GoodDetector(void) {
   this->k = 0.04;
 }
 
-int GoodDetector::configure(void) { this->configured = true; }
+int GoodDetector::configure(void) {
+  this->configured = true;
+  return 0;
+}
 
 int GoodDetector::detect(cv::Mat &image, std::vector<cv::Point2f> &points) {
   cv::goodFeaturesToTrack(image, points, this->max_corners, this->quality_level,
