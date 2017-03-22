@@ -7,6 +7,7 @@ BUILD_PATH = $(PWD)/build
 BIN_DIR = $(BUILD_PATH)/bin
 OBJ_DIR = $(BUILD_PATH)/obj
 LIB_DIR = $(BUILD_PATH)/lib
+DEP_DIR = $(BUILD_PATH)/dep
 
 # INCLUDE AND LIBRARY PATHS
 INCLUDES = -I/usr/include \

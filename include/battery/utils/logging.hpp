@@ -1,5 +1,5 @@
-#ifndef __UTILS_LOGGING_HPP__
-#define __UTILS_LOGGING_HPP__
+#ifndef UTILS_LOGGING_HPP
+#define UTILS_LOGGING_HPP
 
 #define __FILENAME__                                                           \
   (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)

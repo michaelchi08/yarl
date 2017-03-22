@@ -146,7 +146,7 @@ int LMAOpt::optimize(void) {
   try {
     // pre-check
     if (this->configured == false) {
-      LOG_ERROR(ELMAC);
+      log_err(ELMAC);
       return -1;
     }
 
@@ -160,7 +160,7 @@ int LMAOpt::optimize(void) {
     }
 
   } catch (const std::bad_function_call &e) {
-    LOG_ERROR(ELMAF, e.what());
+    log_err(ELMAF, e.what());
     return -2;
   }
 

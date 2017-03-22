@@ -1,5 +1,5 @@
-#ifndef __VISION_SFM_HPP__
-#define __VISION_SFM_HPP__
+#ifndef VISION_SFM_HPP
+#define VISION_SFM_HPP
 
 #include <iostream>
 

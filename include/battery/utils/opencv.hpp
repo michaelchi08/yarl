@@ -1,5 +1,5 @@
-#ifndef __UTILS_OPENCV_HPP__
-#define __UTILS_OPENCV_HPP__
+#ifndef UTILS_OPENCV_HPP
+#define UTILS_OPENCV_HPP
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>

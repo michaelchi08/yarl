@@ -1,5 +1,5 @@
-#ifndef __VISION_CALIBRATION_HPP__
-#define __VISION_CALIBRATION_HPP__
+#ifndef VISION_CALIBRATION_HPP
+#define VISION_CALIBRATION_HPP
 
 #include <errno.h>
 #include <sys/stat.h>

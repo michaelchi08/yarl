@@ -1,5 +1,5 @@
-#ifndef __OPTIMIZATION_BENCHMARK_HPP__
-#define __OPTIMIZATION_BENCHMARK_HPP__
+#ifndef OPTIMIZATION_BENCHMARK_HPP
+#define OPTIMIZATION_BENCHMARK_HPP
 
 #include <iostream>
 #include <random>

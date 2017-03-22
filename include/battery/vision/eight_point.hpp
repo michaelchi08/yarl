@@ -1,5 +1,5 @@
-#ifndef __VISION_EIGHT_POINT_HPP__
-#define __VISION_EIGHT_POINT_HPP__
+#ifndef VISION_EIGHT_POINT_HPP
+#define VISION_EIGHT_POINT_HPP
 
 #include <iostream>
 #include <vector>

@@ -1,5 +1,5 @@
-#ifndef __OPTIMIZATION_BENCHMARK_HPP__
-#define __OPTIMIZATION_BENCHMARK_HPP__
+#ifndef OPTIMIZATION_BENCHMARK_HPP
+#define OPTIMIZATION_BENCHMARK_HPP
 
 #include "battery/optimization/benchmark.hpp"
 #include "battery/utils/utils.hpp"

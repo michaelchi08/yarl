@@ -1,5 +1,5 @@
-#ifndef __UTILS_FILESYSTEM_HPP__
-#define __UTILS_FILESYSTEM_HPP__
+#ifndef UTILS_FILESYSTEM_HPP
+#define UTILS_FILESYSTEM_HPP
 
 #include <stdio.h>
 

@@ -1,5 +1,5 @@
-#ifndef __VISION_UTILS_HPP__
-#define __VISION_UTILS_HPP__
+#ifndef VISION_UTILS_HPP
+#define VISION_UTILS_HPP
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>

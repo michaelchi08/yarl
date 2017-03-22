@@ -1,5 +1,5 @@
-#ifndef __MUNIT_HPP__
-#define __MUNIT_HPP__
+#ifndef MUNIT_HPP
+#define MUNIT_HPP
 
 #include <math.h>
 #include <stdio.h>

@@ -1,5 +1,5 @@
-#ifndef __ESTIMATION_PF_HPP__
-#define __ESTIMATION_PF_HPP__
+#ifndef ESTIMATION_PF_HPP
+#define ESTIMATION_PF_HPP
 
 #include <functional>
 #include <iostream>

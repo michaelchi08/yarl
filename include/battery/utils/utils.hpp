@@ -1,5 +1,5 @@
-#ifndef __UTILS_UTILS_HPP__
-#define __UTILS_UTILS_HPP__
+#ifndef UTILS_UTILS_HPP
+#define UTILS_UTILS_HPP
 
 #include "battery/utils/config.hpp"
 #include "battery/utils/data.hpp"

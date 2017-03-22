@@ -1,5 +1,5 @@
-#ifndef __UTILS_STATS_HPP__
-#define __UTILS_STATS_HPP__
+#ifndef UTILS_STATS_HPP
+#define UTILS_STATS_HPP
 
 #include "battery/utils/math.hpp"
 

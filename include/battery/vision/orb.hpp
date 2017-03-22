@@ -1,5 +1,5 @@
-#ifndef __VISION_ORB_HPP__
-#define __VISION_ORB_HPP__
+#ifndef VISION_ORB_HPP
+#define VISION_ORB_HPP
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d/features2d.hpp>

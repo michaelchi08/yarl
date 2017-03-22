@@ -1,5 +1,5 @@
-#ifndef __VISION_FAST_HPP__
-#define __VISION_FAST_HPP__
+#ifndef VISION_FAST_HPP
+#define VISION_FAST_HPP
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d/features2d.hpp>

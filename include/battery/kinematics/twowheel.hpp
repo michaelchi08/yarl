@@ -1,5 +1,5 @@
-#ifndef __KINEMATICS_TWOWHEEL_HPP__
-#define __KINEMATICS_TWOWHEEL_HPP__
+#ifndef KINEMATICS_TWOWHEEL_HPP
+#define KINEMATICS_TWOWHEEL_HPP
 
 #include "battery/utils/utils.hpp"
 

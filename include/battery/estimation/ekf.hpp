@@ -1,5 +1,5 @@
-#ifndef __ESTIMATION_EKF_HPP__
-#define __ESTIMATION_EKF_HPP__
+#ifndef ESTIMATION_EKF_HPP
+#define ESTIMATION_EKF_HPP
 
 #include <functional>
 #include <iostream>

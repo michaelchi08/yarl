@@ -15,6 +15,7 @@ mkdirs:
 	@mkdir -p build/bin
 	@mkdir -p build/obj
 	@mkdir -p build/lib
+	@mkdir -p build/dep
 
 rmdirs:
 	@rm -rf build

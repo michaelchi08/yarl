@@ -1,5 +1,5 @@
-#ifndef __UTILS_DATA_HPP__
-#define __UTILS_DATA_HPP__
+#ifndef UTILS_DATA_HPP
+#define UTILS_DATA_HPP
 
 #include <fstream>
 #include <iostream>

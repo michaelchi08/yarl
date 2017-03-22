@@ -1,5 +1,5 @@
-#ifndef __OPTIMIZATION_CERES_BA_HPP__
-#define __OPTIMIZATION_CERES_BA_HPP__
+#ifndef OPTIMIZATION_CERES_BA_HPP
+#define OPTIMIZATION_CERES_BA_HPP
 
 #include <typeinfo>
 
@@ -191,7 +191,7 @@ public:
 
     // setup
     this->setupCameraInstrinsicsMatrix(K);
-    this->setupRotationMatrixFromQuaternion(parameters[0]);
+    // this->setupRotationMatrixFromQuaternion(parameters[0]);
     // this->setupCameraCenter(parameters[1], C);
     // this->setup3DPoint(parameters[2], X);
 

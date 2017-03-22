@@ -1,5 +1,5 @@
-#ifndef __OPTIMIZATION_HPP__
-#define __OPTIMIZATION_HPP__
+#ifndef OPTIMIZATION_HPP
+#define OPTIMIZATION_HPP
 
 #include "battery/optimization/ceres/ba.hpp"
 #include "battery/optimization/ceres/extensions.hpp"

@@ -1,5 +1,5 @@
-#ifndef __VISION_VISION_HPP__
-#define __VISION_VISION_HPP__
+#ifndef VISION_VISION_HPP
+#define VISION_VISION_HPP
 
 #include "battery/vision/calibration.hpp"
 #include "battery/vision/camera.hpp"

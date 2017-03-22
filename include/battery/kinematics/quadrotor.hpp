@@ -1,5 +1,5 @@
-#ifndef __KINEMATICS_QUADROTOR_HPP__
-#define __KINEMATICS_QUADROTOR_HPP__
+#ifndef KINEMATICS_QUADROTOR_HPP
+#define KINEMATICS_QUADROTOR_HPP
 
 #include "battery/utils/utils.hpp"
 

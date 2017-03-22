@@ -30,7 +30,7 @@ int GDOpt::calcGradient(VecX &df) {
   try {
     // pre-check
     if (this->configured == false) {
-      LOG_ERROR(EGDC);
+      log_err(EGDC);
       return -1;
     }
 
@@ -47,7 +47,7 @@ int GDOpt::calcGradient(VecX &df) {
     }
 
   } catch (const std::bad_function_call &e) {
-    LOG_ERROR(EGDF, e.what());
+    log_err(EGDF, e.what());
     return -2;
   }
 
@@ -60,7 +60,7 @@ int GDOpt::optimize(void) {
   try {
     // pre-check
     if (this->configured == false) {
-      LOG_ERROR(EGDC);
+      log_err(EGDC);
       return -1;
     }
 
@@ -74,7 +74,7 @@ int GDOpt::optimize(void) {
     }
 
   } catch (const std::bad_function_call &e) {
-    LOG_ERROR(EGDF, e.what());
+    log_err(EGDF, e.what());
     return -2;
   }
 
