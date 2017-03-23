@@ -1,9 +1,8 @@
-#include <batterytream>
 #include <ctime>
 #include <sstream>
 #include <string>
 
-#include <gtest/gtest.h>
+#include "battery/battery_test.hpp"
 
 #include "battery/utils/math.hpp"
 #include "battery/utils/utils.hpp"
@@ -206,7 +205,6 @@ TEST(EightPoint, denormalizeFundamentalMatrix) {
 }
 
 TEST(EightPoint, estimate) {
-  double result;
   MatX pts1;
   MatX pts2;
   MatX F;
@@ -243,7 +241,6 @@ TEST(EightPoint, estimate) {
 }
 
 TEST(EightPoint, obtainPossiblePoses) {
-  double result;
   MatX pts1;
   MatX pts2;
   Mat3 K, E;
@@ -271,7 +268,6 @@ TEST(EightPoint, obtainPossiblePoses) {
 }
 
 TEST(EightPoint, obtainPose) {
-  double result;
   MatX pts1;
   MatX pts2;
   Vec3 pt1;
@@ -312,7 +308,6 @@ TEST(EightPoint, obtainPose) {
 }
 
 TEST(EightPoint, obtainPose2) {
-  double result;
   cv::Mat img_1, img_2, twin_img;
   std::vector<cv::Point2f> cvpts_1, cvpts_2;
   std::vector<float> errors;
@@ -328,8 +323,11 @@ TEST(EightPoint, obtainPose2) {
   VisualOdometry vo;
 
   // setup
-  K << 279.0161682343449, 0, 150.3072895826164, 0, 276.3467561622266,
-      123.3623526538343, 0, 0, 1;
+	// clang-format off
+  K << 279.0161682343449, 0, 150.3072895826164,
+       0, 276.3467561622266, 123.3623526538343,
+       0, 0, 1;
+	// clang-format on
   fast.configure(40, true);
   vo.configure(K);
 

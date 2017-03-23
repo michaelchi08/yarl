@@ -112,7 +112,7 @@ public:
   ConfigParser(void);
 
   template <typename T>
-  void addParam(std::string key, T *out, bool optional = false) {
+  void addParam(const std::string key, T *out, const bool optional = false) {
     ConfigParam param;
 
     // setup
@@ -196,15 +196,16 @@ public:
     }
   }
 
-  int getYamlNode(std::string key, YAML::Node &node);
-  int checkKey(std::string key, bool optional);
-  int checkVector(std::string key, enum ConfigDataType type, bool optional);
-  int checkMatrix(std::string key, bool optional);
-  int loadPrimitive(ConfigParam param);
-  int loadArray(ConfigParam param);
-  int loadVector(ConfigParam param);
-  int loadMatrix(ConfigParam param);
-  int load(std::string config_file);
+  int getYamlNode(const std::string key, YAML::Node &node);
+  int checkKey(const std::string key, const bool optional);
+  int checkVector(const std::string key, const enum ConfigDataType type,
+                  const bool optional);
+  int checkMatrix(const std::string key, const bool optional);
+  int loadPrimitive(const ConfigParam param);
+  int loadArray(const ConfigParam param);
+  int loadVector(const ConfigParam param);
+  int loadMatrix(const ConfigParam param);
+  int load(const std::string config_file);
 };
 
 } // end of battery namespace

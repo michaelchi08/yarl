@@ -1,5 +1,5 @@
-#include "battery/utils/config.hpp"
 #include "battery/battery_test.hpp"
+#include "battery/utils/config.hpp"
 #include "battery/utils/data.hpp"
 
 #define TEST_CONFIG "tests/configs/config/config.yaml"

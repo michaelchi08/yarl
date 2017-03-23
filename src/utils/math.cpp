@@ -2,13 +2,9 @@
 
 namespace battery {
 
-int sign(double x) {
-  return (x < 0) ? -1 : 1;
-}
+int sign(double x) { return (x < 0) ? -1 : 1; }
 
-int randi(int ub, int lb) {
-  return rand() % lb + ub;
-}
+int randi(int ub, int lb) { return rand() % lb + ub; }
 
 double randf(double ub, double lb) {
   double f = (double)rand() / RAND_MAX;

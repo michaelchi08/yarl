@@ -1,7 +1,5 @@
-#include <batterytream>
-
+#include "battery/battery_test.hpp"
 #include "battery/vision/calibration.hpp"
-#include <gtest/gtest.h>
 
 #define TEST_IMAGE "tests/data/chessboard.jpg"
 
@@ -56,7 +54,7 @@ TEST(Calibration, findChessboardCorners) {
 }
 
 TEST(Calibration, saveImage) {
-  std::ibatterytream image_file;
+  std::ifstream image_file;
   cv::Mat image;
   Chessboard chess;
   Calibration calib;
@@ -72,14 +70,14 @@ TEST(Calibration, saveImage) {
   calib.saveImage(image, corners);
 
   // test and assert
-  image_file.open("/tmp/test/sample_0.jpg", std::ibatterytream::in);
+  image_file.open("/tmp/test/sample_0.jpg", std::ifstream::in);
   ASSERT_TRUE(image_file.good());
 }
 
 TEST(Calibration, saveCalibrationOutputs) {
   int k;
   cv::Mat image;
-  std::ibatterytream yaml_file;
+  std::ifstream yaml_file;
   std::vector<cv::Point2f> corners;
   Calibration calib;
   Chessboard chess;
@@ -112,7 +110,7 @@ TEST(Calibration, saveCalibrationOutputs) {
 
   // test and assert
   calib.saveCalibrationOutputs();
-  yaml_file.open("/tmp/test/calibration.yaml", std::ibatterytream::in);
+  yaml_file.open("/tmp/test/calibration.yaml", std::ifstream::in);
   ASSERT_TRUE(yaml_file.good());
 }
 

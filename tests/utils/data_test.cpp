@@ -1,5 +1,5 @@
-#include "battery/utils/data.hpp"
 #include "battery/battery_test.hpp"
+#include "battery/utils/data.hpp"
 
 #define TEST_DATA "tests/data/utils/matrix.dat"
 #define TEST_OUTPUT "/tmp/matrix.dat"

@@ -4,18 +4,14 @@ default: all done
 
 all: mkdirs
 	@make -s -C src
-	# @make -s -C tests
-
-debug: mkdirs
-	@make -C src
-	# @make -C tests
+	@make -s -C tests
 
 mkdirs:
 	@mkdir -p build
 	@mkdir -p build/bin
 	@mkdir -p build/obj
 	@mkdir -p build/lib
-	@mkdir -p build/dep
+	@mkdir -p build/tests
 
 rmdirs:
 	@rm -rf build

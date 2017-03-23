@@ -1,5 +1,5 @@
-#include "battery/utils/time.hpp"
 #include "battery/battery_test.hpp"
+#include "battery/utils/time.hpp"
 
 namespace battery {
 

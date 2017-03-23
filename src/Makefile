@@ -4,7 +4,7 @@ SRCS := $(shell find . -name "*.cpp")
 OBJS := $(SRCS:./%.cpp=$(OBJ_DIR)/%.o)
 SUBDIRS := $(addprefix $(OBJ_DIR)/, $(shell find . -type d -printf '%P\n'))
 
-.PHONY: all
+.PHONY: all prep_build_dirs
 
 all: prep_build_dirs libbattery
 

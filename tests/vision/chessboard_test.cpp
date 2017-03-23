@@ -1,5 +1,4 @@
-#include <gtest/gtest.h>
-
+#include "battery/battery_test.hpp"
 #include "battery/vision/chessboard.hpp"
 
 namespace battery {

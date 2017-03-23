@@ -7,7 +7,7 @@ ConfigParser::ConfigParser(void) {
   this->loaded = false;
 }
 
-int ConfigParser::getYamlNode(std::string key, YAML::Node &node) {
+int ConfigParser::getYamlNode(const std::string key, YAML::Node &node) {
   int end;
   std::string s;
   std::vector<std::string> elements;
@@ -38,7 +38,7 @@ int ConfigParser::getYamlNode(std::string key, YAML::Node &node) {
   return 0;
 }
 
-int ConfigParser::checkKey(std::string key, bool optional) {
+int ConfigParser::checkKey(const std::string key, bool optional) {
   YAML::Node node;
 
   this->getYamlNode(key, node);
@@ -52,8 +52,9 @@ int ConfigParser::checkKey(std::string key, bool optional) {
   return 0;
 }
 
-int ConfigParser::checkVector(std::string key, enum ConfigDataType type,
-                              bool optional) {
+int ConfigParser::checkVector(const std::string key,
+                              const enum ConfigDataType type,
+                              const bool optional) {
   int retval;
   int vector_size;
 
@@ -87,7 +88,7 @@ int ConfigParser::checkVector(std::string key, enum ConfigDataType type,
   return 0;
 }
 
-int ConfigParser::checkMatrix(std::string key, bool optional) {
+int ConfigParser::checkMatrix(const std::string key, const bool optional) {
   int retval;
   const std::string targets[3] = {"rows", "cols", "data"};
 
@@ -109,7 +110,7 @@ int ConfigParser::checkMatrix(std::string key, bool optional) {
   return 0;
 }
 
-int ConfigParser::loadPrimitive(ConfigParam param) {
+int ConfigParser::loadPrimitive(const ConfigParam param) {
   int retval;
   YAML::Node node;
 
@@ -135,7 +136,7 @@ int ConfigParser::loadPrimitive(ConfigParam param) {
   return 0;
 }
 
-int ConfigParser::loadArray(ConfigParam param) {
+int ConfigParser::loadArray(const ConfigParam param) {
   int retval;
   YAML::Node node;
 
@@ -181,7 +182,7 @@ int ConfigParser::loadArray(ConfigParam param) {
   return 0;
 }
 
-int ConfigParser::loadVector(ConfigParam param) {
+int ConfigParser::loadVector(const ConfigParam param) {
   int retval;
   YAML::Node node;
 
@@ -230,7 +231,7 @@ int ConfigParser::loadVector(ConfigParam param) {
   return 0;
 }
 
-int ConfigParser::loadMatrix(ConfigParam param) {
+int ConfigParser::loadMatrix(const ConfigParam param) {
   int retval;
   int index;
   int rows;
@@ -311,7 +312,7 @@ int ConfigParser::loadMatrix(ConfigParam param) {
   return 0;
 }
 
-int ConfigParser::load(std::string config_file) {
+int ConfigParser::load(const std::string config_file) {
   int retval;
 
   // pre-check

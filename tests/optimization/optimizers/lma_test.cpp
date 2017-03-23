@@ -5,14 +5,16 @@
 #include "battery/optimization/benchmark.hpp"
 #include "battery/optimization/optimizers/lma.hpp"
 
-std::vector<battery::MatX> generate_data(void) {
-  battery::VecX input;
-  battery::VecX beta;
+namespace battery {
+
+std::vector<MatX> generate_data(void) {
+  VecX input;
+  VecX beta;
 
   std::vector<double> inputs;
   std::vector<double> outputs;
 
-  std::vector<battery::MatX> data;
+  std::vector<MatX> data;
 
   // setup
   input.resize(2);
@@ -27,21 +29,21 @@ std::vector<battery::MatX> generate_data(void) {
       input << x, y;
       inputs.push_back(input(0));
       inputs.push_back(input(1));
-      outputs.push_back(battery::rosenbrock(input, beta));
+      outputs.push_back(rosenbrock(input, beta));
     }
   }
 
   // convert data to matrices and vectors
-  battery::MatX x;
-  battery::VecX y;
+  MatX x;
+  VecX y;
 
   y.resize(outputs.size());
-  for (int i = 0; i < outputs.size(); i++) {
+  for (size_t i = 0; i < outputs.size(); i++) {
     y(i) = outputs[i];
   }
 
   x.resize(inputs.size() / 2.0, 2);
-  for (int i = 0; i < (inputs.size() / 2.0); i++) {
+  for (size_t i = 0; i < (inputs.size() / 2.0); i++) {
     x(i, 0) = inputs[2 * i];
     x(i, 1) = inputs[2 * i + 1];
   }
@@ -53,14 +55,14 @@ std::vector<battery::MatX> generate_data(void) {
   return data;
 }
 
-void test_settings(battery::LMASettings &settings) {
-  std::vector<battery::MatX> data;
-  battery::MatX x;
+void test_settings(LMASettings &settings) {
+  std::vector<MatX> data;
+  MatX x;
 
   settings.max_iter = 100;
   settings.lambda = 0.01;
-  settings.function = LMA_BIND(battery::rosenbrock);
-  settings.jacobian = LMA_BIND(battery::rosenbrock_jacobian);
+  settings.function = LMA_BIND(rosenbrock);
+  settings.jacobian = LMA_BIND(rosenbrock_jacobian);
   settings.nb_inputs = 2;
   settings.nb_params = 2;
 
@@ -71,7 +73,7 @@ void test_settings(battery::LMASettings &settings) {
 }
 
 TEST(LMAOpt, constructor) {
-  battery::LMAOpt opt;
+  LMAOpt opt;
 
   ASSERT_EQ(false, opt.configured);
   ASSERT_EQ(100, opt.max_iter);
@@ -95,8 +97,8 @@ TEST(LMAOpt, constructor) {
 }
 
 TEST(LMAOpt, configure) {
-  battery::LMAOpt opt;
-  battery::LMASettings settings;
+  LMAOpt opt;
+  LMASettings settings;
 
   test_settings(settings);
   opt.configure(settings);
@@ -123,8 +125,8 @@ TEST(LMAOpt, configure) {
 }
 
 TEST(LMAOpt, evalFunction) {
-  battery::LMAOpt opt;
-  battery::LMASettings settings;
+  LMAOpt opt;
+  LMASettings settings;
   double error;
 
   // configure
@@ -137,9 +139,9 @@ TEST(LMAOpt, evalFunction) {
 }
 
 TEST(LMAOpt, calcGradients) {
-  battery::LMAOpt opt;
-  battery::LMASettings settings;
-  battery::MatX J_before, H_before;
+  LMAOpt opt;
+  LMASettings settings;
+  MatX J_before, H_before;
 
   // configure
   test_settings(settings);
@@ -155,11 +157,10 @@ TEST(LMAOpt, calcGradients) {
 }
 
 TEST(LMAOpt, iterate) {
-  battery::LMAOpt opt;
-  battery::LMASettings settings;
-  battery::VecX beta_before;
-  double error;
-  std::vector<battery::VecX> data;
+  LMAOpt opt;
+  LMASettings settings;
+  VecX beta_before;
+  std::vector<VecX> data;
 
   // configure
   test_settings(settings);
@@ -180,10 +181,10 @@ TEST(LMAOpt, iterate) {
 }
 
 TEST(LMAOpt, optimize) {
-  battery::VecX beta;
-  battery::LMAOpt opt;
-  battery::LMASettings settings;
-  std::vector<battery::VecX> data;
+  VecX beta;
+  LMAOpt opt;
+  LMASettings settings;
+  std::vector<VecX> data;
 
   // configure
   test_settings(settings);
@@ -195,7 +196,4 @@ TEST(LMAOpt, optimize) {
   std::cout << opt.beta.transpose() << std::endl;
 }
 
-int main(int argc, char *argv[]) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
+} // end of battery namespace

@@ -1,5 +1,4 @@
-#include <gtest/gtest.h>
-
+#include "battery/battery_test.hpp"
 #include "battery/utils/utils.hpp"
 #include "battery/vision/sfm.hpp"
 #include "battery/vision/utils.hpp"

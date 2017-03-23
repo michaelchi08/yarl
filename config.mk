@@ -6,6 +6,7 @@ STANDARD = -std=c++11
 BUILD_PATH = $(PWD)/build
 BIN_DIR = $(BUILD_PATH)/bin
 OBJ_DIR = $(BUILD_PATH)/obj
+TESTS_DIR = $(BUILD_PATH)/tests
 LIB_DIR = $(BUILD_PATH)/lib
 
 # INCLUDE AND LIBRARY PATHS
@@ -16,6 +17,11 @@ INCLUDES = -I/usr/local/include/ \
 LIBS = -L/usr/local/lib \
 	   -L/usr/lib \
 	   -L$(LIB_DIR) \
+	   -lbattery \
+	   -lceres \
+	   `pkg-config --libs opencv` \
+	   -lgtest \
+	   -lpthread \
 	   -lm
 
 # COMPILER FLAGS
