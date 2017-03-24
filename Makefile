@@ -10,7 +10,7 @@ mkdirs:
 	@mkdir -p build/tests
 
 gtest:
-	@cd $(GTEST_LIB_DIR) && make -s && ar -rv libgtest.a gtest-all.o
+	@cd $(GTEST_LIB_DIR) && make -s && ar -r libgtest.a gtest-all.o
 
 libbattery:
 	@make -s -C src

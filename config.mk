@@ -1,6 +1,8 @@
 # GENERAL
 CXX = g++
 STANDARD = -std=c++11
+PROJECT_NAME = battery
+LIB_NAME = lib$(PROJECT_NAME)
 
 # BUILD DIRS
 BUILD_PATH = $(PWD)/build
@@ -28,9 +30,11 @@ OPENCV_LIB = -lopencv_calib3d \
              -lopencv_superres \
              -lopencv_video \
              -lopencv_videoio \
-             -lopencv_videostab \
-             -lopencv_viz
-CERES_LIB = -lceres
+             -lopencv_videostab
+CERES_LIB = -lceres -lblas
+CERES_LIB += -llapack -lcamd -lamd -lccolamd -lcolamd -lcholmod
+CERES_LIB += -fopenmp -lpthread -lgomp -lm
+CERES_LIB += -lcxsparse
 GTEST_LIB = -lglog -lgtest -lpthread
 
 # INCLUDE AND LIBRARY PATHS
@@ -38,14 +42,14 @@ INCLUDES = -I/usr/local/include/ \
 		   -I/usr/include \
 		   -I/usr/include/eigen3 \
 		   -I$(PWD)/include
-LIBS = -L/usr/lib \
-        -L/usr/local/lib \
+LIBS =  -L/usr/local/lib \
+		-L/usr/lib \
         -L$(LIB_DIR) \
         -L$(GTEST_LIB_DIR) \
-        -lbattery \
-        $(YAML_CPP_LIB) \
-        $(CERES_LIB) \
+        -l$(PROJECT_NAME) \
         $(OPENCV_LIB) \
+        $(CERES_LIB) \
+        $(YAML_CPP_LIB) \
         $(GTEST_LIB)
 
 # COMPILER FLAGS
@@ -69,7 +73,7 @@ MAKE_OBJ = \
 
 MAKE_STATIC_LIB = \
 	@echo "AR [$@]"; \
-	$(AR) $(ARFLAGS) $(LIB_DIR)/$@.a $^;
+	$(AR) $(ARFLAGS) $@ $^;
 
 MAKE_TEST = \
 	echo "TEST [$@]"; \
@@ -77,4 +81,4 @@ MAKE_TEST = \
 
 MAKE_TEST_RUNNER = \
 	echo "TEST RUNNER [$@]"; \
-	$(CXX) $< -o $(BIN_DIR)/$@ $(LIBS);
+	$(CXX) $^ -o $@ $(LIBS);

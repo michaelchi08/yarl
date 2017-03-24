@@ -6,7 +6,7 @@ SUBDIRS := $(addprefix $(OBJ_DIR)/, $(shell find . -type d -printf '%P\n'))
 
 .PHONY: all prep_build_dirs
 
-all: prep_build_dirs libbattery
+all: prep_build_dirs $(LIB_DIR)/$(LIB_NAME).a
 
 prep_build_dirs:
 	mkdir -p $(SUBDIRS)
@@ -15,5 +15,5 @@ prep_build_dirs:
 $(OBJ_DIR)/%.o: ./%.cpp | $$(@D)
 	$(MAKE_OBJ)
 
-libbattery: $(OBJS)
+$(LIB_DIR)/$(LIB_NAME).a: $(OBJS)
 	$(MAKE_STATIC_LIB)

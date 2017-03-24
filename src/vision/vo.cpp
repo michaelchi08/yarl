@@ -107,7 +107,7 @@ int VisualOdometry::drawOpticalFlow(cv::Mat img_1, cv::Mat img_2,
 
   // draw flow lines
   cvmatconcat(img_1, img_2, output);
-  for (int i = 0; i < std::min(pts_1.size(), pts_2.size()); i++) {
+  for (size_t i = 0; i < std::min(pts_1.size(), pts_2.size()); i++) {
     p.x = pts_1[i].x;
     p.y = pts_1[i].y;
 
@@ -116,6 +116,8 @@ int VisualOdometry::drawOpticalFlow(cv::Mat img_1, cv::Mat img_2,
 
     cv::arrowedLine(output, p, q, cv::Scalar(0, 0, 255), 1, 8, 0, 0.005);
   }
+
+  return 0;
 }
 
 } // end of battery namespace

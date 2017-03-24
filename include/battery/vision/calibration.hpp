@@ -8,13 +8,11 @@
 #include <fstream>
 #include <iostream>
 
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/opencv.hpp>
-
 #include <yaml-cpp/yaml.h>
 
 #include "battery/utils/logging.hpp"
 #include "battery/utils/utils.hpp"
+#include "battery/vision/utils.hpp"
 #include "battery/vision/chessboard.hpp"
 
 namespace battery {

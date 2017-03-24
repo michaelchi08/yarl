@@ -1,11 +1,7 @@
 #ifndef VISION_GOOD_HPP
 #define VISION_GOOD_HPP
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/features2d/features2d.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/opencv.hpp>
+#include "battery/vision/utils.hpp"
 
 namespace battery {
 

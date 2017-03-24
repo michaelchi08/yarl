@@ -3,7 +3,7 @@ SRCS := $(shell find . -name "*.cpp")
 OBJS := $(SRCS:./%.cpp=$(TESTS_DIR)/%.o)
 SUBDIRS := $(addprefix $(TESTS_DIR)/, $(shell find . -type d -printf '%P\n'))
 
-all: prep_build_dirs test_runner
+all: prep_build_dirs $(BIN_DIR)/test_runner
 
 prep_build_dirs:
 	mkdir -p $(SUBDIRS)
@@ -12,5 +12,5 @@ prep_build_dirs:
 $(TESTS_DIR)/%.o: ./%.cpp | $$(@D)
 	$(MAKE_TEST)
 
-test_runner: $(OBJS)
+$(BIN_DIR)/test_runner: $(OBJS) $(LIB_DIR)/$(LIB_NAME).a
 	$(MAKE_TEST_RUNNER)
