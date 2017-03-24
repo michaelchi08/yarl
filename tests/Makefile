@@ -10,8 +10,7 @@ prep_build_dirs:
 
 .SECONDEXPANSION:
 $(TESTS_DIR)/%.o: ./%.cpp | $$(@D)
-	$(MAKE_OBJ)
+	$(MAKE_TEST)
 
 test_runner: $(OBJS)
-	echo $(OBJS)
-	$(CXX) $(OBJS) -o $(BIN_DIR)/$@ $(LIBS);
+	$(MAKE_TEST_RUNNER)

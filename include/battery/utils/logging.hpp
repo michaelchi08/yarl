@@ -1,6 +1,8 @@
 #ifndef UTILS_LOGGING_HPP
 #define UTILS_LOGGING_HPP
 
+#include <stdio.h>
+
 #define __FILENAME__                                                           \
   (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 

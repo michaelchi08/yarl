@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "battery/vision/calibration.hpp"
 #include "battery/vision/camera.hpp"
 
