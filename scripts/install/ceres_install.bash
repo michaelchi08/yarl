@@ -33,7 +33,7 @@ install_ceres_solver() {
 
     # compile and install
     make
-    make test
+    # make test
     make install
 }
 
