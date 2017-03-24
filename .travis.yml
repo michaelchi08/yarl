@@ -1,0 +1,18 @@
+dist: trusty
+sudo: required
+
+language:
+    - c++
+
+install:
+    - sudo bash scripts/install/install_deps.bash
+
+script:
+    - bash scripts/ci_run.bash
+
+notifications:
+    recipients:
+        - chutsu@gmail.com
+    email:
+        on_success: change
+        on_failure: always
