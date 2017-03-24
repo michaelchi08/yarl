@@ -8,21 +8,44 @@ BIN_DIR = $(BUILD_PATH)/bin
 OBJ_DIR = $(BUILD_PATH)/obj
 TESTS_DIR = $(BUILD_PATH)/tests
 LIB_DIR = $(BUILD_PATH)/lib
+GTEST_LIB_DIR = ./deps/googletest/googletest/make
 
 # INCLUDE AND LIBRARY PATHS
 INCLUDES = -I/usr/local/include/ \
 		   -I/usr/include \
 		   -I/usr/include/eigen3 \
 		   -I$(PWD)/include
-LIBS = -L/usr/local/lib \
-	   -L/usr/lib \
-	   -L$(LIB_DIR) \
-	   -lbattery \
-	   -lceres \
-	   `pkg-config --libs opencv` \
-	   -lgtest \
-	   -lpthread \
-	   -lm
+LIBS = -L/usr/lib \
+        -L/usr/local/lib \
+        -L$(LIB_DIR) \
+        -L$(GTEST_LIB_DIR) \
+        -lbattery \
+        -lm \
+        -lyaml-cpp \
+        -lopencv_calib3d \
+        -lopencv_core \
+        -lopencv_features2d \
+        -lopencv_flann \
+        -lopencv_highgui \
+        -lopencv_imgcodecs \
+        -lopencv_imgproc \
+        -lopencv_ml \
+        -lopencv_objdetect \
+        -lopencv_photo \
+        -lopencv_shape \
+        -lopencv_stitching \
+        -lopencv_superres \
+        -lopencv_video \
+        -lopencv_videoio \
+        -lopencv_videostab \
+        -lopencv_viz \
+        -lceres \
+        -lglog \
+        -lgtest \
+        -lpthread
+
+
+
 
 # COMPILER FLAGS
 DEBUG_FLAGS = -g -gdwarf-2

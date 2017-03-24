@@ -24,7 +24,7 @@ void cvpts2mat(std::vector<cv::Point2f> points, MatX &mat) {
   cv::Point2f p;
 
   mat.resize(points.size(), 3);
-  for (int i = 0; i < points.size(); i++) {
+  for (size_t i = 0; i < points.size(); i++) {
     p = points[i];
     mat(i, 0) = p.x;
     mat(i, 1) = p.y;

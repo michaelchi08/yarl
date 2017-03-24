@@ -1,10 +1,6 @@
 include config.mk
 
-default: all done
-
-all: mkdirs
-	@make -s -C src
-	@make -s -C tests
+all: mkdirs gtest libbattery
 
 mkdirs:
 	@mkdir -p build
@@ -12,6 +8,13 @@ mkdirs:
 	@mkdir -p build/obj
 	@mkdir -p build/lib
 	@mkdir -p build/tests
+
+gtest:
+	@cd $(GTEST_LIB_DIR) && make -s && ar -rv libgtest.a gtest-all.o
+
+libbattery:
+	@make -s -C src
+	@make -s -C tests
 
 rmdirs:
 	@rm -rf build

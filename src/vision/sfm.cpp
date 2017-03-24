@@ -8,8 +8,8 @@ SFM::SFM(void) { this->configured = false; }
 
 int SFM::configure(Mat3 K) {
   this->configured = true;
-
   this->K = K;
+  return 0;
 }
 
 int SFM::recoverPose(MatX pts1, MatX pts2, SFMPose &pose) {
