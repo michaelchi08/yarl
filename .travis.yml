@@ -8,7 +8,7 @@ install:
     - travis_wait sudo bash scripts/install/install_deps.bash
 
 script:
-    - bash scripts/ci_run.bash
+    - make && make run_tests
 
 notifications:
     recipients:
