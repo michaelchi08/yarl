@@ -2,7 +2,9 @@
 
 namespace battery {
 
-LLSSolver::LLSSolver(void) { this->configured = false; }
+LLSSolver::LLSSolver(void) {
+  this->configured = false;
+}
 
 int LLSSolver::configure(void) {
   this->configured = true;
@@ -22,4 +24,4 @@ int LLSSolver::solve(MatX A, MatX b, VecX &x) {
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

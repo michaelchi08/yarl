@@ -114,4 +114,4 @@ TEST(Calibration, saveCalibrationOutputs) {
   ASSERT_TRUE(yaml_file.good());
 }
 
-} // end of battery namespace
+}  // end of battery namespace

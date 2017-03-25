@@ -40,7 +40,7 @@ int main(void) {
   // );
   // cv::imshow("Camera", image);
 
-  printf("keypoints size: %d\n", (int)keypoints.size());
+  printf("keypoints size: %d\n", (int) keypoints.size());
   std::cout << descriptors.size() << std::endl;
 
   //     // handle keyboard events

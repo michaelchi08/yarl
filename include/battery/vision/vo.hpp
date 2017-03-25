@@ -21,15 +21,20 @@ public:
 
   VisualOdometry(void);
   int configure(Mat3 K);
-  int featureTracking(cv::Mat img_1, cv::Mat img_2,
+  int featureTracking(cv::Mat img_1,
+                      cv::Mat img_2,
                       std::vector<cv::Point2f> &pts_1,
                       std::vector<cv::Point2f> &pts_2,
-                      std::vector<float> &errors, std::vector<uchar> &status);
-  int measure(std::vector<cv::Point2f> &pts_1, std::vector<cv::Point2f> &pts_2);
-  int drawOpticalFlow(cv::Mat img_1, cv::Mat img_2,
+                      std::vector<float> &errors,
+                      std::vector<uchar> &status);
+  int measure(std::vector<cv::Point2f> &pts_1,
+              std::vector<cv::Point2f> &pts_2);
+  int drawOpticalFlow(cv::Mat img_1,
+                      cv::Mat img_2,
                       std::vector<cv::Point2f> pts_1,
-                      std::vector<cv::Point2f> pts_2, cv::Mat &output);
+                      std::vector<cv::Point2f> pts_2,
+                      cv::Mat &output);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

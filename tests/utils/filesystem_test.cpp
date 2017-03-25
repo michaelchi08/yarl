@@ -38,4 +38,4 @@ TEST(Utils_filesystem, paths_combine) {
   ASSERT_EQ("./a/b/d/e", out);
 }
 
-} // end of namespace
+}  // end of namespace

@@ -2,7 +2,9 @@
 
 namespace battery {
 
-QuadrotorModel::QuadrotorModel(void) { this->initialized = false; }
+QuadrotorModel::QuadrotorModel(void) {
+  this->initialized = false;
+}
 
 MatX QuadrotorModel::GFunc(VecX x, VecX u, float dt) {
   MatX G(12, 12);
@@ -191,7 +193,8 @@ MatX QuadrotorModel::GFunc(VecX x, VecX u, float dt) {
   // G(9, 0) = dt * (cos(ph) * sin(ps) - cos(ps) * sin(th) * sin(ph)) * tauf /
   // m;
   // G(9, 1) = dt * cos(ph) * tauf * cos(ps) / m * cos(th);
-  // G(9, 2) = -dt * tauf * (cos(ph) * sin(th) * sin(ps) - cos(ps) * sin(ph)) /
+  // G(9, 2) = -dt * tauf * (cos(ph) * sin(th) * sin(ps) - cos(ps) * sin(ph))
+  // /
   // m;
   // G(9, 3) = 0.0;
   // G(9, 4) = 0.0;
@@ -204,7 +207,8 @@ MatX QuadrotorModel::GFunc(VecX x, VecX u, float dt) {
   // G(9, 11) = 0.0;
   //
   // // row 11
-  // G(10, 0) = -dt * (sin(th) * sin(ps) * sin(ph) + cos(ph) * cos(ps)) * tauf /
+  // G(10, 0) = -dt * (sin(th) * sin(ps) * sin(ph) + cos(ph) * cos(ps)) * tauf
+  // /
   // m;
   // G(10, 1) = dt * cos(ph) * tauf / m * cos(th) * sin(ps);
   // G(10, 2) = dt * tauf / m * (cos(ph) * cos(ps) * sin(th) + sin(ps) *
@@ -236,4 +240,4 @@ MatX QuadrotorModel::GFunc(VecX x, VecX u, float dt) {
   return G;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

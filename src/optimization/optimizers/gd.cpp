@@ -6,12 +6,14 @@ GDOpt::GDOpt(void) {
   this->configured = false;
 
   this->max_iter = 1000;
-  this->eta;
-  this->x;
-  this->f;
+  this->eta = VecX();
+  this->x = VecX();
+  this->f = nullptr;
 }
 
-int GDOpt::configure(int max_iter, VecX eta, VecX x,
+int GDOpt::configure(int max_iter,
+                     VecX eta,
+                     VecX x,
                      std::function<double(VecX x)> f) {
   this->configured = true;
 
@@ -81,4 +83,4 @@ int GDOpt::optimize(void) {
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

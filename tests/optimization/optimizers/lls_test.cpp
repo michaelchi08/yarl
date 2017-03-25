@@ -35,4 +35,4 @@ TEST(LLSSolver, solve) {
   ASSERT_FLOAT_EQ(x(1), 1.4);
 }
 
-} // end of battery namespace
+}  // end of battery namespace

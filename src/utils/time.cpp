@@ -2,7 +2,9 @@
 
 namespace battery {
 
-void tic(struct timespec *tic) { clock_gettime(CLOCK_MONOTONIC, tic); }
+void tic(struct timespec *tic) {
+  clock_gettime(CLOCK_MONOTONIC, tic);
+}
 
 float toc(struct timespec *tic) {
   struct timespec toc;
@@ -15,12 +17,14 @@ float toc(struct timespec *tic) {
   return time_elasped;
 }
 
-float mtoc(struct timespec *tic) { return toc(tic) * 1000.0; }
+float mtoc(struct timespec *tic) {
+  return toc(tic) * 1000.0;
+}
 
 double time_now(void) {
   struct timeval t;
   gettimeofday(&t, NULL);
-  return ((double)t.tv_sec + ((double)t.tv_usec) / 1000000.0);
+  return ((double) t.tv_sec + ((double) t.tv_usec) / 1000000.0);
 }
 
-} // end of battery namespace
+}  // end of battery namespace

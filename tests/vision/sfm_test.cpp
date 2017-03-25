@@ -8,7 +8,9 @@
 
 namespace battery {
 
-TEST(SFM, constructor) { battery::SFM sfm; }
+TEST(SFM, constructor) {
+  battery::SFM sfm;
+}
 
 TEST(SFM, configure) {
   battery::SFM sfm;
@@ -45,4 +47,4 @@ TEST(SFM, recoverPose) {
   std::cout << pose.t << std::endl;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

@@ -15,7 +15,7 @@ int ConfigParser::getYamlNode(const std::string key, YAML::Node &node) {
 
   // split key into elements
   s = "";
-  for (int i = 0; i < (int)key.length(); i++) {
+  for (int i = 0; i < (int) key.length(); i++) {
     if (key[i] == '.') {
       elements.push_back(s);
       s = "";
@@ -74,7 +74,7 @@ int ConfigParser::checkVector(const std::string key,
   // clang-format on
 
   // check number of values
-  if ((int)this->root[key].size() != vector_size) {
+  if ((int) this->root[key].size() != vector_size) {
     // clang-format off
     log_err("Vector [%s] should have %d values but config has %d!",
       key.c_str(),
@@ -101,7 +101,8 @@ int ConfigParser::checkMatrix(const std::string key, const bool optional) {
   // check fields
   for (int i = 0; i < 3; i++) {
     if (!this->root[key][targets[i]]) {
-      log_err("Key [%s] is missing for matrix [%s]!", targets[i].c_str(),
+      log_err("Key [%s] is missing for matrix [%s]!",
+              targets[i].c_str(),
               key.c_str());
       return -2;
     }
@@ -149,34 +150,34 @@ int ConfigParser::loadArray(const ConfigParam param) {
   // parse
   this->getYamlNode(param.key, node);
   switch (param.type) {
-  case BOOL_ARRAY:
-    for (size_t i = 0; i < node.size(); i++) {
-      param.b_array->push_back(node[i].as<bool>());
-    }
-    break;
-  case INT_ARRAY:
-    for (size_t i = 0; i < node.size(); i++) {
-      param.i_array->push_back(node[i].as<int>());
-    }
-    break;
-  case FLOAT_ARRAY:
-    for (size_t i = 0; i < node.size(); i++) {
-      param.f_array->push_back(node[i].as<float>());
-    }
-    break;
-  case DOUBLE_ARRAY:
-    for (size_t i = 0; i < node.size(); i++) {
-      param.d_array->push_back(node[i].as<double>());
-    }
-    break;
-  case STRING_ARRAY:
-    for (size_t i = 0; i < node.size(); i++) {
-      param.s_array->push_back(node[i].as<std::string>());
-    }
-    break;
-  default:
-    return -2;
-    break;
+    case BOOL_ARRAY:
+      for (size_t i = 0; i < node.size(); i++) {
+        param.b_array->push_back(node[i].as<bool>());
+      }
+      break;
+    case INT_ARRAY:
+      for (size_t i = 0; i < node.size(); i++) {
+        param.i_array->push_back(node[i].as<int>());
+      }
+      break;
+    case FLOAT_ARRAY:
+      for (size_t i = 0; i < node.size(); i++) {
+        param.f_array->push_back(node[i].as<float>());
+      }
+      break;
+    case DOUBLE_ARRAY:
+      for (size_t i = 0; i < node.size(); i++) {
+        param.d_array->push_back(node[i].as<double>());
+      }
+      break;
+    case STRING_ARRAY:
+      for (size_t i = 0; i < node.size(); i++) {
+        param.s_array->push_back(node[i].as<std::string>());
+      }
+      break;
+    default:
+      return -2;
+      break;
   }
 
   return 0;
@@ -202,30 +203,30 @@ int ConfigParser::loadVector(const ConfigParam param) {
   this->getYamlNode(param.key, node);
 
   switch (param.type) {
-  case VEC2:
-    vec2(0) = node[0].as<double>();
-    vec2(1) = node[1].as<double>();
-    break;
-  case VEC3:
-    vec3(0) = node[0].as<double>();
-    vec3(1) = node[1].as<double>();
-    vec3(2) = node[2].as<double>();
-    break;
-  case VEC4:
-    vec4(0) = node[0].as<double>();
-    vec4(1) = node[1].as<double>();
-    vec4(2) = node[2].as<double>();
-    vec4(3) = node[3].as<double>();
-    break;
-  case VECX:
-    vecx = VecX((int)node.size());
-    for (size_t i = 0; i < node.size(); i++) {
-      vecx(i) = node[i].as<double>();
-    }
-    break;
-  default:
-    return -2;
-    break;
+    case VEC2:
+      vec2(0) = node[0].as<double>();
+      vec2(1) = node[1].as<double>();
+      break;
+    case VEC3:
+      vec3(0) = node[0].as<double>();
+      vec3(1) = node[1].as<double>();
+      vec3(2) = node[2].as<double>();
+      break;
+    case VEC4:
+      vec4(0) = node[0].as<double>();
+      vec4(1) = node[1].as<double>();
+      vec4(2) = node[2].as<double>();
+      vec4(3) = node[3].as<double>();
+      break;
+    case VECX:
+      vecx = VecX((int) node.size());
+      for (size_t i = 0; i < node.size(); i++) {
+        vecx(i) = node[i].as<double>();
+      }
+      break;
+    default:
+      return -2;
+      break;
   }
 
   return 0;
@@ -258,55 +259,55 @@ int ConfigParser::loadMatrix(const ConfigParam param) {
   cols = node["cols"].as<int>();
 
   switch (param.type) {
-  case MAT2:
-    mat2(0, 0) = node["data"][0].as<double>();
-    mat2(0, 1) = node["data"][1].as<double>();
+    case MAT2:
+      mat2(0, 0) = node["data"][0].as<double>();
+      mat2(0, 1) = node["data"][1].as<double>();
 
-    mat2(1, 0) = node["data"][2].as<double>();
-    mat2(1, 1) = node["data"][3].as<double>();
-    break;
-  case MAT3:
-    mat3(0, 0) = node["data"][0].as<double>();
-    mat3(0, 1) = node["data"][1].as<double>();
-    mat3(0, 2) = node["data"][2].as<double>();
+      mat2(1, 0) = node["data"][2].as<double>();
+      mat2(1, 1) = node["data"][3].as<double>();
+      break;
+    case MAT3:
+      mat3(0, 0) = node["data"][0].as<double>();
+      mat3(0, 1) = node["data"][1].as<double>();
+      mat3(0, 2) = node["data"][2].as<double>();
 
-    mat3(1, 0) = node["data"][3].as<double>();
-    mat3(1, 1) = node["data"][4].as<double>();
-    mat3(1, 2) = node["data"][5].as<double>();
+      mat3(1, 0) = node["data"][3].as<double>();
+      mat3(1, 1) = node["data"][4].as<double>();
+      mat3(1, 2) = node["data"][5].as<double>();
 
-    mat3(2, 0) = node["data"][6].as<double>();
-    mat3(2, 1) = node["data"][7].as<double>();
-    mat3(2, 2) = node["data"][8].as<double>();
-    break;
-  case MAT4:
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        mat4(i, j) = node["data"][index].as<double>();
-        index++;
+      mat3(2, 0) = node["data"][6].as<double>();
+      mat3(2, 1) = node["data"][7].as<double>();
+      mat3(2, 2) = node["data"][8].as<double>();
+      break;
+    case MAT4:
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          mat4(i, j) = node["data"][index].as<double>();
+          index++;
+        }
       }
-    }
-    break;
-  case MATX:
-    matx.resize(rows, cols);
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        matx(i, j) = node["data"][index].as<double>();
-        index++;
+      break;
+    case MATX:
+      matx.resize(rows, cols);
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          matx(i, j) = node["data"][index].as<double>();
+          index++;
+        }
       }
-    }
-    break;
-  case CVMAT:
-    cvmat = cv::Mat(rows, cols, CV_64F);
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        cvmat.at<double>(i, j) = node["data"][index].as<double>();
-        index++;
+      break;
+    case CVMAT:
+      cvmat = cv::Mat(rows, cols, CV_64F);
+      for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+          cvmat.at<double>(i, j) = node["data"][index].as<double>();
+          index++;
+        }
       }
-    }
-    break;
-  default:
-    return -2;
-    break;
+      break;
+    default:
+      return -2;
+      break;
   }
 
   return 0;
@@ -324,42 +325,42 @@ int ConfigParser::load(const std::string config_file) {
   // load and parse file
   this->root = YAML::LoadFile(config_file);
 
-  for (int i = 0; i < (int)this->params.size(); i++) {
+  for (int i = 0; i < (int) this->params.size(); i++) {
     switch (this->params[i].type) {
-    // PRIMITIVE
-    case BOOL:
-    case INT:
-    case FLOAT:
-    case DOUBLE:
-    case STRING:
-      retval = this->loadPrimitive(this->params[i]);
-      break;
-    // ARRAY
-    case BOOL_ARRAY:
-    case INT_ARRAY:
-    case FLOAT_ARRAY:
-    case DOUBLE_ARRAY:
-    case STRING_ARRAY:
-      retval = this->loadArray(this->params[i]);
-      break;
-    // VECTOR
-    case VEC2:
-    case VEC3:
-    case VEC4:
-    case VECX:
-      retval = this->loadVector(this->params[i]);
-      break;
-    // MAT
-    case MAT2:
-    case MAT3:
-    case MAT4:
-    case MATX:
-    case CVMAT:
-      retval = this->loadMatrix(this->params[i]);
-      break;
-    default:
-      return -2;
-      break;
+      // PRIMITIVE
+      case BOOL:
+      case INT:
+      case FLOAT:
+      case DOUBLE:
+      case STRING:
+        retval = this->loadPrimitive(this->params[i]);
+        break;
+      // ARRAY
+      case BOOL_ARRAY:
+      case INT_ARRAY:
+      case FLOAT_ARRAY:
+      case DOUBLE_ARRAY:
+      case STRING_ARRAY:
+        retval = this->loadArray(this->params[i]);
+        break;
+      // VECTOR
+      case VEC2:
+      case VEC3:
+      case VEC4:
+      case VECX:
+        retval = this->loadVector(this->params[i]);
+        break;
+      // MAT
+      case MAT2:
+      case MAT3:
+      case MAT4:
+      case MATX:
+      case CVMAT:
+        retval = this->loadMatrix(this->params[i]);
+        break;
+      default:
+        return -2;
+        break;
     }
 
     if (retval != 0) {
@@ -370,4 +371,4 @@ int ConfigParser::load(const std::string config_file) {
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

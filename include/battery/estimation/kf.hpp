@@ -31,5 +31,5 @@ public:
   int estimate(MatX A, VecX y);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

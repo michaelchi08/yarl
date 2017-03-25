@@ -2,7 +2,9 @@
 
 namespace battery {
 
-TwoWheelRobotModel::TwoWheelRobotModel(void) { this->initialized = false; }
+TwoWheelRobotModel::TwoWheelRobotModel(void) {
+  this->initialized = false;
+}
 
 VecX TwoWheelRobotModel::gFunc(VecX x, VecX u, float dt) {
   VecX g;
@@ -47,4 +49,4 @@ MatX TwoWheelRobotModel::HFunc(VecX y) {
   return H;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

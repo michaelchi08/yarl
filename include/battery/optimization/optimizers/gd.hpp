@@ -20,11 +20,13 @@ public:
   std::function<double(VecX x)> f;
 
   GDOpt(void);
-  int configure(int max_iter, VecX eta, VecX x,
+  int configure(int max_iter,
+                VecX eta,
+                VecX x,
                 std::function<double(VecX x)> f);
   int calcGradient(VecX &df);
   int optimize(void);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

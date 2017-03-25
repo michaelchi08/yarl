@@ -70,4 +70,4 @@ VecX rosenbrock_jacobian(VecX x, VecX beta) {
   return J;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

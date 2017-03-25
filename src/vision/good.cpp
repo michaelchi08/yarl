@@ -18,10 +18,15 @@ int GoodDetector::configure(void) {
 }
 
 int GoodDetector::detect(cv::Mat &image, std::vector<cv::Point2f> &points) {
-  cv::goodFeaturesToTrack(image, points, this->max_corners, this->quality_level,
-                          this->min_dist, this->mask, this->block_size);
+  cv::goodFeaturesToTrack(image,
+                          points,
+                          this->max_corners,
+                          this->quality_level,
+                          this->min_dist,
+                          this->mask,
+                          this->block_size);
 
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

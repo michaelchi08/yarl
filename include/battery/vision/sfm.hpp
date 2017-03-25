@@ -26,5 +26,5 @@ public:
   int recoverPose(MatX pts1, MatX pts2, SFMPose &pose);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

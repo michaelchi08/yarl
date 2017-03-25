@@ -2,7 +2,9 @@
 
 namespace battery {
 
-ExtendedKalmanFilter::ExtendedKalmanFilter(void) { this->initialized = false; }
+ExtendedKalmanFilter::ExtendedKalmanFilter(void) {
+  this->initialized = false;
+}
 
 int ExtendedKalmanFilter::init(VecX mu, MatX R, MatX Q) {
   int nb_states;
@@ -39,4 +41,4 @@ int ExtendedKalmanFilter::measurementUpdate(VecX h, MatX H, VecX y) {
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

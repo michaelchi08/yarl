@@ -71,4 +71,4 @@ TEST(GDOpt, optimize) {
   ASSERT_TRUE(opt.x(1) <= 0.5);
 }
 
-} // end of battery namespace
+}  // end of battery namespace

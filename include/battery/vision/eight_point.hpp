@@ -32,10 +32,14 @@ public:
   int estimate(MatX pts1, MatX pts2, MatX &F);
   int estimate(MatX pts1, MatX pts2, Mat3 &K, Mat3 &E);
   int obtainPossiblePoses(Mat3 E, std::vector<MatX> &poses);
-  int obtainPose(Vec3 pt1, Vec3 pt2, Mat3 K1, Mat3 K2, std::vector<MatX> poses,
+  int obtainPose(Vec3 pt1,
+                 Vec3 pt2,
+                 Mat3 K1,
+                 Mat3 K2,
+                 std::vector<MatX> poses,
                  MatX &pose);
 };
 
-} // end of optimization namespace
-} // end of battery namespace
+}  // end of optimization namespace
+}  // end of battery namespace
 #endif

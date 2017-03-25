@@ -27,27 +27,27 @@ void mouse_callback(int event, int x, int y, int flags, void *data) {
   struct state *ui;
 
   // setup
-  ui = (struct state *)data;
+  ui = (struct state *) data;
 
   // handle mouse events
   switch (event) {
-  case cv::EVENT_LBUTTONDOWN:
-    ui->point_1 = cv::Point(x, y);
-    ui->point_2 = cv::Point(x, y);
-    ui->select_mode = 1;
-    ui->roi_configured = 0;
-    break;
-
-  case cv::EVENT_MOUSEMOVE:
-    if (ui->select_mode) {
+    case cv::EVENT_LBUTTONDOWN:
+      ui->point_1 = cv::Point(x, y);
       ui->point_2 = cv::Point(x, y);
-    }
-    break;
+      ui->select_mode = 1;
+      ui->roi_configured = 0;
+      break;
 
-  case cv::EVENT_LBUTTONUP:
-    ui->point_2 = cv::Point(x, y);
-    ui->select_mode = 0;
-    ui->roi_configured = 1;
+    case cv::EVENT_MOUSEMOVE:
+      if (ui->select_mode) {
+        ui->point_2 = cv::Point(x, y);
+      }
+      break;
+
+    case cv::EVENT_LBUTTONUP:
+      ui->point_2 = cv::Point(x, y);
+      ui->select_mode = 0;
+      ui->roi_configured = 1;
   }
 }
 
@@ -81,7 +81,8 @@ void extract_roi(battery::Camera &camera, cv::Mat &mask) {
   mask(cv::Rect(ui.point_1.x, ui.point_1.y, ui.point_2.x, ui.point_2.y));
 }
 
-void feature_extraction(battery::FastDetector &fast, cv::Mat &frame,
+void feature_extraction(battery::FastDetector &fast,
+                        cv::Mat &frame,
                         std::vector<cv::Point2f> &points) {
   cv::Size win_size;
   cv::Size zero_zone;
@@ -91,7 +92,7 @@ void feature_extraction(battery::FastDetector &fast, cv::Mat &frame,
   win_size = cv::Size(5, 5);
   zero_zone = cv::Size(-1, -1);
   criteria = cv::TermCriteria(
-      cv::TermCriteria::EPS + cv::TermCriteria::MAX_ITER, 40, 0.001);
+    cv::TermCriteria::EPS + cv::TermCriteria::MAX_ITER, 40, 0.001);
 
   // detect keypoints
   fast.detect(frame, points);

@@ -20,5 +20,5 @@ public:
   int detect(cv::Mat &image, MatX &points);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

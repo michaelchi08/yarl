@@ -72,7 +72,7 @@ int LMAOpt::evalFunction(VecX beta, double &error) {
   // evaluate function
   for (int i = 0; i < this->y.rows(); i++) {
     this->y_est(i) = this->function(
-        this->x.block(i, 0, 1, this->nb_inputs).transpose(), beta);
+      this->x.block(i, 0, 1, this->nb_inputs).transpose(), beta);
   }
 
   // calculate error
@@ -91,9 +91,9 @@ int LMAOpt::calcGradients(VecX beta) {
   // calculate jacobian
   for (int i = 0; i < this->y.rows(); i++) {
     this->J.block(i, 0, 1, this->nb_params) =
-        this->jacobian(this->x.block(i, 0, 1, this->nb_inputs).transpose(),
-                       beta)
-            .transpose();
+      this
+        ->jacobian(this->x.block(i, 0, 1, this->nb_inputs).transpose(), beta)
+        .transpose();
   }
 
   // approximate Hessian
@@ -167,4 +167,4 @@ int LMAOpt::optimize(void) {
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

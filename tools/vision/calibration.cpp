@@ -18,8 +18,8 @@ int main(void) {
     return -1;
   }
 
-  retval = calibration.configure("/tmp/calibration", chessboard,
-                                 cv::Size(320, 240), 10);
+  retval = calibration.configure(
+    "/tmp/calibration", chessboard, cv::Size(320, 240), 10);
   if (retval != 0) {
     log_err("failed to configure calibration!");
     return -1;
@@ -43,9 +43,9 @@ int main(void) {
 
     // handle events
     key_pressed = cv::waitKey(1);
-    if (key_pressed == 27) { // press 'ESC' to stop
+    if (key_pressed == 27) {  // press 'ESC' to stop
       return 0;
-    } else if (key_pressed == 99) { // press 'c' to capture image
+    } else if (key_pressed == 99) {  // press 'c' to capture image
       calibration.saveImage(image, corners);
     }
   }

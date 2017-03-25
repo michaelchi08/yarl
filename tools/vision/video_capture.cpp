@@ -42,7 +42,7 @@ int main(void) {
     cv::imshow("Video Capture", image);
     char c = cv::waitKey(1);
     if (c == 27)
-      break; // press ESC to stop
+      break;  // press ESC to stop
   }
 
   return 0;

@@ -52,7 +52,7 @@ MatX load_data(std::string file_path) {
   while (std::getline(infile, line)) {
     std::istringstream ss(line);
 
-    if (line_no != 0) { // skip header line
+    if (line_no != 0) {  // skip header line
       // assuming data is 2 columns
       for (int i = 0; i < 2; i++) {
         std::getline(ss, element, ',');
@@ -217,7 +217,7 @@ TEST(EightPoint, estimate) {
   pts2 = load_data(TEST_2_DATA);
   estimator.configure(800, 600);
   K << 687.189819, 0.000000, 375.042664, 0.000000, 641.376221, 308.712708,
-      0.000000, 0.000000, 1.000000;
+    0.000000, 0.000000, 1.000000;
 
   // estimate fundamental matrix F
   estimator.estimate(pts1, pts2, F);
@@ -252,7 +252,7 @@ TEST(EightPoint, obtainPossiblePoses) {
   pts2 = load_data(TEST_2_DATA);
   estimator.configure(800, 600);
   K << 687.189819, 0.000000, 375.042664, 0.000000, 641.376221, 308.712708,
-      0.000000, 0.000000, 1.000000;
+    0.000000, 0.000000, 1.000000;
   estimator.estimate(pts1, pts2, K, E);
 
   // test and assert
@@ -282,7 +282,7 @@ TEST(EightPoint, obtainPose) {
   pts2 = load_data(TEST_2_DATA);
   estimator.configure(800, 600);
   K << 687.189819, 0.000000, 375.042664, 0.000000, 641.376221, 308.712708,
-      0.000000, 0.000000, 1.000000;
+    0.000000, 0.000000, 1.000000;
   estimator.estimate(pts1, pts2, K, E);
   estimator.obtainPossiblePoses(E, poses);
 
@@ -323,11 +323,11 @@ TEST(EightPoint, obtainPose2) {
   VisualOdometry vo;
 
   // setup
-	// clang-format off
+  // clang-format off
   K << 279.0161682343449, 0, 150.3072895826164,
        0, 276.3467561622266, 123.3623526538343,
        0, 0, 1;
-	// clang-format on
+  // clang-format on
   fast.configure(40, true);
   vo.configure(K);
 
@@ -362,4 +362,4 @@ TEST(EightPoint, obtainPose2) {
   std::cout << "cv translation: \n" << vo.t << std::endl << std::endl;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

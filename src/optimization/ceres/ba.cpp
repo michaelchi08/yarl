@@ -39,21 +39,21 @@ int BundleAdjustment::configure(Mat3 K, MatX x1_pts, MatX x2_pts) {
   this->x1_pts = x1_pts;
   this->x2_pts = x2_pts;
 
-  this->q = (double **)malloc(sizeof(double *) * 2);
-  this->c = (double **)malloc(sizeof(double *) * 2);
-  this->x = (double **)malloc(sizeof(double *) * this->x1_pts.rows());
+  this->q = (double **) malloc(sizeof(double *) * 2);
+  this->c = (double **) malloc(sizeof(double *) * 2);
+  this->x = (double **) malloc(sizeof(double *) * this->x1_pts.rows());
 
   // initialize quaternion and camera center position
   for (int i = 0; i < 2; i++) {
     // quaternion q = (x, y, z, w)
-    this->q[i] = (double *)malloc(sizeof(double) * 4);
+    this->q[i] = (double *) malloc(sizeof(double) * 4);
     this->q[i][0] = 0.0;
     this->q[i][1] = 0.0;
     this->q[i][2] = 0.0;
     this->q[i][3] = 1.0;
 
     // camera center c = (x, y, z)
-    this->c[i] = (double *)malloc(sizeof(double) * 3);
+    this->c[i] = (double *) malloc(sizeof(double) * 3);
     this->c[i][0] = 0.0;
     this->c[i][1] = 0.0;
     this->c[i][2] = 0.0;
@@ -69,7 +69,7 @@ int BundleAdjustment::configure(Mat3 K, MatX x1_pts, MatX x2_pts) {
     x1 << this->x1_pts(i, 0), this->x1_pts(i, 1), 1.0;
     pt = K_inv * x1;
 
-    this->x[i] = (double *)malloc(sizeof(double) * 3);
+    this->x[i] = (double *) malloc(sizeof(double) * 3);
     this->x[i][0] = pt(0);
     this->x[i][1] = pt(1);
     this->x[i][2] = 1.0;
@@ -106,14 +106,14 @@ int BundleAdjustment::solve(MatX pts3d) {
     r = new BAResidual(this->K, pt1, true);
 
     cost_func = new ::ceres::AutoDiffCostFunction<
-        BAResidual,
-        2, // size of residual
-        4, // size of 1st parameter - quaternion
-        3, // size of 2nd parameter - camera center (x, y, z)
-        3  // size of 3rd parameter - 3d point in world (x, y, z)
-        >(r);
-    problem.AddResidualBlock(cost_func, NULL, this->q[0], this->c[0],
-                             this->x[i]);
+      BAResidual,
+      2,  // size of residual
+      4,  // size of 1st parameter - quaternion
+      3,  // size of 2nd parameter - camera center (x, y, z)
+      3   // size of 3rd parameter - 3d point in world (x, y, z)
+      >(r);
+    problem.AddResidualBlock(
+      cost_func, NULL, this->q[0], this->c[0], this->x[i]);
   }
   problem.SetParameterization(q[0], quat_param);
 
@@ -123,14 +123,14 @@ int BundleAdjustment::solve(MatX pts3d) {
     r = new BAResidual(this->K, pt2, false);
 
     cost_func = new ::ceres::AutoDiffCostFunction<
-        BAResidual,
-        2, // size of residual
-        4, // size of 1st parameter - quaternion
-        3, // size of 2nd parameter - camera center (x, y, z)
-        3  // size of 3rd parameter - 3d point in world (x, y, z)
-        >(r);
-    problem.AddResidualBlock(cost_func, NULL, this->q[1], this->c[1],
-                             this->x[i]);
+      BAResidual,
+      2,  // size of residual
+      4,  // size of 1st parameter - quaternion
+      3,  // size of 2nd parameter - camera center (x, y, z)
+      3   // size of 3rd parameter - 3d point in world (x, y, z)
+      >(r);
+    problem.AddResidualBlock(
+      cost_func, NULL, this->q[1], this->c[1], this->x[i]);
   }
   problem.SetParameterization(q[1], quat_param);
 
@@ -141,5 +141,5 @@ int BundleAdjustment::solve(MatX pts3d) {
   return 0;
 }
 
-} // end of ceres namespace
-} // end of battery namespace
+}  // end of ceres namespace
+}  // end of battery namespace

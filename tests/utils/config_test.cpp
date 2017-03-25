@@ -198,7 +198,7 @@ TEST(Utils_config_ConfigParser, loadArray) {
   parser.loadArray(param);
 
   for (int i = 0; i < 4; i++) {
-    ASSERT_FLOAT_EQ((float)i + 1.0, f_array[i]);
+    ASSERT_FLOAT_EQ((float) i + 1.0, f_array[i]);
   }
 
   // DOUBLE
@@ -209,7 +209,7 @@ TEST(Utils_config_ConfigParser, loadArray) {
   parser.loadArray(param);
 
   for (int i = 0; i < 4; i++) {
-    ASSERT_FLOAT_EQ((double)i + 1.0, d_array[i]);
+    ASSERT_FLOAT_EQ((double) i + 1.0, d_array[i]);
   }
 
   // STRING
@@ -277,7 +277,7 @@ TEST(Utils_config_ConfigParser, loadVector) {
   parser.loadVector(param);
 
   for (int i = 0; i < 10; i++) {
-    ASSERT_FLOAT_EQ((double)i + 1.0, vecx(i));
+    ASSERT_FLOAT_EQ((double) i + 1.0, vecx(i));
   }
 }
 
@@ -443,4 +443,4 @@ TEST(Utils_config_ConfigParser, load) {
   std::cout << std::endl;
 }
 
-} // end of  battery namespace
+}  // end of  battery namespace

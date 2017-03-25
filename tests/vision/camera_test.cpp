@@ -45,4 +45,4 @@ TEST(Camera, getFrame) {
   camera.close();
 }
 
-} // end of battery namespace
+}  // end of battery namespace

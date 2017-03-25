@@ -13,7 +13,9 @@ TestRange::TestRange(void) {
   this->z_max = 0.0;
 }
 
-TestCase::TestCase(void) { this->configured = false; }
+TestCase::TestCase(void) {
+  this->configured = false;
+}
 
 int TestCase::configure(void) {
   this->configured = true;
@@ -67,7 +69,8 @@ void TestCase::createP(Mat3 K, Mat3 R, Vec3 t, MatX &P) {
   P = K * P;
 }
 
-void TestCase::generateRandom3DPoints(TestRange range, int nb_pts,
+void TestCase::generateRandom3DPoints(TestRange range,
+                                      int nb_pts,
                                       battery::MatX &pts) {
   std::default_random_engine generator;
   std::uniform_real_distribution<double> x_dist(range.x_min, range.x_max);
@@ -106,15 +109,17 @@ void TestCase::project3DTo2D(MatX P, MatX pts_3d, MatX &pts_2d) {
   }
 }
 
-void TestCase::project3DTo2D(Mat3 K, Mat3 R, Vec3 t, MatX pts_3d,
-                             MatX &pts_2d) {
+void TestCase::project3DTo2D(
+  Mat3 K, Mat3 R, Vec3 t, MatX pts_3d, MatX &pts_2d) {
   MatX P;
 
   this->createP(K, R, t, P);
   this->project3DTo2D(P, pts_3d, pts_2d);
 }
 
-void TestCase::generateTestCase(TestRange range, MatX &pts1, MatX &pts2,
+void TestCase::generateTestCase(TestRange range,
+                                MatX &pts1,
+                                MatX &pts2,
                                 MatX &pts3d) {
   Mat3 K, R;
   MatX P;
@@ -144,4 +149,4 @@ void TestCase::generateTestCase(TestRange range, MatX &pts1, MatX &pts2,
   this->project3DTo2D(K, R, t, pts3d, pts2);
 }
 
-} // end of battery namespace
+}  // end of battery namespace

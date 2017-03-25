@@ -123,4 +123,4 @@ TEST(TestCase, generateTestCase) {
   mat2csv("/tmp/pts3d.dat", pts3d);
 }
 
-} // end of battery namespace
+}  // end of battery namespace

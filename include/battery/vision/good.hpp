@@ -23,5 +23,5 @@ public:
   int detect(cv::Mat &image, std::vector<cv::Point2f> &points);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

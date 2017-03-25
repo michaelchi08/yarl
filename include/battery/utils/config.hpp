@@ -122,70 +122,70 @@ public:
     // primitives
     if (std::is_same<T, bool>::value) {
       param.type = BOOL;
-      param.b = (bool *)out;
+      param.b = (bool *) out;
     } else if (std::is_same<T, int>::value) {
       param.type = INT;
-      param.i = (int *)out;
+      param.i = (int *) out;
     } else if (std::is_same<T, float>::value) {
       param.type = FLOAT;
-      param.f = (float *)out;
+      param.f = (float *) out;
     } else if (std::is_same<T, double>::value) {
       param.type = DOUBLE;
-      param.d = (double *)out;
+      param.d = (double *) out;
     } else if (std::is_same<T, std::string>::value) {
       param.type = STRING;
-      param.s = (std::string *)out;
+      param.s = (std::string *) out;
     }
 
     // arrays
     if (std::is_same<T, std::vector<bool>>::value) {
       param.type = BOOL_ARRAY;
-      param.b_array = (std::vector<bool> *)out;
+      param.b_array = (std::vector<bool> *) out;
     } else if (std::is_same<T, std::vector<int>>::value) {
       param.type = INT_ARRAY;
-      param.i_array = (std::vector<int> *)out;
+      param.i_array = (std::vector<int> *) out;
     } else if (std::is_same<T, std::vector<float>>::value) {
       param.type = FLOAT_ARRAY;
-      param.f_array = (std::vector<float> *)out;
+      param.f_array = (std::vector<float> *) out;
     } else if (std::is_same<T, std::vector<double>>::value) {
       param.type = DOUBLE_ARRAY;
-      param.d_array = (std::vector<double> *)out;
+      param.d_array = (std::vector<double> *) out;
     } else if (std::is_same<T, std::vector<std::string>>::value) {
       param.type = STRING_ARRAY;
-      param.s_array = (std::vector<std::string> *)out;
+      param.s_array = (std::vector<std::string> *) out;
     }
 
     // vectors
     if (std::is_same<T, Vec2>::value) {
       param.type = VEC2;
-      param.vec2 = (Vec2 *)out;
+      param.vec2 = (Vec2 *) out;
     } else if (std::is_same<T, Vec3>::value) {
       param.type = VEC3;
-      param.vec3 = (Vec3 *)out;
+      param.vec3 = (Vec3 *) out;
     } else if (std::is_same<T, Vec4>::value) {
       param.type = VEC4;
-      param.vec4 = (Vec4 *)out;
+      param.vec4 = (Vec4 *) out;
     } else if (std::is_same<T, VecX>::value) {
       param.type = VECX;
-      param.vecx = (VecX *)out;
+      param.vecx = (VecX *) out;
     }
 
     // matrix
     if (std::is_same<T, Mat2>::value) {
       param.type = MAT2;
-      param.mat2 = (Mat2 *)out;
+      param.mat2 = (Mat2 *) out;
     } else if (std::is_same<T, Mat3>::value) {
       param.type = MAT3;
-      param.mat3 = (Mat3 *)out;
+      param.mat3 = (Mat3 *) out;
     } else if (std::is_same<T, Mat4>::value) {
       param.type = MAT4;
-      param.mat4 = (Mat4 *)out;
+      param.mat4 = (Mat4 *) out;
     } else if (std::is_same<T, MatX>::value) {
       param.type = MATX;
-      param.matx = (MatX *)out;
+      param.matx = (MatX *) out;
     } else if (std::is_same<T, cv::Mat>::value) {
       param.type = CVMAT;
-      param.cvmat = (cv::Mat *)out;
+      param.cvmat = (cv::Mat *) out;
     }
 
     // add params
@@ -198,7 +198,8 @@ public:
 
   int getYamlNode(const std::string key, YAML::Node &node);
   int checkKey(const std::string key, const bool optional);
-  int checkVector(const std::string key, const enum ConfigDataType type,
+  int checkVector(const std::string key,
+                  const enum ConfigDataType type,
                   const bool optional);
   int checkMatrix(const std::string key, const bool optional);
   int loadPrimitive(const ConfigParam param);
@@ -208,5 +209,5 @@ public:
   int load(const std::string config_file);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

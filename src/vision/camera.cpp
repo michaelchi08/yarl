@@ -135,4 +135,4 @@ void Camera::close(void) {
   }
 }
 
-} // end of battery namespace
+}  // end of battery namespace

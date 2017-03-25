@@ -16,5 +16,5 @@ public:
   MatX HFunc(VecX y);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

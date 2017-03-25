@@ -152,4 +152,4 @@ int RANSAC::optimize(MatX &data) {
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

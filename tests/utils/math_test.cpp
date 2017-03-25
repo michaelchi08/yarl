@@ -619,4 +619,4 @@ TEST(Utils_math, linear_interpolation) {
   std::cout << result << std::endl;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

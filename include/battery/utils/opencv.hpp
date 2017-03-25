@@ -9,5 +9,5 @@ namespace battery {
 
 bool cvMatIsEqual(const cv::Mat m1, const cv::Mat m2);
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

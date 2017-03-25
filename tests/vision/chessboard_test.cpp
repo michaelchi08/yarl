@@ -27,4 +27,4 @@ TEST(Chessboard, configure) {
   ASSERT_EQ(cv::Size(1, 2), chessboard.board_size);
 }
 
-} // end of battery namespace
+}  // end of battery namespace

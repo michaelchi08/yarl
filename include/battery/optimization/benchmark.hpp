@@ -14,5 +14,5 @@ double sphere(VecX x);
 double rosenbrock(VecX x, VecX beta);
 VecX rosenbrock_jacobian(VecX x, VecX beta);
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

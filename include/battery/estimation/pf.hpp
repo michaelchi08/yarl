@@ -23,5 +23,5 @@ public:
   int estimate(std::vector<VecX> X_p, std::vector<VecX> hX_p, VecX y);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

@@ -130,6 +130,7 @@ TEST(RANSAC, update) {
   // test and assert
   retval = ransac.update(p1, p2);
   ASSERT_EQ(ransac.max_inliers, 4);
+  ASSERT_EQ(retval, 0);
   ASSERT_FLOAT_EQ(ransac.model_params[0], 1.0);
   ASSERT_FLOAT_EQ(ransac.model_params[1], 1.0);
 }
@@ -158,4 +159,4 @@ TEST(RANSAC, optimize) {
   ASSERT_TRUE(ransac.model_params[1] > 8);
 }
 
-} // end of battery namespace
+}  // end of battery namespace

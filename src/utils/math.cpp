@@ -2,12 +2,16 @@
 
 namespace battery {
 
-int sign(double x) { return (x < 0) ? -1 : 1; }
+int sign(double x) {
+  return (x < 0) ? -1 : 1;
+}
 
-int randi(int ub, int lb) { return rand() % lb + ub; }
+int randi(int ub, int lb) {
+  return rand() % lb + ub;
+}
 
 double randf(double ub, double lb) {
-  double f = (double)rand() / RAND_MAX;
+  double f = (double) rand() / RAND_MAX;
   return lb + f * (ub - lb);
 }
 
@@ -40,9 +44,13 @@ double median(std::vector<double> v) {
   }
 }
 
-double deg2rad(double d) { return d * (M_PI / 180); }
+double deg2rad(double d) {
+  return d * (M_PI / 180);
+}
 
-double rad2deg(double r) { return r * (180 / M_PI); }
+double rad2deg(double r) {
+  return r * (180 / M_PI);
+}
 
 void load_matrix(std::vector<double> x, int rows, int cols, MatX &y) {
   int idx;
@@ -85,26 +93,26 @@ int euler2quat(Vec3 euler, int euler_seq, Quaternion &q) {
   s3 = sin(gamma / 2.0);
 
   switch (euler_seq) {
-  case 123:
-    // euler 1-2-3 to quaternion
-    w = c1 * c2 * c3 - s1 * s2 * s3;
-    x = s1 * c2 * c3 + c1 * s2 * s3;
-    y = c1 * s2 * c3 - s1 * c2 * s3;
-    z = c1 * c2 * s3 + s1 * s2 * c3;
-    break;
+    case 123:
+      // euler 1-2-3 to quaternion
+      w = c1 * c2 * c3 - s1 * s2 * s3;
+      x = s1 * c2 * c3 + c1 * s2 * s3;
+      y = c1 * s2 * c3 - s1 * c2 * s3;
+      z = c1 * c2 * s3 + s1 * s2 * c3;
+      break;
 
-  case 321:
-    // euler 3-2-1 to quaternion
-    w = c1 * c2 * c3 + s1 * s2 * s3;
-    x = s1 * c2 * c3 - c1 * s2 * s3;
-    y = c1 * s2 * c3 + s1 * c2 * s3;
-    z = c1 * c2 * s3 - s1 * s2 * c3;
-    break;
+    case 321:
+      // euler 3-2-1 to quaternion
+      w = c1 * c2 * c3 + s1 * s2 * s3;
+      x = s1 * c2 * c3 - c1 * s2 * s3;
+      y = c1 * s2 * c3 + s1 * c2 * s3;
+      z = c1 * c2 * s3 - s1 * s2 * c3;
+      break;
 
-  default:
-    printf("Error! Invalid euler sequence [%d]\n", euler_seq);
-    return -1;
-    break;
+    default:
+      printf("Error! Invalid euler sequence [%d]\n", euler_seq);
+      return -1;
+      break;
   }
 
   q.w() = w;
@@ -296,8 +304,10 @@ void ned2nwu(Quaternion ned, Quaternion &nwu) {
   nwu.z() = -ned.z();
 }
 
-void target2body(Vec3 target_pos_if, Vec3 body_pos_if,
-                 Quaternion body_orientation_if, Vec3 &target_pos_bf) {
+void target2body(Vec3 target_pos_if,
+                 Vec3 body_pos_if,
+                 Quaternion body_orientation_if,
+                 Vec3 &target_pos_bf) {
   Mat3 R;
   Vec3 pos_enu, pos_nwu;
 
@@ -305,14 +315,16 @@ void target2body(Vec3 target_pos_if, Vec3 body_pos_if,
   R = body_orientation_if.toRotationMatrix().inverse();
 
   // calculate position difference and convert to body frame
-  pos_enu = target_pos_if - body_pos_if; // assumes inertial frame is ENU
+  pos_enu = target_pos_if - body_pos_if;  // assumes inertial frame is ENU
   enu2nwu(pos_enu, pos_nwu);
 
   // compensate for body orientation by rotating
   target_pos_bf = R * pos_nwu;
 }
 
-void target2body(Vec3 target_pos_if, Vec3 body_pos_if, Vec3 body_orientation_if,
+void target2body(Vec3 target_pos_if,
+                 Vec3 body_pos_if,
+                 Vec3 body_orientation_if,
                  Vec3 &target_pos_bf) {
   Mat3 R;
   Vec3 pos_enu, pos_nwu;
@@ -321,15 +333,17 @@ void target2body(Vec3 target_pos_if, Vec3 body_pos_if, Vec3 body_orientation_if,
   euler2rot(body_orientation_if, 123, R);
 
   // calculate position difference and convert to body frame
-  pos_enu = target_pos_if - body_pos_if; // assumes inertial frame is ENU
+  pos_enu = target_pos_if - body_pos_if;  // assumes inertial frame is ENU
   enu2nwu(pos_enu, pos_nwu);
 
   // compensate for body orientation by rotating
   target_pos_bf = R * pos_nwu;
 }
 
-void target2bodyplanar(Vec3 target_pos_if, Vec3 body_pos_if,
-                       Quaternion body_orientation_if, Vec3 &target_pos_bf) {
+void target2bodyplanar(Vec3 target_pos_if,
+                       Vec3 body_pos_if,
+                       Quaternion body_orientation_if,
+                       Vec3 &target_pos_bf) {
   Vec3 euler;
 
   // convert quaternion to euler
@@ -342,8 +356,10 @@ void target2bodyplanar(Vec3 target_pos_if, Vec3 body_pos_if,
   target2body(target_pos_if, body_pos_if, euler, target_pos_bf);
 }
 
-void target2bodyplanar(Vec3 target_pos_if, Vec3 body_pos_if,
-                       Vec3 body_orientation_if, Vec3 &target_pos_bf) {
+void target2bodyplanar(Vec3 target_pos_if,
+                       Vec3 body_pos_if,
+                       Vec3 body_orientation_if,
+                       Vec3 &target_pos_bf) {
   Vec3 euler;
 
   // filtering out roll and pitch since we are in body planar frame
@@ -353,8 +369,10 @@ void target2bodyplanar(Vec3 target_pos_if, Vec3 body_pos_if,
   target2body(target_pos_if, body_pos_if, euler, target_pos_bf);
 }
 
-void target2inertial(Vec3 target_pos_bf, Vec3 body_pos_if,
-                     Vec3 body_orientation_if, Vec3 &target_pos_if) {
+void target2inertial(Vec3 target_pos_bf,
+                     Vec3 body_pos_if,
+                     Vec3 body_orientation_if,
+                     Vec3 &target_pos_if) {
   Mat3 R;
   Vec3 target_enu;
 
@@ -368,8 +386,10 @@ void target2inertial(Vec3 target_pos_bf, Vec3 body_pos_if,
   target_pos_if = (R * target_enu) + body_pos_if;
 }
 
-void target2inertial(Vec3 target_pos_bf, Vec3 body_pos_if,
-                     Quaternion body_orientation_if, Vec3 &target_pos_if) {
+void target2inertial(Vec3 target_pos_bf,
+                     Vec3 body_pos_if,
+                     Quaternion body_orientation_if,
+                     Vec3 &target_pos_if) {
   Mat3 R;
   Vec3 target_enu;
 
@@ -456,11 +476,11 @@ int point_left_right(Vec2 a, Vec2 b, Vec2 c) {
 
   x = (b(0) - a(0)) * (c(1) - a(1)) - (b(1) - a(1)) * (c(0) - a(0));
   if (x > 0) {
-    return 1; // left
+    return 1;  // left
   } else if (x < 0) {
-    return 2; // right
+    return 2;  // right
   } else if (x == 0) {
-    return 0; // parallel
+    return 0;  // parallel
   }
 
   return -1;
@@ -520,4 +540,4 @@ Vec2 linear_interpolation(Vec2 a, Vec2 b, double mu) {
   return a * (1 - mu) + b * mu;
 }
 
-} // eof battery
+}  // eof battery

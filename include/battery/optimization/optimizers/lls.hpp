@@ -14,5 +14,5 @@ public:
   int solve(MatX A, MatX b, VecX &x);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

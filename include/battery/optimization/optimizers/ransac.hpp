@@ -35,5 +35,5 @@ public:
   int optimize(MatX &data);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

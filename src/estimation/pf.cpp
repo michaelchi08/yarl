@@ -65,4 +65,4 @@ namespace battery {
 //     return 0;
 // }
 
-} // end of battery namespace
+}  // end of battery namespace

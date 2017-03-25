@@ -16,7 +16,8 @@ int FastDetector::configure(int threshold, bool nonmax_suppression) {
   return 0;
 }
 
-int FastDetector::detect(cv::Mat &image, std::vector<cv::KeyPoint> &keypoints) {
+int FastDetector::detect(cv::Mat &image,
+                         std::vector<cv::KeyPoint> &keypoints) {
   cv::FAST(image, keypoints, this->threshold, this->nonmax_suppression);
 
   return 0;
@@ -35,7 +36,7 @@ int FastDetector::detect(cv::Mat &image, MatX &points) {
 
   cv::FAST(image, keypoints, this->threshold, this->nonmax_suppression);
   points.resize(keypoints.size(), 2);
-  for (int i = 0; i < keypoints.size(); i++) {
+  for (size_t i = 0; i < keypoints.size(); i++) {
     points(i, 0) = keypoints[i].pt.x;
     points(i, 1) = keypoints[i].pt.y;
   }
@@ -43,4 +44,4 @@ int FastDetector::detect(cv::Mat &image, MatX &points) {
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

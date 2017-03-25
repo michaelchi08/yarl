@@ -6,7 +6,6 @@ namespace battery {
 Pose::Pose(void) {
   this->position = Vec3::Zero(3, 1);
   this->orientation = Quaternion();
-
 }
 
 Pose::Pose(Vec3 position, Quaternion orientation) {
@@ -28,7 +27,9 @@ Pose::Pose(double roll,
 }
 // clang-format on
 
-Mat3 Pose::rotationMatrix(void) { return this->orientation.toRotationMatrix(); }
+Mat3 Pose::rotationMatrix(void) {
+  return this->orientation.toRotationMatrix();
+}
 
 void Pose::printPosition(void) {
   std::cout << "position: [";
@@ -174,4 +175,4 @@ int mat2csv(std::string file_path, MatX data) {
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

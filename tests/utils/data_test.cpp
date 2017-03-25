@@ -125,4 +125,4 @@ TEST(Utils_data, mat2csv) {
   }
 }
 
-} // end of battery namespace
+}  // end of battery namespace

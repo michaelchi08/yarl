@@ -196,4 +196,4 @@ TEST(LMAOpt, optimize) {
   std::cout << opt.beta.transpose() << std::endl;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

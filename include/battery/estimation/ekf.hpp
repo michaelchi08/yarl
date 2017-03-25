@@ -29,5 +29,5 @@ public:
   int measurementUpdate(VecX h, MatX H, VecX y);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

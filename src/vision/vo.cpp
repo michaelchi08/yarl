@@ -12,18 +12,19 @@ VisualOdometry::VisualOdometry(void) {
 int VisualOdometry::configure(Mat3 K) {
   this->configured = true;
 
-  this->focal_length = K(0, 0);                          // fx
-  this->principle_point = cv::Point2f(K(0, 2), K(1, 2)); // cx, cy
+  this->focal_length = K(0, 0);                           // fx
+  this->principle_point = cv::Point2f(K(0, 2), K(1, 2));  // cx, cy
 
   return 0;
 }
 
-int VisualOdometry::featureTracking(cv::Mat img_1, cv::Mat img_2,
+int VisualOdometry::featureTracking(cv::Mat img_1,
+                                    cv::Mat img_2,
                                     std::vector<cv::Point2f> &pts_1,
                                     std::vector<cv::Point2f> &pts_2,
                                     std::vector<float> &errors,
                                     std::vector<uchar> &status) {
-  int correlation_index;
+  // int correlation_index;
   cv::Point2f pt;
   cv::Size win_size;
   cv::TermCriteria term_crit;
@@ -36,14 +37,23 @@ int VisualOdometry::featureTracking(cv::Mat img_1, cv::Mat img_2,
   }
 
   // setup
-  correlation_index = 0;
+  // correlation_index = 0;
   win_size = cv::Size(21, 21);
-  term_crit = cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS,
-                               40, 0.3);
+  term_crit = cv::TermCriteria(
+    cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 40, 0.3);
 
   // optical flow
-  cv::calcOpticalFlowPyrLK(img_1, img_2, pts_1, pts_2, status, errors, win_size,
-                           3, term_crit, 0, 0.001);
+  cv::calcOpticalFlowPyrLK(img_1,
+                           img_2,
+                           pts_1,
+                           pts_2,
+                           status,
+                           errors,
+                           win_size,
+                           3,
+                           term_crit,
+                           0,
+                           0.001);
 
   // // get rid of points for which the KLT tracking failed or those who
   // // have gone outside the frame
@@ -76,24 +86,32 @@ int VisualOdometry::measure(std::vector<cv::Point2f> &pts_1,
   }
 
   // essential matrix
-  this->E = cv::findEssentialMat(pts_1, pts_2, this->focal_length,
+  this->E = cv::findEssentialMat(pts_1,
+                                 pts_2,
+                                 this->focal_length,
                                  this->principle_point,
-                                 cv::RANSAC, // outlier rejection method
-                                 0.999,      // threshold
-                                 1.0         // confidence level
+                                 cv::RANSAC,  // outlier rejection method
+                                 0.999,       // threshold
+                                 1.0          // confidence level
                                  );
   if (this->E.rows != 3 || this->E.cols != 3) {
     return -4;
   }
 
   // recover pose
-  cv::recoverPose(this->E, pts_1, pts_2, this->R, this->t, this->focal_length,
+  cv::recoverPose(this->E,
+                  pts_1,
+                  pts_2,
+                  this->R,
+                  this->t,
+                  this->focal_length,
                   this->principle_point);
 
   return 0;
 }
 
-int VisualOdometry::drawOpticalFlow(cv::Mat img_1, cv::Mat img_2,
+int VisualOdometry::drawOpticalFlow(cv::Mat img_1,
+                                    cv::Mat img_2,
                                     std::vector<cv::Point2f> pts_1,
                                     std::vector<cv::Point2f> pts_2,
                                     cv::Mat &output) {
@@ -120,4 +138,4 @@ int VisualOdometry::drawOpticalFlow(cv::Mat img_1, cv::Mat img_2,
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

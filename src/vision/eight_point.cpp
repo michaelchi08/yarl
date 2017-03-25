@@ -17,7 +17,7 @@ int EightPoint::configure(int image_width, int image_height) {
   this->image_width = image_width;
   this->image_height = image_height;
   this->N << 2.0 / image_width, 0.0, -1.0, 0.0, 2.0 / image_height, -1.0, 0.0,
-      0.0, 1.0;
+    0.0, 1.0;
 
   return 0;
 }
@@ -186,8 +186,8 @@ int EightPoint::obtainPossiblePoses(Mat3 E, std::vector<MatX> &poses) {
   return 0;
 }
 
-int EightPoint::obtainPose(Vec3 pt1, Vec3 pt2, Mat3 K1, Mat3 K2,
-                           std::vector<MatX> poses, MatX &pose) {
+int EightPoint::obtainPose(
+  Vec3 pt1, Vec3 pt2, Mat3 K1, Mat3 K2, std::vector<MatX> poses, MatX &pose) {
   MatX P1(3, 4), P2(3, 4);
   Mat4 A, V;
   Vec4 p;
@@ -209,9 +209,9 @@ int EightPoint::obtainPose(Vec3 pt1, Vec3 pt2, Mat3 K1, Mat3 K2,
 
     // build matrix A
     A << (pt1(0) * P1.block(2, 0, 1, 4)) - P1.block(0, 0, 1, 4),
-        (pt1(1) * P1.block(2, 0, 1, 4)) - P1.block(1, 0, 1, 4),
-        (pt2(0) * P2.block(2, 0, 1, 4)) - P2.block(0, 0, 1, 4),
-        (pt2(1) * P2.block(2, 0, 1, 4)) - P2.block(1, 0, 1, 4);
+      (pt1(1) * P1.block(2, 0, 1, 4)) - P1.block(1, 0, 1, 4),
+      (pt2(0) * P2.block(2, 0, 1, 4)) - P2.block(0, 0, 1, 4),
+      (pt2(1) * P2.block(2, 0, 1, 4)) - P2.block(1, 0, 1, 4);
 
     // normalize A - row by row
     A.block(0, 0, 1, 4) = A.block(0, 0, 1, 4) / A.block(0, 0, 1, 4).norm();
@@ -247,5 +247,5 @@ int EightPoint::obtainPose(Vec3 pt1, Vec3 pt2, Mat3 K1, Mat3 K2,
   return 0;
 }
 
-} // end of optimization namespace
-} // end of battery namespace
+}  // end of optimization namespace
+}  // end of battery namespace

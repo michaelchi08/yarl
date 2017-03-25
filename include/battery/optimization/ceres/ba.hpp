@@ -48,7 +48,9 @@ public:
   }
 
   template <typename T>
-  bool operator()(const T *const q, const T *const c, const T *const x,
+  bool operator()(const T *const q,
+                  const T *const c,
+                  const T *const x,
                   T *residual) const {
     Eigen::Matrix<T, 3, 3> K, R;
     Eigen::Matrix<T, 3, 1> C, X;
@@ -89,9 +91,9 @@ public:
 
     // calculate reprojection error
     if (origin) {
-      x_est = K * X; // for image 1
+      x_est = K * X;  // for image 1
     } else {
-      x_est = K * R * (X - C); // for image 2 and beyond
+      x_est = K * R * (X - C);  // for image 2 and beyond
     }
 
     // convert predicted 2d point in homogenous coordinates
@@ -197,9 +199,9 @@ public:
 
     // calculate reprojection error
     if (origin) {
-      x_est = K * X; // for image 1
+      x_est = K * X;  // for image 1
     } else {
-      x_est = K * R * (X - C); // for image 2 and beyond
+      x_est = K * R * (X - C);  // for image 2 and beyond
     }
 
     // convert predicted 2d point in homogenous coordinates
@@ -211,7 +213,8 @@ public:
     residuals[1] = abs(this->y - x_est_pixel(1));
   }
 
-  virtual bool Evaluate(double const *const *parameters, double *residuals,
+  virtual bool Evaluate(double const *const *parameters,
+                        double *residuals,
                         double **jacobians) {
     // this->calculateReprojectionError(parameters, residuals);
 
@@ -237,6 +240,6 @@ public:
   int solve(MatX pt3d);
 };
 
-} // end of ceres namespace
-} // end of battery namespace
+}  // end of ceres namespace
+}  // end of battery namespace
 #endif

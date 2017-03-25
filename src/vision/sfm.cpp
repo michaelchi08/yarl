@@ -4,7 +4,9 @@ namespace battery {
 
 SFMPose::SFMPose(void) {}
 
-SFM::SFM(void) { this->configured = false; }
+SFM::SFM(void) {
+  this->configured = false;
+}
 
 int SFM::configure(Mat3 K) {
   this->configured = true;
@@ -30,10 +32,13 @@ int SFM::recoverPose(MatX pts1, MatX pts2, SFMPose &pose) {
   }
 
   // essential matrix
-  E = cv::findEssentialMat(cvpts1, cvpts2, focal_length, principle_point,
-                           cv::RANSAC, // outlier rejection method
-                           0.999,      // confidence level
-                           1           // threshold (pixels)
+  E = cv::findEssentialMat(cvpts1,
+                           cvpts2,
+                           focal_length,
+                           principle_point,
+                           cv::RANSAC,  // outlier rejection method
+                           0.999,       // confidence level
+                           1            // threshold (pixels)
                            );
   if (E.rows != 3 || E.cols != 3) {
     return -1;
@@ -60,4 +65,4 @@ int SFM::recoverPose(MatX pts1, MatX pts2, SFMPose &pose) {
   return 0;
 }
 
-} // end of battery namespace
+}  // end of battery namespace

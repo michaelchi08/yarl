@@ -61,5 +61,5 @@ public:
   int optimize(void);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif

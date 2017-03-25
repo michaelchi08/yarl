@@ -158,9 +158,12 @@ TEST(VisualOdometry, featureTracking) {
 //     //      0.0, 0.0, 1.0;
 //     //
 //     // Eigen::Matrix3d F;
-//     // F << Fun.at<double>(0, 0), Fun.at<double>(0, 1), Fun.at<double>(0, 2),
-//     //      Fun.at<double>(1, 0), Fun.at<double>(1, 1), Fun.at<double>(1, 2),
-//     //      Fun.at<double>(2, 0), Fun.at<double>(2, 1), Fun.at<double>(2, 2);
+//     // F << Fun.at<double>(0, 0), Fun.at<double>(0, 1), Fun.at<double>(0,
+//     2),
+//     //      Fun.at<double>(1, 0), Fun.at<double>(1, 1), Fun.at<double>(1,
+//     2),
+//     //      Fun.at<double>(2, 0), Fun.at<double>(2, 1), Fun.at<double>(2,
+//     2);
 //     // Eigen::Matrix3d result = (K.transpose() * F * K);
 //     //
 //     // std::cout << std::endl;
@@ -214,4 +217,4 @@ TEST(VisualOdometry, featureTracking) {
 //     // cv::waitKey(0);
 // }
 
-} // end of battery namespace
+}  // end of battery namespace

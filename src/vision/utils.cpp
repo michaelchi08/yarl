@@ -89,4 +89,4 @@ void normalize_2dpts(double image_width, double image_height, MatX &pts) {
   }
 }
 
-} // end of battery namespace
+}  // end of battery namespace

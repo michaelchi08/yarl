@@ -46,5 +46,5 @@ public:
   void close(void);
 };
 
-} // end of battery namespace
+}  // end of battery namespace
 #endif
