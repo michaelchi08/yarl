@@ -3,7 +3,7 @@
 
 namespace battery {
 
-TEST(Utils_time, ticAndtoc) {
+TEST(Utils, ticAndtoc) {
   struct timespec start;
 
   tic(&start);

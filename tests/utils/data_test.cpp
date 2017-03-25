@@ -6,7 +6,7 @@
 
 namespace battery {
 
-TEST(Utils_data_Pose, checkPose) {
+TEST(Pose, checkPose) {
   Pose testPose;
   Quaternion q_test;
   Vec3 euler;
@@ -86,19 +86,19 @@ TEST(Utils_data_Pose, checkPose) {
   ASSERT_TRUE(rotation_mtx == q_test.toRotationMatrix());
 }
 
-TEST(Utils_data, csvrows) {
+TEST(Utils, csvrows) {
   int rows;
   rows = csvrows(TEST_DATA);
   ASSERT_EQ(281, rows);
 }
 
-TEST(Utils_data, csvcols) {
+TEST(Utils, csvcols) {
   int cols;
   cols = csvcols(TEST_DATA);
   ASSERT_EQ(2, cols);
 }
 
-TEST(Utils_data, csv2mat) {
+TEST(Utils, csv2mat) {
   MatX data;
 
   csv2mat(TEST_DATA, true, data);
@@ -110,7 +110,7 @@ TEST(Utils_data, csv2mat) {
   ASSERT_FLOAT_EQ(613.503760567, data(279, 1));
 }
 
-TEST(Utils_data, mat2csv) {
+TEST(Utils, mat2csv) {
   MatX x;
   MatX y;
 

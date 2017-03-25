@@ -1,7 +1,7 @@
 #include "battery/battery_test.hpp"
 #include "battery/vision/camera.hpp"
 
-#define CALIB_FILE "tests/data/calibration.yaml"
+#define CALIB_FILE "tests/data/vision/camera/config.yaml"
 
 namespace battery {
 
@@ -39,8 +39,8 @@ TEST(Camera, getFrame) {
   camera.configure(0, 320, 240);
   for (int i = 0; i < 10; i++) {
     camera.getFrame(image);
-    cv::imshow("test", image);
-    cv::waitKey(1);
+    // cv::imshow("test", image);
+    // cv::waitKey(1);
   }
   camera.close();
 }

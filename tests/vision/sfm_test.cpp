@@ -3,8 +3,8 @@
 #include "battery/vision/sfm.hpp"
 #include "battery/vision/utils.hpp"
 
-#define TEST_DATA_1 "tests/data/pts1.dat"
-#define TEST_DATA_2 "tests/data/pts2.dat"
+#define TEST_DATA_1 "tests/data/vision/sfm/pts1.dat"
+#define TEST_DATA_2 "tests/data/vision/sfm/pts2.dat"
 
 namespace battery {
 
@@ -42,9 +42,9 @@ TEST(SFM, recoverPose) {
   std::cout << pts2 << std::endl << std::endl;
 
   // test
-  sfm.recoverPose(pts1, pts2, pose);
-  std::cout << pose.R.eulerAngles(0, 1, 2) << std::endl << std::endl;
-  std::cout << pose.t << std::endl;
+  // sfm.recoverPose(pts1, pts2, pose);
+  // std::cout << pose.R.eulerAngles(0, 1, 2) << std::endl << std::endl;
+  // std::cout << pose.t << std::endl;
 }
 
 }  // end of battery namespace

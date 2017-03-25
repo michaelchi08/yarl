@@ -13,10 +13,10 @@
 #include "battery/vision/utils.hpp"
 #include "battery/vision/vo.hpp"
 
-#define TEST_1_DATA "tests/data/eight_point/img_1.dat"
-#define TEST_2_DATA "tests/data/eight_point/img_2.dat"
-#define TEST_IMAGE_1 "tests/data/eight_point/left.jpg"
-#define TEST_IMAGE_2 "tests/data/eight_point/right.jpg"
+#define TEST_1_DATA "tests/data/vision/eight_point/img_1.dat"
+#define TEST_2_DATA "tests/data/vision/eight_point/img_2.dat"
+#define TEST_IMAGE_1 "tests/data/vision/eight_point/left.jpg"
+#define TEST_IMAGE_2 "tests/data/vision/eight_point/right.jpg"
 
 namespace battery {
 
@@ -343,8 +343,8 @@ TEST(EightPoint, obtainPose2) {
 
   // display tracked features
   vo.drawOpticalFlow(img_1, img_2, cvpts_1, cvpts_2, twin_img);
-  cv::imshow("image", twin_img);
-  cv::waitKey(5000);
+  // cv::imshow("image", twin_img);
+  // cv::waitKey(5000);
 
   // test 8-point
   estimator.configure(960, 720);

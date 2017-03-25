@@ -5,9 +5,9 @@
 #include "battery/optimization/ceres/ba.hpp"
 #include "battery/utils/utils.hpp"
 
-#define TEST_DATA_1 "tests/data/ba/pts1.dat"
-#define TEST_DATA_2 "tests/data/ba/pts2.dat"
-#define TEST_DATA_3 "tests/data/ba/pts3d.dat"
+#define TEST_DATA_1 "tests/data/optimization/ceres/ba/pts1.dat"
+#define TEST_DATA_2 "tests/data/optimization/ceres/ba/pts2.dat"
+#define TEST_DATA_3 "tests/data/optimization/ceres/ba/pts3d.dat"
 
 namespace battery {
 
@@ -112,11 +112,18 @@ TEST(BundleAdjustment, solve) {
   ba.solve(pts3d);
   std::cout << mtoc(&t) << " ms" << std::endl << std::endl;
 
-  printf("q: %f %f %f %f\n", ba.q[1][0], ba.q[1][1], ba.q[1][2], ba.q[1][3]);
-  printf("c: %f %f %f \n",
-         ba.c[1][0] * 0.00001,
-         ba.c[1][1] * 0.00001,
-         ba.c[1][2] * 0.00001);
+  std::cout << "q: (";
+  std::cout << ba.q[1][0] << ", ";
+  std::cout << ba.q[1][1] << ", ";
+  std::cout << ba.q[1][2] << ", ";
+  std::cout << ba.q[1][3] << ")";
+  std::cout << std::endl;
+
+  std::cout << "c: (";
+  std::cout << ba.c[1][0] << ", ";
+  std::cout << ba.c[1][1] << ", ";
+  std::cout << ba.c[1][2] << ")";
+  std::cout << std::endl;
 }
 
 }  // end of battery namespace

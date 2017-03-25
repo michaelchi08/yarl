@@ -2,11 +2,11 @@
 #include "battery/utils/config.hpp"
 #include "battery/utils/data.hpp"
 
-#define TEST_CONFIG "tests/configs/config/config.yaml"
+#define TEST_CONFIG "tests/data/utils/config.yaml"
 
 namespace battery {
 
-TEST(Utils_config_ConfigParam, constructor) {
+TEST(ConfigParam, constructor) {
   ConfigParam param;
 
   ASSERT_EQ(TYPE_NOT_SET, param.type);
@@ -36,14 +36,14 @@ TEST(Utils_config_ConfigParam, constructor) {
   ASSERT_EQ(NULL, param.matx);
 }
 
-TEST(Utils_config_ConfigParser, constructor) {
+TEST(ConfigParser, constructor) {
   ConfigParser parser;
 
   ASSERT_FALSE(parser.configured);
   ASSERT_FALSE(parser.loaded);
 }
 
-TEST(Utils_config_ConfigParser, addParam) {
+TEST(ConfigParser, addParam) {
   bool b;
   int i;
   float f;
@@ -98,7 +98,7 @@ TEST(Utils_config_ConfigParser, addParam) {
   ASSERT_TRUE(parser.params[0].b != NULL);
 }
 
-TEST(Utils_config_ConfigParser, getYamlNode) {
+TEST(ConfigParser, getYamlNode) {
   YAML::Node node1, node2;
   ConfigParser parser;
 
@@ -111,7 +111,7 @@ TEST(Utils_config_ConfigParser, getYamlNode) {
   ASSERT_FLOAT_EQ(2.0, node2.as<float>());
 }
 
-TEST(Utils_config_ConfigParser, loadPrimitive) {
+TEST(ConfigParser, loadPrimitive) {
   int i;
   float f;
   double d;
@@ -155,7 +155,7 @@ TEST(Utils_config_ConfigParser, loadPrimitive) {
   ASSERT_EQ("hello world!", s);
 }
 
-TEST(Utils_config_ConfigParser, loadArray) {
+TEST(ConfigParser, loadArray) {
   std::vector<bool> b_array;
   std::vector<int> i_array;
   std::vector<float> f_array;
@@ -225,7 +225,7 @@ TEST(Utils_config_ConfigParser, loadArray) {
   ASSERT_EQ("4.0", s_array[3]);
 }
 
-TEST(Utils_config_ConfigParser, loadVector) {
+TEST(ConfigParser, loadVector) {
   Vec2 vec2;
   Vec3 vec3;
   Vec4 vec4;
@@ -281,7 +281,7 @@ TEST(Utils_config_ConfigParser, loadVector) {
   }
 }
 
-TEST(Utils_config_ConfigParser, loadMatrix) {
+TEST(ConfigParser, loadMatrix) {
   int index;
   Mat2 mat2;
   Mat3 mat3;
@@ -367,7 +367,7 @@ TEST(Utils_config_ConfigParser, loadMatrix) {
   }
 }
 
-TEST(Utils_config_ConfigParser, load) {
+TEST(ConfigParser, load) {
   int retval;
   bool b;
   int i;

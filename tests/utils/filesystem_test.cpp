@@ -3,12 +3,12 @@
 
 namespace battery {
 
-TEST(Utils_filesystem, file_exists) {
-  ASSERT_TRUE(file_exists("tests/configs/control/position_controller.yaml"));
-  ASSERT_FALSE(file_exists("tests/configs/control/bogus.yaml"));
+TEST(Utils, file_exists) {
+  ASSERT_TRUE(file_exists("tests/data/utils/config.yaml"));
+  ASSERT_FALSE(file_exists("tests/data/utils/bogus.yaml"));
 }
 
-TEST(Utils_filesystem, path_split) {
+TEST(Utils, path_split) {
   std::vector<std::string> splits;
 
   splits = path_split("/a/b/c.yaml");
@@ -18,7 +18,7 @@ TEST(Utils_filesystem, path_split) {
   ASSERT_EQ("c.yaml", splits[2]);
 }
 
-TEST(Utils_filesystem, paths_combine) {
+TEST(Utils, paths_combine) {
   std::string out;
 
   paths_combine("/a/b/c", "../", out);

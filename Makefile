@@ -12,6 +12,9 @@ mkdirs:
 gtest:
 	@cd $(GTEST_LIB_DIR) && make -s && ar -r libgtest.a gtest-all.o
 
+run_tests: libbattery
+	./build/bin/test_runner --silence-stdcout
+
 libbattery:
 	@make -s -C src
 	@make -s -C tests

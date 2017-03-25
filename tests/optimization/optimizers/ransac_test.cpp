@@ -9,7 +9,7 @@
 #include "battery/utils/data.hpp"
 #include "battery/utils/math.hpp"
 
-#define TEST_DATA "tests/data/ransac/ransac_sample.dat"
+#define TEST_DATA "tests/data/optimization/optimizers/ransac/sample.dat"
 
 namespace battery {
 
