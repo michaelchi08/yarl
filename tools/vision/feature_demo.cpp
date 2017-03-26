@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "battery/vision/camera.hpp"
-#include "battery/vision/orb.hpp"
+#include "yarl/vision/camera.hpp"
+#include "yarl/vision/orb.hpp"
 
 int main(void) {
   int retval;
@@ -9,8 +9,8 @@ int main(void) {
   cv::Mat image;
   std::vector<cv::KeyPoint> keypoints;
   cv::Mat descriptors;
-  battery::Camera camera;
-  battery::ORB orb;
+  yarl::Camera camera;
+  yarl::ORB orb;
 
   // setup
   retval = camera.configure(0, 320, 240);

@@ -1,7 +1,7 @@
-#include "battery/battery_test.hpp"
-#include "battery/utils/filesystem.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/utils/filesystem.hpp"
 
-namespace battery {
+namespace yarl {
 
 TEST(Utils, file_exists) {
   ASSERT_TRUE(file_exists("tests/data/utils/config.yaml"));

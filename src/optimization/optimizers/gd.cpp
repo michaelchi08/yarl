@@ -1,6 +1,6 @@
-#include "battery/optimization/optimizers/gd.hpp"
+#include "yarl/optimization/optimizers/gd.hpp"
 
-namespace battery {
+namespace yarl {
 
 GDOpt::GDOpt(void) {
   this->configured = false;
@@ -83,4 +83,4 @@ int GDOpt::optimize(void) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

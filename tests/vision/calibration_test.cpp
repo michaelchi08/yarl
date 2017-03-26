@@ -1,9 +1,9 @@
-#include "battery/battery_test.hpp"
-#include "battery/vision/calibration.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/vision/calibration.hpp"
 
 #define TEST_IMAGE "tests/data/vision/chessboard.jpg"
 
-namespace battery {
+namespace yarl {
 
 TEST(Calibration, constructor) {
   Calibration calibration;
@@ -114,4 +114,4 @@ TEST(Calibration, saveCalibrationOutputs) {
   ASSERT_TRUE(yaml_file.good());
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

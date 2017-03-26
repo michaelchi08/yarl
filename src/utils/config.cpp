@@ -1,6 +1,6 @@
-#include "battery/utils/config.hpp"
+#include "yarl/utils/config.hpp"
 
-namespace battery {
+namespace yarl {
 
 ConfigParser::ConfigParser(void) {
   this->configured = false;
@@ -371,4 +371,4 @@ int ConfigParser::load(const std::string config_file) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

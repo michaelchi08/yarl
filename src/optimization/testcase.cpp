@@ -1,6 +1,6 @@
-#include "battery/optimization/testcase.hpp"
+#include "yarl/optimization/testcase.hpp"
 
-namespace battery {
+namespace yarl {
 
 TestRange::TestRange(void) {
   this->x_min = 0.0;
@@ -71,7 +71,7 @@ void TestCase::createP(Mat3 K, Mat3 R, Vec3 t, MatX &P) {
 
 void TestCase::generateRandom3DPoints(TestRange range,
                                       int nb_pts,
-                                      battery::MatX &pts) {
+                                      yarl::MatX &pts) {
   std::default_random_engine generator;
   std::uniform_real_distribution<double> x_dist(range.x_min, range.x_max);
   std::uniform_real_distribution<double> y_dist(range.y_min, range.y_max);
@@ -149,4 +149,4 @@ void TestCase::generateTestCase(TestRange range,
   this->project3DTo2D(K, R, t, pts3d, pts2);
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

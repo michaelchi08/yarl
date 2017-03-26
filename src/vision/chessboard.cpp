@@ -1,6 +1,6 @@
-#include "battery/vision/chessboard.hpp"
+#include "yarl/vision/chessboard.hpp"
 
-namespace battery {
+namespace yarl {
 
 Chessboard::Chessboard(void) {
   this->configured = false;
@@ -22,4 +22,4 @@ int Chessboard::configure(int nb_corners_columns, int nb_corners_rows) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

@@ -1,6 +1,6 @@
-#include "battery/estimation/ekf.hpp"
+#include "yarl/estimation/ekf.hpp"
 
-namespace battery {
+namespace yarl {
 
 ExtendedKalmanFilter::ExtendedKalmanFilter(void) {
   this->initialized = false;
@@ -41,4 +41,4 @@ int ExtendedKalmanFilter::measurementUpdate(VecX h, MatX H, VecX y) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

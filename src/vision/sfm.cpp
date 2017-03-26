@@ -1,6 +1,6 @@
-#include "battery/vision/sfm.hpp"
+#include "yarl/vision/sfm.hpp"
 
-namespace battery {
+namespace yarl {
 
 SFMPose::SFMPose(void) {}
 
@@ -65,4 +65,4 @@ int SFM::recoverPose(MatX pts1, MatX pts2, SFMPose &pose) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

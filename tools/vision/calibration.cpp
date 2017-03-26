@@ -1,13 +1,13 @@
-#include "battery/vision/calibration.hpp"
-#include "battery/vision/camera.hpp"
+#include "yarl/vision/calibration.hpp"
+#include "yarl/vision/camera.hpp"
 
 int main(void) {
   int retval;
   char key_pressed;
   cv::Mat image;
-  battery::Camera camera;
-  battery::Chessboard chessboard;
-  battery::Calibration calibration;
+  yarl::Camera camera;
+  yarl::Chessboard chessboard;
+  yarl::Calibration calibration;
   std::vector<cv::Point2f> corners;
   std::vector<std::vector<cv::Point2f>> image_points;
 

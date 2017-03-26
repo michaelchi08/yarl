@@ -1,6 +1,6 @@
-#include "battery/estimation/kf.hpp"
+#include "yarl/estimation/kf.hpp"
 
-namespace battery {
+namespace yarl {
 
 KalmanFilter::KalmanFilter(void) {
   this->initialized = false;
@@ -42,4 +42,4 @@ int KalmanFilter::estimate(MatX A, VecX y) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

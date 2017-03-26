@@ -1,6 +1,6 @@
-#include "battery/optimization/optimizers/ransac.hpp"
+#include "yarl/optimization/optimizers/ransac.hpp"
 
-namespace battery {
+namespace yarl {
 
 RANSAC::RANSAC(void) {
   this->configured = false;
@@ -152,4 +152,4 @@ int RANSAC::optimize(MatX &data) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

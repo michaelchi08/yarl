@@ -3,9 +3,9 @@
 
 #include <Eigen/Dense>
 
-#include "battery/vision/eight_point.hpp"
-#include "battery/vision/fast.hpp"
-#include "battery/vision/vo.hpp"
+#include "yarl/vision/eight_point.hpp"
+#include "yarl/vision/fast.hpp"
+#include "yarl/vision/vo.hpp"
 
 #define CALIB_FILE "utils/data/calibration.yaml"
 
@@ -51,7 +51,7 @@ void mouse_callback(int event, int x, int y, int flags, void *data) {
   }
 }
 
-void extract_roi(battery::Camera &camera, cv::Mat &mask) {
+void extract_roi(yarl::Camera &camera, cv::Mat &mask) {
   cv::Mat frame;
   cv::Scalar rect_color;
   struct state ui;
@@ -81,7 +81,7 @@ void extract_roi(battery::Camera &camera, cv::Mat &mask) {
   mask(cv::Rect(ui.point_1.x, ui.point_1.y, ui.point_2.x, ui.point_2.y));
 }
 
-void feature_extraction(battery::FastDetector &fast,
+void feature_extraction(yarl::FastDetector &fast,
                         cv::Mat &frame,
                         std::vector<cv::Point2f> &points) {
   cv::Size win_size;
@@ -101,7 +101,7 @@ void feature_extraction(battery::FastDetector &fast,
   // cv::cornerSubPix(frame, points, win_size, zero_zone, criteria);
 }
 
-static void pts2mat(std::vector<cv::Point2f> points, battery::MatX &mat) {
+static void pts2mat(std::vector<cv::Point2f> points, yarl::MatX &mat) {
   cv::Point2f p;
 
   mat.resize(points.size(), 3);
@@ -125,9 +125,9 @@ int main(void) {
   //
   // std::ofstream output_file;
   //
-  // battery::Camera camera;
-  // battery::VisualOdometry vo;
-  // battery::FastDetector fast;
+  // yarl::Camera camera;
+  // yarl::VisualOdometry vo;
+  // yarl::FastDetector fast;
   //
   // // setup camera
   // camera.configure(0, CALIB_FILE);
@@ -154,13 +154,13 @@ int main(void) {
   // cv::cvtColor(frame, img_1, cv::COLOR_BGR2GRAY);
   // feature_extraction(fast, img_1, pts_1);
   //
-  // battery::Mat3 K, E;
-  // battery::Vec3 pt1, pt2;
-  // battery::MatX pose;
-  // battery::MatX epts1;
-  // battery::MatX epts2;
-  // std::vector<battery::MatX> poses;
-  // battery::optimization::EightPoint estimator;
+  // yarl::Mat3 K, E;
+  // yarl::Vec3 pt1, pt2;
+  // yarl::MatX pose;
+  // yarl::MatX epts1;
+  // yarl::MatX epts2;
+  // std::vector<yarl::MatX> poses;
+  // yarl::optimization::EightPoint estimator;
   // estimator.configure(320, 240);
   // K << camera.camera_mat.at<double>(0, 0), camera.camera_mat.at<double>(0,
   // 1), camera.camera_mat.at<double>(0, 2),

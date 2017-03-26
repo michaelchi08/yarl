@@ -1,6 +1,6 @@
-# battery
+# yarl
 
-Battery is a slam library.
+`yarl` is Yet Another Robotics Library.
 
 
 ## Licence

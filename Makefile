@@ -1,6 +1,6 @@
 include config.mk
 
-all: mkdirs gtest libbattery
+all: mkdirs gtest libyarl
 
 mkdirs:
 	@mkdir -p build
@@ -12,10 +12,10 @@ mkdirs:
 gtest:
 	@cd $(GTEST_LIB_DIR) && make -s && ar -r libgtest.a gtest-all.o
 
-run_tests: libbattery
+run_tests: libyarl
 	@./build/bin/test_runner --silence-stdcout
 
-libbattery:
+libyarl:
 	@make -s -C src
 	@make -s -C tests
 

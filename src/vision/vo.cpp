@@ -1,6 +1,6 @@
-#include "battery/vision/vo.hpp"
+#include "yarl/vision/vo.hpp"
 
-namespace battery {
+namespace yarl {
 
 VisualOdometry::VisualOdometry(void) {
   this->configured = false;
@@ -138,4 +138,4 @@ int VisualOdometry::drawOpticalFlow(cv::Mat img_1,
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

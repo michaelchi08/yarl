@@ -1,7 +1,7 @@
-#include "battery/battery_test.hpp"
-#include "battery/vision/chessboard.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/vision/chessboard.hpp"
 
-namespace battery {
+namespace yarl {
 
 TEST(Chessboard, constructor) {
   Chessboard chessboard;
@@ -27,4 +27,4 @@ TEST(Chessboard, configure) {
   ASSERT_EQ(cv::Size(1, 2), chessboard.board_size);
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

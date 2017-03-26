@@ -1,6 +1,6 @@
-#include "battery/optimization/optimizers/lma.hpp"
+#include "yarl/optimization/optimizers/lma.hpp"
 
-namespace battery {
+namespace yarl {
 
 LMASettings::LMASettings(void) {
   this->max_iter = 100;
@@ -167,4 +167,4 @@ int LMAOpt::optimize(void) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

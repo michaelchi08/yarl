@@ -1,6 +1,6 @@
-#include "battery/kinematics/twowheel.hpp"
+#include "yarl/kinematics/twowheel.hpp"
 
-namespace battery {
+namespace yarl {
 
 TwoWheelRobotModel::TwoWheelRobotModel(void) {
   this->initialized = false;
@@ -49,4 +49,4 @@ MatX TwoWheelRobotModel::HFunc(VecX y) {
   return H;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

@@ -2,10 +2,10 @@
 
 #include <gtest/gtest.h>
 
-#include "battery/optimization/benchmark.hpp"
-#include "battery/optimization/optimizers/lma.hpp"
+#include "yarl/optimization/benchmark.hpp"
+#include "yarl/optimization/optimizers/lma.hpp"
 
-namespace battery {
+namespace yarl {
 
 std::vector<MatX> generate_data(void) {
   VecX input;
@@ -196,4 +196,4 @@ TEST(LMAOpt, optimize) {
   std::cout << opt.beta.transpose() << std::endl;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

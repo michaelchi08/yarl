@@ -2,14 +2,14 @@
 
 #include <gtest/gtest.h>
 
-#include "battery/optimization/ceres/ba.hpp"
-#include "battery/utils/utils.hpp"
+#include "yarl/optimization/ceres/ba.hpp"
+#include "yarl/utils/utils.hpp"
 
 #define TEST_DATA_1 "tests/data/optimization/ceres/ba/pts1.dat"
 #define TEST_DATA_2 "tests/data/optimization/ceres/ba/pts2.dat"
 #define TEST_DATA_3 "tests/data/optimization/ceres/ba/pts3d.dat"
 
-namespace battery {
+namespace yarl {
 
 TEST(BAResidual, constructor) {
   Mat3 K;
@@ -126,4 +126,4 @@ TEST(BundleAdjustment, solve) {
   std::cout << std::endl;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

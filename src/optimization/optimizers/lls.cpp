@@ -1,6 +1,6 @@
-#include "battery/optimization/optimizers/lls.hpp"
+#include "yarl/optimization/optimizers/lls.hpp"
 
-namespace battery {
+namespace yarl {
 
 LLSSolver::LLSSolver(void) {
   this->configured = false;
@@ -24,4 +24,4 @@ int LLSSolver::solve(MatX A, MatX b, VecX &x) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

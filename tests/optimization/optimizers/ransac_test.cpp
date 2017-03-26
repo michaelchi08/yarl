@@ -5,13 +5,13 @@
 
 #include <gtest/gtest.h>
 
-#include "battery/optimization/optimizers/ransac.hpp"
-#include "battery/utils/data.hpp"
-#include "battery/utils/math.hpp"
+#include "yarl/optimization/optimizers/ransac.hpp"
+#include "yarl/utils/data.hpp"
+#include "yarl/utils/math.hpp"
 
 #define TEST_DATA "tests/data/optimization/optimizers/ransac/sample.dat"
 
-namespace battery {
+namespace yarl {
 
 TEST(RANSAC, constructor) {
   RANSAC ransac;
@@ -159,4 +159,4 @@ TEST(RANSAC, optimize) {
   ASSERT_TRUE(ransac.model_params[1] > 8);
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

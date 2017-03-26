@@ -1,7 +1,7 @@
-#include "battery/vision/camera.hpp"
+#include "yarl/vision/camera.hpp"
 
 int main(void) {
-  battery::Camera camera;
+  yarl::Camera camera;
   cv::Mat image;
 
   int fps;

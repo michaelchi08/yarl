@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
-#include "battery/optimization/optimizers/lls.hpp"
-#include "battery/utils/math.hpp"
+#include "yarl/optimization/optimizers/lls.hpp"
+#include "yarl/utils/math.hpp"
 
-namespace battery {
+namespace yarl {
 
 TEST(LLSSolver, constructor) {
   LLSSolver solver;
@@ -35,4 +35,4 @@ TEST(LLSSolver, solve) {
   ASSERT_FLOAT_EQ(x(1), 1.4);
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

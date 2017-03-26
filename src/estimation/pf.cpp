@@ -1,6 +1,6 @@
-#include "battery/estimation/pf.hpp"
+#include "yarl/estimation/pf.hpp"
 
-namespace battery {
+namespace yarl {
 
 // ParticleFilter::ParticleFilter(void)
 // {
@@ -65,4 +65,4 @@ namespace battery {
 //     return 0;
 // }
 
-}  // end of battery namespace
+}  // end of yarl namespace

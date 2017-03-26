@@ -1,6 +1,6 @@
-#include "battery/vision/camera.hpp"
+#include "yarl/vision/camera.hpp"
 
-namespace battery {
+namespace yarl {
 
 Camera::Camera(void) {
   this->configured = false;
@@ -135,4 +135,4 @@ void Camera::close(void) {
   }
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

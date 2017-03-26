@@ -1,6 +1,6 @@
-#include "battery/utils/filesystem.hpp"
+#include "yarl/utils/filesystem.hpp"
 
-namespace battery {
+namespace yarl {
 
 void rmtrailslash(std::string &path) {
   // pre-check
@@ -94,4 +94,4 @@ void paths_combine(const std::string path1,
   }
 }
 
-}  // end of battery namepsace
+}  // end of yarl namepsace

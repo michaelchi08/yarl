@@ -1,9 +1,9 @@
-#include "battery/battery_test.hpp"
-#include "battery/vision/camera.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/vision/camera.hpp"
 
 #define CALIB_FILE "tests/data/vision/camera/config.yaml"
 
-namespace battery {
+namespace yarl {
 
 TEST(Camera, constructor) {
   Camera camera;
@@ -45,4 +45,4 @@ TEST(Camera, getFrame) {
   camera.close();
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

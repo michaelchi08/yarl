@@ -2,23 +2,23 @@
 #include <sstream>
 #include <string>
 
-#include "battery/battery_test.hpp"
+#include "yarl/yarl_test.hpp"
 
-#include "battery/utils/math.hpp"
-#include "battery/utils/utils.hpp"
+#include "yarl/utils/math.hpp"
+#include "yarl/utils/utils.hpp"
 
-#include "battery/vision/eight_point.hpp"
-#include "battery/vision/fast.hpp"
-#include "battery/vision/good.hpp"
-#include "battery/vision/utils.hpp"
-#include "battery/vision/vo.hpp"
+#include "yarl/vision/eight_point.hpp"
+#include "yarl/vision/fast.hpp"
+#include "yarl/vision/good.hpp"
+#include "yarl/vision/utils.hpp"
+#include "yarl/vision/vo.hpp"
 
 #define TEST_1_DATA "tests/data/vision/eight_point/img_1.dat"
 #define TEST_2_DATA "tests/data/vision/eight_point/img_2.dat"
 #define TEST_IMAGE_1 "tests/data/vision/eight_point/left.jpg"
 #define TEST_IMAGE_2 "tests/data/vision/eight_point/right.jpg"
 
-namespace battery {
+namespace yarl {
 
 MatX load_data(std::string file_path) {
   int line_no;
@@ -362,4 +362,4 @@ TEST(EightPoint, obtainPose2) {
   std::cout << "cv translation: \n" << vo.t << std::endl << std::endl;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

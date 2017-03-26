@@ -1,6 +1,6 @@
-#include "battery/vision/calibration.hpp"
+#include "yarl/vision/calibration.hpp"
 
-namespace battery {
+namespace yarl {
 
 Calibration::Calibration(void) {
   this->configured = false;
@@ -211,4 +211,4 @@ int Calibration::saveCalibrationOutputs(void) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

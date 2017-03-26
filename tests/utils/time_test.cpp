@@ -1,7 +1,7 @@
-#include "battery/battery_test.hpp"
-#include "battery/utils/time.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/utils/time.hpp"
 
-namespace battery {
+namespace yarl {
 
 TEST(Utils, ticAndtoc) {
   struct timespec start;
@@ -14,4 +14,4 @@ TEST(Utils, ticAndtoc) {
   ASSERT_TRUE(mtoc(&start) > 9.0);
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

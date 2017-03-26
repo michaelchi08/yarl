@@ -2,10 +2,10 @@
 
 #include <gtest/gtest.h>
 
-#include "battery/optimization/benchmark.hpp"
-#include "battery/optimization/optimizers/gd.hpp"
+#include "yarl/optimization/benchmark.hpp"
+#include "yarl/optimization/optimizers/gd.hpp"
 
-namespace battery {
+namespace yarl {
 
 TEST(GDOpt, constructor) {
   GDOpt opt;
@@ -71,4 +71,4 @@ TEST(GDOpt, optimize) {
   ASSERT_TRUE(opt.x(1) <= 0.5);
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

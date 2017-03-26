@@ -1,6 +1,6 @@
-#include "battery/vision/utils.hpp"
+#include "yarl/vision/utils.hpp"
 
-namespace battery {
+namespace yarl {
 
 void mat2cvmat(MatX A, cv::Mat &B) {
   B = cv::Mat(A.rows(), A.cols(), CV_8UC1);
@@ -89,4 +89,4 @@ void normalize_2dpts(double image_width, double image_height, MatX &pts) {
   }
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

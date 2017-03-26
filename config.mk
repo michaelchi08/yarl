@@ -1,7 +1,7 @@
 # GENERAL
 CXX = g++
 STANDARD = -std=c++11
-PROJECT_NAME = battery
+PROJECT_NAME = yarl
 LIB_NAME = lib$(PROJECT_NAME)
 
 # BUILD DIRS

@@ -1,7 +1,7 @@
-#include "battery/battery_test.hpp"
-#include "battery/utils/stats.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/utils/stats.hpp"
 
-namespace battery {
+namespace yarl {
 
 TEST(Utils, linreg) {
   Eigen::Vector2d p;
@@ -29,4 +29,4 @@ TEST(Utils, linreg) {
   std::cout << "r: " << r << std::endl;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

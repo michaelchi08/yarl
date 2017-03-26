@@ -1,6 +1,6 @@
-#include "battery/vision/good.hpp"
+#include "yarl/vision/good.hpp"
 
-namespace battery {
+namespace yarl {
 
 GoodDetector::GoodDetector(void) {
   this->configured = false;
@@ -29,4 +29,4 @@ int GoodDetector::detect(cv::Mat &image, std::vector<cv::Point2f> &points) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

@@ -1,6 +1,6 @@
-#include "battery/vision/eight_point.hpp"
+#include "yarl/vision/eight_point.hpp"
 
-namespace battery {
+namespace yarl {
 namespace optimization {
 
 EightPoint::EightPoint(void) {
@@ -248,4 +248,4 @@ int EightPoint::obtainPose(
 }
 
 }  // end of optimization namespace
-}  // end of battery namespace
+}  // end of yarl namespace

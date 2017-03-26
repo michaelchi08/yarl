@@ -1,6 +1,6 @@
-#include "battery/utils/math.hpp"
+#include "yarl/utils/math.hpp"
 
-namespace battery {
+namespace yarl {
 
 int sign(double x) {
   return (x < 0) ? -1 : 1;
@@ -540,4 +540,4 @@ Vec2 linear_interpolation(Vec2 a, Vec2 b, double mu) {
   return a * (1 - mu) + b * mu;
 }
 
-}  // eof battery
+}  // eof yarl

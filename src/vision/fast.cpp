@@ -1,6 +1,6 @@
-#include "battery/vision/fast.hpp"
+#include "yarl/vision/fast.hpp"
 
-namespace battery {
+namespace yarl {
 
 FastDetector::FastDetector(void) {
   this->configured = false;
@@ -44,4 +44,4 @@ int FastDetector::detect(cv::Mat &image, MatX &points) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

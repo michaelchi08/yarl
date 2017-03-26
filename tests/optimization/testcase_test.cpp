@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
-#include "battery/optimization/testcase.hpp"
-#include "battery/utils/utils.hpp"
+#include "yarl/optimization/testcase.hpp"
+#include "yarl/utils/utils.hpp"
 
-namespace battery {
+namespace yarl {
 
 TEST(Testcase, constructor) {
   TestCase testcase;
@@ -123,4 +123,4 @@ TEST(TestCase, generateTestCase) {
   mat2csv("/tmp/pts3d.dat", pts3d);
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

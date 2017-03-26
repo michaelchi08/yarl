@@ -1,10 +1,10 @@
-#include "battery/battery_test.hpp"
-#include "battery/utils/config.hpp"
-#include "battery/utils/data.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/utils/config.hpp"
+#include "yarl/utils/data.hpp"
 
 #define TEST_CONFIG "tests/data/utils/config.yaml"
 
-namespace battery {
+namespace yarl {
 
 TEST(ConfigParam, constructor) {
   ConfigParam param;
@@ -443,4 +443,4 @@ TEST(ConfigParser, load) {
   std::cout << std::endl;
 }
 
-}  // end of  battery namespace
+}  // end of  yarl namespace

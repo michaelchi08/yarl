@@ -1,6 +1,6 @@
-#include "battery/optimization/benchmark.hpp"
+#include "yarl/optimization/benchmark.hpp"
 
-namespace battery {
+namespace yarl {
 
 double ackley(VecX x) {
   // range: -5.0 <= x, y <= 5.0
@@ -56,7 +56,7 @@ double rosenbrock(VecX x, VecX beta) {
 VecX rosenbrock_jacobian(VecX x, VecX beta) {
   // double a;
   double b;
-  battery::VecX J;
+  yarl::VecX J;
 
   // setup
   // a = beta(0);
@@ -70,4 +70,4 @@ VecX rosenbrock_jacobian(VecX x, VecX beta) {
   return J;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

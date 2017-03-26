@@ -1,6 +1,6 @@
-#include "battery/optimization/ceres/ba.hpp"
+#include "yarl/optimization/ceres/ba.hpp"
 
-namespace battery {
+namespace yarl {
 namespace ceres {
 
 BundleAdjustment::BundleAdjustment(void) {
@@ -142,4 +142,4 @@ int BundleAdjustment::solve(MatX pts3d) {
 }
 
 }  // end of ceres namespace
-}  // end of battery namespace
+}  // end of yarl namespace

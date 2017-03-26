@@ -1,10 +1,10 @@
-#include "battery/battery_test.hpp"
-#include "battery/utils/data.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/utils/data.hpp"
 
 #define TEST_DATA "tests/data/utils/matrix.dat"
 #define TEST_OUTPUT "/tmp/matrix.dat"
 
-namespace battery {
+namespace yarl {
 
 TEST(Pose, checkPose) {
   Pose testPose;
@@ -125,4 +125,4 @@ TEST(Utils, mat2csv) {
   }
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

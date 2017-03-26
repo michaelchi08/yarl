@@ -1,4 +1,4 @@
-#include "battery/utils/opencv.hpp"
-#include "battery/battery_test.hpp"
+#include "yarl/utils/opencv.hpp"
+#include "yarl/yarl_test.hpp"
 
-namespace battery {}  // end of namespace
+namespace yarl {}  // end of namespace

@@ -1,7 +1,7 @@
-#include "battery/battery_test.hpp"
-#include "battery/utils/math.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/utils/math.hpp"
 
-namespace battery {
+namespace yarl {
 
 TEST(Utils, median) {
   std::vector<double> v;
@@ -619,4 +619,4 @@ TEST(Utils, linear_interpolation) {
   std::cout << result << std::endl;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

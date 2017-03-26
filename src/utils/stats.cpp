@@ -1,6 +1,6 @@
-#include "battery/utils/stats.hpp"
+#include "yarl/utils/stats.hpp"
 
-namespace battery {
+namespace yarl {
 
 inline static double sqr(double x) {
   return x * x;
@@ -47,4 +47,4 @@ int linreg(std::vector<Vec2> pts, double *m, double *c, double *r) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

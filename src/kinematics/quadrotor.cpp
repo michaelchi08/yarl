@@ -1,6 +1,6 @@
-#include "battery/kinematics/quadrotor.hpp"
+#include "yarl/kinematics/quadrotor.hpp"
 
-namespace battery {
+namespace yarl {
 
 QuadrotorModel::QuadrotorModel(void) {
   this->initialized = false;
@@ -240,4 +240,4 @@ MatX QuadrotorModel::GFunc(VecX x, VecX u, float dt) {
   return G;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

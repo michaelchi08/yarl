@@ -1,6 +1,6 @@
-#include "battery/utils/opencv.hpp"
+#include "yarl/utils/opencv.hpp"
 
-namespace battery {
+namespace yarl {
 
 bool cvMatIsEqual(const cv::Mat m1, const cv::Mat m2) {
   cv::Mat diff;
@@ -25,4 +25,4 @@ bool cvMatIsEqual(const cv::Mat m1, const cv::Mat m2) {
   return cv::countNonZero(diff) ? false : true;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

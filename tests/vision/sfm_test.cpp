@@ -1,20 +1,20 @@
-#include "battery/battery_test.hpp"
-#include "battery/utils/utils.hpp"
-#include "battery/vision/sfm.hpp"
-#include "battery/vision/utils.hpp"
+#include "yarl/yarl_test.hpp"
+#include "yarl/utils/utils.hpp"
+#include "yarl/vision/sfm.hpp"
+#include "yarl/vision/utils.hpp"
 
 #define TEST_DATA_1 "tests/data/vision/sfm/pts1.dat"
 #define TEST_DATA_2 "tests/data/vision/sfm/pts2.dat"
 
-namespace battery {
+namespace yarl {
 
 TEST(SFM, constructor) {
-  battery::SFM sfm;
+  yarl::SFM sfm;
 }
 
 TEST(SFM, configure) {
-  battery::SFM sfm;
-  battery::Mat3 K;
+  yarl::SFM sfm;
+  yarl::Mat3 K;
 
   K << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0;
 
@@ -23,19 +23,19 @@ TEST(SFM, configure) {
 }
 
 TEST(SFM, recoverPose) {
-  battery::SFM sfm;
-  battery::SFMPose pose;
-  battery::Mat3 K;
-  battery::MatX pts1, pts2;
+  yarl::SFM sfm;
+  yarl::SFMPose pose;
+  yarl::Mat3 K;
+  yarl::MatX pts1, pts2;
 
   // setup
   K << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0;
 
-  battery::csv2mat(TEST_DATA_1, false, pts1);
-  battery::csv2mat(TEST_DATA_2, false, pts2);
+  yarl::csv2mat(TEST_DATA_1, false, pts1);
+  yarl::csv2mat(TEST_DATA_2, false, pts2);
 
-  // battery::normalize_2dpts(960, 720, pts1);
-  // battery::normalize_2dpts(960, 720, pts2);
+  // yarl::normalize_2dpts(960, 720, pts1);
+  // yarl::normalize_2dpts(960, 720, pts2);
 
   sfm.configure(K);
   std::cout << pts1 << std::endl << std::endl;
@@ -47,4 +47,4 @@ TEST(SFM, recoverPose) {
   // std::cout << pose.t << std::endl;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace

@@ -1,6 +1,6 @@
-#include "battery/utils/data.hpp"
+#include "yarl/utils/data.hpp"
 
-namespace battery {
+namespace yarl {
 
 // POSE
 Pose::Pose(void) {
@@ -175,4 +175,4 @@ int mat2csv(std::string file_path, MatX data) {
   return 0;
 }
 
-}  // end of battery namespace
+}  // end of yarl namespace
