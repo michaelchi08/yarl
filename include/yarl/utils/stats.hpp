@@ -1,5 +1,5 @@
-#ifndef UTILS_STATS_HPP
-#define UTILS_STATS_HPP
+#ifndef YARL_UTILS_STATS_HPP
+#define YARL_UTILS_STATS_HPP
 
 #include "yarl/utils/math.hpp"
 

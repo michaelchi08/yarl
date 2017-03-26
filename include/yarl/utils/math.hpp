@@ -1,5 +1,5 @@
-#ifndef UTILS_MATH_HPP
-#define UTILS_MATH_HPP
+#ifndef YARL_UTILS_MATH_HPP
+#define YARL_UTILS_MATH_HPP
 
 #include <iostream>
 

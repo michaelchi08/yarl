@@ -1,5 +1,5 @@
-#ifndef OPTIMIZATION_HPP
-#define OPTIMIZATION_HPP
+#ifndef YARL_OPTIMIZATION_HPP
+#define YARL_OPTIMIZATION_HPP
 
 #include "yarl/optimization/ceres/ba.hpp"
 #include "yarl/optimization/ceres/extensions.hpp"

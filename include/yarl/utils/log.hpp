@@ -1,5 +1,5 @@
-#ifndef UTILS_LOG_HPP
-#define UTILS_LOG_HPP
+#ifndef YARL_UTILS_LOG_HPP
+#define YARL_UTILS_LOG_HPP
 
 #include <stdio.h>
 

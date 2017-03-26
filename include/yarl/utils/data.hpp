@@ -1,5 +1,5 @@
-#ifndef UTILS_DATA_HPP
-#define UTILS_DATA_HPP
+#ifndef YARL_UTILS_DATA_HPP
+#define YARL_UTILS_DATA_HPP
 
 #include <fstream>
 #include <iostream>

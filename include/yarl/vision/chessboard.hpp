@@ -1,5 +1,5 @@
-#ifndef VISION_CHESSBOARD_HPP
-#define VISION_CHESSBOARD_HPP
+#ifndef YARL_VISION_CHESSBOARD_HPP
+#define YARL_VISION_CHESSBOARD_HPP
 
 #include <errno.h>
 #include <sys/stat.h>

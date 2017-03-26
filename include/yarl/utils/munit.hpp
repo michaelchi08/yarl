@@ -1,5 +1,5 @@
-#ifndef MUNIT_HPP
-#define MUNIT_HPP
+#ifndef YARL_MUNIT_HPP
+#define YARL_MUNIT_HPP
 
 #include <math.h>
 #include <stdio.h>

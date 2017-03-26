@@ -1,5 +1,5 @@
-#ifndef VISION_GOOD_HPP
-#define VISION_GOOD_HPP
+#ifndef YARL_VISION_GOOD_HPP
+#define YARL_VISION_GOOD_HPP
 
 #include "yarl/vision/utils.hpp"
 

@@ -1,5 +1,5 @@
-#ifndef VISION_UTILS_HPP
-#define VISION_UTILS_HPP
+#ifndef YARL_VISION_UTILS_HPP
+#define YARL_VISION_UTILS_HPP
 
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/features2d/features2d.hpp>

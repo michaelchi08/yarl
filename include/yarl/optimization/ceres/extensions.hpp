@@ -2,8 +2,8 @@
 //  Copyright (c) 2014 Lloyd Hughes. All rights reserved.
 //  hughes.lloyd@gmail.com
 
-#ifndef OPTIMIZATION_CERES_EXTENSIONS_HPP
-#define OPTIMIZATION_CERES_EXTENSIONS_HPP
+#ifndef YARL_OPTIMIZATION_CERES_EXTENSIONS_HPP
+#define YARL_OPTIMIZATION_CERES_EXTENSIONS_HPP
 
 #include <Eigen/Core>
 #include <ceres/local_parameterization.h>

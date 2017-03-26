@@ -1,5 +1,5 @@
-#ifndef yarl_TEST_HPP
-#define yarl_TEST_HPP
+#ifndef YARL_TEST_HPP
+#define YARL_TEST_HPP
 
 #include <fstream>
 #include <iostream>

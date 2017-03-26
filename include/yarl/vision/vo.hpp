@@ -1,5 +1,5 @@
-#ifndef VISION_VO_HPP
-#define VISION_VO_HPP
+#ifndef YARL_VISION_VO_HPP
+#define YARL_VISION_VO_HPP
 
 #include "yarl/utils/utils.hpp"
 #include "yarl/vision/camera.hpp"

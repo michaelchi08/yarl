@@ -1,5 +1,5 @@
-#ifndef VISION_FAST_HPP
-#define VISION_FAST_HPP
+#ifndef YARL_VISION_FAST_HPP
+#define YARL_VISION_FAST_HPP
 
 #include "yarl/utils/utils.hpp"
 #include "yarl/vision/utils.hpp"

@@ -1,5 +1,5 @@
-#ifndef VISION_EIGHT_POINT_HPP
-#define VISION_EIGHT_POINT_HPP
+#ifndef YARL_VISION_EIGHT_POINT_HPP
+#define YARL_VISION_EIGHT_POINT_HPP
 
 #include <iostream>
 #include <vector>

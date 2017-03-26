@@ -1,5 +1,5 @@
-#ifndef VISION_CAMERA_HPP
-#define VISION_CAMERA_HPP
+#ifndef YARL_VISION_CAMERA_HPP
+#define YARL_VISION_CAMERA_HPP
 
 #include <iostream>
 

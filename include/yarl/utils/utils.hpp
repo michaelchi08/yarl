@@ -1,5 +1,5 @@
-#ifndef UTILS_UTILS_HPP
-#define UTILS_UTILS_HPP
+#ifndef YARL_UTILS_UTILS_HPP
+#define YARL_UTILS_UTILS_HPP
 
 #include "yarl/utils/config.hpp"
 #include "yarl/utils/data.hpp"

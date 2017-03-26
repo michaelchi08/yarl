@@ -1,5 +1,5 @@
-#ifndef ESTIMATION_KF_HPP
-#define ESTIMATION_KF_HPP
+#ifndef YARL_ESTIMATION_KF_HPP
+#define YARL_ESTIMATION_KF_HPP
 
 #include <functional>
 #include <iostream>

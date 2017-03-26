@@ -1,5 +1,5 @@
-#ifndef UTILS_CONFIG_HPP
-#define UTILS_CONFIG_HPP
+#ifndef YARL_UTILS_CONFIG_HPP
+#define YARL_UTILS_CONFIG_HPP
 
 #include <type_traits>
 

@@ -25,11 +25,15 @@ TEST(TestCase, createP) {
   Vec3 t;
 
   // setup
-  K << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0;
-
-  R << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0;
-
+  // clang-format off
+  K << 1.0, 0.0, 0.0,
+       0.0, 1.0, 0.0,
+       0.0, 0.0, 1.0;
+  R << 1.0, 0.0, 0.0,
+       0.0, 1.0, 0.0,
+       0.0, 0.0, 1.0;
   t << 1.0, 2.0, 3.0;
+  // clang-format on
 
   // test and assert
   testcase.createP(K, R, t, P);
@@ -91,11 +95,16 @@ TEST(TestCase, project3DTo2D) {
   range.z_min = 2.0;
   range.z_max = 5.0;
 
-  K << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0;
-
-  R << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0;
-
+  // setup
+  // clang-format off
+  K << 1.0, 0.0, 0.0,
+       0.0, 1.0, 0.0,
+       0.0, 0.0, 1.0;
+  R << 1.0, 0.0, 0.0,
+       0.0, 1.0, 0.0,
+       0.0, 0.0, 1.0;
   t << 0.0, 0.0, 0.0;
+  // clang-format on
 
   testcase.generateRandom3DPoints(range, 10, pts_3d);
   testcase.project3DTo2D(K, R, t, pts_3d, pts_2d);
