@@ -1,4 +1,4 @@
-#include "yarl/optimization/optimizers/gd.hpp"
+#include "yarl/optimization/optimizers/gdopt.hpp"
 
 namespace yarl {
 

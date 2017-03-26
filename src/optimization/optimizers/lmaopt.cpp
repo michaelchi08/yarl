@@ -1,4 +1,4 @@
-#include "yarl/optimization/optimizers/lma.hpp"
+#include "yarl/optimization/optimizers/lmaopt.hpp"
 
 namespace yarl {
 

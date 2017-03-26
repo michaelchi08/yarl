@@ -36,7 +36,7 @@ int ransac_compute_distances(struct ransac *opt,
                              const Vec2 &p1,
                              const Vec2 &p2,
                              VecX &dists);
-int ransac_compute_inliers(struct ransac *opt, VecX &dists);
+int ransac_compute_inliers(struct ransac *opt, const VecX &dists);
 int ransac_update(struct ransac *opt, const Vec2 &p1, const Vec2 &p2);
 void ransac_print_stats(struct ransac *opt);
 int ransac_optimize(struct ransac *opt, const MatX &data);

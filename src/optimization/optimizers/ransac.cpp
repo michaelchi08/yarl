@@ -81,7 +81,7 @@ int ransac_compute_distances(struct ransac *opt,
   return 0;
 }
 
-int ransac_compute_inliers(struct ransac *opt, VecX &dists) {
+int ransac_compute_inliers(struct ransac *opt, const VecX &dists) {
   // pre-check
   if (opt->configured == false) {
     return -1;

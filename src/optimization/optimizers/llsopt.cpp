@@ -1,8 +1,8 @@
-#include "yarl/optimization/optimizers/lls.hpp"
+#include "yarl/optimization/optimizers/llsopt.hpp"
 
 namespace yarl {
 
-int lls_solve(MatX A, MatX b, VecX &x) {
+int llsopt_solve(MatX A, MatX b, VecX &x) {
   x = (A.transpose() * A).inverse() * A.transpose() * b;
 
   return 0;
