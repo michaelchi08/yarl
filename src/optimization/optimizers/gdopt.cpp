@@ -30,28 +30,22 @@ int gdopt_calculate_gradient(struct gdopt *opt, VecX &df) {
   double step;
   VecX px, nx;
 
-  try {
-    // pre-check
-    if (opt->configured == false) {
-      log_err(EGDC);
-      return -1;
-    }
+  // pre-check
+  if (opt->configured == false) {
+    log_err(EGDC);
+    return -1;
+  }
 
-    // setup
-    step = 0.001;
+  // setup
+  step = 0.001;
 
-    // calculate gradient using central finite difference
-    for (int i = 0; i < opt->x.rows(); i++) {
-      px = opt->x;
-      nx = opt->x;
-      px(i) += step;
-      nx(i) -= step;
-      df(i) = (opt->f(px) - opt->f(nx)) / (step * 2);
-    }
-
-  } catch (const std::bad_function_call &e) {
-    log_err(EGDF, e.what());
-    return -2;
+  // calculate gradient using central finite difference
+  for (int i = 0; i < opt->x.rows(); i++) {
+    px = opt->x;
+    nx = opt->x;
+    px(i) += step;
+    nx(i) -= step;
+    df(i) = (opt->f(px) - opt->f(nx)) / (step * 2);
   }
 
   return 0;
@@ -60,25 +54,19 @@ int gdopt_calculate_gradient(struct gdopt *opt, VecX &df) {
 int gdopt_optimize(struct gdopt *opt) {
   VecX df;
 
-  try {
-    // pre-check
-    if (opt->configured == false) {
-      log_err(EGDC);
-      return -1;
-    }
+  // pre-check
+  if (opt->configured == false) {
+    log_err(EGDC);
+    return -1;
+  }
 
-    // setup
-    df.resize(opt->x.rows(), 1);
+  // setup
+  df.resize(opt->x.rows(), 1);
 
-    // optimize
-    for (int i = 0; i < opt->max_iter; i++) {
-      gdopt_calculate_gradient(opt, df);
-      opt->x -= opt->eta.cwiseProduct(df);
-    }
-
-  } catch (const std::bad_function_call &e) {
-    log_err(EGDF, e.what());
-    return -2;
+  // optimize
+  for (int i = 0; i < opt->max_iter; i++) {
+    gdopt_calculate_gradient(opt, df);
+    opt->x -= opt->eta.cwiseProduct(df);
   }
 
   return 0;

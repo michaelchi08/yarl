@@ -1,6 +1,4 @@
 # GENERAL
-CXX = g++
-STANDARD = -std=c++11
 PROJECT_NAME = yarl
 LIB_NAME = lib$(PROJECT_NAME)
 
@@ -53,6 +51,8 @@ LIBS =  -L/usr/local/lib \
         $(GTEST_LIB)
 
 # COMPILER FLAGS
+CXX = g++
+STANDARD = -std=c++11 -fno-exceptions
 DEBUG_FLAGS = -g -gdwarf-2
 WARN_FLAGS = -Wall
 

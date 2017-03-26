@@ -123,19 +123,13 @@ int lmaopt_iterate(struct lmaopt *opt) {
 }
 
 int lmaopt_optimize(struct lmaopt *opt) {
-  try {
-    // initialize error and gradients
-    lmaopt_evaluate_function(opt, opt->beta, &opt->error);
-    lmaopt_calculate_gradient(opt, opt->beta);
+  // initialize error and gradients
+  lmaopt_evaluate_function(opt, opt->beta, &opt->error);
+  lmaopt_calculate_gradient(opt, opt->beta);
 
-    // iterate
-    for (int i = 0; i < opt->max_iter; i++) {
-      lmaopt_iterate(opt);
-    }
-
-  } catch (const std::bad_function_call &e) {
-    log_err(ELMAF, e.what());
-    return -2;
+  // iterate
+  for (int i = 0; i < opt->max_iter; i++) {
+    lmaopt_iterate(opt);
   }
 
   return 0;
