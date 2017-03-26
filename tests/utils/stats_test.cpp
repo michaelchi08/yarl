@@ -1,5 +1,5 @@
-#include "yarl/yarl_test.hpp"
 #include "yarl/utils/stats.hpp"
+#include "yarl/yarl_test.hpp"
 
 namespace yarl {
 

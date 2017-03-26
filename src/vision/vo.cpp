@@ -43,17 +43,21 @@ int VisualOdometry::featureTracking(cv::Mat img_1,
     cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 40, 0.3);
 
   // optical flow
-  cv::calcOpticalFlowPyrLK(img_1,
-                           img_2,
-                           pts_1,
-                           pts_2,
-                           status,
-                           errors,
-                           win_size,
-                           3,
-                           term_crit,
-                           0,
-                           0.001);
+  // clang-format off
+  cv::calcOpticalFlowPyrLK(
+    img_1,
+    img_2,
+    pts_1,
+    pts_2,
+    status,
+    errors,
+    win_size,
+    3,
+    term_crit,
+    0,
+    0.001
+  );
+  // clang-format on
 
   // // get rid of points for which the KLT tracking failed or those who
   // // have gone outside the frame
@@ -86,26 +90,33 @@ int VisualOdometry::measure(std::vector<cv::Point2f> &pts_1,
   }
 
   // essential matrix
-  this->E = cv::findEssentialMat(pts_1,
-                                 pts_2,
-                                 this->focal_length,
-                                 this->principle_point,
-                                 cv::RANSAC,  // outlier rejection method
-                                 0.999,       // threshold
-                                 1.0          // confidence level
-                                 );
+  // clang-format off
+  this->E = cv::findEssentialMat(
+    pts_1,
+    pts_2,
+    this->focal_length,
+    this->principle_point,
+    cv::RANSAC,  // outlier rejection method
+    0.999,       // threshold
+    1.0          // confidence level
+  );
+  // clang-format on
   if (this->E.rows != 3 || this->E.cols != 3) {
     return -4;
   }
 
   // recover pose
-  cv::recoverPose(this->E,
-                  pts_1,
-                  pts_2,
-                  this->R,
-                  this->t,
-                  this->focal_length,
-                  this->principle_point);
+  // clang-format off
+  cv::recoverPose(
+    this->E,
+    pts_1,
+    pts_2,
+    this->R,
+    this->t,
+    this->focal_length,
+    this->principle_point
+  );
+  // clang-format on
 
   return 0;
 }

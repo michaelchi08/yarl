@@ -1,14 +1,14 @@
 BasedOnStyle: Chromium
 AccessModifierOffset: -2
-AlignAfterOpenBracket: true
+AlignAfterOpenBracket: Align
 AlignEscapedNewlinesLeft: true
 AlignOperands: true
 AlignTrailingComments: true
 AlignConsecutiveAssignments: false
 AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortBlocksOnASingleLine: false
+AllowShortBlocksOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterDefinitionReturnType: false
@@ -57,5 +57,5 @@ SpacesInContainerLiterals: true
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 Standard: Auto
-TabWidth: 8
+TabWidth: 2
 UseTab: Never

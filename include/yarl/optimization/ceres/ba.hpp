@@ -144,7 +144,8 @@ public:
     this->origin = origin;
   }
 
-  virtual ~BAAnalyticalResidual(void) {}
+  virtual ~BAAnalyticalResidual(void) {
+  }
 
   inline void setupCameraInstrinsicsMatrix(Eigen::Matrix3d &K) {
     K(0, 0) = this->fx;

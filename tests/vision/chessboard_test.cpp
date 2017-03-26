@@ -1,5 +1,5 @@
-#include "yarl/yarl_test.hpp"
 #include "yarl/vision/chessboard.hpp"
+#include "yarl/yarl_test.hpp"
 
 namespace yarl {
 

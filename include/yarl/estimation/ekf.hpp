@@ -8,9 +8,7 @@
 
 namespace yarl {
 
-class ExtendedKalmanFilter {
-public:
-  bool initialized;
+struct ekf {
   VecX mu;
 
   MatX R;
@@ -22,12 +20,11 @@ public:
 
   VecX mu_p;
   MatX S_p;
-
-  ExtendedKalmanFilter(void);
-  int init(VecX mu, MatX R, MatX Q);
-  int predictionUpdate(VecX g, MatX G);
-  int measurementUpdate(VecX h, MatX H, VecX y);
 };
+
+int ekf_setup(struct ekf *e, VecX mu, MatX R, MatX Q);
+int ekf_prediction_update(struct ekf *e, VecX g, MatX G);
+int ekf_measurement_update(struct ekf *e, VecX h, MatX H, VecX y);
 
 }  // end of yarl namespace
 #endif

@@ -10,10 +10,9 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "yarl/utils/logging.hpp"
 #include "yarl/utils/utils.hpp"
-#include "yarl/vision/utils.hpp"
 #include "yarl/vision/chessboard.hpp"
+#include "yarl/vision/utils.hpp"
 
 namespace yarl {
 

@@ -9,8 +9,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "yarl/utils/filesystem.hpp"
-#include "yarl/utils/logging.hpp"
+#include "yarl/utils/file.hpp"
+#include "yarl/utils/log.hpp"
 #include "yarl/utils/math.hpp"
 
 namespace yarl {
@@ -196,17 +196,15 @@ public:
     }
   }
 
-  int getYamlNode(const std::string key, YAML::Node &node);
-  int checkKey(const std::string key, const bool optional);
-  int checkVector(const std::string key,
-                  const enum ConfigDataType type,
-                  const bool optional);
-  int checkMatrix(const std::string key, const bool optional);
+  int getYamlNode(std::string key, YAML::Node &node);
+  int checkKey(std::string key, bool optional);
+  int checkVector(std::string key, enum ConfigDataType type, bool optional);
+  int checkMatrix(std::string key, bool optional);
   int loadPrimitive(const ConfigParam param);
   int loadArray(const ConfigParam param);
   int loadVector(const ConfigParam param);
   int loadMatrix(const ConfigParam param);
-  int load(const std::string config_file);
+  int load(std::string config_file);
 };
 
 }  // end of yarl namespace

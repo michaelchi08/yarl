@@ -8,9 +8,7 @@
 
 namespace yarl {
 
-class KalmanFilter {
-public:
-  bool initialized;
+struct kf {
   VecX mu;
 
   MatX B;
@@ -25,11 +23,10 @@ public:
 
   VecX mu_p;
   MatX S_p;
-
-  KalmanFilter(void);
-  int init(VecX mu, MatX R, MatX C, MatX Q);
-  int estimate(MatX A, VecX y);
 };
+
+int kf_setup(struct kf *e, VecX mu, MatX R, MatX C, MatX Q);
+int kf_estimate(struct kf *e, MatX A, VecX y);
 
 }  // end of yarl namespace
 #endif

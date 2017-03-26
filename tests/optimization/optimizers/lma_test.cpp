@@ -55,27 +55,28 @@ std::vector<MatX> generate_data(void) {
   return data;
 }
 
-void test_settings(LMASettings &settings) {
+void test_settings(struct lmaopt_settings *settings) {
   std::vector<MatX> data;
   MatX x;
 
-  settings.max_iter = 100;
-  settings.lambda = 0.01;
-  settings.function = LMA_BIND(rosenbrock);
-  settings.jacobian = LMA_BIND(rosenbrock_jacobian);
-  settings.nb_inputs = 2;
-  settings.nb_params = 2;
+  settings->max_iter = 100;
+  settings->lambda = 0.01;
+  settings->function = LMA_BIND(rosenbrock);
+  settings->jacobian = LMA_BIND(rosenbrock_jacobian);
+  settings->nb_inputs = 2;
+  settings->nb_params = 2;
 
   data = generate_data();
-  settings.x = data[0];
-  settings.y = data[1];
-  settings.beta = data[2];
+  settings->x = data[0];
+  settings->y = data[1];
+  settings->beta = data[2];
 }
 
-TEST(LMAOpt, constructor) {
-  LMAOpt opt;
+TEST(lmaopt, setup) {
+  struct lmaopt opt;
 
-  ASSERT_EQ(false, opt.configured);
+  lmaopt_setup(&opt);
+
   ASSERT_EQ(100, opt.max_iter);
   ASSERT_FLOAT_EQ(0.01, opt.lambda);
   ASSERT_EQ(nullptr, opt.function);
@@ -96,14 +97,13 @@ TEST(LMAOpt, constructor) {
   ASSERT_EQ(FLT_MAX, opt.error);
 }
 
-TEST(LMAOpt, configure) {
-  LMAOpt opt;
-  LMASettings settings;
+TEST(lmaopt, configure) {
+  struct lmaopt opt;
+  struct lmaopt_settings settings;
 
-  test_settings(settings);
-  opt.configure(settings);
+  test_settings(&settings);
+  lmaopt_configure(&opt, &settings);
 
-  ASSERT_EQ(true, opt.configured);
   ASSERT_EQ(settings.max_iter, opt.max_iter);
   ASSERT_FLOAT_EQ(settings.lambda, opt.lambda);
   ASSERT_NE(nullptr, opt.function);
@@ -124,75 +124,75 @@ TEST(LMAOpt, configure) {
   ASSERT_EQ(FLT_MAX, opt.error);
 }
 
-TEST(LMAOpt, evalFunction) {
-  LMAOpt opt;
-  LMASettings settings;
+TEST(lmaopt, evaluate_function) {
+  struct lmaopt opt;
+  struct lmaopt_settings settings;
   double error;
 
   // configure
-  test_settings(settings);
-  opt.configure(settings);
+  test_settings(&settings);
+  lmaopt_configure(&opt, &settings);
 
   // test and assert
-  opt.evalFunction(opt.beta, error);
+  lmaopt_evaluate_function(&opt, opt.beta, &error);
   ASSERT_FLOAT_EQ(0.0, error);
 }
 
-TEST(LMAOpt, calcGradients) {
-  LMAOpt opt;
-  LMASettings settings;
+TEST(lmaopt, calculate_gradient) {
+  struct lmaopt opt;
+  struct lmaopt_settings settings;
   MatX J_before, H_before;
 
   // configure
-  test_settings(settings);
-  opt.configure(settings);
+  test_settings(&settings);
+  lmaopt_configure(&opt, &settings);
   J_before = opt.J;
   H_before = opt.H;
 
   // test and assert
-  opt.calcGradients(opt.beta);
+  lmaopt_calculate_gradient(&opt, opt.beta);
 
   ASSERT_FALSE(J_before.isApprox(opt.J));
   ASSERT_FALSE(H_before.isApprox(opt.H));
 }
 
-TEST(LMAOpt, iterate) {
-  LMAOpt opt;
-  LMASettings settings;
+TEST(lmaopt, iterate) {
+  struct lmaopt opt;
+  struct lmaopt_settings settings;
   VecX beta_before;
   std::vector<VecX> data;
 
   // configure
-  test_settings(settings);
-  opt.configure(settings);
+  test_settings(&settings);
+  lmaopt_configure(&opt, &settings);
 
   opt.beta << 1.0, 90.0;
   beta_before = opt.beta;
 
   // test and assert
-  opt.evalFunction(opt.beta, opt.error);
-  opt.calcGradients(opt.beta);
+  lmaopt_evaluate_function(&opt, opt.beta, &opt.error);
+  lmaopt_calculate_gradient(&opt, opt.beta);
 
   std::cout << "beta: " << opt.beta.transpose() << std::endl;
-  opt.iterate();
+  lmaopt_iterate(&opt);
   std::cout << "beta: " << opt.beta.transpose() << std::endl;
 
   ASSERT_FALSE(beta_before.isApprox(opt.beta));
 }
 
-TEST(LMAOpt, optimize) {
+TEST(lmaopt, optimize) {
   VecX beta;
-  LMAOpt opt;
-  LMASettings settings;
+  struct lmaopt opt;
+  struct lmaopt_settings settings;
   std::vector<VecX> data;
 
   // configure
-  test_settings(settings);
+  test_settings(&settings);
   settings.max_iter = 100;
   settings.beta << 1.01, 99.99;
-  opt.configure(settings);
+  lmaopt_configure(&opt, &settings);
 
-  opt.optimize();
+  lmaopt_optimize(&opt);
   std::cout << opt.beta.transpose() << std::endl;
 }
 

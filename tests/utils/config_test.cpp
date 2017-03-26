@@ -1,6 +1,6 @@
-#include "yarl/yarl_test.hpp"
 #include "yarl/utils/config.hpp"
 #include "yarl/utils/data.hpp"
+#include "yarl/yarl_test.hpp"
 
 #define TEST_CONFIG "tests/data/utils/config.yaml"
 

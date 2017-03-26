@@ -2,36 +2,37 @@
 
 namespace yarl {
 
-GDOpt::GDOpt(void) {
-  this->configured = false;
+void gdopt_setup(struct gdopt *opt) {
+  opt->configured = false;
 
-  this->max_iter = 1000;
-  this->eta = VecX();
-  this->x = VecX();
-  this->f = nullptr;
+  opt->max_iter = 1000;
+  opt->eta = VecX();
+  opt->x = VecX();
+  opt->f = nullptr;
 }
 
-int GDOpt::configure(int max_iter,
-                     VecX eta,
-                     VecX x,
-                     std::function<double(VecX x)> f) {
-  this->configured = true;
+int gdopt_configure(struct gdopt *opt,
+                    int max_iter,
+                    VecX eta,
+                    VecX x,
+                    std::function<double(VecX x)> f) {
+  opt->configured = true;
 
-  this->max_iter = max_iter;
-  this->eta = eta;
-  this->x = x;
-  this->f = f;
+  opt->max_iter = max_iter;
+  opt->eta = eta;
+  opt->x = x;
+  opt->f = f;
 
   return 0;
 }
 
-int GDOpt::calcGradient(VecX &df) {
+int gdopt_calculate_gradient(struct gdopt *opt, VecX &df) {
   double step;
   VecX px, nx;
 
   try {
     // pre-check
-    if (this->configured == false) {
+    if (opt->configured == false) {
       log_err(EGDC);
       return -1;
     }
@@ -40,12 +41,12 @@ int GDOpt::calcGradient(VecX &df) {
     step = 0.001;
 
     // calculate gradient using central finite difference
-    for (int i = 0; i < this->x.rows(); i++) {
-      px = this->x;
-      nx = this->x;
+    for (int i = 0; i < opt->x.rows(); i++) {
+      px = opt->x;
+      nx = opt->x;
       px(i) += step;
       nx(i) -= step;
-      df(i) = (this->f(px) - this->f(nx)) / (step * 2);
+      df(i) = (opt->f(px) - opt->f(nx)) / (step * 2);
     }
 
   } catch (const std::bad_function_call &e) {
@@ -56,23 +57,23 @@ int GDOpt::calcGradient(VecX &df) {
   return 0;
 }
 
-int GDOpt::optimize(void) {
+int gdopt_optimize(struct gdopt *opt) {
   VecX df;
 
   try {
     // pre-check
-    if (this->configured == false) {
+    if (opt->configured == false) {
       log_err(EGDC);
       return -1;
     }
 
     // setup
-    df.resize(this->x.rows(), 1);
+    df.resize(opt->x.rows(), 1);
 
     // optimize
-    for (int i = 0; i < this->max_iter; i++) {
-      this->calcGradient(df);
-      this->x -= this->eta.cwiseProduct(df);
+    for (int i = 0; i < opt->max_iter; i++) {
+      gdopt_calculate_gradient(opt, df);
+      opt->x -= opt->eta.cwiseProduct(df);
     }
 
   } catch (const std::bad_function_call &e) {

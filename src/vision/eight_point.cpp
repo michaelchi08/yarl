@@ -8,7 +8,11 @@ EightPoint::EightPoint(void) {
 
   this->image_width = 0;
   this->image_height = 0;
-  this->N << 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0;
+  // clang-format off
+  this->N << 0.0, 0.0, 0.0,
+             0.0, 0.0, 0.0,
+             0.0, 0.0, 0.0;
+  // clang-format on
 }
 
 int EightPoint::configure(int image_width, int image_height) {
@@ -16,8 +20,11 @@ int EightPoint::configure(int image_width, int image_height) {
 
   this->image_width = image_width;
   this->image_height = image_height;
-  this->N << 2.0 / image_width, 0.0, -1.0, 0.0, 2.0 / image_height, -1.0, 0.0,
-    0.0, 1.0;
+  // clang-format off
+  this->N << 2.0 / image_width, 0.0, -1.0,
+             0.0, 2.0 / image_height, -1.0,
+             0.0, 0.0, 1.0;
+  // clang-format on
 
   return 0;
 }
@@ -208,10 +215,12 @@ int EightPoint::obtainPose(
     P2 = poses[i];
 
     // build matrix A
+    // clang-format off
     A << (pt1(0) * P1.block(2, 0, 1, 4)) - P1.block(0, 0, 1, 4),
-      (pt1(1) * P1.block(2, 0, 1, 4)) - P1.block(1, 0, 1, 4),
-      (pt2(0) * P2.block(2, 0, 1, 4)) - P2.block(0, 0, 1, 4),
-      (pt2(1) * P2.block(2, 0, 1, 4)) - P2.block(1, 0, 1, 4);
+         (pt1(1) * P1.block(2, 0, 1, 4)) - P1.block(1, 0, 1, 4),
+         (pt2(0) * P2.block(2, 0, 1, 4)) - P2.block(0, 0, 1, 4),
+         (pt2(1) * P2.block(2, 0, 1, 4)) - P2.block(1, 0, 1, 4);
+    // clang-format on
 
     // normalize A - row by row
     A.block(0, 0, 1, 4) = A.block(0, 0, 1, 4) / A.block(0, 0, 1, 4).norm();

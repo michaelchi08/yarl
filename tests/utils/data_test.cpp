@@ -1,5 +1,5 @@
-#include "yarl/yarl_test.hpp"
 #include "yarl/utils/data.hpp"
+#include "yarl/yarl_test.hpp"
 
 #define TEST_DATA "tests/data/utils/matrix.dat"
 #define TEST_OUTPUT "/tmp/matrix.dat"

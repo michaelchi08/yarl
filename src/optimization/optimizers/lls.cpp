@@ -2,23 +2,7 @@
 
 namespace yarl {
 
-LLSSolver::LLSSolver(void) {
-  this->configured = false;
-}
-
-int LLSSolver::configure(void) {
-  this->configured = true;
-
-  return 0;
-}
-
-int LLSSolver::solve(MatX A, MatX b, VecX &x) {
-  // pre-check
-  if (this->configured == false) {
-    return -1;
-  }
-
-  // perform linear least squares
+int lls_solve(MatX A, MatX b, VecX &x) {
   x = (A.transpose() * A).inverse() * A.transpose() * b;
 
   return 0;

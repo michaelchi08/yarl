@@ -10,23 +10,23 @@ namespace yarl {
 #define EGDC "GDOpt is not configured!"
 #define EGDF "Failed to execute GDOpt.f() [%s]"
 
-class GDOpt {
-public:
+struct gdopt {
   bool configured;
 
   int max_iter;
   VecX eta;
   VecX x;
   std::function<double(VecX x)> f;
-
-  GDOpt(void);
-  int configure(int max_iter,
-                VecX eta,
-                VecX x,
-                std::function<double(VecX x)> f);
-  int calcGradient(VecX &df);
-  int optimize(void);
 };
+
+void gdopt_setup(struct gdopt *opt);
+int gdopt_configure(struct gdopt *opt,
+                    int max_iter,
+                    VecX eta,
+                    VecX x,
+                    std::function<double(VecX x)> f);
+int gdopt_calculate_gradient(struct gdopt *opt, VecX &df);
+int gdopt_optimize(struct gdopt *opt);
 
 }  // end of yarl namespace
 #endif

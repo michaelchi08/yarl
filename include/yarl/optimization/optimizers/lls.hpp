@@ -5,14 +5,7 @@
 
 namespace yarl {
 
-class LLSSolver {
-public:
-  bool configured;
-
-  LLSSolver(void);
-  int configure(void);
-  int solve(MatX A, MatX b, VecX &x);
-};
+int lls_solve(MatX A, MatX b, VecX &x);
 
 }  // end of yarl namespace
 #endif

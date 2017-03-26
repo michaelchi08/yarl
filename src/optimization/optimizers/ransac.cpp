@@ -2,39 +2,42 @@
 
 namespace yarl {
 
-RANSAC::RANSAC(void) {
-  this->configured = false;
+void ransac_setup(struct ransac *opt) {
+  opt->configured = false;
 
-  this->max_iter = 0;
-  this->thresh_ratio = 1.0;
-  this->thresh_dist = 0.0;
+  opt->max_iter = 0;
+  opt->thresh_ratio = 1.0;
+  opt->thresh_dist = 0.0;
 
-  this->iter = 0;
-  this->max_inliers = 0;
-  this->model_params[0] = 0.0;
-  this->model_params[1] = 0.0;
+  opt->iter = 0;
+  opt->max_inliers = 0;
+  opt->model_params[0] = 0.0;
+  opt->model_params[1] = 0.0;
 }
 
-int RANSAC::configure(int max_iter, double thresh_ratio, double thresh_dist) {
-  this->configured = true;
+int ransac_configure(struct ransac *opt,
+                     int max_iter,
+                     double thresh_ratio,
+                     double thresh_dist) {
+  opt->configured = true;
 
-  this->max_iter = max_iter;
-  this->thresh_ratio = thresh_ratio;
-  this->thresh_dist = thresh_dist;
+  opt->max_iter = max_iter;
+  opt->thresh_ratio = thresh_ratio;
+  opt->thresh_dist = thresh_dist;
 
-  this->iter = 0;
-  this->max_inliers = 0;
-  this->model_params[0] = 0.0;
-  this->model_params[1] = 0.0;
+  opt->iter = 0;
+  opt->max_inliers = 0;
+  opt->model_params[0] = 0.0;
+  opt->model_params[1] = 0.0;
 
   return 0;
 }
 
-int RANSAC::randomSample(MatX &data, Vec2 &sample) {
+int ransac_random_sample(struct ransac *opt, const MatX &data, Vec2 &sample) {
   int rand_index;
 
   // pre-check
-  if (this->configured == false) {
+  if (opt->configured == false) {
     return -1;
   } else if (data.rows() != 2) {
     return -2;
@@ -49,14 +52,17 @@ int RANSAC::randomSample(MatX &data, Vec2 &sample) {
   return 0;
 }
 
-int RANSAC::computeDistances(MatX &data, Vec2 &p1, Vec2 &p2, VecX &dists) {
-  int indicies[2];
-  double dx, dy, dist, pdiff_norm;
+int ransac_compute_distances(struct ransac *opt,
+                             const MatX &data,
+                             const Vec2 &p1,
+                             const Vec2 &p2,
+                             VecX &dists) {
+  double pdiff_norm;
   Vec2 pdiff, pdiff_unit, norm;
   MatX repmat(2, 1);
 
   // pre-check
-  if (this->configured == false) {
+  if (opt->configured == false) {
     return -1;
   }
 
@@ -75,78 +81,78 @@ int RANSAC::computeDistances(MatX &data, Vec2 &p1, Vec2 &p2, VecX &dists) {
   return 0;
 }
 
-int RANSAC::computeInliers(VecX &dists) {
+int ransac_compute_inliers(struct ransac *opt, VecX &dists) {
   // pre-check
-  if (this->configured == false) {
+  if (opt->configured == false) {
     return -1;
   }
 
   // compute inliers
-  this->inliers.clear();
+  opt->inliers.clear();
   for (int i = 0; i < dists.rows(); i++) {
-    if (fabs(dists[i]) <= this->thresh_dist) {
-      this->inliers.push_back(i);
+    if (fabs(dists[i]) <= opt->thresh_dist) {
+      opt->inliers.push_back(i);
     }
   }
 
   return 0;
 }
 
-int RANSAC::update(Vec2 &p1, Vec2 &p2) {
+int ransac_update(struct ransac *opt, const Vec2 &p1, const Vec2 &p2) {
   int conditions_met;
 
   // pre-check
-  if (this->configured == false) {
+  if (opt->configured == false) {
     return -1;
   }
 
   // setup
   conditions_met = 0;
-  conditions_met += (this->inliers.size() >= this->threshold) ? 1 : 0;
-  conditions_met += (this->inliers.size() > this->max_inliers) ? 1 : 0;
+  conditions_met += ((int) opt->inliers.size() >= opt->threshold) ? 1 : 0;
+  conditions_met += ((int) opt->inliers.size() > opt->max_inliers) ? 1 : 0;
 
   if (conditions_met == 2) {
-    this->max_inliers = this->inliers.size();
-    this->model_params[0] = (p2(1) - p1(1)) / (p2(0) - p1(0));
-    this->model_params[1] = p1(1) - this->model_params[0] * p1(0);
+    opt->max_inliers = opt->inliers.size();
+    opt->model_params[0] = (p2(1) - p1(1)) / (p2(0) - p1(0));
+    opt->model_params[1] = p1(1) - opt->model_params[0] * p1(0);
   }
 
   return 0;
 }
 
-int RANSAC::printStats(void) {
-  printf("iter: %d\t", this->iter);
-  printf("inliers: %d\t", this->max_inliers);
-  printf("m: %f\t", this->model_params[0]);
-  printf("c: %f\n", this->model_params[1]);
+void ransac_print_stats(struct ransac *opt) {
+  printf("iter: %d\t", opt->iter);
+  printf("inliers: %d\t", opt->max_inliers);
+  printf("m: %f\t", opt->model_params[0]);
+  printf("c: %f\n", opt->model_params[1]);
 }
 
-int RANSAC::optimize(MatX &data) {
+int ransac_optimize(struct ransac *opt, const MatX &data) {
   Vec2 p1;
   Vec2 p2;
   VecX dists;
 
   // pre-check
-  if (this->configured == false) {
+  if (opt->configured == false) {
     return -1;
   }
 
   // setup
-  this->threshold = round(this->thresh_ratio * data.cols());
+  opt->threshold = round(opt->thresh_ratio * data.cols());
 
   // optimize
-  for (this->iter = 0; this->iter < this->max_iter; this->iter++) {
+  for (opt->iter = 0; opt->iter < opt->max_iter; opt->iter++) {
     // random sample 2 points
-    this->randomSample(data, p1);
-    this->randomSample(data, p2);
+    ransac_random_sample(opt, data, p1);
+    ransac_random_sample(opt, data, p2);
 
     // compute distances and inliers
-    this->computeDistances(data, p1, p2, dists);
-    this->computeInliers(dists);
+    ransac_compute_distances(opt, data, p1, p2, dists);
+    ransac_compute_inliers(opt, dists);
 
     // update better model if found
-    this->update(p1, p2);
-    // this->printStats();
+    ransac_update(opt, p1, p2);
+    ransac_print_stats(opt);
   }
 
   return 0;

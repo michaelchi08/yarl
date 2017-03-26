@@ -2,42 +2,41 @@
 
 namespace yarl {
 
-KalmanFilter::KalmanFilter(void) {
-  this->initialized = false;
-}
-
-int KalmanFilter::init(VecX mu, MatX R, MatX C, MatX Q) {
+int kf_setup(struct kf *e, VecX mu, MatX R, MatX C, MatX Q) {
   int nb_states;
 
   nb_states = mu.size();
-  this->initialized = true;
-  this->mu = mu;
+  e->mu = mu;
 
-  this->B = MatX::Zero(nb_states, nb_states);
-  this->R = R;
+  e->B = MatX::Zero(nb_states, nb_states);
+  e->R = R;
 
-  this->C = C;
-  this->Q = Q;
+  e->C = C;
+  e->Q = Q;
 
-  this->S = MatX::Identity(nb_states, nb_states);
-  this->I = MatX::Identity(nb_states, nb_states);
-  this->K = MatX::Zero(nb_states, nb_states);
+  e->S = MatX::Identity(nb_states, nb_states);
+  e->I = MatX::Identity(nb_states, nb_states);
+  e->K = MatX::Zero(nb_states, nb_states);
 
-  this->mu_p = VecX::Zero(nb_states);
-  this->S_p = MatX::Zero(nb_states, nb_states);
+  e->mu_p = VecX::Zero(nb_states);
+  e->S_p = MatX::Zero(nb_states, nb_states);
 
   return 0;
 }
 
-int KalmanFilter::estimate(MatX A, VecX y) {
+int kf_estimate(struct kf *e, MatX A, VecX y) {
+  MatX C_T;
+
   // prediction update
-  mu_p = A * mu;
-  S_p = A * S * A.transpose() + R;
+  e->mu_p = A * e->mu;
+  e->S_p = A * e->S * A.transpose() + e->R;
 
   // measurement update
-  K = S_p * C.transpose() * (C * S_p * C.transpose() + Q).inverse();
-  mu = mu_p + K * (y - C * mu_p);
-  S = (I - K * C) * S_p;
+  // clang-format off
+  e->K = e->S_p * e->C.transpose() * (e->C * e->S_p * e->C.transpose() + e->Q).inverse();
+  e->mu = e->mu_p + e->K * (y - e->C * e->mu_p);
+  e->S = (e->I - e->K * e->C) * e->S_p;
+  // clang-format on
 
   return 0;
 }

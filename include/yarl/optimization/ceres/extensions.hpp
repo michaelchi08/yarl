@@ -20,7 +20,8 @@ namespace extensions {
 class EigenQuaternionParameterization
   : public ::ceres::LocalParameterization {
 public:
-  virtual ~EigenQuaternionParameterization() {}
+  virtual ~EigenQuaternionParameterization() {
+  }
 
   virtual bool Plus(const double *x_raw,
                     const double *delta_raw,

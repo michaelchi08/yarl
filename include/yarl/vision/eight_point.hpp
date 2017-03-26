@@ -6,7 +6,6 @@
 
 #include <math.h>
 
-
 #include "yarl/utils/math.hpp"
 #include "yarl/utils/utils.hpp"
 #include "yarl/vision/utils.hpp"

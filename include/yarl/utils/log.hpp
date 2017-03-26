@@ -1,5 +1,5 @@
-#ifndef UTILS_LOGGING_HPP
-#define UTILS_LOGGING_HPP
+#ifndef UTILS_LOG_HPP
+#define UTILS_LOG_HPP
 
 #include <stdio.h>
 

@@ -1,9 +1,9 @@
 #ifndef yarl_TEST_HPP
 #define yarl_TEST_HPP
 
-#include <random>
 #include <fstream>
 #include <iostream>
+#include <random>
 
 #include <gtest/gtest.h>
 

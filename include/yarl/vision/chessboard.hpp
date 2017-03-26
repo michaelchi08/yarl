@@ -5,7 +5,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "yarl/utils/logging.hpp"
 #include "yarl/utils/utils.hpp"
 
 namespace yarl {

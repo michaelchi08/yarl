@@ -14,8 +14,7 @@ namespace yarl {
 
 #define LMA_BIND(X) std::bind(X, std::placeholders::_1, std::placeholders::_2)
 
-class LMASettings {
-public:
+struct lmaopt_settings {
   int max_iter;
   double lambda;
   std::function<double(VecX x, VecX beta)> function;
@@ -26,14 +25,9 @@ public:
   MatX x;
   VecX y;
   VecX beta;
-
-  LMASettings(void);
 };
 
-class LMAOpt {
-public:
-  bool configured;
-
+struct lmaopt {
   int max_iter;
   double lambda;
   std::function<double(VecX x, VecX beta)> function;
@@ -52,14 +46,15 @@ public:
   MatX H;
 
   double error;
-
-  LMAOpt(void);
-  int configure(LMASettings settings);
-  int evalFunction(VecX beta, double &error);
-  int calcGradients(VecX beta);
-  int iterate(void);
-  int optimize(void);
 };
+
+void lmaopt_default_settings(struct lmaopt_settings *settings);
+void lmaopt_setup(struct lmaopt *opt);
+int lmaopt_configure(struct lmaopt *opt, struct lmaopt_settings *settings);
+int lmaopt_evaluate_function(struct lmaopt *opt, VecX beta, double *error);
+int lmaopt_calculate_gradient(struct lmaopt *opt, VecX beta);
+int lmaopt_iterate(struct lmaopt *opt);
+int lmaopt_optimize(struct lmaopt *opt);
 
 }  // end of yarl namespace
 #endif
