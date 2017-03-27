@@ -1,6 +1,11 @@
 #ifndef YARL_UTILS_UTILS_HPP
 #define YARL_UTILS_UTILS_HPP
 
+#define UNUSED(expr) \
+  do {               \
+    (void) (expr);   \
+  } while (0)
+
 #include "yarl/utils/data.hpp"
 #include "yarl/utils/file.hpp"
 #include "yarl/utils/log.hpp"

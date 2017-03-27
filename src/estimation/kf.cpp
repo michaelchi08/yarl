@@ -25,8 +25,6 @@ int kf_setup(struct kf *e, VecX mu, MatX R, MatX C, MatX Q) {
 }
 
 int kf_estimate(struct kf *e, MatX A, VecX y) {
-  MatX C_T;
-
   // prediction update
   e->mu_p = A * e->mu;
   e->S_p = A * e->S * A.transpose() + e->R;
