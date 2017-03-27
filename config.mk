@@ -40,15 +40,15 @@ INCLUDES = -I/usr/local/include/ \
 		   -I/usr/include \
 		   -I/usr/include/eigen3 \
 		   -I$(PWD)/include
-LIBS =  -L/usr/local/lib \
-		-L/usr/lib \
-        -L$(LIB_DIR) \
-        -L$(GTEST_LIB_DIR) \
-        -l$(PROJECT_NAME) \
-        $(OPENCV_LIB) \
-        $(CERES_LIB) \
-        $(YAML_CPP_LIB) \
-        $(GTEST_LIB)
+LIBS = -L/usr/local/lib \
+			 -L/usr/lib \
+       -L$(LIB_DIR) \
+       -L$(GTEST_LIB_DIR) \
+       -l$(PROJECT_NAME) \
+       $(OPENCV_LIB) \
+       $(CERES_LIB) \
+       $(YAML_CPP_LIB) \
+       $(GTEST_LIB)
 
 # COMPILER FLAGS
 CXX = g++

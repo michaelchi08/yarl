@@ -16,7 +16,7 @@ TEST(lls, solve) {
   b << 6, 5, 7, 10;
   // clang-format on
 
-  lls_solve(A, b, x);
+  llsopt_solve(A, b, x);
   ASSERT_FLOAT_EQ(x(0), 3.5);
   ASSERT_FLOAT_EQ(x(1), 1.4);
 }

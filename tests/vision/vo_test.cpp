@@ -10,64 +10,64 @@
 
 namespace yarl {
 
-TEST(VisualOdometry, constructor) {
-  VisualOdometry vo;
-
-  ASSERT_EQ(false, vo.configured);
-}
-
-TEST(VisualOdometry, configure) {
-  Mat3 K;
-  Camera camera;
-  VisualOdometry vo;
-
-  K(0, 0) = 1.0;
-  K(0, 2) = 2.0;
-  K(1, 2) = 3.0;
-
-  vo.configure(K);
-  ASSERT_EQ(true, vo.configured);
-}
-
-TEST(VisualOdometry, featureTracking) {
-  Mat3 K;
-  cv::Mat mask, frame;
-  cv::Mat img_1, img_2, img_combined;
-  FastDetector fast;
-  VisualOdometry vo;
-  std::vector<cv::Point2f> cvpts1, cvpts2;
-  std::vector<float> errors;
-  std::vector<uchar> status;
-
-  // setup
-  fast.configure(55, true);
-  K(0, 0) = 1.0;
-  K(0, 2) = 0.0;
-  K(1, 2) = 0.0;
-  vo.configure(K);
-
-  img_1 = cv::imread(TEST_IMAGE_1);
-  img_2 = cv::imread(TEST_IMAGE_2);
-  fast.detect(img_1, cvpts1);
-
-  // test and assert
-  vo.featureTracking(img_1, img_2, cvpts1, cvpts2, errors, status);
-  ASSERT_EQ(cvpts2.size(), cvpts1.size());
-  ASSERT_EQ(cvpts2.size(), errors.size());
-  ASSERT_EQ(cvpts2.size(), status.size());
-
-  // // record tracked points
-  // MatX pts1, pts2;
-  // convert_cvpts(cvpts1, pts1);
-  // convert_cvpts(cvpts2, pts2);
-  // mat2csv("/tmp/pts1.dat", pts1);
-  // mat2csv("/tmp/pts2.dat", pts2);
-
-  // // display tracked features
-  // vo.drawOpticalFlow(img_1, img_2, cvpts1, cvpts2, img_combined);
-  // cv::imshow("Test Feature Tracking", img_combined);
-  // cv::waitKey(2000);
-}
+// TEST(VisualOdometry, constructor) {
+//   VisualOdometry vo;
+//
+//   ASSERT_EQ(false, vo.configured);
+// }
+//
+// TEST(VisualOdometry, configure) {
+//   Mat3 K;
+//   Camera camera;
+//   VisualOdometry vo;
+//
+//   K(0, 0) = 1.0;
+//   K(0, 2) = 2.0;
+//   K(1, 2) = 3.0;
+//
+//   vo.configure(K);
+//   ASSERT_EQ(true, vo.configured);
+// }
+//
+// TEST(VisualOdometry, featureTracking) {
+//   Mat3 K;
+//   cv::Mat mask, frame;
+//   cv::Mat img_1, img_2, img_combined;
+//   FastDetector fast;
+//   VisualOdometry vo;
+//   std::vector<cv::Point2f> cvpts1, cvpts2;
+//   std::vector<float> errors;
+//   std::vector<uchar> status;
+//
+//   // setup
+//   fast.configure(55, true);
+//   K(0, 0) = 1.0;
+//   K(0, 2) = 0.0;
+//   K(1, 2) = 0.0;
+//   vo.configure(K);
+//
+//   img_1 = cv::imread(TEST_IMAGE_1);
+//   img_2 = cv::imread(TEST_IMAGE_2);
+//   fast.detect(img_1, cvpts1);
+//
+//   // test and assert
+//   vo.featureTracking(img_1, img_2, cvpts1, cvpts2, errors, status);
+//   ASSERT_EQ(cvpts2.size(), cvpts1.size());
+//   ASSERT_EQ(cvpts2.size(), errors.size());
+//   ASSERT_EQ(cvpts2.size(), status.size());
+//
+//   // // record tracked points
+//   // MatX pts1, pts2;
+//   // convert_cvpts(cvpts1, pts1);
+//   // convert_cvpts(cvpts2, pts2);
+//   // mat2csv("/tmp/pts1.dat", pts1);
+//   // mat2csv("/tmp/pts2.dat", pts2);
+//
+//   // // display tracked features
+//   // vo.drawOpticalFlow(img_1, img_2, cvpts1, cvpts2, img_combined);
+//   // cv::imshow("Test Feature Tracking", img_combined);
+//   // cv::waitKey(2000);
+// }
 
 // TEST(VisualOdometry, measure)
 // {
