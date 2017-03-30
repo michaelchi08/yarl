@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-  <int>1</int>
-  <float>1.0</float>
-  <double>1.0</double>
+  <bool> true </bool>
+  <int> 1 </int>
+  <float> 1.0 </float>
+  <double> 1.0 </double>
   <string>Hello World</string>
+
+	<bool_array>
+		<item>true</item>
+		<item>false</item>
+		<item> true </item>
+		<item> false </item>
+		<item>1</item>
+		<item>0</item>
+		<item> 1 </item>
+		<item> 0 </item>
+	</bool_array>
 
 	<int_array>
 		<item>0</item>
@@ -34,28 +46,60 @@
 	</string_array>
 
   <vector2>
-    <vec>1.0</vec>
-    <vec>2.0</vec>
+    <vec>1.0, 2.0</vec>
   </vector2>
 
   <vector3>
-    <vec>1.0</vec>
-    <vec>2.0</vec>
-    <vec>3.0</vec>
+    <vec>1.0, 2.0, 3.0</vec>
   </vector3>
 
   <vector4>
-    <vec>1.0</vec>
-    <vec>2.0</vec>
-    <vec>3.0</vec>
-    <vec>4.0</vec>
+    <vec>1.0, 2.0, 3.0, 4.0</vec>
   </vector4>
 
   <vectorX>
-    <vec>1.0</vec>
-    <vec>2.0</vec>
-    <vec>3.0</vec>
-    <vec>4.0</vec>
-    <vec>5.0</vec>
+    <vec>1.0, 2.0, 3.0, 4.0, 5.0</vec>
   </vectorX>
+
+  <matrix2>
+    <rows>2</rows>
+    <cols>2</cols>
+    <data>
+      1,2,
+      3,4
+    </data>
+  </matrix2>
+
+  <matrix3>
+    <rows>3</rows>
+    <cols>3</cols>
+    <data>
+      1,2,3,
+      4,5,6,
+      7,8,9
+    </data>
+  </matrix3>
+
+  <matrix4>
+    <rows>4</rows>
+    <cols>4</cols>
+    <data>
+      1,2,3,4,
+      5,6,7,8,
+      9,10,11,12,
+      13,14,15,16
+    </data>
+  </matrix4>
+
+  <matrixX>
+    <rows>5</rows>
+    <cols>5</cols>
+    <data>
+      1,2,3,4,5,
+      6,7,8,9,10,
+      11,12,13,14,15,
+      16,17,18,19,20,
+      21,22,23,24,25
+    </data>
+  </matrixX>
 </config>

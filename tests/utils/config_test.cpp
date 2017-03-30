@@ -74,6 +74,52 @@ TEST(ConfigParser, addParam) {
   ASSERT_TRUE(parser.params[0].data != NULL);
 }
 
+TEST(ConfigParser, checkVector) {
+  ConfigParser parser;
+  int retval;
+
+  // setup
+  parser.load(TEST_CONFIG);
+
+  retval = parser.checkVector("/config/vector2", VEC2);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkVector("/config/vector3", VEC3);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkVector("/config/vector4", VEC4);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkVector("/config/vectorX", VECX);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkVector("/config/vectorX", VEC2);
+  ASSERT_EQ(EVECINVSZ, retval);
+}
+
+TEST(ConfigParser, checkMatrix) {
+  ConfigParser parser;
+  int retval;
+
+  // setup
+  parser.load(TEST_CONFIG);
+
+  retval = parser.checkMatrix("/config/matrix2", MAT2);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkMatrix("/config/matrix3", MAT3);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkMatrix("/config/matrix4", MAT4);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkMatrix("/config/matrixX", MATX);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkMatrix("/config/matrix4", MATX);
+  ASSERT_EQ(0, retval);
+}
+
 TEST(ConfigParser, getParamPointer) {
   ConfigParser parser;
   int retval;
@@ -92,7 +138,7 @@ TEST(ConfigParser, getParamPointer) {
   ASSERT_EQ(NULL, parser.obj);
 
   // test no results
-  retval = parser.getParamPointer("/bogus");
+  retval = parser.getParamPointer("/config/bogus");
   ASSERT_EQ(EXPATHRES, retval);
   ASSERT_EQ(NULL, parser.obj);
 }
@@ -203,29 +249,6 @@ TEST(ConfigParser, parseArray) {
   ASSERT_EQ("D", s_array[3]);
 }
 
-TEST(ConfigParser, checkVector) {
-  ConfigParser parser;
-  int retval;
-
-  // setup
-  parser.load(TEST_CONFIG);
-
-  retval = parser.checkVector("/config/vector2", VEC2);
-  ASSERT_EQ(0, retval);
-
-  retval = parser.checkVector("/config/vector3", VEC3);
-  ASSERT_EQ(0, retval);
-
-  retval = parser.checkVector("/config/vector4", VEC4);
-  ASSERT_EQ(0, retval);
-
-  retval = parser.checkVector("/config/vectorX", VECX);
-  ASSERT_EQ(0, retval);
-
-  retval = parser.checkVector("/config/vectorX", VEC2);
-  ASSERT_EQ(EVECINVSZ, retval);
-}
-
 TEST(ConfigParser, parseVector) {
   Vec2 vec2;
   Vec3 vec3;
@@ -282,166 +305,172 @@ TEST(ConfigParser, parseVector) {
   }
 }
 
-// TEST(ConfigParser, loadMatrix) {
-//   int index;
-//   Mat2 mat2;
-//   Mat3 mat3;
-//   Mat4 mat4;
-//   MatX matx;
-//   cv::Mat cvmat;
-//   ConfigParser parser;
-//   ConfigParam param;
-//
-//   // setup
-//   parser.root = YAML::LoadFile(TEST_CONFIG);
-//
-//   // MATRIX 2
-//   param.optional = false;
-//   param.type = MAT2;
-//   param.key = "matrix2";
-//   param.mat2 = &mat2;
-//   parser.loadMatrix(param);
-//
-//   ASSERT_FLOAT_EQ(1.0, mat2(0, 0));
-//   ASSERT_FLOAT_EQ(2.0, mat2(0, 1));
-//   ASSERT_FLOAT_EQ(3.0, mat2(1, 0));
-//   ASSERT_FLOAT_EQ(4.0, mat2(1, 1));
-//
-//   // MATRIX 3
-//   param.optional = false;
-//   param.type = MAT3;
-//   param.key = "matrix3";
-//   param.mat3 = &mat3;
-//   parser.loadMatrix(param);
-//
-//   index = 0;
-//   for (int i = 0; i < 3; i++) {
-//     for (int j = 0; j < 3; j++) {
-//       ASSERT_FLOAT_EQ(index + 1.0, mat3(i, j));
-//       index++;
-//     }
-//   }
-//
-//   // MATRIX 4
-//   param.optional = false;
-//   param.type = MAT4;
-//   param.key = "matrix4";
-//   param.mat4 = &mat4;
-//   parser.loadMatrix(param);
-//
-//   index = 0;
-//   for (int i = 0; i < 4; i++) {
-//     for (int j = 0; j < 4; j++) {
-//       ASSERT_FLOAT_EQ(index + 1.0, mat4(i, j));
-//       index++;
-//     }
-//   }
-//
-//   // MATRIX X
-//   param.optional = false;
-//   param.type = MATX;
-//   param.key = "matrix";
-//   param.matx = &matx;
-//   parser.loadMatrix(param);
-//
-//   index = 0;
-//   for (int i = 0; i < 3; i++) {
-//     for (int j = 0; j < 4; j++) {
-//       ASSERT_FLOAT_EQ(index + 1.0, matx(i, j));
-//       index++;
-//     }
-//   }
-//
-//   // CV MATRIX
-//   param.optional = false;
-//   param.type = CVMAT;
-//   param.key = "matrix";
-//   param.cvmat = &cvmat;
-//   parser.loadMatrix(param);
-//
-//   index = 0;
-//   for (int i = 0; i < 3; i++) {
-//     for (int j = 0; j < 4; j++) {
-//       ASSERT_FLOAT_EQ(index + 1.0, cvmat.at<double>(i, j));
-//       index++;
-//     }
-//   }
-// }
-//
-// TEST(ConfigParser, load) {
-//   int retval;
-//   bool b;
-//   int i;
-//   float f;
-//   double d;
-//   std::string s;
-//
-//   std::vector<bool> b_array;
-//   std::vector<int> i_array;
-//   std::vector<float> f_array;
-//   std::vector<double> d_array;
-//   std::vector<std::string> s_array;
-//
-//   Vec2 vec2;
-//   Vec3 vec3;
-//   Vec4 vec4;
-//   VecX vecx;
-//
-//   Mat2 mat2;
-//   Mat3 mat3;
-//   Mat4 mat4;
-//   MatX matx;
-//   cv::Mat cvmat;
-//
-//   ConfigParser parser;
-//
-//   parser.addParam<bool>("bool", &b);
-//   parser.addParam<int>("int", &i);
-//   parser.addParam<float>("float", &f);
-//   parser.addParam<double>("double", &d);
-//   parser.addParam<std::string>("string", &s);
-//
-//   parser.addParam<std::vector<bool>>("bool_array", &b_array);
-//   parser.addParam<std::vector<int>>("int_array", &i_array);
-//   parser.addParam<std::vector<float>>("float_array", &f_array);
-//   parser.addParam<std::vector<double>>("double_array", &d_array);
-//   parser.addParam<std::vector<std::string>>("string_array", &s_array);
-//
-//   parser.addParam<Vec2>("vector2", &vec2);
-//   parser.addParam<Vec3>("vector3", &vec3);
-//   parser.addParam<Vec4>("vector4", &vec4);
-//   parser.addParam<VecX>("vector", &vecx);
-//
-//   parser.addParam<Mat2>("matrix2", &mat2);
-//   parser.addParam<Mat3>("matrix3", &mat3);
-//   parser.addParam<Mat4>("matrix4", &mat4);
-//   parser.addParam<MatX>("matrix", &matx);
-//   parser.addParam<cv::Mat>("matrix", &cvmat);
-//
-//   retval = parser.load(TEST_CONFIG);
-//   if (retval != 0) {
-//     FAIL();
-//   }
-//
-//   std::cout << "bool: " << b << std::endl;
-//   std::cout << "int: " << i << std::endl;
-//   std::cout << "float: " << f << std::endl;
-//   std::cout << "double: " << d << std::endl;
-//   std::cout << "string: " << s << std::endl;
-//   std::cout << std::endl;
-//
-//   std::cout << "vector2: " << vec2.transpose() << std::endl;
-//   std::cout << "vector3: " << vec3.transpose() << std::endl;
-//   std::cout << "vector4: " << vec4.transpose() << std::endl;
-//   std::cout << "vector: " << vecx.transpose() << std::endl;
-//   std::cout << std::endl;
-//
-//   std::cout << "matrix2: \n" << mat2 << std::endl;
-//   std::cout << "matrix3: \n" << mat3 << std::endl;
-//   std::cout << "matrix4: \n" << mat4 << std::endl;
-//   std::cout << "matrix: \n" << matx << std::endl;
-//   std::cout << "cvmatrix: \n" << cvmat << std::endl;
-//   std::cout << std::endl;
-// }
+TEST(ConfigParser, parseMatrix) {
+  int index;
+  Mat2 mat2;
+  Mat3 mat3;
+  Mat4 mat4;
+  MatX matx;
+  cv::Mat cvmat;
+  ConfigParser parser;
+  ConfigParam param;
+
+  // setup
+  parser.load(TEST_CONFIG);
+
+  // MATRIX 2
+  param.optional = false;
+  param.type = MAT2;
+  param.key = "/config/matrix2";
+  param.data = &mat2;
+  parser.parseMatrix(param);
+
+  ASSERT_FLOAT_EQ(1.0, mat2(0, 0));
+  ASSERT_FLOAT_EQ(2.0, mat2(0, 1));
+  ASSERT_FLOAT_EQ(3.0, mat2(1, 0));
+  ASSERT_FLOAT_EQ(4.0, mat2(1, 1));
+
+  // MATRIX 3
+  param.optional = false;
+  param.type = MAT3;
+  param.key = "/config/matrix3";
+  param.data = &mat3;
+  parser.parseMatrix(param);
+
+  index = 0;
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      ASSERT_FLOAT_EQ(index + 1.0, mat3(i, j));
+      index++;
+    }
+  }
+
+  // MATRIX 4
+  param.optional = false;
+  param.type = MAT4;
+  param.key = "/config/matrix4";
+  param.data = &mat4;
+  parser.parseMatrix(param);
+
+  index = 0;
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      ASSERT_FLOAT_EQ(index + 1.0, mat4(i, j));
+      index++;
+    }
+  }
+
+  // MATRIX X
+  param.optional = false;
+  param.type = MATX;
+  param.key = "/config/matrixX";
+  param.data = &matx;
+  parser.parseMatrix(param);
+
+  index = 0;
+  for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+      ASSERT_FLOAT_EQ(index + 1.0, matx(i, j));
+      index++;
+    }
+  }
+
+  // CV MATRIX
+  param.optional = false;
+  param.type = CVMAT;
+  param.key = "/config/matrixX";
+  param.data = &cvmat;
+  parser.parseMatrix(param);
+
+  index = 0;
+  for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+      ASSERT_FLOAT_EQ(index + 1.0, cvmat.at<double>(i, j));
+      index++;
+    }
+  }
+}
+
+TEST(ConfigParser, load) {
+  int retval;
+  bool b;
+  int i;
+  float f;
+  double d;
+  std::string s;
+
+  std::vector<bool> b_array;
+  std::vector<int> i_array;
+  std::vector<float> f_array;
+  std::vector<double> d_array;
+  std::vector<std::string> s_array;
+
+  Vec2 vec2;
+  Vec3 vec3;
+  Vec4 vec4;
+  VecX vecx;
+
+  Mat2 mat2;
+  Mat3 mat3;
+  Mat4 mat4;
+  MatX matx;
+  cv::Mat cvmat;
+
+  ConfigParser parser;
+
+  parser.addParam("/config/bool", &b);
+  parser.addParam("/config/int", &i);
+  parser.addParam("/config/float", &f);
+  parser.addParam("/config/double", &d);
+  parser.addParam("/config/string", &s);
+
+  parser.addParam("/config/bool_array", &b_array);
+  parser.addParam("/config/int_array", &i_array);
+  parser.addParam("/config/float_array", &f_array);
+  parser.addParam("/config/double_array", &d_array);
+  parser.addParam("/config/string_array", &s_array);
+
+  parser.addParam("/config/vector2", &vec2);
+  parser.addParam("/config/vector3", &vec3);
+  parser.addParam("/config/vector4", &vec4);
+  parser.addParam("/config/vectorX", &vecx);
+
+  parser.addParam("/config/matrix2", &mat2);
+  parser.addParam("/config/matrix3", &mat3);
+  parser.addParam("/config/matrix4", &mat4);
+  parser.addParam("/config/matrixX", &matx);
+  parser.addParam("/config/matrixX", &cvmat);
+
+  retval = parser.load(TEST_CONFIG);
+  if (retval != 0) {
+    FAIL();
+  }
+
+  std::cout << "bool: " << b << std::endl;
+  std::cout << "int: " << i << std::endl;
+  std::cout << "float: " << f << std::endl;
+  std::cout << "double: " << d << std::endl;
+  std::cout << "string: " << s << std::endl;
+  std::cout << std::endl;
+
+  std::cout << "bool_array: " << std::endl;
+  for (size_t i = 0; i < b_array.size(); i++) {
+    std::cout << b_array[i] << std::endl;
+  }
+  std::cout << std::endl;
+
+  std::cout << "vector2: " << vec2.transpose() << std::endl;
+  std::cout << "vector3: " << vec3.transpose() << std::endl;
+  std::cout << "vector4: " << vec4.transpose() << std::endl;
+  std::cout << "vector: " << vecx.transpose() << std::endl;
+  std::cout << std::endl;
+
+  std::cout << "matrix2: \n" << mat2 << std::endl;
+  std::cout << "matrix3: \n" << mat3 << std::endl;
+  std::cout << "matrix4: \n" << mat4 << std::endl;
+  std::cout << "matrix: \n" << matx << std::endl;
+  std::cout << "cvmatrix: \n" << cvmat << std::endl;
+  std::cout << std::endl;
+}
 
 }  // end of  yarl namespace

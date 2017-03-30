@@ -11,9 +11,7 @@
 #include <libxml/parser.h>
 #include <libxml/xpath.h>
 
-#include "yarl/utils/file.hpp"
-#include "yarl/utils/log.hpp"
-#include "yarl/utils/math.hpp"
+#include "yarl/utils/utils.hpp"
 
 namespace yarl {
 
@@ -23,6 +21,8 @@ namespace yarl {
 #define ECONVTYPE -4
 #define EPARAMNAN -5
 #define EVECINVSZ -6
+#define EMATINVSZ -7
+#define EINVBOOLD -8
 
 enum ConfigDataType {
   TYPE_NOT_SET = 0,
@@ -105,13 +105,16 @@ public:
   void addParam(std::string key, cv::Mat *out, bool optional = false);
   // clang-format on
   int getParamPointer(std::string key);
-  int parsePrimitive(std::string key, enum ConfigDataType type, void *out);
-  int parsePrimitive(ConfigParam &param);
-  int parseArray(std::string key, enum ConfigDataType type, void *out);
-  int parseArray(ConfigParam &param);
   int checkVector(std::string key, enum ConfigDataType type);
+  int checkMatrix(std::string key, enum ConfigDataType type);
+  int parsePrimitive(std::string key, enum ConfigDataType type, void *out);
+  int parseArray(std::string key, enum ConfigDataType type, void *out);
   int parseVector(std::string key, enum ConfigDataType type, void *out);
-  // int checkMatrix(const std::string key, const bool optional);
+  int parseMatrix(const std::string key, enum ConfigDataType type, void *out);
+  int parsePrimitive(ConfigParam &param);
+  int parseArray(ConfigParam &param);
+  int parseVector(ConfigParam &param);
+  int parseMatrix(ConfigParam &param);
   // int loadPrimitive(const ConfigParam param);
   // int loadArray(const ConfigParam param);
   // int loadVector(const ConfigParam param);

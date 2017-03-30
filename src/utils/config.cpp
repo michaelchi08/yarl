@@ -128,10 +128,95 @@ int ConfigParser::getParamPointer(std::string key) {
     return EXPATHINV;
 
   } else if (xmlXPathNodeSetIsEmpty(this->obj->nodesetval)) {
-    log_err("No result");
+    log_err("XPath [%s] not found!", key.c_str());
     xmlXPathFreeObject(this->obj);
     this->obj = NULL;
     return EXPATHRES;
+  }
+
+  return 0;
+}
+
+int ConfigParser::checkVector(std::string key, enum ConfigDataType type) {
+  int retval;
+  xmlNode *xml_node;
+  xmlChar *xml_value;
+  std::vector<std::string> data;
+
+  // check key
+  retval = this->getParamPointer(key + "/vec");
+  if (retval != 0) {
+    return retval;
+  }
+
+  // check data key
+  retval = this->getParamPointer(key + "/vec");
+  if (retval != 0) {
+    return retval;
+  }
+  xml_node = this->obj->nodesetval->nodeTab[0];
+  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
+  std::string s = std::string(reinterpret_cast<char *>(xml_value));
+  split(s, ',', data);
+
+  // check number of values
+  switch (type) {
+  case VEC2:
+    return (data.size() == 2) ? 0 : EVECINVSZ;
+  case VEC3:
+    return (data.size() == 3) ? 0 : EVECINVSZ;
+  case VEC4:
+    return (data.size() == 4) ? 0 : EVECINVSZ;
+  case VECX:
+    return 0;
+  default:
+    return ECONVTYPE;
+  }
+
+  return 0;
+}
+
+int ConfigParser::checkMatrix(std::string key, enum ConfigDataType type) {
+  int retval, rows, cols;
+  xmlNode *xml_node;
+  xmlChar *xml_value;
+  std::vector<std::string> data;
+
+  // get rows and cols
+  retval = this->parsePrimitive(key + "/rows", INT, &rows);
+  if (retval != 0) {
+    return retval;
+  }
+
+  retval = this->parsePrimitive(key + "/cols", INT, &cols);
+  if (retval != 0) {
+    return retval;
+  }
+
+  // check data key
+  retval = this->getParamPointer(key + "/data");
+  if (retval != 0) {
+    return retval;
+  }
+  xml_node = this->obj->nodesetval->nodeTab[0];
+  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
+  std::string s = std::string(reinterpret_cast<char *>(xml_value));
+  split(s, ',', data);
+
+  // check number of values
+  switch (type) {
+  case MAT2:
+    return (static_cast<int>(data.size()) == 4) ? 0 : EMATINVSZ;
+  case MAT3:
+    return (static_cast<int>(data.size()) == 9) ? 0 : EMATINVSZ;
+  case MAT4:
+    return (static_cast<int>(data.size()) == 16) ? 0 : EMATINVSZ;
+  case MATX:
+    return (static_cast<int>(data.size()) == (rows * cols)) ? 0 : EMATINVSZ;
+  case CVMAT:
+    return (static_cast<int>(data.size()) == (rows * cols)) ? 0 : EMATINVSZ;
+  default:
+    return ECONVTYPE;
   }
 
   return 0;
@@ -157,20 +242,33 @@ int ConfigParser::parsePrimitive(std::string key,
 
   // convert value
   value = reinterpret_cast<char *>(xml_value);
-  switch (type) {
-  case INT:
+  if (type == BOOL) {
+    // strip white space in string
+    std::string v = std::string(value);
+    strip(v, ' ');
+
+    // parse bool
+    if (v.compare("true") == 0 || v.compare("1") == 0) {
+      *reinterpret_cast<bool *>(out) = true;
+    } else if (v.compare("false") == 0 || v.compare("0") == 0) {
+      *reinterpret_cast<bool *>(out) = false;
+    } else {
+      return EINVBOOLD;
+    }
+
+  } else if (type == INT) {
     *reinterpret_cast<int *>(out) = atoi(value);
-    break;
-  case FLOAT:
+
+  } else if (type == FLOAT) {
     *reinterpret_cast<float *>(out) = static_cast<float>(atof(value));
-    break;
-  case DOUBLE:
+
+  } else if (type == DOUBLE) {
     *reinterpret_cast<double *>(out) = atof(value);
-    break;
-  case STRING:
-    *reinterpret_cast<std::string *>(out) = std::string(value);
-    break;
-  default:
+
+  } else if (type == STRING) {
+    *reinterpret_cast<std::string *>(out) = strim(std::string(value));
+
+  } else {
     return ECONVTYPE;
   }
 
@@ -180,10 +278,6 @@ int ConfigParser::parsePrimitive(std::string key,
   this->obj = NULL;
 
   return 0;
-}
-
-int ConfigParser::parsePrimitive(ConfigParam &param) {
-  return this->parsePrimitive(param.key, param.type, param.data);
 }
 
 int ConfigParser::parseArray(std::string key,
@@ -211,24 +305,37 @@ int ConfigParser::parseArray(std::string key,
 
     // parse value and push to array
     value = reinterpret_cast<char *>(xml_value);
-    switch (type) {
-    case INT_ARRAY:
+    if (type == BOOL_ARRAY) {
+      // strip white space in string
+      std::string v = std::string(value);
+      strip(v, ' ');
+
+      // parse bool
+      if (v.compare("true") == 0 || v.compare("1") == 0) {
+        reinterpret_cast<std::vector<bool> *>(out)->push_back(true);
+      } else if (v.compare("false") == 0 || v.compare("0") == 0) {
+        reinterpret_cast<std::vector<bool> *>(out)->push_back(false);
+      } else {
+        return EINVBOOLD;
+      }
+
+    } else if (type == INT_ARRAY) {
       i = atoi(value);
       reinterpret_cast<std::vector<int> *>(out)->push_back(i);
-      break;
-    case FLOAT_ARRAY:
+
+    } else if (type == FLOAT_ARRAY) {
       f = static_cast<float>(atof(value));
       reinterpret_cast<std::vector<float> *>(out)->push_back(f);
-      break;
-    case DOUBLE_ARRAY:
+
+    } else if (type == DOUBLE_ARRAY) {
       d = atof(value);
       reinterpret_cast<std::vector<double> *>(out)->push_back(d);
-      break;
-    case STRING_ARRAY:
-      s = std::string(value);
+
+    } else if (type == STRING_ARRAY) {
+      s = strim(std::string(value));
       reinterpret_cast<std::vector<std::string> *>(out)->push_back(s);
-      break;
-    default:
+
+    } else {
       return ECONVTYPE;
     }
   }
@@ -241,45 +348,13 @@ int ConfigParser::parseArray(std::string key,
   return 0;
 }
 
-int ConfigParser::parseArray(ConfigParam &param) {
-  return this->parseArray(param.key, param.type, param.data);
-}
-
-int ConfigParser::checkVector(std::string key, enum ConfigDataType type) {
-  int retval;
-  int vector_size;
-
-  // check key
-  retval = this->getParamPointer(key + "/vec");
-  if (retval != 0) {
-    return retval;
-  }
-
-  // check number of values
-  switch (type) {
-  case VEC2:
-    return (this->obj->nodesetval->nodeNr == 2) ? 0 : EVECINVSZ;
-  case VEC3:
-    return (this->obj->nodesetval->nodeNr == 3) ? 0 : EVECINVSZ;
-  case VEC4:
-    return (this->obj->nodesetval->nodeNr == 4) ? 0 : EVECINVSZ;
-  case VECX:
-    return (this->obj->nodesetval->nodeNr > 4) ? 0 : EVECINVSZ;
-  default:
-    return ECONVTYPE;
-  }
-
-  return 0;
-}
-
 int ConfigParser::parseVector(std::string key,
                               enum ConfigDataType type,
                               void *out) {
-  double d;
   int retval;
   xmlNode *xml_node;
   xmlChar *xml_value;
-  std::vector<double> vec_values;
+  std::vector<std::string> data;
 
   // pre-check
   retval = this->checkVector(key, type);
@@ -287,38 +362,38 @@ int ConfigParser::parseVector(std::string key,
     return retval;
   }
 
-  // parse vector
+  // parse data
   this->getParamPointer(key + "/vec");
-  for (int i = 0; i < this->obj->nodesetval->nodeNr; i++) {
-    xml_node = this->obj->nodesetval->nodeTab[i];
-    xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
-
-    // parse value and push to array
-    d = atof(reinterpret_cast<char *>(xml_value));
-    vec_values.push_back(d);
-  }
+  xml_node = this->obj->nodesetval->nodeTab[0];
+  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
+  std::string s = std::string(reinterpret_cast<char *>(xml_value));
+  split(s, ',', data);
 
   // convert std::vector to VEC
   // clang-format off
   if (type == VEC2) {
-    *reinterpret_cast<Vec2 *>(out) << vec_values[0], vec_values[1];
+    Vec2 &v = *reinterpret_cast<Vec2 *>(out);
+    v(0) = atof(data[0].c_str());
+    v(1) = atof(data[1].c_str());
 
   } else if (type == VEC3) {
-    *reinterpret_cast<Vec3 *>(out) << vec_values[0],
-                                      vec_values[1],
-                                      vec_values[2];
+    Vec3 &v = *reinterpret_cast<Vec3 *>(out);
+    v(0) = atof(data[0].c_str());
+    v(1) = atof(data[1].c_str());
+    v(2) = atof(data[2].c_str());
 
   } else if (type == VEC4) {
-    *reinterpret_cast<Vec4 *>(out) << vec_values[0],
-                                      vec_values[1],
-                                      vec_values[2],
-                                      vec_values[3];
+    Vec4 &v = *reinterpret_cast<Vec4 *>(out);
+    v(0) = atof(data[0].c_str());
+    v(1) = atof(data[1].c_str());
+    v(2) = atof(data[2].c_str());
+    v(3) = atof(data[3].c_str());
 
   } else if (type == VECX) {
-    VecX &vecx = *(VecX *) out;
-    vecx = VecX(this->obj->nodesetval->nodeNr);
-    for (int i = 0; i < this->obj->nodesetval->nodeNr; i++) {
-      vecx(i) = vec_values[i];
+    VecX &vecx = *reinterpret_cast<VecX *>(out);
+    vecx = VecX(data.size());
+    for (size_t i = 0; i < data.size(); i++) {
+      vecx(i) = atof(data[i].c_str());
     }
 
   } else {
@@ -331,236 +406,112 @@ int ConfigParser::parseVector(std::string key,
   xmlXPathFreeObject(this->obj);
   this->obj = NULL;
 
+  return 0;
+}
+
+int ConfigParser::parseMatrix(std::string key,
+                              enum ConfigDataType type,
+                              void *out) {
+  int retval, rows, cols, idx;
+  xmlNode *xml_node;
+  xmlChar *xml_value;
+  std::vector<std::string> data;
+
+  // pre-check
+  retval = this->checkMatrix(key, type);
+  if (retval != 0) {
+    return retval;
+  }
+
+  // parse rows and cols
+  this->parsePrimitive(key + "/rows", INT, &rows);
+  this->parsePrimitive(key + "/cols", INT, &cols);
+
+  // parse data
+  this->getParamPointer(key + "/data");
+  xml_node = this->obj->nodesetval->nodeTab[0];
+  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
+  std::string s = std::string(reinterpret_cast<char *>(xml_value));
+  split(s, ',', data);
+
+  // set matrix
+  idx = 0;
+  if (type == MAT2) {
+    Mat2 &m = *reinterpret_cast<Mat2 *>(out);
+    m(0, 0) = atof(data[0].c_str());
+    m(0, 1) = atof(data[1].c_str());
+    m(1, 0) = atof(data[2].c_str());
+    m(1, 1) = atof(data[3].c_str());
+
+  } else if (type == MAT3) {
+    Mat3 &m = *reinterpret_cast<Mat3 *>(out);
+    m(0, 0) = atof(data[0].c_str());
+    m(0, 1) = atof(data[1].c_str());
+    m(0, 2) = atof(data[2].c_str());
+
+    m(1, 0) = atof(data[3].c_str());
+    m(1, 1) = atof(data[4].c_str());
+    m(1, 2) = atof(data[5].c_str());
+
+    m(2, 0) = atof(data[6].c_str());
+    m(2, 1) = atof(data[7].c_str());
+    m(2, 2) = atof(data[8].c_str());
+
+  } else if (type == MAT4) {
+    Mat4 &m = *reinterpret_cast<Mat4 *>(out);
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        m(i, j) = atof(data[idx].c_str());
+        idx++;
+      }
+    }
+
+  } else if (type == MATX) {
+    MatX &m = *reinterpret_cast<MatX *>(out);
+    m.resize(rows, cols);
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        m(i, j) = atof(data[idx].c_str());
+        idx++;
+      }
+    }
+
+  } else if (type == CVMAT) {
+    cv::Mat &m = *reinterpret_cast<cv::Mat *>(out);
+    m = cv::Mat(rows, cols, CV_64F);
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        m.at<double>(i, j) = atof(data[idx].c_str());
+        idx++;
+      }
+    }
+
+  } else {
+    return ECONVTYPE;
+  }
 
   return 0;
 }
 
-// int ConfigParser::checkMatrix(const std::string key, const bool optional) {
-//   int retval;
-//   const std::string targets[3] = {"rows", "cols", "data"};
-//
-//   // check key
-//   retval = this->checkKey(key, optional);
-//   if (retval != 0) {
-//     return retval;
-//   }
-//
-//   // check fields
-//   for (int i = 0; i < 3; i++) {
-//     if (!this->root[key][targets[i]]) {
-//       log_err("Key [%s] is missing for matrix [%s]!",
-//               targets[i].c_str(),
-//               key.c_str());
-//       return -2;
-//     }
-//   }
-//
-//   return 0;
-// }
-//
-// int ConfigParser::loadPrimitive(const ConfigParam param) {
-//   int retval;
-//   YAML::Node node;
-//
-//   // pre-check
-//   retval = this->checkKey(param.key, param.optional);
-//   if (retval != 0) {
-//     return retval;
-//   }
-//
-//   // parse
-//   // clang-format off
-//   this->getParam(param.key, node);
-//   switch (param.type) {
-//     case BOOL: *param.b = node.as<bool>(); break;
-//     case INT: *param.i = node.as<int>(); break;
-//     case FLOAT: *param.f = node.as<float>(); break;
-//     case DOUBLE: *param.d = node.as<double>(); break;
-//     case STRING: *param.s = node.as<std::string>(); break;
-//     default: return -2;
-//   }
-//   // clang-format on
-//
-//   return 0;
-// }
-//
-// int ConfigParser::loadArray(const ConfigParam param) {
-//   int retval;
-//   YAML::Node node;
-//
-//   // pre-check
-//   retval = this->checkKey(param.key, param.optional);
-//   if (retval != 0) {
-//     return retval;
-//   }
-//
-//   // parse
-//   this->getParam(param.key, node);
-//   switch (param.type) {
-//     case BOOL_ARRAY:
-//       for (size_t i = 0; i < node.size(); i++) {
-//         param.b_array->push_back(node[i].as<bool>());
-//       }
-//       break;
-//     case INT_ARRAY:
-//       for (size_t i = 0; i < node.size(); i++) {
-//         param.i_array->push_back(node[i].as<int>());
-//       }
-//       break;
-//     case FLOAT_ARRAY:
-//       for (size_t i = 0; i < node.size(); i++) {
-//         param.f_array->push_back(node[i].as<float>());
-//       }
-//       break;
-//     case DOUBLE_ARRAY:
-//       for (size_t i = 0; i < node.size(); i++) {
-//         param.d_array->push_back(node[i].as<double>());
-//       }
-//       break;
-//     case STRING_ARRAY:
-//       for (size_t i = 0; i < node.size(); i++) {
-//         param.s_array->push_back(node[i].as<std::string>());
-//       }
-//       break;
-//     default:
-//       return -2;
-//       break;
-//   }
-//
-//   return 0;
-// }
-//
-// int ConfigParser::loadVector(const ConfigParam param) {
-//   int retval;
-//   YAML::Node node;
-//
-//   // check
-//   retval = this->checkVector(param.key, param.type, param.optional);
-//   if (retval != 0) {
-//     return retval;
-//   }
-//
-//   // setup
-//   Vec2 &vec2 = *param.vec2;
-//   Vec3 &vec3 = *param.vec3;
-//   Vec4 &vec4 = *param.vec4;
-//   VecX &vecx = *param.vecx;
-//
-//   // parse
-//   this->getParam(param.key, node);
-//
-//   switch (param.type) {
-//     case VEC2:
-//       vec2(0) = node[0].as<double>();
-//       vec2(1) = node[1].as<double>();
-//       break;
-//     case VEC3:
-//       vec3(0) = node[0].as<double>();
-//       vec3(1) = node[1].as<double>();
-//       vec3(2) = node[2].as<double>();
-//       break;
-//     case VEC4:
-//       vec4(0) = node[0].as<double>();
-//       vec4(1) = node[1].as<double>();
-//       vec4(2) = node[2].as<double>();
-//       vec4(3) = node[3].as<double>();
-//       break;
-//     case VECX:
-//       vecx = VecX((int) node.size());
-//       for (size_t i = 0; i < node.size(); i++) {
-//         vecx(i) = node[i].as<double>();
-//       }
-//       break;
-//     default:
-//       return -2;
-//       break;
-//   }
-//
-//   return 0;
-// }
-//
-// int ConfigParser::loadMatrix(const ConfigParam param) {
-//   int retval;
-//   int index;
-//   int rows;
-//   int cols;
-//   YAML::Node node;
-//
-//   // pre-check
-//   retval = this->checkMatrix(param.key, param.optional);
-//   if (retval != 0) {
-//     return retval;
-//   }
-//
-//   // setup
-//   Mat2 &mat2 = *param.mat2;
-//   Mat3 &mat3 = *param.mat3;
-//   Mat4 &mat4 = *param.mat4;
-//   MatX &matx = *param.matx;
-//   cv::Mat &cvmat = *param.cvmat;
-//
-//   // parse
-//   this->getParam(param.key, node);
-//   index = 0;
-//   rows = node["rows"].as<int>();
-//   cols = node["cols"].as<int>();
-//
-//   switch (param.type) {
-//     case MAT2:
-//       mat2(0, 0) = node["data"][0].as<double>();
-//       mat2(0, 1) = node["data"][1].as<double>();
-//
-//       mat2(1, 0) = node["data"][2].as<double>();
-//       mat2(1, 1) = node["data"][3].as<double>();
-//       break;
-//     case MAT3:
-//       mat3(0, 0) = node["data"][0].as<double>();
-//       mat3(0, 1) = node["data"][1].as<double>();
-//       mat3(0, 2) = node["data"][2].as<double>();
-//
-//       mat3(1, 0) = node["data"][3].as<double>();
-//       mat3(1, 1) = node["data"][4].as<double>();
-//       mat3(1, 2) = node["data"][5].as<double>();
-//
-//       mat3(2, 0) = node["data"][6].as<double>();
-//       mat3(2, 1) = node["data"][7].as<double>();
-//       mat3(2, 2) = node["data"][8].as<double>();
-//       break;
-//     case MAT4:
-//       for (int i = 0; i < rows; i++) {
-//         for (int j = 0; j < cols; j++) {
-//           mat4(i, j) = node["data"][index].as<double>();
-//           index++;
-//         }
-//       }
-//       break;
-//     case MATX:
-//       matx.resize(rows, cols);
-//       for (int i = 0; i < rows; i++) {
-//         for (int j = 0; j < cols; j++) {
-//           matx(i, j) = node["data"][index].as<double>();
-//           index++;
-//         }
-//       }
-//       break;
-//     case CVMAT:
-//       cvmat = cv::Mat(rows, cols, CV_64F);
-//       for (int i = 0; i < rows; i++) {
-//         for (int j = 0; j < cols; j++) {
-//           cvmat.at<double>(i, j) = node["data"][index].as<double>();
-//           index++;
-//         }
-//       }
-//       break;
-//     default:
-//       return -2;
-//       break;
-//   }
-//
-//   return 0;
-// }
+int ConfigParser::parsePrimitive(ConfigParam &param) {
+  return this->parsePrimitive(param.key, param.type, param.data);
+}
+
+int ConfigParser::parseArray(ConfigParam &param) {
+  return this->parseArray(param.key, param.type, param.data);
+}
+
+int ConfigParser::parseVector(ConfigParam &param) {
+  return this->parseVector(param.key, param.type, param.data);
+}
+
+int ConfigParser::parseMatrix(ConfigParam &param) {
+  return this->parseMatrix(param.key, param.type, param.data);
+}
 
 int ConfigParser::load(const std::string config_file) {
+  int retval;
+
   // pre-check
   if (file_exists(config_file) == false) {
     log_err("File not found: %s", config_file.c_str());
@@ -576,48 +527,48 @@ int ConfigParser::load(const std::string config_file) {
     this->config_loaded = true;
   }
 
-  // for (int i = 0; i < (int) this->params.size(); i++) {
-  //   switch (this->params[i].type) {
-  //     // PRIMITIVE
-  //     case BOOL:
-  //     case INT:
-  //     case FLOAT:
-  //     case DOUBLE:
-  //     case STRING:
-  //       // retval = this->loadPrimitive(this->params[i]);
-  //       break;
-  //     // ARRAY
-  //     case BOOL_ARRAY:
-  //     case INT_ARRAY:
-  //     case FLOAT_ARRAY:
-  //     case DOUBLE_ARRAY:
-  //     case STRING_ARRAY:
-  //       // retval = this->loadArray(this->params[i]);
-  //       break;
-  //     // VECTOR
-  //     case VEC2:
-  //     case VEC3:
-  //     case VEC4:
-  //     case VECX:
-  //       // retval = this->loadVector(this->params[i]);
-  //       break;
-  //     // MAT
-  //     case MAT2:
-  //     case MAT3:
-  //     case MAT4:
-  //     case MATX:
-  //     case CVMAT:
-  //       // retval = this->loadMatrix(this->params[i]);
-  //       break;
-  //     default:
-  //       return -2;
-  //       break;
-  //   }
+  for (int i = 0; i < (int) this->params.size(); i++) {
+    switch (this->params[i].type) {
+    // PRIMITIVE
+    case BOOL:
+    case INT:
+    case FLOAT:
+    case DOUBLE:
+    case STRING:
+      retval = this->parsePrimitive(this->params[i]);
+      break;
+    // ARRAY
+    case BOOL_ARRAY:
+    case INT_ARRAY:
+    case FLOAT_ARRAY:
+    case DOUBLE_ARRAY:
+    case STRING_ARRAY:
+      retval = this->parseArray(this->params[i]);
+      break;
+    // VECTOR
+    case VEC2:
+    case VEC3:
+    case VEC4:
+    case VECX:
+      retval = this->parseVector(this->params[i]);
+      break;
+    // MAT
+    case MAT2:
+    case MAT3:
+    case MAT4:
+    case MATX:
+    case CVMAT:
+      retval = this->parseMatrix(this->params[i]);
+      break;
+    default:
+      return -2;
+      break;
+    }
 
-  // if (retval != 0) {
-  //   return retval;
-  // }
-  // }
+    if (retval != 0) {
+      return retval;
+    }
+  }
 
   return 0;
 }
