@@ -104,7 +104,10 @@ public:
   void addParam(std::string key, cv::Mat *out, bool optional = false);
   // clang-format on
   int getParamPointer(std::string key);
-  int getPrimitive(int type, void *out);
+  int parsePrimitive(std::string key, enum ConfigDataType type, void *out);
+  int parsePrimitive(ConfigParam &param);
+  int parseArray(std::string key, enum ConfigDataType type, void *out);
+  int parseArray(ConfigParam &param);
   int checkVector(std::string key, enum ConfigDataType type, bool optional);
   // int checkMatrix(const std::string key, const bool optional);
   // int loadPrimitive(const ConfigParam param);

@@ -9,13 +9,12 @@ ConfigParser::ConfigParser(void) {
 }
 
 ConfigParser::~ConfigParser(void) {
-  if (this->config_loaded) {
-    xmlFreeDoc(this->doc);
-    xmlCleanupParser();
-  }
-
   if (this->obj) {
     xmlXPathFreeObject(this->obj);
+  }
+
+  if (this->config_loaded) {
+    xmlFreeDoc(this->doc);
   }
 }
 
@@ -116,7 +115,8 @@ int ConfigParser::getParamPointer(std::string key) {
   }
 
   // evaluate xpath context
-  xpath = (xmlChar *) key.c_str();
+  xpath =
+    const_cast<xmlChar *>(reinterpret_cast<const xmlChar *>(key.c_str()));
   this->obj = xmlXPathEvalExpression(xpath, context);
   xmlXPathFreeContext(context);
 
@@ -137,39 +137,112 @@ int ConfigParser::getParamPointer(std::string key) {
   return 0;
 }
 
-int ConfigParser::getPrimitive(int type, void *out) {
-  xmlChar *value;
+int ConfigParser::parsePrimitive(std::string key,
+                                 enum ConfigDataType type,
+                                 void *out) {
+  int retval;
+  xmlNode *xml_node;
+  xmlChar *xml_value;
+  char *value;
 
   // pre-check
-  if (this->obj == NULL || this->obj->nodesetval == 0) {
-    return EPARAMNAN;
+  retval = this->getParamPointer(key);
+  if (retval != 0) {
+    return retval;
   }
 
   // get value
-  // clang-format off
-  value = xmlNodeListGetString(
-    this->doc,
-    this->obj->nodesetval->nodeTab[0]->xmlChildrenNode,
-    1
-  );
-  // clang-format on
+  xml_node = this->obj->nodesetval->nodeTab[0];
+  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
 
   // convert value
-  // clang-format off
+  value = reinterpret_cast<char *>(xml_value);
   switch (type) {
-    case 1: *(int *) out = atoi((const char *) value); break;
-    case 2: *(double *) out = atof((const char *) value); break;
-    case 3: *(std::string *) out = std::string((const char *) value); break;
-    default: return ECONVTYPE;
+    case INT:
+      *reinterpret_cast<int *>(out) = atoi(value);
+      break;
+    case FLOAT:
+      *reinterpret_cast<float *>(out) = static_cast<float>(atof(value));
+      break;
+    case DOUBLE:
+      *reinterpret_cast<double *>(out) = atof(value);
+      break;
+    case STRING:
+      *reinterpret_cast<std::string *>(out) = std::string(value);
+      break;
+    default:
+      return ECONVTYPE;
   }
-  // clang-format on
 
   // clean up
-  xmlFree(value);
+  xmlFree(xml_value);
   xmlXPathFreeObject(this->obj);
   this->obj = NULL;
 
   return 0;
+}
+
+int ConfigParser::parsePrimitive(ConfigParam &param) {
+  return this->parsePrimitive(param.key, param.type, param.data);
+}
+
+int ConfigParser::parseArray(std::string key,
+                             enum ConfigDataType type,
+                             void *out) {
+  int retval;
+  char *value;
+  int i;
+  float f;
+  double d;
+  std::string s;
+  xmlNode *xml_node;
+  xmlChar *xml_value;
+
+  // pre-check
+  retval = this->getParamPointer(key + "/item");
+  if (retval != 0) {
+    return retval;
+  }
+
+  // parse array
+  for (int x = 0; x < this->obj->nodesetval->nodeNr; x++) {
+    xml_node = this->obj->nodesetval->nodeTab[x];
+    xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
+
+    // parse value and push to array
+    value = reinterpret_cast<char *>(xml_value);
+    switch (type) {
+      case INT_ARRAY:
+        i = atoi(value);
+        reinterpret_cast<std::vector<int> *>(out)->push_back(i);
+        break;
+      case FLOAT_ARRAY:
+        f = static_cast<float>(atof(value));
+        reinterpret_cast<std::vector<float> *>(out)->push_back(f);
+        break;
+      case DOUBLE_ARRAY:
+        d = atof(value);
+        reinterpret_cast<std::vector<double> *>(out)->push_back(d);
+        break;
+      case STRING_ARRAY:
+        s = std::string(value);
+        reinterpret_cast<std::vector<std::string> *>(out)->push_back(s);
+        break;
+      default:
+        return ECONVTYPE;
+    }
+  }
+
+  // clean up
+  xmlFree(xml_value);
+  xmlXPathFreeObject(this->obj);
+  this->obj = NULL;
+
+  return 0;
+}
+
+int ConfigParser::parseArray(ConfigParam &param) {
+  return this->parseArray(param.key, param.type, param.data);
 }
 
 int ConfigParser::checkVector(std::string key,
@@ -448,7 +521,6 @@ int ConfigParser::load(const std::string config_file) {
   }
 
   // load and parse file
-  xmlInitParser();
   this->doc = xmlReadFile(config_file.c_str(), NULL, XML_PARSE_NOERROR);
   if (this->doc == NULL) {
     log_err("Failed to parse [%s]!", config_file.c_str());

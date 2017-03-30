@@ -82,7 +82,7 @@ TEST(ConfigParser, getParamPointer) {
   parser.load(TEST_CONFIG);
 
   // test xpath
-  retval = parser.getParamPointer("/bookstore/book/title");
+  retval = parser.getParamPointer("/config/int");
   ASSERT_EQ(0, retval);
   ASSERT_EQ(1, parser.obj->type);
 
@@ -92,149 +92,117 @@ TEST(ConfigParser, getParamPointer) {
   ASSERT_EQ(NULL, parser.obj);
 
   // test no results
-  retval = parser.getParamPointer("/bookstore/book/bogus");
+  retval = parser.getParamPointer("/bogus");
   ASSERT_EQ(EXPATHRES, retval);
   ASSERT_EQ(NULL, parser.obj);
 }
 
-TEST(ConfigParser, getPrimitive) {
+TEST(ConfigParser, parsePrimitive) {
   ConfigParser parser;
-  int year;
-  double price;
-  std::string title;
+  int i;
+  float f;
+  double d;
+  std::string s;
+  ConfigParam param;
+
+  // setup
+  i = 0;
+  f = 0;
+  d = 0;
+  s = "";
+  parser.load(TEST_CONFIG);
+
+  // INTEGER
+  param.optional = false;
+  param.type = INT;
+  param.key = "/config/int";
+  param.data = &i;
+  parser.parsePrimitive(param);
+  ASSERT_EQ(1, i);
+
+  // FLOAT
+  param.optional = false;
+  param.type = FLOAT;
+  param.key = "/config/float";
+  param.data = &f;
+  parser.parsePrimitive(param);
+  ASSERT_FLOAT_EQ(1.0, f);
+
+  // DOUBLE
+  param.optional = false;
+  param.type = DOUBLE;
+  param.key = "/config/double";
+  param.data = &d;
+  parser.parsePrimitive(param);
+  ASSERT_FLOAT_EQ(1.0, d);
+
+  // STRING
+  param.optional = false;
+  param.type = STRING;
+  param.key = "/config/string";
+  param.data = &s;
+  parser.parsePrimitive(param);
+  ASSERT_EQ("Hello World", s);
+}
+
+TEST(ConfigParser, parseArray) {
+  std::vector<bool> b_array;
+  std::vector<int> i_array;
+  std::vector<float> f_array;
+  std::vector<double> d_array;
+  std::vector<std::string> s_array;
+  ConfigParser parser;
+  ConfigParam param;
 
   // setup
   parser.load(TEST_CONFIG);
 
-  // test xpath
-  parser.getParamPointer("/bookstore/book/year");
-  parser.getPrimitive(1, &year);
-  ASSERT_EQ(2005, year);
+  // INTEGER
+  param.optional = false;
+  param.type = INT_ARRAY;
+  param.key = "/config/int_array";
+  param.data = &i_array;
+  parser.parseArray(param.key, param.type, param.data);
 
-  parser.getParamPointer("/bookstore/book/price");
-  parser.getPrimitive(2, &price);
-  ASSERT_FLOAT_EQ(30, price);
+  for (int i = 0; i < 4; i++) {
+    ASSERT_EQ(i, i_array[i]);
+  }
 
-  parser.getParamPointer("/bookstore/book/title");
-  parser.getPrimitive(3, &title);
-  ASSERT_EQ("Everyday Italian", title);
+  // FLOAT
+  param.optional = false;
+  param.type = FLOAT_ARRAY;
+  param.key = "/config/float_array";
+  param.data = &f_array;
+  parser.parseArray(param.key, param.type, param.data);
+
+  for (int i = 0; i < 4; i++) {
+    ASSERT_FLOAT_EQ((float) i, f_array[i]);
+  }
+
+  // DOUBLE
+  param.optional = false;
+  param.type = DOUBLE_ARRAY;
+  param.key = "/config/double_array";
+  param.data = &d_array;
+  parser.parseArray(param.key, param.type, param.data);
+
+  for (int i = 0; i < 4; i++) {
+    ASSERT_FLOAT_EQ((double) i, d_array[i]);
+  }
+
+  // STRING
+  param.optional = false;
+  param.type = STRING_ARRAY;
+  param.key = "/config/string_array";
+  param.data = &s_array;
+  parser.parseArray(param.key, param.type, param.data);
+
+  ASSERT_EQ("A", s_array[0]);
+  ASSERT_EQ("B", s_array[1]);
+  ASSERT_EQ("C", s_array[2]);
+  ASSERT_EQ("D", s_array[3]);
 }
 
-
-// TEST(ConfigParser, loadPrimitive) {
-//   int i;
-//   float f;
-//   double d;
-//   std::string s;
-//   ConfigParser parser;
-//   ConfigParam param;
-//
-//   // setup
-//   parser.root = YAML::LoadFile(TEST_CONFIG);
-//
-//   // INTEGER
-//   param.optional = false;
-//   param.type = INT;
-//   param.key = "int";
-//   param.i = &i;
-//   parser.loadPrimitive(param);
-//   ASSERT_EQ(1, i);
-//
-//   // FLOAT
-//   param.optional = false;
-//   param.type = FLOAT;
-//   param.key = "float";
-//   param.f = &f;
-//   parser.loadPrimitive(param);
-//   ASSERT_FLOAT_EQ(2.0, f);
-//
-//   // DOUBLE
-//   param.optional = false;
-//   param.type = DOUBLE;
-//   param.key = "double";
-//   param.d = &d;
-//   parser.loadPrimitive(param);
-//   ASSERT_FLOAT_EQ(3.0, d);
-//
-//   // STRING
-//   param.optional = false;
-//   param.type = STRING;
-//   param.key = "string";
-//   param.s = &s;
-//   parser.loadPrimitive(param);
-//   ASSERT_EQ("hello world!", s);
-// }
-//
-// TEST(ConfigParser, loadArray) {
-//   std::vector<bool> b_array;
-//   std::vector<int> i_array;
-//   std::vector<float> f_array;
-//   std::vector<double> d_array;
-//   std::vector<std::string> s_array;
-//   ConfigParser parser;
-//   ConfigParam param;
-//
-//   // setup
-//   parser.root = YAML::LoadFile(TEST_CONFIG);
-//
-//   // BOOL ARRAY
-//   param.optional = false;
-//   param.type = BOOL_ARRAY;
-//   param.key = "bool_array";
-//   param.b_array = &b_array;
-//   parser.loadArray(param);
-//
-//   ASSERT_TRUE(b_array[0]);
-//   ASSERT_FALSE(b_array[1]);
-//   ASSERT_TRUE(b_array[2]);
-//   ASSERT_FALSE(b_array[3]);
-//
-//   // INTEGER
-//   param.optional = false;
-//   param.type = INT_ARRAY;
-//   param.key = "int_array";
-//   param.i_array = &i_array;
-//   parser.loadArray(param);
-//
-//   for (int i = 0; i < 4; i++) {
-//     ASSERT_EQ(i + 1, i_array[i]);
-//   }
-//
-//   // FLOAT
-//   param.optional = false;
-//   param.type = FLOAT_ARRAY;
-//   param.key = "float_array";
-//   param.f_array = &f_array;
-//   parser.loadArray(param);
-//
-//   for (int i = 0; i < 4; i++) {
-//     ASSERT_FLOAT_EQ((float) i + 1.0, f_array[i]);
-//   }
-//
-//   // DOUBLE
-//   param.optional = false;
-//   param.type = DOUBLE_ARRAY;
-//   param.key = "double_array";
-//   param.d_array = &d_array;
-//   parser.loadArray(param);
-//
-//   for (int i = 0; i < 4; i++) {
-//     ASSERT_FLOAT_EQ((double) i + 1.0, d_array[i]);
-//   }
-//
-//   // STRING
-//   param.optional = false;
-//   param.type = STRING_ARRAY;
-//   param.key = "string_array";
-//   param.s_array = &s_array;
-//   parser.loadArray(param);
-//
-//   ASSERT_EQ("1.0", s_array[0]);
-//   ASSERT_EQ("2.0", s_array[1]);
-//   ASSERT_EQ("3.0", s_array[2]);
-//   ASSERT_EQ("4.0", s_array[3]);
-// }
-//
 // TEST(ConfigParser, loadVector) {
 //   Vec2 vec2;
 //   Vec3 vec3;
@@ -244,7 +212,7 @@ TEST(ConfigParser, getPrimitive) {
 //   ConfigParam param;
 //
 //   // setup
-//   parser.root = YAML::LoadFile(TEST_CONFIG);
+//   parser.load(TEST_CONFIG);
 //
 //   // VECTOR 2
 //   param.optional = false;
@@ -290,7 +258,7 @@ TEST(ConfigParser, getPrimitive) {
 //     ASSERT_FLOAT_EQ((double) i + 1.0, vecx(i));
 //   }
 // }
-//
+
 // TEST(ConfigParser, loadMatrix) {
 //   int index;
 //   Mat2 mat2;
