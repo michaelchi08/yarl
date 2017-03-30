@@ -203,61 +203,84 @@ TEST(ConfigParser, parseArray) {
   ASSERT_EQ("D", s_array[3]);
 }
 
-// TEST(ConfigParser, loadVector) {
-//   Vec2 vec2;
-//   Vec3 vec3;
-//   Vec4 vec4;
-//   VecX vecx;
-//   ConfigParser parser;
-//   ConfigParam param;
-//
-//   // setup
-//   parser.load(TEST_CONFIG);
-//
-//   // VECTOR 2
-//   param.optional = false;
-//   param.type = VEC2;
-//   param.key = "vector2";
-//   param.vec2 = &vec2;
-//   parser.loadVector(param);
-//
-//   ASSERT_FLOAT_EQ(1.0, vec2(0));
-//   ASSERT_FLOAT_EQ(2.0, vec2(1));
-//
-//   // VECTOR 3
-//   param.optional = false;
-//   param.type = VEC3;
-//   param.key = "vector3";
-//   param.vec3 = &vec3;
-//   parser.loadVector(param);
-//
-//   ASSERT_FLOAT_EQ(1.0, vec3(0));
-//   ASSERT_FLOAT_EQ(2.0, vec3(1));
-//   ASSERT_FLOAT_EQ(3.0, vec3(2));
-//
-//   // VECTOR 4
-//   param.optional = false;
-//   param.type = VEC4;
-//   param.key = "vector4";
-//   param.vec4 = &vec4;
-//   parser.loadVector(param);
-//
-//   ASSERT_FLOAT_EQ(1.0, vec4(0));
-//   ASSERT_FLOAT_EQ(2.0, vec4(1));
-//   ASSERT_FLOAT_EQ(3.0, vec4(2));
-//   ASSERT_FLOAT_EQ(4.0, vec4(3));
-//
-//   // VECTOR X
-//   param.optional = false;
-//   param.type = VECX;
-//   param.key = "vector";
-//   param.vecx = &vecx;
-//   parser.loadVector(param);
-//
-//   for (int i = 0; i < 10; i++) {
-//     ASSERT_FLOAT_EQ((double) i + 1.0, vecx(i));
-//   }
-// }
+TEST(ConfigParser, checkVector) {
+  ConfigParser parser;
+  int retval;
+
+  // setup
+  parser.load(TEST_CONFIG);
+
+  retval = parser.checkVector("/config/vector2", VEC2);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkVector("/config/vector3", VEC3);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkVector("/config/vector4", VEC4);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkVector("/config/vectorX", VECX);
+  ASSERT_EQ(0, retval);
+
+  retval = parser.checkVector("/config/vectorX", VEC2);
+  ASSERT_EQ(EVECINVSZ, retval);
+}
+
+TEST(ConfigParser, parseVector) {
+  Vec2 vec2;
+  Vec3 vec3;
+  Vec4 vec4;
+  VecX vecx;
+  ConfigParser parser;
+  ConfigParam param;
+
+  // setup
+  parser.load(TEST_CONFIG);
+
+  // VECTOR 2
+  param.optional = false;
+  param.type = VEC2;
+  param.key = "/config/vector2";
+  param.data = &vec2;
+  parser.parseVector(param.key, param.type, param.data);
+
+  ASSERT_FLOAT_EQ(1.0, vec2(0));
+  ASSERT_FLOAT_EQ(2.0, vec2(1));
+
+  // VECTOR 3
+  param.optional = false;
+  param.type = VEC3;
+  param.key = "/config/vector3";
+  param.data = &vec3;
+  parser.parseVector(param.key, param.type, param.data);
+
+  ASSERT_FLOAT_EQ(1.0, vec3(0));
+  ASSERT_FLOAT_EQ(2.0, vec3(1));
+  ASSERT_FLOAT_EQ(3.0, vec3(2));
+
+  // VECTOR 4
+  param.optional = false;
+  param.type = VEC4;
+  param.key = "/config/vector4";
+  param.data = &vec4;
+  parser.parseVector(param.key, param.type, param.data);
+
+  ASSERT_FLOAT_EQ(1.0, vec4(0));
+  ASSERT_FLOAT_EQ(2.0, vec4(1));
+  ASSERT_FLOAT_EQ(3.0, vec4(2));
+  ASSERT_FLOAT_EQ(4.0, vec4(3));
+
+  // VECTOR X
+  param.optional = false;
+  param.type = VECX;
+  param.key = "/config/vectorX";
+  param.data = &vecx;
+  parser.parseVector(param.key, param.type, param.data);
+
+  for (int i = 0; i < 5; i++) {
+    ASSERT_FLOAT_EQ(i + 1, vecx(i));
+  }
+}
 
 // TEST(ConfigParser, loadMatrix) {
 //   int index;

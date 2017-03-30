@@ -31,23 +31,23 @@ void mouse_callback(int event, int x, int y, int flags, void *data) {
 
   // handle mouse events
   switch (event) {
-    case cv::EVENT_LBUTTONDOWN:
-      ui->point_1 = cv::Point(x, y);
-      ui->point_2 = cv::Point(x, y);
-      ui->select_mode = 1;
-      ui->roi_configured = 0;
-      break;
+  case cv::EVENT_LBUTTONDOWN:
+    ui->point_1 = cv::Point(x, y);
+    ui->point_2 = cv::Point(x, y);
+    ui->select_mode = 1;
+    ui->roi_configured = 0;
+    break;
 
-    case cv::EVENT_MOUSEMOVE:
-      if (ui->select_mode) {
-        ui->point_2 = cv::Point(x, y);
-      }
-      break;
-
-    case cv::EVENT_LBUTTONUP:
+  case cv::EVENT_MOUSEMOVE:
+    if (ui->select_mode) {
       ui->point_2 = cv::Point(x, y);
-      ui->select_mode = 0;
-      ui->roi_configured = 1;
+    }
+    break;
+
+  case cv::EVENT_LBUTTONUP:
+    ui->point_2 = cv::Point(x, y);
+    ui->select_mode = 0;
+    ui->roi_configured = 1;
   }
 }
 

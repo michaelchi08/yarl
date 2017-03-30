@@ -32,4 +32,30 @@
 		<item>C</item>
 		<item>D</item>
 	</string_array>
+
+  <vector2>
+    <vec>1.0</vec>
+    <vec>2.0</vec>
+  </vector2>
+
+  <vector3>
+    <vec>1.0</vec>
+    <vec>2.0</vec>
+    <vec>3.0</vec>
+  </vector3>
+
+  <vector4>
+    <vec>1.0</vec>
+    <vec>2.0</vec>
+    <vec>3.0</vec>
+    <vec>4.0</vec>
+  </vector4>
+
+  <vectorX>
+    <vec>1.0</vec>
+    <vec>2.0</vec>
+    <vec>3.0</vec>
+    <vec>4.0</vec>
+    <vec>5.0</vec>
+  </vectorX>
 </config>

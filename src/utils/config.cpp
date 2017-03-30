@@ -158,20 +158,20 @@ int ConfigParser::parsePrimitive(std::string key,
   // convert value
   value = reinterpret_cast<char *>(xml_value);
   switch (type) {
-    case INT:
-      *reinterpret_cast<int *>(out) = atoi(value);
-      break;
-    case FLOAT:
-      *reinterpret_cast<float *>(out) = static_cast<float>(atof(value));
-      break;
-    case DOUBLE:
-      *reinterpret_cast<double *>(out) = atof(value);
-      break;
-    case STRING:
-      *reinterpret_cast<std::string *>(out) = std::string(value);
-      break;
-    default:
-      return ECONVTYPE;
+  case INT:
+    *reinterpret_cast<int *>(out) = atoi(value);
+    break;
+  case FLOAT:
+    *reinterpret_cast<float *>(out) = static_cast<float>(atof(value));
+    break;
+  case DOUBLE:
+    *reinterpret_cast<double *>(out) = atof(value);
+    break;
+  case STRING:
+    *reinterpret_cast<std::string *>(out) = std::string(value);
+    break;
+  default:
+    return ECONVTYPE;
   }
 
   // clean up
@@ -212,24 +212,24 @@ int ConfigParser::parseArray(std::string key,
     // parse value and push to array
     value = reinterpret_cast<char *>(xml_value);
     switch (type) {
-      case INT_ARRAY:
-        i = atoi(value);
-        reinterpret_cast<std::vector<int> *>(out)->push_back(i);
-        break;
-      case FLOAT_ARRAY:
-        f = static_cast<float>(atof(value));
-        reinterpret_cast<std::vector<float> *>(out)->push_back(f);
-        break;
-      case DOUBLE_ARRAY:
-        d = atof(value);
-        reinterpret_cast<std::vector<double> *>(out)->push_back(d);
-        break;
-      case STRING_ARRAY:
-        s = std::string(value);
-        reinterpret_cast<std::vector<std::string> *>(out)->push_back(s);
-        break;
-      default:
-        return ECONVTYPE;
+    case INT_ARRAY:
+      i = atoi(value);
+      reinterpret_cast<std::vector<int> *>(out)->push_back(i);
+      break;
+    case FLOAT_ARRAY:
+      f = static_cast<float>(atof(value));
+      reinterpret_cast<std::vector<float> *>(out)->push_back(f);
+      break;
+    case DOUBLE_ARRAY:
+      d = atof(value);
+      reinterpret_cast<std::vector<double> *>(out)->push_back(d);
+      break;
+    case STRING_ARRAY:
+      s = std::string(value);
+      reinterpret_cast<std::vector<std::string> *>(out)->push_back(s);
+      break;
+    default:
+      return ECONVTYPE;
     }
   }
 
@@ -245,45 +245,92 @@ int ConfigParser::parseArray(ConfigParam &param) {
   return this->parseArray(param.key, param.type, param.data);
 }
 
-int ConfigParser::checkVector(std::string key,
-                              enum ConfigDataType type,
-                              bool optional) {
+int ConfigParser::checkVector(std::string key, enum ConfigDataType type) {
   int retval;
   int vector_size;
 
   // check key
-  retval = this->getParamPointer(key);
+  retval = this->getParamPointer(key + "/vec");
   if (retval != 0) {
     return retval;
   }
 
+  // check number of values
   switch (type) {
-    case VEC2:
-      vector_size = 2;
-      break;
-    case VEC3:
-      vector_size = 3;
-      break;
-    case VEC4:
-      vector_size = 4;
-      break;
-    default:
-      return 0;
+  case VEC2:
+    return (this->obj->nodesetval->nodeNr == 2) ? 0 : EVECINVSZ;
+  case VEC3:
+    return (this->obj->nodesetval->nodeNr == 3) ? 0 : EVECINVSZ;
+  case VEC4:
+    return (this->obj->nodesetval->nodeNr == 4) ? 0 : EVECINVSZ;
+  case VECX:
+    return (this->obj->nodesetval->nodeNr > 4) ? 0 : EVECINVSZ;
+  default:
+    return ECONVTYPE;
   }
 
-  // check number of values
+  return 0;
+}
 
+int ConfigParser::parseVector(std::string key,
+                              enum ConfigDataType type,
+                              void *out) {
+  double d;
+  int retval;
+  xmlNode *xml_node;
+  xmlChar *xml_value;
+  std::vector<double> vec_values;
 
-  // if ((int) this->root[key].size() != vector_size) {
-  //   // clang-format off
-  //   log_err("Vector [%s] should have %d values but config has %d!",
-  //     key.c_str(),
-  //     vector_size,
-  //     (int) this->root[key].size()
-  //   );
-  //   // clang-format on
-  //   return -3;
-  // }
+  // pre-check
+  retval = this->checkVector(key, type);
+  if (retval != 0) {
+    return retval;
+  }
+
+  // parse vector
+  this->getParamPointer(key + "/vec");
+  for (int i = 0; i < this->obj->nodesetval->nodeNr; i++) {
+    xml_node = this->obj->nodesetval->nodeTab[i];
+    xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
+
+    // parse value and push to array
+    d = atof(reinterpret_cast<char *>(xml_value));
+    vec_values.push_back(d);
+  }
+
+  // convert std::vector to VEC
+  // clang-format off
+  if (type == VEC2) {
+    *reinterpret_cast<Vec2 *>(out) << vec_values[0], vec_values[1];
+
+  } else if (type == VEC3) {
+    *reinterpret_cast<Vec3 *>(out) << vec_values[0],
+                                      vec_values[1],
+                                      vec_values[2];
+
+  } else if (type == VEC4) {
+    *reinterpret_cast<Vec4 *>(out) << vec_values[0],
+                                      vec_values[1],
+                                      vec_values[2],
+                                      vec_values[3];
+
+  } else if (type == VECX) {
+    VecX &vecx = *(VecX *) out;
+    vecx = VecX(this->obj->nodesetval->nodeNr);
+    for (int i = 0; i < this->obj->nodesetval->nodeNr; i++) {
+      vecx(i) = vec_values[i];
+    }
+
+  } else {
+    return ECONVTYPE;
+  }
+  // clang-format on
+
+  // clean up
+  xmlFree(xml_value);
+  xmlXPathFreeObject(this->obj);
+  this->obj = NULL;
+
 
   return 0;
 }

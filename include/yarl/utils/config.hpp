@@ -22,6 +22,7 @@ namespace yarl {
 #define EXPATHRES -3
 #define ECONVTYPE -4
 #define EPARAMNAN -5
+#define EVECINVSZ -6
 
 enum ConfigDataType {
   TYPE_NOT_SET = 0,
@@ -108,7 +109,8 @@ public:
   int parsePrimitive(ConfigParam &param);
   int parseArray(std::string key, enum ConfigDataType type, void *out);
   int parseArray(ConfigParam &param);
-  int checkVector(std::string key, enum ConfigDataType type, bool optional);
+  int checkVector(std::string key, enum ConfigDataType type);
+  int parseVector(std::string key, enum ConfigDataType type, void *out);
   // int checkMatrix(const std::string key, const bool optional);
   // int loadPrimitive(const ConfigParam param);
   // int loadArray(const ConfigParam param);
