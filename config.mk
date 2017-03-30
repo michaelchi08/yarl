@@ -12,7 +12,7 @@ GTEST_LIB_DIR = ./deps/googletest/googletest/make
 
 # LIBS
 STD_LIB = -lm
-YAML_CPP_LIB = -lyaml-cpp
+XML_LIB = -lxml2
 OPENCV_LIB = -lopencv_calib3d \
              -lopencv_core \
              -lopencv_features2d \
@@ -39,6 +39,7 @@ GTEST_LIB = -lglog -lgtest -lpthread
 INCLUDES = -I/usr/local/include/ \
 		   -I/usr/include \
 		   -I/usr/include/eigen3 \
+		   -I/usr/include/libxml2 \
 		   -I$(PWD)/include
 LIBS = -L/usr/local/lib \
 			 -L/usr/lib \
@@ -47,7 +48,7 @@ LIBS = -L/usr/local/lib \
        -l$(PROJECT_NAME) \
        $(OPENCV_LIB) \
        $(CERES_LIB) \
-       $(YAML_CPP_LIB) \
+       $(XML_LIB) \
        $(GTEST_LIB)
 
 # COMPILER FLAGS
