@@ -23,6 +23,8 @@ namespace yarl {
 #define EVECINVSZ -6
 #define EMATINVSZ -7
 #define EINVBOOLD -8
+#define ENOTVALUE -9
+#define EMULVALUE -10
 
 enum ConfigDataType {
   TYPE_NOT_SET = 0,
@@ -104,7 +106,10 @@ public:
   void addParam(std::string key, MatX *out, bool optional = false);
   void addParam(std::string key, cv::Mat *out, bool optional = false);
   // clang-format on
-  int getParamPointer(std::string key);
+  int setXMLPointer(std::string key);
+  void resetXMLPointer(void);
+  int getXMLValue(std::string key, std::string &value);
+  int getXMLValues(std::string key, std::vector<std::string> &values);
   int checkVector(std::string key, enum ConfigDataType type);
   int checkMatrix(std::string key, enum ConfigDataType type);
   int parsePrimitive(std::string key, enum ConfigDataType type, void *out);

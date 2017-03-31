@@ -74,6 +74,58 @@ TEST(ConfigParser, addParam) {
   ASSERT_TRUE(parser.params[0].data != NULL);
 }
 
+TEST(ConfigParser, setXMLPointer) {
+  ConfigParser parser;
+  int retval;
+
+  // setup
+  parser.load(TEST_CONFIG);
+
+  // test xpath
+  retval = parser.setXMLPointer("/config/int");
+  ASSERT_EQ(0, retval);
+  ASSERT_EQ(1, parser.obj->type);
+
+  // test bad xpath
+  retval = parser.setXMLPointer("#");
+  ASSERT_EQ(EXPATHINV, retval);
+  ASSERT_EQ(NULL, parser.obj);
+
+  // test no results
+  retval = parser.setXMLPointer("/config/bogus");
+  ASSERT_EQ(EXPATHRES, retval);
+  ASSERT_EQ(NULL, parser.obj);
+}
+
+TEST(ConfigParser, getXMLValue) {
+  int retval;
+  ConfigParser parser;
+  std::string value;
+
+  // setup
+  parser.load(TEST_CONFIG);
+
+  // test and assert
+  retval = parser.getXMLValue("/config/int", value);
+  ASSERT_EQ(0, retval);
+  ASSERT_EQ("1", value);
+}
+
+TEST(ConfigParser, getXMLValues) {
+  int retval;
+  ConfigParser parser;
+  std::vector<std::string> values;
+
+  // setup
+  parser.load(TEST_CONFIG);
+
+  // test and assert
+  retval = parser.getXMLValues("/config/int_array/item", values);
+  ASSERT_EQ(0, retval);
+  ASSERT_EQ(4, values.size());
+  ASSERT_EQ("0", values[0]);
+}
+
 TEST(ConfigParser, checkVector) {
   ConfigParser parser;
   int retval;
@@ -118,29 +170,6 @@ TEST(ConfigParser, checkMatrix) {
 
   retval = parser.checkMatrix("/config/matrix4", MATX);
   ASSERT_EQ(0, retval);
-}
-
-TEST(ConfigParser, getParamPointer) {
-  ConfigParser parser;
-  int retval;
-
-  // setup
-  parser.load(TEST_CONFIG);
-
-  // test xpath
-  retval = parser.getParamPointer("/config/int");
-  ASSERT_EQ(0, retval);
-  ASSERT_EQ(1, parser.obj->type);
-
-  // test bad xpath
-  retval = parser.getParamPointer("#");
-  ASSERT_EQ(EXPATHINV, retval);
-  ASSERT_EQ(NULL, parser.obj);
-
-  // test no results
-  retval = parser.getParamPointer("/config/bogus");
-  ASSERT_EQ(EXPATHRES, retval);
-  ASSERT_EQ(NULL, parser.obj);
 }
 
 TEST(ConfigParser, parsePrimitive) {

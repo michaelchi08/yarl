@@ -96,7 +96,7 @@ void ConfigParser::addParam(std::string key, cv::Mat *out, bool optional) {
 }
 // clang-format on
 
-int ConfigParser::getParamPointer(std::string key) {
+int ConfigParser::setXMLPointer(std::string key) {
   xmlChar *xpath;
   xmlXPathContextPtr context;
 
@@ -137,49 +137,125 @@ int ConfigParser::getParamPointer(std::string key) {
   return 0;
 }
 
-int ConfigParser::checkVector(std::string key, enum ConfigDataType type) {
+void ConfigParser::resetXMLPointer(void) {
+  if (this->obj) {
+    xmlXPathFreeObject(this->obj);
+    this->obj = NULL;
+  }
+}
+
+int ConfigParser::getXMLValue(std::string key, std::string &value) {
   int retval;
   xmlNode *xml_node;
   xmlChar *xml_value;
+
+  // check key
+  retval = this->setXMLPointer(key);
+  if (retval != 0) {
+    return retval;
+  }
+
+  // check results
+  if (this->obj->nodesetval->nodeNr == 0) {
+    this->resetXMLPointer();
+  }
+  xml_node = this->obj->nodesetval->nodeTab[0];
+
+  // parse results
+  if (xmlChildElementCount(xml_node) != 0) {
+    retval = ENOTVALUE;
+
+  } else {
+    xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
+    value = strim(std::string(reinterpret_cast<char *>(xml_value)));
+    xmlFree(xml_value);
+    retval = 0;
+  }
+
+  // clean up
+  this->resetXMLPointer();
+  return retval;
+}
+
+int ConfigParser::getXMLValues(std::string key,
+                               std::vector<std::string> &values) {
+  int retval;
+  xmlNode *xml_node;
+  xmlChar *xml_value;
+
+  // check key
+  retval = this->setXMLPointer(key);
+  if (retval != 0) {
+    return retval;
+  }
+
+  // parse results
+  for (int x = 0; x < this->obj->nodesetval->nodeNr; x++) {
+    xml_node = this->obj->nodesetval->nodeTab[x];
+
+    // parse results
+    if (xmlChildElementCount(xml_node) != 0) {
+      this->resetXMLPointer();
+      return ENOTVALUE;
+
+    } else {
+      xml_value =
+        xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
+      std::string s = strim(std::string(reinterpret_cast<char *>(xml_value)));
+
+      if (s.length() != 0) {
+        values.push_back(s);
+      }
+      xmlFree(xml_value);
+    }
+  }
+
+  // clean up
+  this->resetXMLPointer();
+  if (values.size() > 0) {
+    return 0;
+  } else {
+    return ENOTVALUE;
+  }
+}
+
+int ConfigParser::checkVector(std::string key, enum ConfigDataType type) {
+  int retval;
+  std::string xml_value;
   std::vector<std::string> data;
 
   // check key
-  retval = this->getParamPointer(key + "/vec");
+  retval = this->getXMLValue(key + "/vec", xml_value);
   if (retval != 0) {
     return retval;
   }
-
-  // check data key
-  retval = this->getParamPointer(key + "/vec");
-  if (retval != 0) {
-    return retval;
-  }
-  xml_node = this->obj->nodesetval->nodeTab[0];
-  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
-  std::string s = std::string(reinterpret_cast<char *>(xml_value));
-  split(s, ',', data);
 
   // check number of values
+  split(xml_value, ',', data);
   switch (type) {
   case VEC2:
-    return (data.size() == 2) ? 0 : EVECINVSZ;
+    retval = (data.size() == 2) ? 0 : EVECINVSZ;
+    break;
   case VEC3:
-    return (data.size() == 3) ? 0 : EVECINVSZ;
+    retval = (data.size() == 3) ? 0 : EVECINVSZ;
+    break;
   case VEC4:
-    return (data.size() == 4) ? 0 : EVECINVSZ;
+    retval = (data.size() == 4) ? 0 : EVECINVSZ;
+    break;
   case VECX:
-    return 0;
+    retval = 0;
+    break;
   default:
-    return ECONVTYPE;
+    retval = ECONVTYPE;
+    break;
   }
 
-  return 0;
+  return retval;
 }
 
 int ConfigParser::checkMatrix(std::string key, enum ConfigDataType type) {
   int retval, rows, cols;
-  xmlNode *xml_node;
-  xmlChar *xml_value;
+  std::string xml_value;
   std::vector<std::string> data;
 
   // get rows and cols
@@ -194,14 +270,11 @@ int ConfigParser::checkMatrix(std::string key, enum ConfigDataType type) {
   }
 
   // check data key
-  retval = this->getParamPointer(key + "/data");
+  retval = this->getXMLValue(key + "/data", xml_value);
   if (retval != 0) {
     return retval;
   }
-  xml_node = this->obj->nodesetval->nodeTab[0];
-  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
-  std::string s = std::string(reinterpret_cast<char *>(xml_value));
-  split(s, ',', data);
+  split(xml_value, ',', data);
 
   // check number of values
   switch (type) {
@@ -219,6 +292,9 @@ int ConfigParser::checkMatrix(std::string key, enum ConfigDataType type) {
     return ECONVTYPE;
   }
 
+  // clean up
+  this->resetXMLPointer();
+
   return 0;
 }
 
@@ -226,56 +302,40 @@ int ConfigParser::parsePrimitive(std::string key,
                                  enum ConfigDataType type,
                                  void *out) {
   int retval;
-  xmlNode *xml_node;
-  xmlChar *xml_value;
-  char *value;
+  std::string val;
 
   // pre-check
-  retval = this->getParamPointer(key);
+  retval = this->getXMLValue(key, val);
   if (retval != 0) {
     return retval;
   }
 
-  // get value
-  xml_node = this->obj->nodesetval->nodeTab[0];
-  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
-
   // convert value
-  value = reinterpret_cast<char *>(xml_value);
   if (type == BOOL) {
-    // strip white space in string
-    std::string v = std::string(value);
-    strip(v, ' ');
-
     // parse bool
-    if (v.compare("true") == 0 || v.compare("1") == 0) {
+    if (val.compare("true") == 0 || val.compare("1") == 0) {
       *reinterpret_cast<bool *>(out) = true;
-    } else if (v.compare("false") == 0 || v.compare("0") == 0) {
+    } else if (val.compare("false") == 0 || val.compare("0") == 0) {
       *reinterpret_cast<bool *>(out) = false;
     } else {
       return EINVBOOLD;
     }
 
   } else if (type == INT) {
-    *reinterpret_cast<int *>(out) = atoi(value);
+    *reinterpret_cast<int *>(out) = atoi(val.c_str());
 
   } else if (type == FLOAT) {
-    *reinterpret_cast<float *>(out) = static_cast<float>(atof(value));
+    *reinterpret_cast<float *>(out) = static_cast<float>(atof(val.c_str()));
 
   } else if (type == DOUBLE) {
-    *reinterpret_cast<double *>(out) = atof(value);
+    *reinterpret_cast<double *>(out) = atof(val.c_str());
 
   } else if (type == STRING) {
-    *reinterpret_cast<std::string *>(out) = strim(std::string(value));
+    *reinterpret_cast<std::string *>(out) = strim(std::string(val.c_str()));
 
   } else {
     return ECONVTYPE;
   }
-
-  // clean up
-  xmlFree(xml_value);
-  xmlXPathFreeObject(this->obj);
-  this->obj = NULL;
 
   return 0;
 }
@@ -284,33 +344,23 @@ int ConfigParser::parseArray(std::string key,
                              enum ConfigDataType type,
                              void *out) {
   int retval;
-  char *value;
   int i;
   float f;
   double d;
-  std::string s;
-  xmlNode *xml_node;
-  xmlChar *xml_value;
+  std::vector<std::string> xml_values;
 
   // pre-check
-  retval = this->getParamPointer(key + "/item");
+  retval = this->getXMLValues(key + "/item", xml_values);
   if (retval != 0) {
     return retval;
   }
 
   // parse array
-  for (int x = 0; x < this->obj->nodesetval->nodeNr; x++) {
-    xml_node = this->obj->nodesetval->nodeTab[x];
-    xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
+  for (size_t x = 0; x < xml_values.size(); x++) {
+    std::string v = xml_values[x];
 
     // parse value and push to array
-    value = reinterpret_cast<char *>(xml_value);
     if (type == BOOL_ARRAY) {
-      // strip white space in string
-      std::string v = std::string(value);
-      strip(v, ' ');
-
-      // parse bool
       if (v.compare("true") == 0 || v.compare("1") == 0) {
         reinterpret_cast<std::vector<bool> *>(out)->push_back(true);
       } else if (v.compare("false") == 0 || v.compare("0") == 0) {
@@ -320,30 +370,24 @@ int ConfigParser::parseArray(std::string key,
       }
 
     } else if (type == INT_ARRAY) {
-      i = atoi(value);
+      i = atoi(v.c_str());
       reinterpret_cast<std::vector<int> *>(out)->push_back(i);
 
     } else if (type == FLOAT_ARRAY) {
-      f = static_cast<float>(atof(value));
+      f = static_cast<float>(atof(v.c_str()));
       reinterpret_cast<std::vector<float> *>(out)->push_back(f);
 
     } else if (type == DOUBLE_ARRAY) {
-      d = atof(value);
+      d = atof(v.c_str());
       reinterpret_cast<std::vector<double> *>(out)->push_back(d);
 
     } else if (type == STRING_ARRAY) {
-      s = strim(std::string(value));
-      reinterpret_cast<std::vector<std::string> *>(out)->push_back(s);
+      reinterpret_cast<std::vector<std::string> *>(out)->push_back(v);
 
     } else {
       return ECONVTYPE;
     }
   }
-
-  // clean up
-  xmlFree(xml_value);
-  xmlXPathFreeObject(this->obj);
-  this->obj = NULL;
 
   return 0;
 }
@@ -352,25 +396,17 @@ int ConfigParser::parseVector(std::string key,
                               enum ConfigDataType type,
                               void *out) {
   int retval;
-  xmlNode *xml_node;
-  xmlChar *xml_value;
+  std::string xml_value;
   std::vector<std::string> data;
 
   // pre-check
-  retval = this->checkVector(key, type);
+  retval = this->getXMLValue(key + "/vec", xml_value);
   if (retval != 0) {
     return retval;
   }
-
-  // parse data
-  this->getParamPointer(key + "/vec");
-  xml_node = this->obj->nodesetval->nodeTab[0];
-  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
-  std::string s = std::string(reinterpret_cast<char *>(xml_value));
-  split(s, ',', data);
+  split(xml_value, ',', data);
 
   // convert std::vector to VEC
-  // clang-format off
   if (type == VEC2) {
     Vec2 &v = *reinterpret_cast<Vec2 *>(out);
     v(0) = atof(data[0].c_str());
@@ -399,12 +435,6 @@ int ConfigParser::parseVector(std::string key,
   } else {
     return ECONVTYPE;
   }
-  // clang-format on
-
-  // clean up
-  xmlFree(xml_value);
-  xmlXPathFreeObject(this->obj);
-  this->obj = NULL;
 
   return 0;
 }
@@ -413,8 +443,7 @@ int ConfigParser::parseMatrix(std::string key,
                               enum ConfigDataType type,
                               void *out) {
   int retval, rows, cols, idx;
-  xmlNode *xml_node;
-  xmlChar *xml_value;
+  std::string xml_value;
   std::vector<std::string> data;
 
   // pre-check
@@ -428,11 +457,12 @@ int ConfigParser::parseMatrix(std::string key,
   this->parsePrimitive(key + "/cols", INT, &cols);
 
   // parse data
-  this->getParamPointer(key + "/data");
-  xml_node = this->obj->nodesetval->nodeTab[0];
-  xml_value = xmlNodeListGetString(this->doc, xml_node->xmlChildrenNode, 1);
-  std::string s = std::string(reinterpret_cast<char *>(xml_value));
-  split(s, ',', data);
+  this->setXMLPointer(key + "/data");
+  retval = this->getXMLValue(key + "/data", xml_value);
+  if (retval != 0) {
+    return retval;
+  }
+  split(xml_value, ',', data);
 
   // set matrix
   idx = 0;
@@ -569,6 +599,9 @@ int ConfigParser::load(const std::string config_file) {
       return retval;
     }
   }
+
+  // clean up
+  this->resetXMLPointer();
 
   return 0;
 }
