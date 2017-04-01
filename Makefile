@@ -1,6 +1,6 @@
 include config.mk
 
-all: mkdirs libyarl
+all: mkdirs gtest libyarl
 
 mkdirs:
 	@mkdir -p build
@@ -11,6 +11,9 @@ mkdirs:
 
 run_tests: libyarl
 	@./build/bin/test_runner --silence-stdcout
+
+gtest:
+	@cd $(GTEST_LIB_DIR) && make -s && ar -r libgtest.a gtest-all.o
 
 libyarl:
 	@make -s -C src

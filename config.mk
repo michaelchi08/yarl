@@ -8,6 +8,7 @@ BIN_DIR = $(BUILD_PATH)/bin
 OBJ_DIR = $(BUILD_PATH)/obj
 TESTS_DIR = $(BUILD_PATH)/tests
 LIB_DIR = $(BUILD_PATH)/lib
+GTEST_LIB_DIR = $(PWD)/deps/googletest/googletest/make
 
 # LIBS
 STD_LIB = -lm
@@ -39,7 +40,8 @@ INCLUDES = -I/usr/local/include/ \
 		   -I/usr/include \
 		   -I/usr/include/eigen3 \
 		   -I/usr/include/libxml2 \
-		   -I$(PWD)/include
+		   -I$(PWD)/include \
+		   -I$(PWD)/deps/googletest/googletest/include
 LIBS = -L/usr/local/lib \
 	   -L/usr/lib \
        -L$(LIB_DIR) \
