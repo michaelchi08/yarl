@@ -1,7 +1,4 @@
-#include <functional>
-
-#include <gtest/gtest.h>
-
+#include "yarl/test.hpp"
 #include "yarl/optimization/benchmark.hpp"
 #include "yarl/optimization/optimizers/lmaopt.hpp"
 

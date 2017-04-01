@@ -1,7 +1,4 @@
-#include <functional>
-
-#include <gtest/gtest.h>
-
+#include "yarl/test.hpp"
 #include "yarl/utils/utils.hpp"
 #include "yarl/optimization/ceres/ceres_examples.hpp"
 

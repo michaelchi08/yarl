@@ -1,5 +1,5 @@
+#include "yarl/test.hpp"
 #include "yarl/vision/camera.hpp"
-#include "yarl/yarl_test.hpp"
 
 #define CALIB_FILE "tests/data/vision/camera/config.yaml"
 

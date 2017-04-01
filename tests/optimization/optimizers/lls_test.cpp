@@ -1,7 +1,6 @@
-#include <gtest/gtest.h>
-
-#include "yarl/optimization/optimizers/llsopt.hpp"
+#include "yarl/test.hpp"
 #include "yarl/utils/math.hpp"
+#include "yarl/optimization/optimizers/llsopt.hpp"
 
 namespace yarl {
 

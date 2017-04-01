@@ -1,8 +1,4 @@
-#include <ctime>
-#include <sstream>
-#include <string>
-
-#include "yarl/yarl_test.hpp"
+#include "yarl/test.hpp"
 
 #include "yarl/utils/math.hpp"
 #include "yarl/utils/utils.hpp"
@@ -71,7 +67,7 @@ MatX load_data(std::string file_path) {
 TEST(EightPoint, constructor) {
   optimization::EightPoint estimator;
 
-  ASSERT_EQ(false, estimator.configured);
+  ASSERT_FALSE(estimator.configured);
 
   ASSERT_EQ(0, estimator.image_width);
   ASSERT_EQ(0, estimator.image_height);
@@ -84,7 +80,7 @@ TEST(EightPoint, configure) {
   estimator.configure(800, 600);
 
   // test and assert
-  ASSERT_EQ(true, estimator.configured);
+  ASSERT_TRUE(estimator.configured);
 
   ASSERT_EQ(800, estimator.image_width);
   ASSERT_EQ(600, estimator.image_height);

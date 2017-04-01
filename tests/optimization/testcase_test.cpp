@@ -1,21 +1,20 @@
-#include <gtest/gtest.h>
-
-#include "yarl/optimization/testcase.hpp"
+#include "yarl/test.hpp"
 #include "yarl/utils/utils.hpp"
+#include "yarl/optimization/testcase.hpp"
 
 namespace yarl {
 
 TEST(Testcase, constructor) {
   TestCase testcase;
 
-  ASSERT_EQ(false, testcase.configured);
+  ASSERT_FALSE(testcase.configured);
 }
 
 TEST(Testcase, configure) {
   TestCase testcase;
 
   testcase.configure();
-  ASSERT_EQ(true, testcase.configured);
+  ASSERT_TRUE(testcase.configured);
 }
 
 TEST(TestCase, createP) {

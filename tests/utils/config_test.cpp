@@ -1,4 +1,4 @@
-#include "yarl/yarl_test.hpp"
+#include "yarl/test.hpp"
 #include "yarl/utils/config.hpp"
 #include "yarl/utils/data.hpp"
 
@@ -12,7 +12,7 @@ TEST(ConfigParam, constructor) {
   ASSERT_EQ(TYPE_NOT_SET, param.type);
   ASSERT_EQ("", param.key);
   ASSERT_EQ(NULL, param.data);
-  ASSERT_EQ(false, param.optional);
+  ASSERT_FALSE(param.optional);
 }
 
 TEST(ConfigParser, constructor) {
@@ -68,7 +68,7 @@ TEST(ConfigParser, addParam) {
   parser.addParam("matrix", &matx);
   parser.addParam("matrix", &cvmat);
 
-  ASSERT_EQ(19, parser.params.size());
+  ASSERT_EQ(19, (int) parser.params.size());
   ASSERT_EQ(BOOL, parser.params[0].type);
   ASSERT_EQ("bool", parser.params[0].key);
   ASSERT_TRUE(parser.params[0].data != NULL);
@@ -122,7 +122,7 @@ TEST(ConfigParser, getXMLValues) {
   // test and assert
   retval = parser.getXMLValues("/config/int_array/item", values);
   ASSERT_EQ(0, retval);
-  ASSERT_EQ(4, values.size());
+  ASSERT_EQ(4, (int) values.size());
   ASSERT_EQ("0", values[0]);
 }
 

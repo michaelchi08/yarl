@@ -1,9 +1,6 @@
-#include <functional>
-
-#include <gtest/gtest.h>
-
-#include "yarl/optimization/ceres/ba.hpp"
+#include "yarl/test.hpp"
 #include "yarl/utils/utils.hpp"
+#include "yarl/optimization/ceres/ba.hpp"
 
 #define TEST_DATA_1 "tests/data/optimization/ceres/ba/pts1.dat"
 #define TEST_DATA_2 "tests/data/optimization/ceres/ba/pts2.dat"
@@ -65,7 +62,7 @@ TEST(BAResidual, test) {
 
 TEST(BundleAdjustment, constructor) {
   ceres::BundleAdjustment ba;
-  ASSERT_EQ(false, ba.configured);
+  ASSERT_FALSE(ba.configured);
 }
 
 TEST(BundleAdjustment, configure) {
@@ -82,7 +79,7 @@ TEST(BundleAdjustment, configure) {
   K << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0;
   ba.configure(K, x1_pts, x2_pts);
 
-  ASSERT_EQ(true, ba.configured);
+  ASSERT_TRUE(ba.configured);
   ASSERT_EQ(x1_pts, ba.x1_pts);
   ASSERT_EQ(x2_pts, ba.x2_pts);
   // ASSERT_FLOAT_EQ(K(0, 0), ba.K(0, 0));

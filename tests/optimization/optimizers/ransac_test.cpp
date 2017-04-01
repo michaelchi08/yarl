@@ -1,13 +1,6 @@
-#include <ctime>
-#include <fstream>
-#include <sstream>
-#include <string>
-
-#include <gtest/gtest.h>
-
+#include "yarl/test.hpp"
+#include "yarl/utils/utils.hpp"
 #include "yarl/optimization/optimizers/ransac.hpp"
-#include "yarl/utils/data.hpp"
-#include "yarl/utils/math.hpp"
 
 #define TEST_DATA "tests/data/optimization/optimizers/ransac/sample.dat"
 
@@ -17,7 +10,7 @@ TEST(ransac, setup) {
   struct ransac opt;
 
   ransac_setup(&opt);
-  ASSERT_EQ(opt.configured, false);
+  ASSERT_FALSE(opt.configured);
 
   ASSERT_EQ(opt.max_iter, 0);
   ASSERT_FLOAT_EQ(opt.thresh_ratio, 1.0);
@@ -47,7 +40,7 @@ TEST(ransac, configure) {
   ASSERT_FLOAT_EQ(opt.model_params[1], 0.0);
 }
 
-TEST(ransac, RandomSample) {
+TEST(ransac, randomSample) {
   int retval;
   Vec2 sample;
   MatX data(2, 100);
@@ -106,7 +99,7 @@ TEST(ransac, compute_inliers) {
   // test and assert
   retval = ransac_compute_inliers(&opt, dists);
   ASSERT_EQ(retval, 0);
-  ASSERT_EQ(opt.inliers.size(), 5);
+  ASSERT_EQ((int) opt.inliers.size(), 5);
   ASSERT_EQ(opt.inliers[0], 0);
   ASSERT_EQ(opt.inliers[1], 1);
   ASSERT_EQ(opt.inliers[2], 2);

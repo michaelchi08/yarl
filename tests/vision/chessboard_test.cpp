@@ -1,12 +1,12 @@
+#include "yarl/test.hpp"
 #include "yarl/vision/chessboard.hpp"
-#include "yarl/yarl_test.hpp"
 
 namespace yarl {
 
 TEST(Chessboard, constructor) {
   Chessboard chessboard;
 
-  ASSERT_EQ(false, chessboard.configured);
+  ASSERT_FALSE(chessboard.configured);
 
   ASSERT_EQ(0, chessboard.nb_corners_rows);
   ASSERT_EQ(0, chessboard.nb_corners_columns);
@@ -19,7 +19,7 @@ TEST(Chessboard, configure) {
 
   chessboard.configure(1, 2);
 
-  ASSERT_EQ(true, chessboard.configured);
+  ASSERT_TRUE(chessboard.configured);
 
   ASSERT_EQ(2, chessboard.nb_corners_rows);
   ASSERT_EQ(1, chessboard.nb_corners_columns);

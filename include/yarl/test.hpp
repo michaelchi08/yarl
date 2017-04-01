@@ -1,9 +1,13 @@
 #ifndef YARL_TEST_HPP
 #define YARL_TEST_HPP
 
+#include <ctime>
+#include <random>
+#include <string>
 #include <fstream>
 #include <iostream>
-#include <random>
+#include <sstream>
+#include <functional>
 
 #include <gtest/gtest.h>
 

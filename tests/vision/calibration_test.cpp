@@ -1,5 +1,5 @@
+#include "yarl/test.hpp"
 #include "yarl/vision/calibration.hpp"
-#include "yarl/yarl_test.hpp"
 
 #define TEST_IMAGE "tests/data/vision/chessboard.jpg"
 

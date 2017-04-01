@@ -1,7 +1,7 @@
+#include "yarl/test.hpp"
 #include "yarl/vision/vo.hpp"
 #include "yarl/vision/fast.hpp"
 #include "yarl/vision/utils.hpp"
-#include "yarl/yarl_test.hpp"
 
 #define TEST_IMAGE_1 "tests/data/vo/left.jpg"
 #define TEST_IMAGE_2 "tests/data/vo/right.jpg"

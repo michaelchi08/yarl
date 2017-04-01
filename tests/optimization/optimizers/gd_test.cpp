@@ -1,7 +1,4 @@
-#include <functional>
-
-#include <gtest/gtest.h>
-
+#include "yarl/test.hpp"
 #include "yarl/optimization/benchmark.hpp"
 #include "yarl/optimization/optimizers/gdopt.hpp"
 
@@ -11,7 +8,7 @@ TEST(gdopt, setup) {
   struct gdopt opt;
 
   gdopt_setup(&opt);
-  ASSERT_EQ(opt.configured, false);
+  ASSERT_FALSE(opt.configured);
   ASSERT_EQ(opt.max_iter, 1000);
 }
 
@@ -36,7 +33,7 @@ TEST(gdopt, configure) {
   );
   // clang-format on
 
-  ASSERT_EQ(true, opt.configured);
+  ASSERT_TRUE(opt.configured);
   ASSERT_EQ(max_iter, opt.max_iter);
   ASSERT_FLOAT_EQ(eta(0), opt.eta(0));
   ASSERT_FLOAT_EQ(eta(1), opt.eta(1));
