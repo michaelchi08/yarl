@@ -8,7 +8,6 @@ BIN_DIR = $(BUILD_PATH)/bin
 OBJ_DIR = $(BUILD_PATH)/obj
 TESTS_DIR = $(BUILD_PATH)/tests
 LIB_DIR = $(BUILD_PATH)/lib
-GTEST_LIB_DIR = ./deps/googletest/googletest/make
 
 # LIBS
 STD_LIB = -lm
@@ -29,11 +28,11 @@ OPENCV_LIB = -lopencv_calib3d \
              -lopencv_video \
              -lopencv_videoio \
              -lopencv_videostab
-CERES_LIB = -lceres -lblas
+CERES_LIB = -lceres -lblas -lglog
 CERES_LIB += -llapack -lcamd -lamd -lccolamd -lcolamd -lcholmod
 CERES_LIB += -fopenmp -lpthread -lgomp -lm
 CERES_LIB += -lcxsparse
-GTEST_LIB = -lglog -lgtest -lpthread
+GTEST_LIB = -lgtest -lglog -lpthread
 
 # INCLUDE AND LIBRARY PATHS
 INCLUDES = -I/usr/local/include/ \
@@ -42,7 +41,7 @@ INCLUDES = -I/usr/local/include/ \
 		   -I/usr/include/libxml2 \
 		   -I$(PWD)/include
 LIBS = -L/usr/local/lib \
-			 -L/usr/lib \
+	   -L/usr/lib \
        -L$(LIB_DIR) \
        -L$(GTEST_LIB_DIR) \
        -l$(PROJECT_NAME) \
