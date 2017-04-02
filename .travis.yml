@@ -8,6 +8,7 @@ install:
     - travis_wait sudo bash scripts/install/install_deps.bash
 
 script:
+    - export LD_LIBRARY_PATH=/usr/local/lib
     - git submodule init
     - git submodule update
     - make && make run_tests
