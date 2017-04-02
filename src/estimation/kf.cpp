@@ -2,38 +2,55 @@
 
 namespace yarl {
 
-int kf_setup(struct kf *e, VecX mu, MatX R, MatX C, MatX Q) {
+KF::KF(void) {
+  this->mu = VecX();
+
+  this->B = MatX();
+  this->R = MatX();
+
+  this->C = MatX();
+  this->Q = MatX();
+
+  this->S = MatX();
+  this->I = MatX();
+  this->K = MatX();
+
+  this->mu_p = VecX();
+  this->S_p = MatX();
+}
+
+int KF::configure(VecX mu, MatX R, MatX C, MatX Q) {
   int nb_states;
 
   nb_states = mu.size();
-  e->mu = mu;
+  this->mu = mu;
 
-  e->B = MatX::Zero(nb_states, nb_states);
-  e->R = R;
+  this->B = MatX::Zero(nb_states, nb_states);
+  this->R = R;
 
-  e->C = C;
-  e->Q = Q;
+  this->C = C;
+  this->Q = Q;
 
-  e->S = MatX::Identity(nb_states, nb_states);
-  e->I = MatX::Identity(nb_states, nb_states);
-  e->K = MatX::Zero(nb_states, nb_states);
+  this->S = MatX::Identity(nb_states, nb_states);
+  this->I = MatX::Identity(nb_states, nb_states);
+  this->K = MatX::Zero(nb_states, nb_states);
 
-  e->mu_p = VecX::Zero(nb_states);
-  e->S_p = MatX::Zero(nb_states, nb_states);
+  this->mu_p = VecX::Zero(nb_states);
+  this->S_p = MatX::Zero(nb_states, nb_states);
 
   return 0;
 }
 
-int kf_estimate(struct kf *e, MatX A, VecX y) {
+int KF::estimate(MatX A, VecX y) {
   // prediction update
-  e->mu_p = A * e->mu;
-  e->S_p = A * e->S * A.transpose() + e->R;
+  mu_p = A * mu;
+  S_p = A * S * A.transpose() + R;
 
   // measurement update
   // clang-format off
-  e->K = e->S_p * e->C.transpose() * (e->C * e->S_p * e->C.transpose() + e->Q).inverse();
-  e->mu = e->mu_p + e->K * (y - e->C * e->mu_p);
-  e->S = (e->I - e->K * e->C) * e->S_p;
+  K = S_p * C.transpose() * (C * S_p * C.transpose() + Q).inverse();
+  mu = mu_p + K * (y - C * mu_p);
+  S = (I - K * C) * S_p;
   // clang-format on
 
   return 0;

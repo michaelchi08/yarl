@@ -8,7 +8,7 @@
 
 namespace yarl {
 
-struct ekf {
+struct EKF {
   VecX mu;
 
   MatX R;
@@ -20,11 +20,12 @@ struct ekf {
 
   VecX mu_p;
   MatX S_p;
-};
 
-int ekf_setup(struct ekf *e, VecX mu, MatX R, MatX Q);
-int ekf_prediction_update(struct ekf *e, VecX g, MatX G);
-int ekf_measurement_update(struct ekf *e, VecX h, MatX H, VecX y);
+  EKF(void);
+  int configure(VecX mu, MatX R, MatX Q);
+  int predictionUpdate(VecX g, MatX G);
+  int measurementUpdate(VecX h, MatX H, VecX y);
+};
 
 }  // end of yarl namespace
 #endif

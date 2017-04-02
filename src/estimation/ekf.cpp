@@ -2,37 +2,49 @@
 
 namespace yarl {
 
-int ekf_setup(struct ekf *e, VecX mu, MatX R, MatX Q) {
+EKF::EKF(void) {
+  this->mu = VecX();
+
+  this->R = MatX();
+  this->Q = MatX();
+
+  this->S = MatX();
+  this->I = MatX();
+  this->K = MatX();
+
+  this->mu_p = VecX();
+  this->S_p = MatX();
+}
+
+int EKF::configure(VecX mu, MatX R, MatX Q) {
   int nb_states;
 
   nb_states = mu.size();
-  e->mu = mu;
+  this->mu = mu;
 
-  e->R = R;
-  e->Q = Q;
+  this->R = R;
+  this->Q = Q;
 
-  e->S = MatX::Identity(nb_states, nb_states);
-  e->I = MatX::Identity(nb_states, nb_states);
-  e->K = MatX::Zero(nb_states, nb_states);
+  this->S = MatX::Identity(nb_states, nb_states);
+  this->I = MatX::Identity(nb_states, nb_states);
+  this->K = MatX::Zero(nb_states, nb_states);
 
-  e->mu_p = VecX::Zero(nb_states);
-  e->S_p = MatX::Zero(nb_states, nb_states);
+  this->mu_p = VecX::Zero(nb_states);
+  this->S_p = MatX::Zero(nb_states, nb_states);
 
   return 0;
 }
 
-int ekf_prediction_update(struct ekf *e, VecX g, MatX G) {
-  e->mu_p = g;
-  e->S_p = G * e->S * G.transpose() + e->R;
+int EKF::predictionUpdate(VecX g, MatX G) {
+  mu_p = g;
+  S_p = G * S * G.transpose() + R;
   return 0;
 }
 
-int ekf_measurement_update(struct ekf *e, VecX h, MatX H, VecX y) {
-  // clang-format off
-  e->K = e->S_p * H.transpose() * (H * e->S_p * H.transpose() + e->Q).inverse();
-  e->mu = e->mu_p + e->K * (y - h);
-  e->S = (e->I - e->K * H) * e->S_p;
-  // clang-format on
+int EKF::measurementUpdate(VecX h, MatX H, VecX y) {
+  K = S_p * H.transpose() * (H * S_p * H.transpose() + Q).inverse();
+  mu = mu_p + K * (y - h);
+  S = (I - K * H) * S_p;
 
   return 0;
 }

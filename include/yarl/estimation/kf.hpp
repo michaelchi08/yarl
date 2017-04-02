@@ -8,7 +8,8 @@
 
 namespace yarl {
 
-struct kf {
+class KF {
+public:
   VecX mu;
 
   MatX B;
@@ -23,10 +24,11 @@ struct kf {
 
   VecX mu_p;
   MatX S_p;
-};
 
-int kf_setup(struct kf *e, VecX mu, MatX R, MatX C, MatX Q);
-int kf_estimate(struct kf *e, MatX A, VecX y);
+  KF(void);
+  int configure(VecX mu, MatX R, MatX C, MatX Q);
+  int estimate(MatX A, VecX y);
+};
 
 }  // end of yarl namespace
 #endif
