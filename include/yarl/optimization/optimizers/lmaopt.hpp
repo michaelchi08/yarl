@@ -1,5 +1,5 @@
-#ifndef YARL_OPTIMIZATION_OPTIMIZERS_LMAOPT_HPP
-#define YARL_OPTIMIZATION_OPTIMIZERS_LMAOPT_HPP
+#ifndef YARL_OPTIMIZATION_OPTIMIZERS_LMA_HPP
+#define YARL_OPTIMIZATION_OPTIMIZERS_LMA_HPP
 
 #include <cmath>
 #include <float.h>
@@ -14,7 +14,8 @@ namespace yarl {
 
 #define LMA_BIND(X) std::bind(X, std::placeholders::_1, std::placeholders::_2)
 
-struct lmaopt_settings {
+class LMASettings {
+public:
   int max_iter;
   double lambda;
   std::function<double(VecX x, VecX beta)> function;
@@ -25,9 +26,14 @@ struct lmaopt_settings {
   MatX x;
   VecX y;
   VecX beta;
+
+  LMASettings(void);
 };
 
-struct lmaopt {
+class LMAOpt {
+public:
+  bool configured;
+
   int max_iter;
   double lambda;
   std::function<double(VecX x, VecX beta)> function;
@@ -46,15 +52,14 @@ struct lmaopt {
   MatX H;
 
   double error;
-};
 
-void lmaopt_default_settings(struct lmaopt_settings *settings);
-void lmaopt_setup(struct lmaopt *opt);
-int lmaopt_configure(struct lmaopt *opt, struct lmaopt_settings *settings);
-int lmaopt_evaluate_function(struct lmaopt *opt, VecX beta, double *error);
-int lmaopt_calculate_gradient(struct lmaopt *opt, VecX beta);
-int lmaopt_iterate(struct lmaopt *opt);
-int lmaopt_optimize(struct lmaopt *opt);
+  LMAOpt(void);
+  int configure(LMASettings settings);
+  int evalFunction(VecX beta, double &error);
+  int calcGradients(VecX beta);
+  int iterate(void);
+  int optimize(void);
+};
 
 }  // end of yarl namespace
 #endif
