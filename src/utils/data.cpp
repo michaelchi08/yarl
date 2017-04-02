@@ -104,6 +104,23 @@ int csvcols(std::string file_path) {
   return (found_separator) ? nb_elements : 0;
 }
 
+int csvheader(std::string file_path, std::vector<std::string> &fields) {
+  std::string line;
+  std::fstream infile(file_path);
+
+  // load file
+  if (infile.good() != true) {
+    printf(E_CSV_DATA_LOAD, file_path.c_str());
+    return -1;
+  }
+
+  // parse header
+  std::getline(infile, line);
+  split(line, ',', fields);
+
+  return 0;
+}
+
 int csv2mat(std::string file_path, bool header, MatX &data) {
   int line_no;
   int nb_rows;

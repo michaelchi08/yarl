@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "yarl/utils/math.hpp"
+#include "yarl/utils/string.hpp"
 
 namespace yarl {
 
@@ -49,6 +50,7 @@ public:
 
 int csvrows(std::string file_path);
 int csvcols(std::string file_path);
+int csvheader(std::string file_path, std::vector<std::string> &fields);
 int csv2mat(std::string file_path, bool header, MatX &data);
 int mat2csv(std::string file_path, MatX data);
 

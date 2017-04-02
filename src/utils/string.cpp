@@ -13,6 +13,22 @@ std::string strim(const std::string &str, const std::string &whitespace) {
   return str.substr(str_begin, str_range);
 }
 
+// std::string &ltrim(std::string &s) {
+//   s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+//         std::not1(std::ptr_fun<int, int>(std::isspace))));
+//   return s;
+// }
+//
+// std::string &rtrim(std::string &s) {
+//   s.erase(std::find_if(s.rbegin(), s.rend(),
+//         std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+//   return s;
+// }
+//
+// std::string &trim(std::string &s) {
+//   return ltrim(rtrim(s));
+// }
+
 void strip(std::string &str, char delim) {
   str.erase(std::remove(str.begin(), str.end(), delim), str.end());
 }
@@ -23,7 +39,8 @@ void split(const std::string s, char delim, std::vector<std::string> &out) {
 
   while (std::getline(iss, element, delim)) {
     strip(element, '\n');
-    out.push_back(strim(element));
+    element = strim(element);
+    out.push_back(element);
   }
 }
 

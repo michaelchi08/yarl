@@ -181,8 +181,8 @@ above.
 
 
     class AnalyticalCostFunction
-      : public SizedCostFunction<1 /* number of residuals */,
-                                 1 /* size of first parameter */> {
+      : public SizedCostFunction<1 number of residuals,
+                                 1 size of first parameter> {
     public:
       virtual ~AnalyticalCostFunction() {}
       virtual bool Evaluate(double const * const * parameters,

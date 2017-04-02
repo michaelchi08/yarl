@@ -113,7 +113,7 @@ int RANSAC::update(Vec2 &p1, Vec2 &p2) {
   return 0;
 }
 
-int RANSAC::printStats(void) {
+void RANSAC::printStats(void) {
   printf("iter: %d\t", this->iter);
   printf("inliers: %d\t", this->max_inliers);
   printf("m: %f\t", this->model_params[0]);

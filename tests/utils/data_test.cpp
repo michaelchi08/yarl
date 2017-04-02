@@ -98,6 +98,16 @@ TEST(Utils, csvcols) {
   ASSERT_EQ(2, cols);
 }
 
+TEST(Utils, csvheader) {
+  std::vector<std::string> fields;
+
+  csvheader(TEST_DATA, fields);
+  for (size_t i = 0; i < fields.size(); i++) {
+    std::cout << "[" << fields[i] << "]" << std::endl;
+  }
+  ASSERT_EQ(2, (int) fields.size());
+}
+
 TEST(Utils, csv2mat) {
   MatX data;
 

@@ -7,7 +7,7 @@ rm -rf *
 
 # get docs folder from master branch and move contents out
 git checkout master -- docs
-mv docs/* .
+mv docs.
 rm -rf docs
 
 # get latest README file

@@ -31,7 +31,7 @@ public:
   int computeDistances(MatX &data, Vec2 &p1, Vec2 &p2, VecX &dists);
   int computeInliers(VecX &dists);
   int update(Vec2 &p1, Vec2 &p2);
-  int printStats(void);
+  void printStats(void);
   int optimize(MatX &data);
 };
 
