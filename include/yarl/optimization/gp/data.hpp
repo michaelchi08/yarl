@@ -1,5 +1,5 @@
-#ifndef YARL_OPTIMIZATION_OPTIMIZERS_GPDATA_HPP
-#define YARL_OPTIMIZATION_OPTIMIZERS_GPDATA_HPP
+#ifndef YARL_OPTIMIZATION_GP_DATA_HPP
+#define YARL_OPTIMIZATION_GP_DATA_HPP
 
 #include <vector>
 #include <string>
@@ -8,8 +8,9 @@
 #include "yarl/utils/utils.hpp"
 
 namespace yarl {
+namespace gp {
 
-class GPData {
+class Data {
 public:
   bool loaded;
 
@@ -21,21 +22,22 @@ public:
   VecX data_in;
   VecX data_out;
 
-  GPData(void);
+  Data(void);
   int load(MatX data, std::vector<std::string> &fields);
   int load(std::string data_file);
   int fieldIndex(std::string field);
 };
 
-class GPDataset {
-  GPData train_data;
-  GPData valid_data;
-  GPData test_data;
+class Dataset {
+  Data train_data;
+  Data valid_data;
+  Data test_data;
   std::string predict;
 
-  GPDataset(void);
-  int load(GPData data, float train, float validation, float test);
+  Dataset(void);
+  int load(Data data, float train, float validation, float test);
 };
 
+}  // end of gp namespace
 }  // end of yarl namespace
 #endif

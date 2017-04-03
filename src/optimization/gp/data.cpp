@@ -1,8 +1,9 @@
-#include "yarl/optimization/gp/gpdata.hpp"
+#include "yarl/optimization/gp/data.hpp"
 
 namespace yarl {
+namespace gp {
 
-GPData::GPData(void) {
+Data::Data(void) {
   this->loaded = false;
 
   this->fields.clear();
@@ -14,7 +15,7 @@ GPData::GPData(void) {
   this->data_out = VecX();
 }
 
-int GPData::load(MatX data, std::vector<std::string> &fields) {
+int Data::load(MatX data, std::vector<std::string> &fields) {
   // pre-eheck
   if (this->loaded) {
     this->fields.clear();
@@ -30,7 +31,7 @@ int GPData::load(MatX data, std::vector<std::string> &fields) {
   return 0;
 }
 
-int GPData::load(std::string data_file) {
+int Data::load(std::string data_file) {
   // pre-eheck
   if (this->loaded) {
     this->fields.clear();
@@ -51,7 +52,7 @@ int GPData::load(std::string data_file) {
   return 0;
 }
 
-int GPData::fieldIndex(std::string field) {
+int Data::fieldIndex(std::string field) {
   auto it = std::find(this->fields.begin(), this->fields.end(), field);
   if (it == this->fields.end()) {
     return -1;
@@ -60,14 +61,14 @@ int GPData::fieldIndex(std::string field) {
   }
 }
 
-GPDataset::GPDataset(void) {
-  this->train_data = GPData();
-  this->valid_data = GPData();
-  this->test_data = GPData();
+Dataset::Dataset(void) {
+  this->train_data = Data();
+  this->valid_data = Data();
+  this->test_data = Data();
   this->predict = "";
 }
 
-int GPDataset::load(GPData d, float train, float valid, float test) {
+int Dataset::load(Data d, float train, float valid, float test) {
   double train_rows, valid_rows, test_rows;
   MatX train_mat, valid_mat, test_mat;
 
@@ -85,7 +86,6 @@ int GPDataset::load(GPData d, float train, float valid, float test) {
   valid_mat = d.data.block(train_rows, 0, valid_rows, d.cols);
   test_mat = d.data.block(train_rows + valid_rows, 0, test_rows, d.cols);
 
-
   this->train_data.load(train_mat, d.fields);
   this->valid_data.load(valid_mat, d.fields);
   this->test_data.load(test_mat, d.fields);
@@ -93,4 +93,5 @@ int GPDataset::load(GPData d, float train, float valid, float test) {
   return 0;
 }
 
+}  // end of gp namespace
 }  // end of yarl namespace

@@ -1,822 +1,535 @@
-#include "yarl/optimization/gp/gptree.hpp"
+#include "yarl/optimization/gp/tree.hpp"
+
+namespace yarl {
+namespace gp {
+
+Node::Node(void) {
+  // general
+  this->type = UINITI;
+  this->parent = NULL;
+  this->nth_child = UINITI;
+
+  // constant
+  this->nval = UINITI;
+
+  // input
+  this->input = "";
+
+  // function
+  this->fval = UINITI;
+  this->arity = UINITI;
+  this->children.clear();
+
+  // evaluation
+  this->data = VecX();
+}
+
+void Node::setAsConstant(double constant) {
+  // general
+  this->type = CONST;
+  this->parent = NULL;
+  this->nth_child = UINITI;
+
+  // constant
+  this->nval = constant;
+
+  // input
+  this->input = "";
+
+  // function
+  this->fval = UINITI;
+  this->arity = UINITI;
+  this->children.clear();
+
+  // evaluation
+  this->data = VecX();
+}
+
+void Node::setAsInput(std::string input) {
+  // general
+  this->type = INPUT;
+  this->parent = NULL;
+  this->nth_child = UINITI;
+
+  // constant
+  this->nval = UINITI;
+
+  // input
+  this->input = "";
+
+  // function
+  this->fval = UINITI;
+  this->arity = UINITI;
+  this->children.clear();
+
+  // evaluation
+  this->data = VecX();
+}
+
+void Node::setAsUnaryFunc(int function_type) {
+  // general
+  this->type = UFUNC;
+  this->parent = NULL;
+  this->nth_child = UINITI;
+
+  // constant
+  this->nval = UINITI;
+
+  // input
+  this->input = "";
+
+  // function
+  this->fval = function_type;
+  this->arity = 1;
+  this->children.clear();
+
+  // evaluation
+  this->data = VecX();
+}
+
+void Node::setAsBinaryFunc(int function_type) {
+  // general
+  this->type = BFUNC;
+  this->parent = NULL;
+  this->nth_child = UINITI;
+
+  // constant
+  this->nval = UINITI;
+
+  // input
+  this->input = "";
+
+  // function
+  this->fval = function_type;
+  this->arity = 2;
+  this->children.clear();
+
+  // evaluation
+  this->data = VecX();
+}
+
+bool Node::isTermNode(void) {
+  if (this->type == CONST || this->type == INPUT || this->type == FEVAL) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool Node::isFuncNode(void) {
+  if (this->type == UFUNC || this->type == BFUNC) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+int Node::copyFrom(Node &target) {
+  // general
+  this->type = target.type;
+  this->parent = target.parent;
+  this->nth_child = target.nth_child;
+
+  // constant
+  if (target.type == CONST) {
+    this->nval = target.nval;
+  }
+
+  // input
+  if (target.type == INPUT) {
+    this->input = target.input;
+  }
+
+  // function
+  if (target.type == UFUNC || target.type == BFUNC) {
+    this->fval = target.fval;
+    this->arity = target.arity;
+
+    // this function does not copy the children, if you want that
+    // use node_deepcopy() instead
+  }
+
+  // evaluation
+  if (target.type == FEVAL) {
+    this->data = target.data;
+  }
+
+  return 0;
+}
+
+int Node::deepCopyFrom(Node &target) {
+  // general
+  this->type = target.type;
+  this->parent = target.parent;
+  this->nth_child = target.nth_child;
+
+  // constant
+  if (target.type == CONST) {
+    this->nval = target.nval;
+  }
+
+  // input
+  if (target.type == INPUT) {
+    this->input = target.input;
+  }
+
+  // function
+  if (target.type == UFUNC || target.type == BFUNC) {
+    this->fval = target.fval;
+    this->arity = target.arity;
+
+    for (int i = 0; i < target.arity; i++) {
+      this->children.push_back(target.children[i]);
+    }
+  }
+
+  // evaluation
+  if (target.type == FEVAL) {
+    this->data = target.data;
+  }
+
+  return 0;
+}
+
+int Node::equals(Node &target) {
+  // pre-check
+  if (this->type != target.type) {
+    return 0;
+  }
+
+  // constant
+  if (this->type == CONST) {
+    if (fltcmp(this->nval, target.nval) != 0) {
+      return 0;
+    }
+  }
+
+  // input
+  if (this->type == INPUT) {
+    if (this->input.compare(target.input) != 0) {
+      return 0;
+    }
+  }
+
+  // function
+  if (this->type == UFUNC || target.type == BFUNC) {
+    if (this->fval != target.fval) {
+      return 0;
+    } else if (this->arity != target.arity) {
+      return 0;
+    }
+  }
+
+  // evaluation
+  if (this->type == FEVAL) {
+    for (int i = 0; i < this->data.size(); i++) {
+      if (fltcmp(this->data[i], target.data[i]) != 0) {
+        return 0;
+      }
+    }
+  }
+
+  return 1;
+}
+
+int Node::deepEquals(Node &target) {
+  int retval;
+
+  if (this->isTermNode() && target.isTermNode()) {
+    return this->equals(target);
+
+  } else if (this->isFuncNode() && target.isFuncNode()) {
+    if (this->equals(target) == 0) {
+      return 0;
+    }
+
+    for (int i = 0; i < this->arity; i++) {
+      retval = this->children[i].deepEquals(target.children[i]);
+      if (retval == 0) {
+        return 0;
+      }
+    }
+  }
+
+  return 1;
+}
+
+std::string Node::toString(void) {
+  std::ostringstream oss;
+
+  // build node string
+  if (this->type == CONST) {
+    oss << "T[" << this->nval << "]";
+
+  } else if (this->type == INPUT) {
+    oss << "T[" << this->input << "]";
+
+  } else if (this->type == UFUNC || this->type == BFUNC) {
+    oss << "F[" << this->fval << "]";
+  }
+
+  // copy and return node string
+  return oss.str();
+}
+
+void Node::print(void) {
+  if (this->type == CONST) {
+    std::cout << "T[" << this->nval << "]";
+  } else if (this->type == INPUT) {
+    std::cout << "T[" << this->input << "]";
+  } else if (this->type == UFUNC || this->type == BFUNC) {
+    std::cout << "F[" << this->fval << "]";
+  }
+}
+
+int FunctionSet::configure(void) {
+  this->unary_functions.push_back(LOG);
+  this->unary_functions.push_back(EXP);
+  this->unary_functions.push_back(RAD);
+  this->unary_functions.push_back(SIN);
+  this->unary_functions.push_back(COS);
+
+  this->binary_functions.push_back(ADD);
+  this->binary_functions.push_back(SUB);
+  this->binary_functions.push_back(MUL);
+  this->binary_functions.push_back(DIV);
+  this->binary_functions.push_back(POW);
+
+  return 0;
+}
+
+void FunctionSet::clear(void) {
+  this->unary_functions.clear();
+  this->binary_functions.clear();
+}
+
+Node FunctionSet::randomUnaryFunction(void) {
+  int index;
+  Node node;
+
+  index = randi(0, (int) this->unary_functions.size() - 1);
+  node.setAsUnaryFunc(this->unary_functions[index]);
+
+  return node;
+}
+
+Node FunctionSet::randomBinaryFunction(void) {
+  int index;
+  Node node;
+
+  index = randi(0, (int) this->binary_functions.size() - 1);
+  node.setAsUnaryFunc(this->binary_functions[index]);
+
+  return node;
+}
+
+Node FunctionSet::randomFunction(void) {
+  // pre-check
+  if (this->unary_functions.size() == 0) {
+    return this->randomBinaryFunction();
+  } else if (this->binary_functions.size() == 0) {
+    return this->randomUnaryFunction();
+  }
+
+  // return random function
+  if (randf(0.0, 1.0) > 0.5) {
+    return this->randomUnaryFunction();
+  } else {
+    return this->randomBinaryFunction();
+  }
+}
 
 
-// // FUNCTION SET FUNCTIONS
-// struct function_set *function_set_new(void) {
-//   int i;
-//   struct function_set *fs;
-//
-//   fs = (struct function_set *) malloc(sizeof(struct function_set));
-//   for (i = 0; i < MAX_FUNCTIONS; i++) {
-//     fs->unary_functions[i] = UINITI;
-//     fs->binary_functions[i] = UINITI;
-//   }
-//   fs->nb_unary_functions = 0;
-//   fs->nb_binary_functions = 0;
-//
-//   return fs;
-// }
-//
-// void function_set_destroy(void *target) {
-//   struct function_set *fs;
-//
-//   fs = (struct function_set *) target;
-//   free(fs);
-//   fs = NULL;
-// }
-//
-// struct function_set *function_set_defaults(void) {
-//   struct function_set *fs;
-//
-//   fs = (struct function_set *) malloc(sizeof(struct function_set));
-//   function_set_setup(fs);
-//
-//   fs->unary_functions[0] = LOG;
-//   fs->unary_functions[1] = EXP;
-//   fs->unary_functions[2] = RAD;
-//   fs->unary_functions[3] = SIN;
-//   fs->unary_functions[4] = COS;
-//   fs->nb_unary_functions = 5;
-//
-//   fs->binary_functions[0] = ADD;
-//   fs->binary_functions[1] = SUB;
-//   fs->binary_functions[2] = MUL;
-//   fs->binary_functions[3] = DIV;
-//   fs->binary_functions[4] = POW;
-//   fs->nb_binary_functions = 5;
-//
-//   return fs;
-// }
-//
-// void function_set_setup(struct function_set *fs) {
-//   memset(fs->unary_functions, UINITI, sizeof(int) * MAX_FUNCTIONS);
-//   fs->nb_unary_functions = 0;
-//
-//   memset(fs->binary_functions, UINITI, sizeof(int) * MAX_FUNCTIONS);
-//   fs->nb_binary_functions = 0;
-// }
-//
-// void function_set_clear(struct function_set *fs) {
-//   function_set_setup(fs);
-// }
-//
-//
-// // TERMINAL SET FUNCTIONS
-// struct terminal_set *terminal_set_new(void) {
-//   int i;
-//   struct terminal_set *ts;
-//
-//   ts = (struct terminal_set *) malloc(sizeof(struct terminal_set));
-//
-//   // constants
-//   for (i = 0; i < MAX_CONSTANTS; i++) {
-//     ts->constants[i] = UINITF;
-//   }
-//   ts->nb_constants = 0;
-//
-//   // inputs
-//   for (i = 0; i < MAX_INPUTS; i++) {
-//     memset(ts->inputs[i], UINITC, sizeof(char) * MAX_INPUT_VAR_SIZE);
-//   }
-//   ts->nb_inputs = 0;
-//
-//   return ts;
-// }
-//
-// void terminal_set_destroy(void *target) {
-//   struct terminal_set *ts;
-//
-//   ts = (struct terminal_set *) target;
-//   free(ts);
-//   ts = NULL;
-// }
-//
-// struct terminal_set *terminal_set_defaults(char inputs[MAX_INPUTS]
-//                                                       [MAX_INPUT_VAR_SIZE],
-//                                            int nb_inputs) {
-//   int i;
-//   struct terminal_set *ts;
-//
-//   ts = (struct terminal_set *) malloc(sizeof(struct terminal_set));
-//   terminal_set_setup(ts);
-//   ts->constants[0] = 0.0;
-//   ts->constants[1] = 1.0;
-//   ts->constants[2] = 2.0;
-//   ts->constants[3] = 3.0;
-//   ts->constants[4] = 4.0;
-//   ts->constants[5] = 5.0;
-//   ts->constants[6] = 6.0;
-//   ts->constants[7] = 7.0;
-//   ts->constants[8] = 8.0;
-//   ts->constants[9] = 9.0;
-//   ts->constants[10] = 10.0;
-//   ts->nb_constants = 11;
-//
-//   for (i = 0; i < nb_inputs; i++) {
-//     memset(ts->inputs[i], '\0', sizeof(char) * MAX_INPUT_VAR_SIZE);
-//     strcpy(ts->inputs[i], inputs[i]);
-//   }
-//   ts->nb_inputs = nb_inputs;
-//
-//   return ts;
-// }
-//
-// void terminal_set_setup(struct terminal_set *ts) {
-//   int i;
-//
-//   for (i = 0; i < MAX_CONSTANTS; i++) {
-//     ts->constants[i] = UINITF;
-//   }
-//   ts->nb_constants = 0;
-//
-//   for (i = 0; i < MAX_INPUTS; i++) {
-//     memset(ts->inputs[i], UINITC, sizeof(char) * MAX_INPUT_VAR_SIZE);
-//   }
-//   ts->nb_inputs = 0;
-// }
-//
-// void terminal_set_clear(struct terminal_set *ts) {
-//   terminal_set_setup(ts);
-// }
-//
-//
-// // NODE FUNCTIONS
-// void node_setup(struct node *n) {
-//   // general
-//   n->type = UINITI;
-//   n->parent = NULL;
-//   n->nth_child = UINITI;
-//
-//   // constant
-//   n->nval = UINITI;
-//
-//   // input
-//   n->input = NULL;
-//
-//   // function
-//   n->fval = UINITI;
-//   n->arity = UINITI;
-//   n->children = NULL;
-//
-//   // evaluation
-//   n->data = NULL;
-//   n->data_length = 0;
-// }
-//
-// void node_setup_const(struct node *n, double constant) {
-//   // general
-//   n->type = CONST;
-//   n->parent = NULL;
-//   n->nth_child = UINITI;
-//
-//   // constant
-//   n->nval = constant;
-//
-//   // input
-//   n->input = NULL;
-//
-//   // function
-//   n->fval = UINITI;
-//   n->arity = UINITI;
-//   n->children = NULL;
-//
-//   // evaluation
-//   n->data = NULL;
-//   n->data_length = 0;
-// }
-//
-// void node_setup_input(struct node *n, char *input) {
-//   // general
-//   n->type = INPUT;
-//   n->parent = NULL;
-//   n->nth_child = UINITI;
-//
-//   // constant
-//   n->nval = UINITI;
-//
-//   // input
-//   n->input = malloc_string(input);
-//
-//   // function
-//   n->fval = UINITI;
-//   n->arity = UINITI;
-//   n->children = NULL;
-//
-//   // evaluation
-//   n->data = NULL;
-//   n->data_length = 0;
-// }
-//
-// void node_setup_ufunc(struct node *n, int function) {
-//   // general
-//   n->type = UFUNC;
-//   n->parent = NULL;
-//   n->nth_child = UINITI;
-//
-//   // constant
-//   n->nval = UINITI;
-//
-//   // input
-//   n->input = NULL;
-//
-//   // function
-//   n->fval = function;
-//   n->arity = 1;
-//   n->children = (struct node **) malloc(sizeof(struct node *) * 1);
-//
-//   // evaluation
-//   n->data = NULL;
-//   n->data_length = 0;
-// }
-//
-// void node_setup_bfunc(struct node *n, int function) {
-//   // general
-//   n->type = BFUNC;
-//   n->parent = NULL;
-//   n->nth_child = UINITI;
-//
-//   // constant
-//   n->nval = UINITI;
-//
-//   // input
-//   n->input = NULL;
-//
-//   // function
-//   n->fval = function;
-//   n->arity = 2;
-//   n->children = (struct node **) malloc(sizeof(struct node *) * 2);
-//
-//   // evaluation
-//   n->data = NULL;
-//   n->data_length = 0;
-// }
-//
-// void node_setup_feval(struct node *n, int size) {
-//   // general
-//   n->type = FEVAL;
-//   n->parent = NULL;
-//   n->nth_child = UINITI;
-//
-//   // constant
-//   n->nval = UINITI;
-//
-//   // input
-//   n->input = NULL;
-//
-//   // function
-//   n->fval = UINITI;
-//   n->arity = UINITI;
-//   n->children = NULL;
-//
-//   // evaluation
-//   n->data = (double *) malloc(sizeof(double) * size);
-//   n->data_length = size;
-// }
-//
-// struct node *node_new(void) {
-//   struct node *n;
-//
-//   n = (struct node *) malloc(sizeof(struct node));
-//   node_setup(n);
-//
-//   return n;
-// }
-//
-// void node_destroy(void *target) {
-//   int i;
-//   struct node *n;
-//
-//   n = (struct node *) target;
-//   if (n->input) {
-//     free(n->input);
-//   }
-//
-//   if (n->data) {
-//     free(n->data);
-//   }
-//
-//   if (n->children) {
-//     for (i = 0; i < n->arity; i++) {
-//       node_destroy(n->children[i]);
-//     }
-//     free(n->children);
-//   }
-//
-//   free(n);
-//   n = NULL;
-// }
-//
-// void node_clear_destroy(void *target) {
-//   int i;
-//   struct node *n;
-//
-//   n = (struct node *) target;
-//   if (target == NULL) {
-//     return;
-//   }
-//
-//   if (n->data) {
-//     free(n->data);
-//     n->data = NULL;
-//   }
-//
-//   if (n->input) {
-//     free(n->input);
-//     n->input = NULL;
-//   }
-//
-//   if (n->children) {
-//     for (i = 0; i < n->arity; i++) {
-//       node_clear_destroy(n->children[i]);
-//     }
-//     free(n->children);
-//     n->children = NULL;
-//   }
-//
-//   free(n);
-//   n = NULL;
-// }
-//
-// void node_copy(struct node *src, struct node *dest) {
-//   int i;
-//
-//   // general
-//   dest->type = src->type;
-//   dest->parent = src->parent;
-//   dest->nth_child = src->nth_child;
-//
-//   // constant
-//   if (src->type == CONST) {
-//     dest->nval = src->nval;
-//   }
-//
-//   // input
-//   if (src->type == INPUT) {
-//     if (src->input) {
-//       dest->input = malloc_string(src->input);
-//     }
-//   }
-//
-//   // function
-//   if (src->type == UFUNC || src->type == BFUNC) {
-//     dest->fval = src->fval;
-//     dest->arity = src->arity;
-//
-//     // this function does not copy the children, if you want that
-//     // use node_deepcopy() instead
-//   }
-//
-//   // evaluation
-//   if (src->type == FEVAL) {
-//     if (src->data) {
-//       dest->data = (double *) malloc(sizeof(double) * src->data_length);
-//       for (i = 0; i < src->data_length; i++) {
-//         dest->data[i] = src->data[i];
-//       }
-//       dest->data_length = src->data_length;
-//     }
-//   }
-// }
-//
-// void node_deepcopy(struct node *src, struct node *dest) {
-//   int i;
-//
-//   // pre-check
-//   if (src == NULL) {
-//     dest = NULL;
-//     return;
-//   }
-//
-//   // general
-//   dest->type = src->type;
-//   dest->parent = src->parent;
-//   dest->nth_child = src->nth_child;
-//
-//   // constant
-//   if (src->type == CONST) {
-//     dest->nval = src->nval;
-//   }
-//
-//   // input
-//   if (src->type == INPUT) {
-//     if (src->input) {
-//       dest->input = malloc_string(src->input);
-//     }
-//   }
-//
-//   // function
-//   if (src->type == UFUNC || src->type == BFUNC) {
-//     dest->fval = src->fval;
-//     dest->arity = src->arity;
-//
-//     if (dest->children == NULL) {
-//       dest->children =
-//         (struct node **) malloc(sizeof(struct node *) * src->arity);
-//     }
-//
-//     for (i = 0; i < src->arity; i++) {
-//       dest->children[i] = node_new();
-//       node_deepcopy(src->children[i], dest->children[i]);
-//     }
-//   }
-//
-//   // evaluation
-//   if (src->type == FEVAL) {
-//     if (src->data) {
-//       dest->data = (double *) malloc(sizeof(double) * src->data_length);
-//       for (i = 0; i < src->data_length; i++) {
-//         dest->data[i] = src->data[i];
-//       }
-//       dest->data_length = src->data_length;
-//     }
-//   }
-// }
-//
-// int node_equals(struct node *n1, struct node *n2) {
-//   int i;
-//
-//   // pre-check
-//   if (n1 == NULL || n2 == NULL || n1->type != n2->type) {
-//     return 0;
-//   }
-//
-//   // constant
-//   if (n1->type == CONST) {
-//     if (fltcmp(n1->nval, n2->nval) != 0) {
-//       return 0;
-//     }
-//   }
-//
-//   // input
-//   if (n1->type == INPUT) {
-//     if (strcmp(n1->input, n2->input) != 0) {
-//       return 0;
-//     }
-//   }
-//
-//   // function
-//   if (n1->type == UFUNC || n2->type == BFUNC) {
-//     if (n1->fval != n2->fval) {
-//       return 0;
-//     } else if (n1->arity != n2->arity) {
-//       return 0;
-//     }
-//   }
-//
-//   // evaluation
-//   if (n1->type == FEVAL && n1->data_length == n2->data_length) {
-//     for (i = 0; i < n1->data_length; i++) {
-//       if (fltcmp(n1->data[i], n2->data[i]) != 0) {
-//         return 0;
-//       }
-//     }
-//   }
-//
-//   return 1;
-// }
-//
-// int node_deepequals(struct node *n1, struct node *n2) {
-//   int i;
-//   int retval;
-//
-//   if (TERM_NODE(n1->type) && TERM_NODE(n2->type)) {
-//     return node_equals(n1, n2);
-//
-//   } else if (FUNC_NODE(n1->type) && FUNC_NODE(n2->type)) {
-//     if (node_equals(n1, n2) == 0) {
-//       return 0;
-//     }
-//
-//     for (i = 0; i < n1->arity; i++) {
-//       retval = node_deepequals(n1->children[i], n2->children[i]);
-//       if (retval == 0) {
-//         return 0;
-//       }
-//     }
-//   }
-//
-//   return 1;
-// }
-//
-// char *node_string(struct node *n) {
-//   char buffer[30];
-//   char *node_str;
-//
-//   // pre-check
-//   if (n == NULL) {
-//     return NULL;
-//   }
-//
-//   // build node string
-//   if (n->type == CONST) {
-//     sprintf(buffer, "T[%f]", n->nval);
-//
-//   } else if (n->type == INPUT) {
-//     sprintf(buffer, "T[%s]", n->input);
-//
-//   } else if (n->type == UFUNC || n->type == BFUNC) {
-//     sprintf(buffer, "F[%d]", n->fval);
-//   }
-//
-//   // copy and return node string
-//   node_str = (char *) malloc(sizeof(char) * strlen(buffer) + 1);
-//   strcpy(node_str, buffer);
-//   return node_str;
-// }
-//
-// void node_print(struct node *n) {
-//   // pre-check
-//   if (n == NULL) {
-//     return;
-//   }
-//
-//   // print node
-//   if (n->type == CONST) {
-//     printf("T[%.2f]", n->nval);
-//
-//   } else if (n->type == INPUT) {
-//     printf("T[%s]", n->input);
-//
-//   } else if (n->type == UFUNC || n->type == BFUNC) {
-//     printf("F[%d]", n->fval);
-//   }
-// }
-//
-// struct node *node_random_input(struct terminal_set *ts) {
-//   int i;
-//   struct node *n;
-//
-//   i = randi(0, ts->nb_inputs - 1);
-//   n = node_new();
-//   n->type = INPUT;
-//   n->input = malloc_string(ts->inputs[i]);
-//
-//   return n;
-// }
-//
-// struct node *node_random_const(struct terminal_set *ts) {
-//   int i;
-//   struct node *n;
-//
-//   i = randi(0, ts->nb_constants - 1);
-//   n = node_new();
-//   n->type = CONST;
-//   n->nval = ts->constants[i];
-//
-//   return n;
-// }
-//
-// struct node *node_random_ufunc(struct function_set *fs) {
-//   int i;
-//   struct node *n;
-//
-//   i = randi(0, fs->nb_unary_functions - 1);
-//   n = node_new();
-//   n->type = UFUNC;
-//   n->fval = fs->unary_functions[i];
-//   n->arity = 1;
-//   n->children = (struct node **) malloc(sizeof(struct node *) * n->arity);
-//
-//   return n;
-// }
-//
-// struct node *node_random_bfunc(struct function_set *fs) {
-//   int i;
-//   struct node *n;
-//
-//   i = randi(0, fs->nb_binary_functions - 1);
-//   n = node_new();
-//   n->type = BFUNC;
-//   n->fval = fs->binary_functions[i];
-//   n->arity = 2;
-//   n->children = (struct node **) malloc(sizeof(struct node *) * n->arity);
-//
-//   return n;
-// }
-//
-// struct node *node_random_func(struct function_set *fs) {
-//   // pre-check
-//   if (fs->nb_unary_functions == 0) {
-//     return node_random_bfunc(fs);
-//   } else if (fs->nb_binary_functions == 0) {
-//     return node_random_ufunc(fs);
-//   }
-//
-//   // return random function
-//   if (randf(0.0, 1.0) > 0.5) {
-//     return node_random_ufunc(fs);
-//   } else {
-//     return node_random_bfunc(fs);
-//   }
-// }
-//
-// struct node *node_random_term(struct terminal_set *ts) {
-//   // pre-check
-//   if (ts->nb_inputs == 0) {
-//     return node_random_const(ts);
-//   } else if (ts->nb_constants == 0) {
-//     return node_random_input(ts);
-//   }
-//
-//   // return random terminal
-//   if (randf(0.0, 1.0) > 0.5) {
-//     return node_random_input(ts);
-//   } else {
-//     return node_random_const(ts);
-//   }
-// }
-//
-//
-// // TREE FUNCTIONS
-// void tree_setup(struct tree *t) {
-//   t->root = NULL;
-//   t->chromosome = NULL;
-//
-//   t->nb_inputs = 0;
-//   t->nb_constants = 0;
-//   t->nb_functions = 0;
-//
-//   t->size = 0;
-//   t->depth = 0;
-//
-//   t->error = 0;
-//   t->score = 0;
-//   t->hits = 0;
-//   t->evaluated = 0;
-//
-//   t->fs = NULL;
-//   t->ts = NULL;
-// }
-//
-// void tree_clear(struct tree *t) {
-//   tree_setup(t);
-// }
-//
-// struct tree *tree_new(void) {
-//   struct tree *t;
-//
-//   t = (struct tree *) malloc(sizeof(struct tree));
-//   tree_setup(t);
-//
-//   return t;
-// }
-//
-// void tree_destroy(void *target) {
-//   struct tree *t;
-//
-//   // pre-check
-//   if (target == NULL) {
-//     return;
-//   }
-//
-//   // destroy
-//   t = (struct tree *) target;
-//   if (t->root) {
-//     node_destroy(t->root);
-//   }
-//   if (t->chromosome) {
-//     free(t->chromosome);
-//     t->chromosome = NULL;
-//   }
-//
-//   free(t);
-//   t = NULL;
-// }
-//
-// void tree_config_defaults(struct tree_config *tc,
-//                           struct function_set *fs,
-//                           struct terminal_set *ts) {
-//   tc->build_method = FULL_METHOD;
-//   tc->max_depth = 2;
-//   tc->fs = fs;
-//   tc->ts = ts;
-// }
-//
-// void tree_copy(struct tree *src, struct tree *dest) {
-//   if (dest->root) {
-//     node_clear_destroy(dest->root);
-//   }
-//   dest->root = node_new();
-//   node_deepcopy(src->root, dest->root);
-//   tree_update(dest);
-//
-//   dest->nb_inputs = src->nb_inputs;
-//   dest->nb_constants = src->nb_constants;
-//   dest->nb_functions = src->nb_functions;
-//
-//   dest->size = src->size;
-//   dest->depth = src->depth;
-//
-//   dest->error = src->error;
-//   dest->score = src->score;
-//   dest->hits = src->hits;
-//   dest->evaluated = src->evaluated;
-//
-//   dest->evaluated = src->evaluated;
-//
-//   dest->fs = src->fs;
-//   dest->ts = src->ts;
-// }
-//
-// int tree_size(struct node *n) {
-//   int i;
-//   int size;
-//
-//   size = 1;
-//
-//   if (TERM_NODE(n->type)) {
-//     return 1;
-//   } else if (FUNC_NODE(n->type)) {
-//     for (i = 0; i < n->arity; i++) {
-//       size += tree_size(n->children[i]);
-//     }
-//   }
-//
-//   return size;
-// }
-//
-// static void tree_update_traverse(struct tree *t, struct node *n, int depth)
-// {
-//   int i;
-//
-//   // pre-check
-//   if (depth > t->depth) {
-//     t->depth++;
-//   }
-//
-//   // traverse
-//   if (TERM_NODE(n->type)) {
-//     t->chromosome[t->size] = n;
-//     t->size++;
-//
-//   } else if (FUNC_NODE(n->type)) {
-//     for (i = 0; i < n->arity; i++) {
-//       n->children[i]->parent = n;
-//       n->children[i]->nth_child = i;
-//       tree_update_traverse(t, n->children[i], depth + 1);
-//     }
-//     t->chromosome[t->size] = n;
-//     t->size++;
-//   }
-// }
-//
-// void tree_update(struct tree *t) {
-//   int size;
-//
-//   // reset chromosome, size and depth
-//   if (t->chromosome) {
-//     free(t->chromosome);
-//   }
-//   size = tree_size(t->root);
-//   t->chromosome = (struct node **) malloc(sizeof(struct node *) * size);
-//   t->depth = 0;
-//   t->size = 0;
-//
-//   // update tree
-//   tree_update_traverse(t, t->root, 0);
-//   t->chromosome[size - 1] = t->root;
-// }
-//
-// static void tree_build(
-//   int method, struct tree *t, struct node *n, int depth, int max_depth) {
-//   int i;
-//   struct node *child;
-//
-//   // pre-check
-//   if (depth > t->depth) {
-//     t->depth++;
-//   }
-//
-//   // grow method
-//   for (i = 0; i < n->arity; i++) {
-//     if ((depth + 1) == max_depth) {
-//       // create terminal node
-//       child = node_random_term(t->ts);
-//       child->parent = n;
-//       child->nth_child = i;
-//       n->children[i] = child;
-//
-//     } else if (method == GROW_METHOD && randf(0.0, 1.0) > 0.8) {
-//       // create terminal node
-//       child = node_random_term(t->ts);
-//       child->parent = n;
-//       child->nth_child = i;
-//       n->children[i] = child;
-//
-//     } else {
-//       // create function node
-//       child = node_random_func(t->fs);
-//       child->parent = n;
-//       child->nth_child = i;
-//       n->children[i] = child;
-//
-//       tree_build(method, t, child, depth + 1, max_depth);
-//     }
-//
-//     t->size++;
-//   }
-// }
-//
+int TerminalSet::configure(void) {
+  this->constants.push_back(0.0);
+  this->constants.push_back(1.0);
+  this->constants.push_back(2.0);
+  this->constants.push_back(3.0);
+  this->constants.push_back(4.0);
+  this->constants.push_back(5.0);
+  this->constants.push_back(6.0);
+  this->constants.push_back(7.0);
+  this->constants.push_back(8.0);
+  this->constants.push_back(9.0);
+  this->constants.push_back(10.0);
+
+  return 0;
+}
+
+void TerminalSet::clear(void) {
+  this->constants.clear();
+  this->inputs.clear();
+}
+
+Node TerminalSet::randomInput(void) {
+  int index;
+  Node node;
+
+  index = randi(0, this->inputs.size() - 1);
+  node.setAsInput(this->inputs[index]);
+
+  return node;
+}
+
+Node TerminalSet::randomConstant(void) {
+  int index;
+  Node node;
+
+  index = randi(0, this->constants.size() - 1);
+  node.setAsConstant(this->constants[index]);
+
+  return node;
+}
+
+Node TerminalSet::randomTerminal(void) {
+  Node node;
+
+  // pre-check
+  if (this->inputs.size() == 0) {
+    return this->randomConstant();
+  } else if (this->constants.size() == 0) {
+    return this->randomInput();
+  }
+
+  // return random terminal
+  if (randf(0.0, 1.0) > 0.5) {
+    return this->randomInput();
+  } else {
+    return this->randomConstant();
+  }
+
+  return node;
+}
+
+Tree::Tree(void) {
+  this->root = Node();
+  this->chromosome.clear();
+
+  this->nb_inputs = 0;
+  this->nb_constants = 0;
+  this->nb_functions = 0;
+
+  this->size = 0;
+  this->depth = 0;
+
+  this->error = 0;
+  this->score = 0;
+  this->hits = 0;
+  this->evaluated = 0;
+
+  this->fs = FunctionSet();
+  this->ts = TerminalSet();
+}
+
+void Tree::clear(void) {
+  this->root = Node();
+  this->chromosome.clear();
+
+  this->nb_inputs = 0;
+  this->nb_constants = 0;
+  this->nb_functions = 0;
+
+  this->size = 0;
+  this->depth = 0;
+
+  this->error = 0;
+  this->score = 0;
+  this->hits = 0;
+  this->evaluated = 0;
+
+  this->fs = FunctionSet();
+  this->ts = TerminalSet();
+}
+
+int Tree::copyFrom(Tree &target) {
+  this->root.deepCopyFrom(target.root);
+
+  this->nb_inputs = target.nb_inputs;
+  this->nb_constants = target.nb_constants;
+  this->nb_functions = target.nb_functions;
+
+  this->size = target.size;
+  this->depth = target.depth;
+
+  this->error = target.error;
+  this->score = target.score;
+  this->hits = target.hits;
+  this->evaluated = target.evaluated;
+
+  this->evaluated = target.evaluated;
+
+  this->fs = target.fs;
+  this->ts = target.ts;
+
+  return 0;
+}
+
+void Tree::updateTraverse(Node &node, int depth) {
+  // pre-check
+  if (depth > this->depth) {
+    this->depth++;
+  }
+
+  // traverse
+  if (node.isTermNode()) {
+    this->chromosome.push_back(node);
+
+  } else if (node.isFuncNode()) {
+    for (int i = 0; i < node.arity; i++) {
+      node.children[i].parent = &node;
+      node.children[i].nth_child = i;
+      this->updateTraverse(node.children[i], depth + 1);
+    }
+    this->chromosome.push_back(node);
+  }
+}
+
+void Tree::update(void) {
+  // reset chromosome, size and depth
+  this->chromosome.clear();
+  this->depth = 0;
+
+  // update tree
+  this->updateTraverse(this->root, 0);
+  this->chromosome.push_back(this->root);
+}
+
+void Tree::build(int method, Node &node, int depth, int max_depth) {
+  Node child;
+
+  // pre-check
+  if (depth > this->depth) {
+    this->depth++;
+  }
+
+  // grow method
+  for (int i = 0; i < node.arity; i++) {
+    if ((depth + 1) == max_depth) {
+      // create terminal node
+      child = this->ts.randomTerminal();
+      child.parent = &node;
+      child.nth_child = i;
+      node.children[i] = child;
+
+    } else if (method == GROW_METHOD && randf(0.0, 1.0) > 0.8) {
+      // create terminal node
+      child = this->ts.randomTerminal();
+      child.parent = &node;
+      child.nth_child = i;
+      node.children[i] = child;
+
+    } else {
+      // create function node
+      child = this->fs.randomFunction();
+      child.parent = &node;
+      child.nth_child = i;
+      node.children[i] = child;
+
+      this->build(method, child, depth + 1, max_depth);
+    }
+  }
+}
+
 // void tree_generate(struct tree *t, struct tree_config *tc) {
 //   // setup
 //   tree_setup(t);
@@ -2086,3 +1799,7 @@
 // error:
 //   return -1;
 // }
+
+
+}  // end of gp namespace
+}  // end of yarl namespace

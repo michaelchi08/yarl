@@ -1,10 +1,10 @@
-#ifndef YARL_OPTIMIZATION_OPTIMIZERS_GPOPT_HPP
-#define YARL_OPTIMIZATION_OPTIMIZERS_GPOPT_HPP
+#ifndef YARL_OPTIMIZATION_GPOPT_HPP
+#define YARL_OPTIMIZATION_GPOPT_HPP
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "yarl/optimization/gp/gptree.hpp"
+#include "yarl/optimization/gp/tree.hpp"
 
 // ERROR MESSAGES
 #define E_SR_INVALID_MODE "invalid symbolic regression mode!"
@@ -58,4 +58,43 @@ int sr_evolve_terminate(struct config *c);
 void sr_print(struct config *c, int generation);
 int sr_evolve(struct config *c, struct dataset *d);
 
+namespace yarl {
+
+class GPConfig {
+public:
+  // details
+  int nb_populations;
+  int nb_individuals;
+
+  // populations
+  struct population **p;
+  struct population **selected;
+
+  // genetic operators
+  struct selection_config selection;
+  struct crossover_config crossover;
+  struct mutation_config mutation;
+
+  // termination criteria
+  int max_generations;
+  double target_score;
+
+  GPConfig(void) {
+    this->nb_populations;
+    this->nb_individuals;
+
+    // population
+
+    // genetic operators
+    this->selection_config selection;
+    this->crossover_config crossover;
+    this->mutation_config mutation;
+
+    // termination criteria
+    this->max_generations;
+    this->target_score;
+  }
+};
+
+}  // end of yarl namespace
 #endif

@@ -1,14 +1,15 @@
 #include "yarl/test.hpp"
-#include "yarl/optimization/gp/gpdata.hpp"
+#include "yarl/optimization/gp/data.hpp"
 
 #define TEST_DATA "./tests/data/optimization/gp/sine.csv"
 
 
 namespace yarl {
+namespace gp {
 
-TEST(GPData, load) {
+TEST(Data, load) {
   int retval;
-  GPData data;
+  Data data;
   MatX mat;
   std::vector<std::string> fields;
 
@@ -27,9 +28,9 @@ TEST(GPData, load) {
   ASSERT_EQ(2, (int) data.fields.size());
 }
 
-TEST(GPData, fieldIndex) {
+TEST(Data, fieldIndex) {
   int index;
-  GPData data;
+  Data data;
 
   data.load(TEST_DATA);
 
@@ -43,4 +44,5 @@ TEST(GPData, fieldIndex) {
   ASSERT_EQ(-1, index);
 }
 
+}  // end of gp namespace
 }  // end of yarl namespace
