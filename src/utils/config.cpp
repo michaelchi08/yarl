@@ -233,21 +233,11 @@ int ConfigParser::checkVector(std::string key, enum ConfigDataType type) {
   // check number of values
   split(xml_value, ',', data);
   switch (type) {
-  case VEC2:
-    retval = (data.size() == 2) ? 0 : EVECINVSZ;
-    break;
-  case VEC3:
-    retval = (data.size() == 3) ? 0 : EVECINVSZ;
-    break;
-  case VEC4:
-    retval = (data.size() == 4) ? 0 : EVECINVSZ;
-    break;
-  case VECX:
-    retval = 0;
-    break;
-  default:
-    retval = ECONVTYPE;
-    break;
+    case VEC2: retval = (data.size() == 2) ? 0 : EVECINVSZ; break;
+    case VEC3: retval = (data.size() == 3) ? 0 : EVECINVSZ; break;
+    case VEC4: retval = (data.size() == 4) ? 0 : EVECINVSZ; break;
+    case VECX: retval = 0; break;
+    default: retval = ECONVTYPE; break;
   }
 
   return retval;
@@ -278,18 +268,14 @@ int ConfigParser::checkMatrix(std::string key, enum ConfigDataType type) {
 
   // check number of values
   switch (type) {
-  case MAT2:
-    return (static_cast<int>(data.size()) == 4) ? 0 : EMATINVSZ;
-  case MAT3:
-    return (static_cast<int>(data.size()) == 9) ? 0 : EMATINVSZ;
-  case MAT4:
-    return (static_cast<int>(data.size()) == 16) ? 0 : EMATINVSZ;
-  case MATX:
-    return (static_cast<int>(data.size()) == (rows * cols)) ? 0 : EMATINVSZ;
-  case CVMAT:
-    return (static_cast<int>(data.size()) == (rows * cols)) ? 0 : EMATINVSZ;
-  default:
-    return ECONVTYPE;
+    case MAT2: return (static_cast<int>(data.size()) == 4) ? 0 : EMATINVSZ;
+    case MAT3: return (static_cast<int>(data.size()) == 9) ? 0 : EMATINVSZ;
+    case MAT4: return (static_cast<int>(data.size()) == 16) ? 0 : EMATINVSZ;
+    case MATX:
+      return (static_cast<int>(data.size()) == (rows * cols)) ? 0 : EMATINVSZ;
+    case CVMAT:
+      return (static_cast<int>(data.size()) == (rows * cols)) ? 0 : EMATINVSZ;
+    default: return ECONVTYPE;
   }
 
   // clean up
@@ -559,40 +545,36 @@ int ConfigParser::load(const std::string config_file) {
 
   for (int i = 0; i < (int) this->params.size(); i++) {
     switch (this->params[i].type) {
-    // PRIMITIVE
-    case BOOL:
-    case INT:
-    case FLOAT:
-    case DOUBLE:
-    case STRING:
-      retval = this->parsePrimitive(this->params[i]);
-      break;
-    // ARRAY
-    case BOOL_ARRAY:
-    case INT_ARRAY:
-    case FLOAT_ARRAY:
-    case DOUBLE_ARRAY:
-    case STRING_ARRAY:
-      retval = this->parseArray(this->params[i]);
-      break;
-    // VECTOR
-    case VEC2:
-    case VEC3:
-    case VEC4:
-    case VECX:
-      retval = this->parseVector(this->params[i]);
-      break;
-    // MAT
-    case MAT2:
-    case MAT3:
-    case MAT4:
-    case MATX:
-    case CVMAT:
-      retval = this->parseMatrix(this->params[i]);
-      break;
-    default:
-      return -2;
-      break;
+      // PRIMITIVE
+      case BOOL:
+      case INT:
+      case FLOAT:
+      case DOUBLE:
+      case STRING:
+        retval = this->parsePrimitive(this->params[i]);
+        break;
+      // ARRAY
+      case BOOL_ARRAY:
+      case INT_ARRAY:
+      case FLOAT_ARRAY:
+      case DOUBLE_ARRAY:
+      case STRING_ARRAY:
+        retval = this->parseArray(this->params[i]);
+        break;
+      // VECTOR
+      case VEC2:
+      case VEC3:
+      case VEC4:
+      case VECX:
+        retval = this->parseVector(this->params[i]);
+        break;
+      // MAT
+      case MAT2:
+      case MAT3:
+      case MAT4:
+      case MATX:
+      case CVMAT: retval = this->parseMatrix(this->params[i]); break;
+      default: return -2; break;
     }
 
     if (retval != 0) {

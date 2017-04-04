@@ -10,9 +10,6 @@ Data::Data(void) {
   this->rows = 0;
   this->cols = 0;
   this->data = MatX();
-
-  this->data_in = VecX();
-  this->data_out = VecX();
 }
 
 int Data::load(MatX data, std::vector<std::string> &fields) {

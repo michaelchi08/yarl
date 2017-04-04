@@ -7,7 +7,7 @@ AlignTrailingComments: true
 AlignConsecutiveAssignments: false
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: true
-AllowShortCaseLabelsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
@@ -29,7 +29,7 @@ Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
 ExperimentalAutoDetectBinPacking: true
-IndentCaseLabels: false
+IndentCaseLabels: true
 IndentWidth: 2
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: false

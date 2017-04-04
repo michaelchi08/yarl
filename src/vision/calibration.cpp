@@ -24,18 +24,10 @@ int Calibration::configure(std::string save_path,
   retval = mkdir(save_path.c_str(), ACCESSPERMS);
   if (retval != 0) {
     switch (errno) {
-    case EACCES:
-      log_err(ECALIBDIRPERM, save_path.c_str());
-      break;
-    case ENOTDIR:
-      log_err(ECALIBNOTDIR, save_path.c_str());
-      break;
-    case EEXIST:
-      log_err(ECALIBDIREXIST, save_path.c_str());
-      break;
-    default:
-      log_err(ECALIBDIR, save_path.c_str());
-      break;
+      case EACCES: log_err(ECALIBDIRPERM, save_path.c_str()); break;
+      case ENOTDIR: log_err(ECALIBNOTDIR, save_path.c_str()); break;
+      case EEXIST: log_err(ECALIBDIREXIST, save_path.c_str()); break;
+      default: log_err(ECALIBDIR, save_path.c_str()); break;
     }
     return -1;
   }

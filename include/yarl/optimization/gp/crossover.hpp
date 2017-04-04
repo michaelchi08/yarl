@@ -1,7 +1,7 @@
 #ifndef YARL_OPTIMIZATION_CROSSOVER_HPP
 #define YARL_OPTIMIZATION_CROSSOVER_HPP
 
-#include "yarl/optimization/crossover.hpp"
+#include "yarl/optimization/gp/tree.hpp"
 
 namespace yarl {
 namespace gp {

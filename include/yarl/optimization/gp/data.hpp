@@ -19,9 +19,6 @@ public:
   int cols;
   MatX data;
 
-  VecX data_in;
-  VecX data_out;
-
   Data(void);
   int load(MatX data, std::vector<std::string> &fields);
   int load(std::string data_file);

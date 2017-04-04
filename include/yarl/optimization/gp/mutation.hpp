@@ -1,7 +1,7 @@
 #ifndef YARL_OPTIMIZATION_MUTATION_HPP
 #define YARL_OPTIMIZATION_MUTATION_HPP
 
-#include "yarl/optimization/mutation.hpp"
+#include "yarl/optimization/gp/tree.hpp"
 
 namespace yarl {
 namespace gp {

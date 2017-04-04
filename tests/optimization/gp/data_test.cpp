@@ -3,7 +3,6 @@
 
 #define TEST_DATA "./tests/data/optimization/gp/sine.csv"
 
-
 namespace yarl {
 namespace gp {
 
