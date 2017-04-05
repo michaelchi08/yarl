@@ -1,23 +1,25 @@
-#ifndef YARL_OPTIMIZATION_POPULATION_HPP
-#define YARL_OPTIMIZATION_POPULATION_HPP
+#ifndef YARL_OPTIMIZATION_GP_POPULATION_HPP
+#define YARL_OPTIMIZATION_GP_POPULATION_HPP
 
 #include "yarl/optimization/gp/tree.hpp"
 
 namespace yarl {
 namespace gp {
 
-// class Population {
-// public:
-//   std::vector<Node> individuals;
-//
-//   int generate(void);
-//   int evaluate(void);
-//   Tree best(void);
-//   int copyFrom(Population &p);
-//   int tournamentSelection(void);
-//   void clear(void);
-//   void print(void);
-// };
+class Population {
+public:
+  std::vector<Tree *> individuals;
+
+  Population(void);
+  ~Population(void);
+  int configure(int nb_individuals);
+  void clear(void);
+  int best(Tree &tree);
+  int evaluate(void);
+  int copyFrom(Population &p);
+  int tournamentSelection(void);
+  void print(void);
+};
 
 }  // end of gp namespace
 }  // end of yarl namespace
