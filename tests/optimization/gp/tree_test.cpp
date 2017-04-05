@@ -1,10 +1,11 @@
 #include "yarl/test.hpp"
 #include "yarl/optimization/gp/tree.hpp"
 
-#define TEST_SINE_DATA "./tests/data/sine.csv"
-#define TEST_CIRCLE_DATA "./tests/data/circle.csv"
-#define TEST_ELLIPTIC_DATA "./tests/data/elliptic.csv"
-#define TEST_IMPLICIT_DATA "./tests/data/implicit.csv"
+#define TEST_SINE_DATA "./tests/data/optimization/gp/sine.csv"
+#define TEST_SIMPLE_DATA "./tests/data/optimization/gp/simple.csv"
+#define TEST_CIRCLE_DATA "./tests/data/optimization/gp/circle.csv"
+#define TEST_ELLIPTIC_DATA "./tests/data/optimization/gp/elliptic.csv"
+#define TEST_IMPLICIT_DATA "./tests/data/optimization/gp/implicit.csv"
 
 namespace yarl {
 namespace gp {
@@ -147,8 +148,10 @@ TEST(Tree, constructor) {
 TEST(Tree, configure) {
   Tree tree;
   TreeConfig tc;
+  Data data;
 
-  tree.configure(&tc);
+  data.load(TEST_SINE_DATA);
+  tree.configure(&tc, data);
   ASSERT_EQ(0, (int) tree.chromosome.size());
 
   ASSERT_EQ(0, tree.nb_inputs);
@@ -168,7 +171,11 @@ TEST(Tree, configure) {
 
 TEST(Tree, clear) {
   Tree tree;
+  TreeConfig tc;
+  Data data;
 
+  data.load(TEST_SINE_DATA);
+  tree.configure(&tc, data);
   tree.clear();
   ASSERT_EQ(0, (int) tree.chromosome.size());
 
@@ -225,9 +232,11 @@ TEST(Tree, update) {
 TEST(Tree, generate) {
   Tree t;
   TreeConfig tc;
+  Data data;
 
+  data.load(TEST_SINE_DATA);
   tc.configure(FULL_METHOD, 2);
-  t.configure(&tc);
+  t.configure(&tc, data);
   t.generate();
   t.printStack();
 }
@@ -235,17 +244,113 @@ TEST(Tree, generate) {
 TEST(Tree, prepData) {
   Tree t;
   TreeConfig tc;
+  Data data;
+  Node node;
 
+  // setup
   tc.configure(FULL_METHOD, 2);
-  t.configure(&tc);
+  data.load(TEST_SINE_DATA);
+  t.configure(&tc, data);
+
+  // prep input data
+  node.setAsInput("x");
+  node.nth_child = 0;
+  t.prepData(data, node);
+  ASSERT_FLOAT_EQ(0.0, t.f_in(0, 0));
+  ASSERT_FLOAT_EQ(10.0, t.f_in(10, 0));
+
+  // prep const data
+  node.setAsConstant(23.0);
+  node.nth_child = 0;
+  t.prepData(data, node);
+  ASSERT_FLOAT_EQ(23.0, t.f_in(10, 0));
+
+  // prep feval data
+  node.type = FEVAL;
+  node.nth_child = 0;
+  node.data = VecX(data.rows);
+  for (int i = 0; i < data.rows; i++) {
+    node.data(i) = 23.0;
+  }
+  t.prepData(data, node);
+  ASSERT_FLOAT_EQ(23.0, t.f_in(10, 0));
+}
+
+TEST(Tree, evaluateNode) {
+  Data data;
+  TreeConfig tc;
+  Tree t;
+  Node node;
+  Node feval;
+
+  // setup
+  tc.configure(FULL_METHOD, 2);
+  data.load(TEST_SIMPLE_DATA);
+  t.configure(&tc, data);
+
+  node.setAsInput("x");
+  node.nth_child = 0;
+  t.prepData(data, node);
+
+  node.setAsInput("y");
+  node.nth_child = 1;
+  t.prepData(data, node);
+
+  // test add
+  node.setAsBinaryFunc(ADD);
+  t.evaluateNode(data, node, feval);
+  ASSERT_FLOAT_EQ(2.0, feval.data(0));
+  ASSERT_FLOAT_EQ(5.0, feval.data(1));
+  ASSERT_FLOAT_EQ(8.0, feval.data(2));
+  ASSERT_FLOAT_EQ(11.0, feval.data(3));
+
+  // test sub
+  node.setAsBinaryFunc(SUB);
+  t.evaluateNode(data, node, feval);
+  ASSERT_FLOAT_EQ(-2.0, feval.data(0));
+  ASSERT_FLOAT_EQ(-3.0, feval.data(1));
+  ASSERT_FLOAT_EQ(-4.0, feval.data(2));
+  ASSERT_FLOAT_EQ(-5.0, feval.data(3));
+
+  // test mul
+  node.setAsBinaryFunc(MUL);
+  t.evaluateNode(data, node, feval);
+  ASSERT_FLOAT_EQ(0.0, feval.data(0));
+  ASSERT_FLOAT_EQ(4.0, feval.data(1));
+  ASSERT_FLOAT_EQ(12.0, feval.data(2));
+  ASSERT_FLOAT_EQ(24.0, feval.data(3));
+}
+
+TEST(Tree, evaluate) {
+  Data data;
+  TreeConfig tc;
+  Tree t;
+  Node node;
+  Node feval;
+
+  // setup
+  data.load(TEST_SINE_DATA);
+  tc.configure(FULL_METHOD, 2);
+  tc.inputs.push_back("x");
+  t.configure(&tc, data);
+
+  setupSineTree(t);
+  t.update();
+  t.printEquation();
+  t.printStack();
+
+  t.evaluate(data, "y");
+  std::cout << t.error << std::endl;
 }
 
 TEST(Tree, toString) {
   Tree t;
   TreeConfig tc;
+  Data data;
 
   tc.configure(FULL_METHOD, 2);
-  t.configure(&tc);
+  data.load(TEST_SINE_DATA);
+  t.configure(&tc, data);
   t.generate();
   t.toString();
 }
@@ -253,175 +358,15 @@ TEST(Tree, toString) {
 TEST(Tree, printEquation) {
   Tree t;
   TreeConfig tc;
+  Data data;
 
   tc.configure(FULL_METHOD, 2);
-  t.configure(&tc);
+  data.load(TEST_SINE_DATA);
+  t.configure(&tc, data);
   t.generate();
   t.printEquation();
 }
 
-// int test_tree_prep_data(void)
-// {
-//     struct node n;
-//     struct dataset *d;
-//     double data[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-//
-//     #<{(| setup |)}>#
-//     d = dataset_new(TEST_SINE_DATA, 1, ",", "x");
-//     node_setup(&n);
-//
-//     #<{(| test load input |)}>#
-//     n.type = INPUT;
-//     n.input = malloc_string("x");
-//     n.nth_child = 0;
-//     tree_prep_data(&n, d->data);
-//     mu_check(fltcmp(d->data->f_in[n.nth_child][0], 0.0) == 0);
-//     mu_check(fltcmp(d->data->f_in[n.nth_child][1], 1.0) == 0);
-//     mu_check(fltcmp(d->data->f_in[n.nth_child][2], 2.0) == 0);
-//
-//     #<{(| test load constant |)}>#
-//     n.type = CONST;
-//     n.nval = 123.0;
-//     n.nth_child = 1;
-//     tree_prep_data(&n, d->data);
-//     mu_check(fltcmp(d->data->f_in[n.nth_child][0], 123.0) == 0);
-//     mu_check(fltcmp(d->data->f_in[n.nth_child][1], 123.0) == 0);
-//     mu_check(fltcmp(d->data->f_in[n.nth_child][2], 123.0) == 0);
-//
-//     #<{(| test load function eval |)}>#
-//     n.type = FEVAL;
-//     n.nth_child = 1;
-//     n.data = data;
-//     tree_prep_data(&n, d->data);
-//     mu_check(fltcmp(d->data->f_in[n.nth_child][0], 10.0) == 0);
-//     mu_check(fltcmp(d->data->f_in[n.nth_child][1], 9.0) == 0);
-//     mu_check(fltcmp(d->data->f_in[n.nth_child][2], 8.0) == 0);
-//
-//     #<{(| clean up |)}>#
-//     free(n.input);
-//     dataset_destroy(d);
-//
-//     return 0;
-// }
-//
-// int test_tree_halstead_metric(void)
-// {
-//     struct tree *t;
-//
-//     #<{(| setup |)}>#
-//     t = setup_sine_tree();
-//
-//     #<{(| test and assert |)}>#
-//     tree_halstead_metric(t);
-//
-//     #<{(| clean up |)}>#
-//     destroy_sine_tree(t);
-//
-//     return 0;
-// }
-//
-// int test_tree_evaluate_data(void)
-// {
-//     int i;
-//     struct tree *t;
-//     struct node *n;
-//     struct dataset *d;
-//
-//     #<{(| setup |)}>#
-//     t = setup_sine_tree();
-//     d = dataset_new(TEST_SINE_DATA, 1, ",", "y");
-//
-//     #<{(| evaluate data |)}>#
-//     n = tree_evaluate_data(t, d->data);
-//     for (i = 0; i < d->data->rows; i++) {
-//         printf("row[%d]: %f\n", i, n->data[i]);
-//     }
-//
-//     #<{(| clean up |)}>#
-//     node_destroy(n);
-//     dataset_destroy(d);
-//     destroy_sine_tree(t);
-//
-//     return 0;
-// }
-//
-// int test_tree_evaluate(void)
-// {
-//     struct tree *t;
-//     struct dataset *d;
-//
-//     #<{(| setup |)}>#
-//     t = setup_sine_tree();
-//     d = dataset_new(TEST_SINE_DATA, 1, ",", "y");
-//
-//     #<{(| evaluate data |)}>#
-//     tree_evaluate(t, d->data, d->predict);
-//     mu_print("error: %f\n", t->error);
-//     mu_print("hits: %d\n", t->hits);
-//     mu_check(fltcmp(t->error, 0.0) == 0);
-//
-//     #<{(| clean up |)}>#
-//     dataset_destroy(d);
-//     destroy_sine_tree(t);
-//
-//     return 0;
-// }
-//
-// int test_tree_string(void)
-// {
-//     struct tree *t;
-//     char *tstr;
-//
-//     #<{(| setup |)}>#
-//     t = setup_sine_tree();
-//
-//     #<{(| evaluate data |)}>#
-//     tstr = tree_string(t);
-//     mu_print("tree->rpn: %s\n", tstr);
-//     mu_check(strcmp(tstr, "100.00 RAD x MUL SIN ") == 0);
-//
-//     #<{(| clean up |)}>#
-//     free(tstr);
-//     destroy_sine_tree(t);
-//
-//     return 0;
-// }
-//
-// int test_tree_print_equation(void)
-// {
-//     struct tree *t;
-//
-//     #<{(| setup |)}>#
-//     t = setup_sine_tree();
-//
-//     #<{(| print equation |)}>#
-//     tree_print_equation(t);
-//
-//     #<{(| clean up |)}>#
-//     destroy_sine_tree(t);
-//
-//     return 0;
-// }
-//
-// int test_tree_equation_string(void)
-// {
-//     char *tstr;
-//     struct tree *t;
-//
-//     #<{(| setup |)}>#
-//     t = setup_sine_tree();
-//
-//     #<{(| create equation string |)}>#
-//     tstr = tree_equation_string(t);
-//     mu_print("%s\n", tstr);
-//
-//     #<{(| clean up |)}>#
-//     free(tstr);
-//     destroy_sine_tree(t);
-//
-//     return 0;
-// }
-//
 // int test_tree_record(void)
 // {
 //     struct tree *t;
@@ -456,73 +401,7 @@ TEST(Tree, printEquation) {
 //
 //     return 0;
 // }
-//
-// int test_tree_load(void)
-// {
-//     int i;
-//     char **rpn;
-//     struct tree *t;
-//
-//     #<{(| setup |)}>#
-//     rpn = malloc(sizeof(char *) * 5);
-//     rpn[0] = malloc_string("2");
-//     rpn[1] = malloc_string("3");
-//     rpn[2] = malloc_string("SUB");
-//     rpn[3] = malloc_string("3");
-//     rpn[4] = malloc_string("ADD");
-//
-//     #<{(| test tree load |)}>#
-//     t = tree_new();
-//     tree_load(t, rpn, 5);
-//
-//     #<{(| clean up |)}>#
-//     for (i = 0; i < 5; i++) {
-//         free(rpn[i]);
-//     }
-//     free(rpn);
-//     tree_destroy(t);
-//
-//     return 0;
-// }
-//
-// int test_tree_load_file(void)
-// {
-//     struct tree *t;
-//
-//     #<{(| setup |)}>#
-//     t = setup_sine_tree();
-//     tree_record(t, "/tmp/tree.model");
-//     destroy_sine_tree(t);
-//
-//     #<{(| load file |)}>#
-//     t = tree_new();
-//     tree_load_file(t, "/tmp/tree.model");
-//     tree_print(t);
-//
-//     #<{(| clean up |)}>#
-//     tree_destroy(t);
-//
-//     return 0;
-// }
-//
-// int test_tree_simplify(void)
-// {
-//     struct tree *t;
-//
-//     #<{(| setup |)}>#
-//     t = setup_sine_tree();
-//
-//     #<{(| simplify |)}>#
-//     tree_simplify(t);
-//     tree_print(t);
-//     tree_print_equation(t);
-//
-//     #<{(| clean up |)}>#
-//     destroy_sine_tree(t);
-//
-//     return 0;
-// }
-//
+
 // int test_crossover_config_defaults(void)
 // {
 //     struct crossover_config cc;

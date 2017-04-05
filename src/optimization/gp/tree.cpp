@@ -98,6 +98,9 @@ int TreeConfig::randomInput(Node &node) {
   // pre-check
   if (this->inputs.size() == 0) {
     return -1;
+  } else if (this->inputs.size() == 1) {
+    node.setAsInput(this->inputs[0]);
+    return 0;
   }
 
   // random input node
@@ -160,6 +163,9 @@ Tree::Tree(void) {
   this->hits = 0;
   this->evaluated = 0;
 
+  this->f_in = MatX();
+  this->f_out = VecX();
+
   this->tc = NULL;
 }
 
@@ -167,7 +173,7 @@ Tree::~Tree(void) {
   delete this->root;
 }
 
-int Tree::configure(TreeConfig *tc) {
+int Tree::configure(TreeConfig *tc, Data &data) {
   this->root = NULL;
   this->chromosome.clear();
 
@@ -182,6 +188,9 @@ int Tree::configure(TreeConfig *tc) {
   this->score = 0;
   this->hits = 0;
   this->evaluated = 0;
+
+  this->f_in = MatX(data.rows, 2);
+  this->f_out = VecX(data.rows);
 
   this->tc = tc;
 
@@ -257,6 +266,7 @@ void Tree::update(void) {
 
   // update tree
   this->updateTraverse(this->root, 0);
+  this->size = this->chromosome.size();
 }
 
 int Tree::build(int method, Node &node, int depth) {
@@ -327,22 +337,22 @@ int Tree::generate(void) {
 }
 
 int Tree::prepData(const Data &data, const Node &node) {
-  // int data_index;
+  int data_index;
 
   if (node.type == INPUT) {
-    // data_index = data.fieldIndex(node.input);
+    data_index = data.fieldIndex(node.input);
     for (int i = 0; i < data.rows; i++) {
-      // data.f_in[node.nth_child][i] = data.data[data_index][i];
+      this->f_in(i, node.nth_child) = data.data(i, data_index);
     }
 
   } else if (node.type == CONST) {
     for (int i = 0; i < data.rows; i++) {
-      // data.f_in[node.nth_child][i] = node.nval;
+      this->f_in(i, node.nth_child) = node.nval;
     }
 
   } else if (node.type == FEVAL) {
     for (int i = 0; i < data.rows; i++) {
-      // data.f_in[node.nth_child][i] = node.data[i];
+      this->f_in(i, node.nth_child) = node.data(i);
     }
 
   } else {
@@ -450,7 +460,7 @@ int Tree::evaluateTraverse(const Data &d, Node &result) {
   right = NULL;
 
   // evaluate tree
-  for (int i = 0; i < this->size; i++) {
+  for (size_t i = 0; i < this->chromosome.size(); i++) {
     n = this->chromosome[i];
 
     switch (n->type) {
@@ -462,33 +472,51 @@ int Tree::evaluateTraverse(const Data &d, Node &result) {
 
       // unary function
       case UFUNC:
+        // pop from stack
         left = s.top();
         s.pop();
-        this->prepData(d, *left);
 
+        // prepare data
+        this->prepData(d, *left);
+        if (left->type == FEVAL) {
+          delete left;
+        }
+
+        // evaluate
+        feval = new Node();
         this->evaluateNode(d, *n, *feval);
         s.push(feval);
         break;
 
       // binary function
       case BFUNC:
+        // pop from stack
         right = s.top();
         s.pop();
 
         left = s.top();
         s.pop();
 
+        // prepare data
         this->prepData(d, *left);
         this->prepData(d, *right);
+        if (left->type == FEVAL) {
+          delete left;
+        }
+        if (right->type == FEVAL) {
+          delete right;
+        }
 
+        // evaluate
+        feval = new Node();
         this->evaluateNode(d, *n, *feval);
         s.push(feval);
         break;
     }
   }
   result.copyFrom(*s.top());
+  delete s.top();
 
-  // clean up
   return 0;
 }
 

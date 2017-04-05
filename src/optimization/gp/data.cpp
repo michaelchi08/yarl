@@ -12,7 +12,7 @@ Data::Data(void) {
   this->data = MatX();
 }
 
-int Data::load(MatX data, std::vector<std::string> &fields) {
+int Data::load(const MatX data, std::vector<std::string> &fields) {
   // pre-eheck
   if (this->loaded) {
     this->fields.clear();
@@ -28,7 +28,7 @@ int Data::load(MatX data, std::vector<std::string> &fields) {
   return 0;
 }
 
-int Data::load(std::string data_file) {
+int Data::load(const std::string &data_file) {
   // pre-eheck
   if (this->loaded) {
     this->fields.clear();
@@ -49,13 +49,14 @@ int Data::load(std::string data_file) {
   return 0;
 }
 
-int Data::fieldIndex(std::string field) {
+int Data::fieldIndex(const std::string &field) const {
   auto it = std::find(this->fields.begin(), this->fields.end(), field);
   if (it == this->fields.end()) {
     return -1;
   } else {
     return std::distance(this->fields.begin(), it);
   }
+  return 0;
 }
 
 Dataset::Dataset(void) {

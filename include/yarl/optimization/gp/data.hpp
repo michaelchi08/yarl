@@ -20,9 +20,9 @@ public:
   MatX data;
 
   Data(void);
-  int load(MatX data, std::vector<std::string> &fields);
-  int load(std::string data_file);
-  int fieldIndex(std::string field);
+  int load(const MatX data, std::vector<std::string> &fields);
+  int load(const std::string &data_file);
+  int fieldIndex(const std::string &field) const;
 };
 
 class Dataset {
