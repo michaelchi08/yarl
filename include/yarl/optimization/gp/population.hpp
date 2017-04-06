@@ -17,7 +17,6 @@ public:
   int best(Tree &tree);
   int evaluate(void);
   int copyFrom(Population &p);
-  int tournamentSelection(void);
   void print(void);
 };
 

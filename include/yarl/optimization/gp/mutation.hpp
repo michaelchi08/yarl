@@ -9,8 +9,15 @@ namespace gp {
 class Mutation {
 public:
   float probability;
-  int pointMutation(const Tree &t);
-  int subtreeMutation(const Tree &t);
+
+  // subtree mutation specific
+  int subtree_build_method;
+  int subtree_max_depth;
+
+  Mutation(void);
+  int configure(float probability);
+  int pointMutation(Tree *t);
+  int subtreeMutation(Tree *t);
 };
 
 }  // end of gp namespace

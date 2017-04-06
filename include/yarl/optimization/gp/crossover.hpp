@@ -9,7 +9,9 @@ namespace gp {
 class Crossover {
 public:
   float probability;
-  int pointCrossover(const Tree &t1, const Tree &t2);
+
+  Crossover(void);
+  int pointCrossover(Tree *t1, Tree *t2);
 };
 
 }  // end of gp namespace

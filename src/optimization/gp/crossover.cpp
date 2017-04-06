@@ -1,50 +1,49 @@
 #include "yarl/optimization/gp/crossover.hpp"
 
-// // CROSSOVER FUNCTIONS
-// void crossover_config_defaults(struct crossover_config *cc) {
-//   cc->crossover_function = point_crossover;
-//   cc->probability = 0.6;
-// }
-//
-// int point_crossover(struct tree *t1,
-//                     struct tree *t2,
-//                     struct crossover_config *config) {
-//   int i1;
-//   int i2;
-//   struct node *n1;
-//   struct node *n2;
-//
-//   // pre-check
-//   if (randf(0.0, 1.0) > config->probability) {
-//     return 0;
-//   }
-//
-//   // setup
-//   i1 = randi(0, t1->size - 1);
-//   i2 = randi(0, t2->size - 1);
-//   n1 = t1->chromosome[i1];
-//   n2 = t2->chromosome[i2];
-//
-//   // crossover
-//   if (n1 == t1->root) {
-//     t1->root = n2;
-//   } else {
-//     n1->parent->children[n1->nth_child] = n2;
-//   }
-//
-//   if (n2 == t2->root) {
-//     t2->root = n1;
-//   } else {
-//     n2->parent->children[n2->nth_child] = n1;
-//   }
-//
-//   // update
-//   t1->root->parent = NULL;
-//   t2->root->parent = NULL;
-//   tree_update(t1);
-//   tree_update(t2);
-//
-//   return 0;
-// }
-//
-//
+
+namespace yarl {
+namespace gp {
+
+Crossover::Crossover(void) {
+  this->probability = 0.0;
+}
+
+int Crossover::pointCrossover(Tree *tree1, Tree *tree2) {
+  int index1, index2;
+  Node *node1, *node2;
+
+  // pre-check
+  if (randf(0.0, 1.0) > this->probability) {
+    return 0;
+  }
+
+  // setup
+  index1 = randi(0, tree1->size - 1);
+  index2 = randi(0, tree2->size - 1);
+  node1 = tree1->chromosome[index1];
+  node2 = tree2->chromosome[index2];
+
+  // crossover
+  if (node1 == tree1->root) {
+    tree1->root = node2;
+  } else {
+    node1->parent->children[node1->nth_child] = node2;
+  }
+
+  if (node2 == tree2->root) {
+    tree2->root = node1;
+  } else {
+    node2->parent->children[node2->nth_child] = node1;
+  }
+
+  // update
+  tree1->root->parent = NULL;
+  tree2->root->parent = NULL;
+  tree1->update();
+  tree2->update();
+
+  return 0;
+}
+
+}  // end of gp namespace
+}  // end of yarl namespace
