@@ -2,6 +2,25 @@
 
 `yarl` is Yet Another Robotics Library.
 
+## Install
+
+    # clone repo
+    git clone https://github.com/chutsu/yarl
+    cd yarl
+
+    # initialize git submodules
+    git submodule init
+    git submodule update
+
+    # install dependencies
+    bash scripts/install/install_deps.bash
+
+    # compile yarl
+    mkdir -p build
+    cd build
+    cmake ..
+    make
+
 
 ## Licence
 GPLv3 Copyright (C) <2015> Chris Choi
