@@ -8,11 +8,7 @@ install:
     - travis_wait 30 sudo bash scripts/install/install_deps.bash
 
 script:
-    - export LD_LIBRARY_PATH=/usr/local/lib
-    - git submodule init
-    - git submodule update
-    - mkdir -p build && cd build && cmake .. && make
-    - ./tests/yarl_tests --silence-stdout
+    - bash scripts/ci_run.bash
 
 notifications:
     recipients:
