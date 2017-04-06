@@ -21,6 +21,7 @@ public:
 
   PID(void);
   PID(double k_p, double k_i, double k_d);
+
   double calculate(double setpoint, double input, double dt);
 };
 
