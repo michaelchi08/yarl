@@ -3,7 +3,7 @@
 int main(int argc, char **argv) {
   // parse command line arguments
   for (int i = 0; i < argc; i++) {
-    if (strcmp(argv[i], "--silence-stdcout") == 0) {
+    if (strcmp(argv[i], "--silence-stdout") == 0) {
       std::cout.setstate(std::ios_base::failbit);
     }
   }
