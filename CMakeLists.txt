@@ -34,11 +34,30 @@ INCLUDE_DIRECTORIES(${gtest_SOURCE_DIR}/include)
 
 # YARL
 SET(
+	YARL_OPENCV_DEPS
+	opencv_calib3d
+	opencv_core
+	opencv_features2d
+	opencv_flann
+	opencv_highgui
+	opencv_imgcodecs
+	opencv_imgproc
+	opencv_ml
+	opencv_objdetect
+	opencv_photo
+	opencv_shape
+	opencv_stitching
+	opencv_superres
+	opencv_video
+	opencv_videoio
+	opencv_videostab
+)
+SET(
   YARL_DEPS
   yarl
   xml2
   ${CERES_LIBRARIES}
-  ${OpenCV_LIBS}
+	${YARL_OPENCV_DEPS}
   gtest
   glog
   pthread

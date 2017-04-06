@@ -50,3 +50,4 @@ ADD_LIBRARY(
   vision/utils.cpp
   vision/vo.cpp
 )
+ADD_DEPENDENCIES(yarl gtest)
