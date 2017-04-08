@@ -29,6 +29,7 @@ ADD_LIBRARY(
   optimization/optimizers/lmaopt.cpp
   optimization/optimizers/ransac.cpp
   # OPTIMIZATION
+  optimization/factor_graph.cpp
   optimization/benchmark.cpp
   optimization/testcase.cpp
   # UTILS
