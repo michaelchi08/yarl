@@ -68,7 +68,7 @@ int Mutation::subtreeMutation(Tree &tree) {
   subtree.generate();
 
   // mutate
-  index = randi(0, tree.chromosome.size() - 1);
+  index = randi(0, tree.chromosome.size());
   node = tree.chromosome[index];
   if (node == tree.root) {
     delete tree.root;

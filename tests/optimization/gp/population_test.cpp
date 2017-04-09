@@ -5,6 +5,13 @@
 namespace yarl {
 namespace gp {
 
+TEST(Population, constructor) {
+  Population p;
+
+  // std::shared_ptr<Factor> factor_ptr(nullptr);
+  // factor_ptr = std::make_shared<Factor>(at, measurement);
+}
+
 // int test_population_new_and_destroy(void)
 // {
 //     int i;
