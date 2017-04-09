@@ -16,8 +16,8 @@ public:
 
   Mutation(void);
   int configure(float probability);
-  int pointMutation(Tree *t);
-  int subtreeMutation(Tree *t);
+  int pointMutation(Tree &tree);
+  int subtreeMutation(Tree &tree);
 };
 
 }  // end of gp namespace

@@ -6,7 +6,7 @@
 namespace yarl {
 namespace gp {
 
-void setupAddTree(Tree &t) {
+static void setupAddTree(Tree &t) {
   Node *n1, *n2, *n3;
 
   // setup
@@ -25,7 +25,7 @@ void setupAddTree(Tree &t) {
   t.update();
 }
 
-void setupSubTree(Tree &t) {
+static void setupSubTree(Tree &t) {
   Node *n1, *n2, *n3;
 
   // setup
