@@ -11,7 +11,7 @@ public:
   float probability;
 
   Crossover(void);
-  int pointCrossover(Tree *t1, Tree *t2);
+  int pointCrossover(Tree &t1, Tree &t2);
 };
 
 }  // end of gp namespace

@@ -8,7 +8,9 @@ ADD_EXECUTABLE(
   optimization/ceres/ba_test.cpp
   optimization/ceres/ceres_examples_test.cpp
   # OPTIMIZATION GP
+  optimization/gp/crossover_test.cpp
   optimization/gp/data_test.cpp
+  optimization/gp/mutation_test.cpp
   optimization/gp/node_test.cpp
   optimization/gp/tree_test.cpp
   # OPTIMIZATION OPTIMIZERS
