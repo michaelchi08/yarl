@@ -2,12 +2,18 @@
 ADD_LIBRARY(
   yarl
   STATIC
+  # CONTROL GIMBAL
+  control/gimbal/attitude_controller.cpp
+  # CONTROL QUADROTOR
+  control/quadrotor/attitude_controller.cpp
+  control/quadrotor/position_controller.cpp
   # CONTROL
   control/pid.cpp
   # ESTIMATION
   estimation/ekf.cpp
   estimation/kf.cpp
   # MODELS
+  models/gimbal.cpp
   models/quadrotor.cpp
   models/two_wheel.cpp
   # OPTIMIZATION CERES

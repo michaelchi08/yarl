@@ -5,46 +5,10 @@
 #include <iostream>
 
 #include "yarl/utils/utils.hpp"
-#include "yarl/control/pid.hpp"
+#include "yarl/control/quadrotor/attitude_controller.hpp"
+#include "yarl/control/quadrotor/position_controller.hpp"
 
 namespace yarl {
-
-class AttitudeController {
-public:
-  double dt;
-  Vec4 outputs;
-
-  PID roll_controller;
-  PID pitch_controller;
-  PID yaw_controller;
-
-  AttitudeController(void);
-  Vec4 calculate(Vec4 setpoints, Vec4 actual, double dt);
-  Vec4 calculate(Vec4 psetpoints, Vec4 vsetpoints, Vec4 actual, double dt);
-};
-
-class PositionController {
-public:
-  double dt;
-  Vec4 outputs;
-
-  PID x_controller;
-  PID y_controller;
-  PID z_controller;
-
-  PositionController(void);
-  Vec4 calculate(Vec3 setpoints, Vec4 actual, double yaw, double dt);
-};
-
-class VelocityController {
-public:
-  PID vx_controller;
-  PID vy_controller;
-  PID vz_controller;
-
-  VelocityController(void);
-  VecX calculate(Vec3 setpoints, Vec3 actual, double yaw, double dt);
-};
 
 class QuadrotorModel {
 public:
