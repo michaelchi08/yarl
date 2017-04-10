@@ -173,7 +173,7 @@ Tree::~Tree(void) {
   delete this->root;
 }
 
-int Tree::configure(TreeConfig *tc, Data &data) {
+int Tree::configure(TreeConfig *tc, Data *data) {
   this->root = NULL;
   this->chromosome.clear();
 
@@ -189,8 +189,8 @@ int Tree::configure(TreeConfig *tc, Data &data) {
   this->hits = 0;
   this->evaluated = 0;
 
-  this->f_in = MatX(data.rows, 2);
-  this->f_out = VecX(data.rows);
+  this->f_in = MatX(data->rows, 2);
+  this->f_out = VecX(data->rows);
 
   this->tc = tc;
 

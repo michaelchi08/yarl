@@ -12,6 +12,7 @@ ADD_EXECUTABLE(
   optimization/gp/data_test.cpp
   optimization/gp/mutation_test.cpp
   optimization/gp/node_test.cpp
+  optimization/gp/population_test.cpp
   optimization/gp/tree_test.cpp
   # OPTIMIZATION OPTIMIZERS
   optimization/optimizers/gdopt_test.cpp

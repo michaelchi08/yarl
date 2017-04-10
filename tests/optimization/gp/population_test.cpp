@@ -8,120 +8,87 @@ namespace gp {
 TEST(Population, constructor) {
   Population p;
 
-  // std::shared_ptr<Factor> factor_ptr(nullptr);
-  // factor_ptr = std::make_shared<Factor>(at, measurement);
+  ASSERT_EQ(0u, p.individuals.size());
+  ASSERT_EQ(NULL, p.tree_config);
+  ASSERT_EQ(NULL, p.data);
 }
 
-// int test_population_new_and_destroy(void)
-// {
-//     int i;
-//     struct population *p;
-//
-//     #<{(| setup |)}>#
-//     p = population_new(100);
-//
-//     #<{(| test |)}>#
-//     mu_check(p->individuals != NULL);
-//     mu_check(p->size == 100);
-//     for (i = 0; i < 100; i++) {
-//         mu_check(p->individuals[i] == NULL);
-//     }
-//
-//     #<{(| clean up |)}>#
-//     population_destroy(p);
-//
-//     return 0;
-// }
-//
-// int test_population_generate(void)
-// {
-//     int i;
-//     struct population *p;
-//     struct tree_config tc;
-//     char inputs[MAX_INPUTS][MAX_INPUT_VAR_SIZE];
-//
-//     #<{(| setup |)}>#
-//     strcpy(inputs[0], "x");
-//     strcpy(inputs[1], "y");
-//
-//     tc.build_method = FULL_METHOD;
-//     tc.max_depth = 2;
-//     tc.fs = function_set_defaults();
-//     tc.ts = terminal_set_defaults(inputs, 2);
-//
-//     #<{(| test |)}>#
-//     p = population_generate(&tc, 10);
-//     for (i = 0; i < 10; i++) {
-//         tree_print(p->individuals[i]);
-//     }
-//
-//     #<{(| clean up |)}>#
-//     function_set_destroy(tc.fs);
-//     terminal_set_destroy(tc.ts);
-//     population_destroy(p);
-//
-//     return 0;
-// }
-//
-// int test_population_best(void)
-// {
-//     int i;
-//     struct population *p;
-//     struct tree *t;
-//
-//     #<{(| setup |)}>#
-//     p = population_new(10);
-//
-//     #<{(| test |)}>#
-//     for (i = 0; i < 10; i++) {
-//         t = tree_new();
-//         t->score = i;
-//         p->individuals[i] = t;
-//     }
-//     t = population_best(p);
-//     printf("best score: %f\n", t->score);
-//
-//     #<{(| clean up |)}>#
-//     tree_destroy(t);
-//     population_destroy(p);
-//
-//     return 0;
-// }
-//
-// int test_population_clear(void)
-// {
-//     int i;
-//     struct population *p;
-//     struct tree_config tc;
-//     struct tree *t;
-//     char inputs[MAX_INPUTS][MAX_INPUT_VAR_SIZE];
-//
-//     #<{(| setup |)}>#
-//     strcpy(inputs[0], "x");
-//     strcpy(inputs[1], "y");
-//
-//     tc.build_method = FULL_METHOD;
-//     tc.max_depth = 2;
-//     tc.fs = function_set_defaults();
-//     tc.ts = terminal_set_defaults(inputs, 2);
-//
-//     p = population_generate(&tc, 10);
-//
-//     #<{(| test |)}>#
-//     population_clear(p);
-//     for (i = 0; i < 10; i++) {
-//         t = p->individuals[i];
-//         mu_check(t->root == NULL);
-//     }
-//
-//     #<{(| clean up |)}>#
-//     population_destroy(p);
-//     function_set_destroy(tc.fs);
-//     terminal_set_destroy(tc.ts);
-//
-//     return 0;
-// }
-//
+TEST(Population, configure) {
+  Population p;
+  TreeConfig tree_config;
+  Data data;
+
+  tree_config.configure(GROW_METHOD, 2);
+  p.configure(10, &tree_config, &data);
+  ASSERT_EQ(10u, p.individuals.size());
+  ASSERT_TRUE(&tree_config == p.tree_config);
+  ASSERT_TRUE(&data == p.data);
+}
+
+TEST(Population, clear) {
+  Population p;
+  TreeConfig tree_config;
+  Data data;
+
+  p.configure(10, &tree_config, &data);
+  p.clear();
+
+  ASSERT_EQ(0u, p.individuals.size());
+  ASSERT_TRUE(&tree_config == p.tree_config);
+  ASSERT_TRUE(&data == p.data);
+}
+
+TEST(Population, best) {
+  Population p;
+  TreeConfig tree_config;
+  Data data;
+  Tree tree;
+
+  tree_config.configure(GROW_METHOD, 2);
+  p.configure(10, &tree_config, &data);
+  p.individuals[0]->score = 0.0;
+  p.individuals[1]->score = 0.0;
+  p.individuals[2]->score = 0.0;
+  p.individuals[3]->score = 0.0;
+  p.individuals[4]->score = 0.0;
+  p.individuals[5]->score = 1.0;
+  p.individuals[6]->score = 2.0;
+  p.individuals[7]->score = 3.0;
+  p.individuals[8]->score = 0.0;
+  p.individuals[9]->score = 0.0;
+  p.best(tree);
+
+  ASSERT_FLOAT_EQ(3.0, tree.score);
+}
+
+TEST(Population, copyFrom) {
+  Population p1, p2;
+  TreeConfig tree_config;
+  Data data;
+  Tree tree;
+  std::string s1, s2;
+
+  // setup
+  tree_config.configure(GROW_METHOD, 2);
+  p1.configure(5, &tree_config, &data);
+
+  // test
+  p2.copyFrom(p1);
+  s1 = p1.individuals[0]->toString();
+  s2 = p2.individuals[0]->toString();
+
+  // print
+  std::cout << "Population 1: " << std::endl;
+  p1.print();
+  std::cout << std::endl;
+
+  std::cout << "Population 2: " << std::endl;
+  p2.print();
+
+  // assert
+  ASSERT_EQ(p2.individuals.size(), p1.individuals.size());
+  ASSERT_EQ(s1, s2);
+}
 
 }  // end of gp namespace
 }  // end of yarl namespace

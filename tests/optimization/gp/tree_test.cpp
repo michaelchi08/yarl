@@ -151,7 +151,7 @@ TEST(Tree, configure) {
   Data data;
 
   data.load(TEST_SINE_DATA);
-  tree.configure(&tc, data);
+  tree.configure(&tc, &data);
   ASSERT_EQ(0, (int) tree.chromosome.size());
 
   ASSERT_EQ(0, tree.nb_inputs);
@@ -175,7 +175,7 @@ TEST(Tree, clear) {
   Data data;
 
   data.load(TEST_SINE_DATA);
-  tree.configure(&tc, data);
+  tree.configure(&tc, &data);
   tree.clear();
   ASSERT_EQ(0, (int) tree.chromosome.size());
 
@@ -236,7 +236,7 @@ TEST(Tree, generate) {
 
   data.load(TEST_SINE_DATA);
   tc.configure(FULL_METHOD, 2);
-  t.configure(&tc, data);
+  t.configure(&tc, &data);
   t.generate();
   t.printStack();
 }
@@ -250,7 +250,7 @@ TEST(Tree, prepData) {
   // setup
   tc.configure(FULL_METHOD, 2);
   data.load(TEST_SINE_DATA);
-  t.configure(&tc, data);
+  t.configure(&tc, &data);
 
   // prep input data
   node.setAsInput("x");
@@ -286,7 +286,7 @@ TEST(Tree, evaluateNode) {
   // setup
   tc.configure(FULL_METHOD, 2);
   data.load(TEST_SIMPLE_DATA);
-  t.configure(&tc, data);
+  t.configure(&tc, &data);
 
   node.setAsInput("x");
   node.nth_child = 0;
@@ -332,7 +332,7 @@ TEST(Tree, evaluate) {
   data.load(TEST_SINE_DATA);
   tc.configure(FULL_METHOD, 2);
   tc.inputs.push_back("x");
-  t.configure(&tc, data);
+  t.configure(&tc, &data);
 
   setupSineTree(t);
   t.update();
@@ -350,7 +350,7 @@ TEST(Tree, toString) {
 
   tc.configure(FULL_METHOD, 2);
   data.load(TEST_SINE_DATA);
-  t.configure(&tc, data);
+  t.configure(&tc, &data);
   t.generate();
   t.toString();
 }
@@ -362,7 +362,7 @@ TEST(Tree, printEquation) {
 
   tc.configure(FULL_METHOD, 2);
   data.load(TEST_SINE_DATA);
-  t.configure(&tc, data);
+  t.configure(&tc, &data);
   t.generate();
   t.printEquation();
 }
