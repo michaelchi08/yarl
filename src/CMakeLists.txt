@@ -1,4 +1,4 @@
-# YARL LIBRARY
+# CONTROL
 SET(
   yarl_control
   control/gimbal/attitude_controller.cpp
@@ -7,12 +7,14 @@ SET(
   control/pid.cpp
 )
 
+# ESTIMATION
 SET(
   yarl_estimation
   estimation/ekf.cpp
   estimation/kf.cpp
 )
 
+# MODELS
 SET(
   yarl_models
   models/gimbal.cpp
@@ -20,14 +22,20 @@ SET(
   models/two_wheel.cpp
 )
 
-SET(
-  yarl_optimization_ceres
+# OPTIMIZATION
+LIST(
+  APPEND yarl_optimization
   optimization/ceres/ba.cpp
   optimization/ceres/ceres_examples.cpp
 )
 
-SET(
-  yarl_optimization_gp
+LIST(
+  APPEND yarl_optimization
+  optimization/factor_graph/factor_graph.cpp
+)
+
+LIST(
+  APPEND yarl_optimization
   optimization/gp/crossover.cpp
   optimization/gp/data.cpp
   optimization/gp/gpopt.cpp
@@ -39,21 +47,21 @@ SET(
   optimization/gp/tree.cpp
 )
 
-SET(
-  yarl_optimization_optimizers
+LIST(
+  APPEND yarl_optimization
   optimization/optimizers/gdopt.cpp
   optimization/optimizers/llsopt.cpp
   optimization/optimizers/lmaopt.cpp
   optimization/optimizers/ransac.cpp
 )
 
-SET(
-  yarl_optimization
-  optimization/factor_graph.cpp
+LIST(
+  APPEND yarl_optimization
   optimization/benchmark.cpp
   optimization/testcase.cpp
 )
 
+# UTILS
 SET(
   yarl_utils
   utils/config.cpp
@@ -66,6 +74,7 @@ SET(
   utils/time.cpp
 )
 
+# VISION
 SET(
   yarl_vision
   vision/calibration.cpp
@@ -78,17 +87,13 @@ SET(
   vision/vo.cpp
 )
 
-LIST(
-  APPEND yarl_modules
+# YARL LIBRARY
+ADD_LIBRARY(
+  yarl STATIC
   ${yarl_control}
   ${yarl_estimation}
   ${yarl_models}
-  ${yarl_optimization_ceres}
-  ${yarl_optimization_gp}
-  ${yarl_optimization_optimizers}
   ${yarl_optimization}
   ${yarl_utils}
   ${yarl_vision}
 )
-
-ADD_LIBRARY(yarl STATIC ${yarl_modules})

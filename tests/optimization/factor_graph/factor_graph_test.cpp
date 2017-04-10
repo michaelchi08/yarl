@@ -1,5 +1,5 @@
 #include "yarl/test.hpp"
-#include "yarl/optimization/factor_graph.hpp"
+#include "yarl/optimization/factor_graph/factor_graph.hpp"
 
 
 namespace yarl {

@@ -19,8 +19,8 @@ ADD_EXECUTABLE(
   optimization/optimizers/llsopt_test.cpp
   optimization/optimizers/lmaopt_test.cpp
   optimization/optimizers/ransac_test.cpp
-  # OPTIMIZATION
-  optimization/factor_graph_test.cpp
+  # OPTIMIZATION FACTOR GRAPH
+  optimization/factor_graph/factor_graph_test.cpp
   # UTILS
   utils/config_test.cpp
   utils/data_test.cpp
