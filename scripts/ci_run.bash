@@ -11,10 +11,9 @@ git submodule update
 # compile
 mkdir -p build
 cd build
-export Eigen3_DIR="/usr/include/eigen3:$Eigen3_DIR"
 cmake .. -DCMAKE_MODULE_PATH=$DIR/$CMAKE_CONFIG_DIR
 make
 
 # run tests
 export LD_LIBRARY_PATH=/usr/local/lib
-./tests/yarl_tests --silence-stdcout
+./tests/yarl_tests --silence-stdout
