@@ -1,7 +1,6 @@
 #include "yarl/vision/eight_point.hpp"
 
 namespace yarl {
-namespace optimization {
 
 EightPoint::EightPoint(void) {
   this->configured = false;
@@ -256,5 +255,4 @@ int EightPoint::obtainPose(
   return 0;
 }
 
-}  // end of optimization namespace
 }  // end of yarl namespace

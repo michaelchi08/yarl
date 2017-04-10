@@ -75,7 +75,7 @@ void normalize_2dpts(double image_width, double image_height, MatX &pts) {
   // create normalization matrix N
   // clang-format off
   N << 2.0 / image_width, 0.0, -1.0,
-       0.0, 2.0 / image_width, -1.0,
+       0.0, 2.0 / image_height, -1.0,
        0.0, 0.0, 1.0;
   // clang-format on
 

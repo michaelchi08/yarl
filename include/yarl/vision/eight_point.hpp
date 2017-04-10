@@ -11,7 +11,6 @@
 #include "yarl/vision/utils.hpp"
 
 namespace yarl {
-namespace optimization {
 
 class EightPoint {
 public:
@@ -39,6 +38,5 @@ public:
                  MatX &pose);
 };
 
-}  // end of optimization namespace
 }  // end of yarl namespace
 #endif

@@ -49,10 +49,8 @@ GimbalModel::GimbalModel(VecX pose) {
 int GimbalModel::update(Vec3 motor_inputs, double dt) {
   float ph, th;
   float ph_vel, th_vel;
-  float ph_acc, th_acc;
   Vec3 euler, target;
   Mat3 R;
-  double dist;
 
   // setup
   ph = this->states(0);

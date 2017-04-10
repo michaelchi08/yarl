@@ -86,6 +86,8 @@ int BundleAdjustment::solve(MatX pts3d) {
   ::ceres::AutoDiffCostFunction<BAResidual, 2, 4, 3, 3> *cost_func;
   BAResidual *r;
 
+  UNUSED(pts3d);
+
   // options
   options.max_num_iterations = 200;
   options.use_nonmonotonic_steps = false;

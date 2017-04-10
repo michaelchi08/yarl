@@ -80,6 +80,7 @@ SET(
   vision/calibration.cpp
   vision/camera.cpp
   vision/chessboard.cpp
+  vision/dataset.cpp
   vision/eight_point.cpp
   vision/fast.cpp
   vision/good.cpp

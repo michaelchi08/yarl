@@ -32,6 +32,7 @@ ADD_EXECUTABLE(
   vision/calibration_test.cpp
   vision/camera_test.cpp
   vision/chessboard_test.cpp
+  vision/dataset_test.cpp
   vision/eight_point_test.cpp
   vision/vo_test.cpp
   # TEST RUNNER

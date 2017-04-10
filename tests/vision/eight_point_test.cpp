@@ -65,7 +65,7 @@ MatX load_data(std::string file_path) {
 }
 
 TEST(EightPoint, constructor) {
-  optimization::EightPoint estimator;
+  EightPoint estimator;
 
   ASSERT_FALSE(estimator.configured);
 
@@ -74,7 +74,7 @@ TEST(EightPoint, constructor) {
 }
 
 TEST(EightPoint, configure) {
-  optimization::EightPoint estimator;
+  EightPoint estimator;
 
   // setup
   estimator.configure(800, 600);
@@ -89,7 +89,7 @@ TEST(EightPoint, configure) {
 TEST(EightPoint, normalizePoints) {
   MatX pts1;
   MatX pts2;
-  optimization::EightPoint estimator;
+  EightPoint estimator;
 
   // setup
   pts1 = load_data(TEST_1_DATA);
@@ -115,7 +115,7 @@ TEST(EightPoint, formMatrixA) {
   MatX pts1;
   MatX pts2;
   MatX A;
-  optimization::EightPoint estimator;
+  EightPoint estimator;
 
   // setup
   pts1 = load_data(TEST_1_DATA);
@@ -146,7 +146,7 @@ TEST(EightPoint, approximateFundamentalMatrix) {
   MatX pts1;
   MatX pts2;
   MatX A, F;
-  optimization::EightPoint estimator;
+  EightPoint estimator;
 
   // setup
   pts1 = load_data(TEST_1_DATA);
@@ -165,7 +165,7 @@ TEST(EightPoint, refineFundamentalMatrix) {
   MatX pts1;
   MatX pts2;
   MatX A, F;
-  optimization::EightPoint estimator;
+  EightPoint estimator;
 
   // setup
   pts1 = load_data(TEST_1_DATA);
@@ -185,7 +185,7 @@ TEST(EightPoint, denormalizeFundamentalMatrix) {
   MatX pts1;
   MatX pts2;
   MatX A, F;
-  optimization::EightPoint estimator;
+  EightPoint estimator;
 
   // setup
   pts1 = load_data(TEST_1_DATA);
@@ -206,7 +206,7 @@ TEST(EightPoint, estimate) {
   MatX F;
   Mat3 K, E;
   Vec3 x;
-  optimization::EightPoint estimator;
+  EightPoint estimator;
 
   // setup
   pts1 = load_data(TEST_1_DATA);
@@ -240,7 +240,7 @@ TEST(EightPoint, obtainPossiblePoses) {
   MatX pts1;
   MatX pts2;
   Mat3 K, E;
-  optimization::EightPoint estimator;
+  EightPoint estimator;
   std::vector<MatX> poses;
 
   // setup
@@ -270,7 +270,7 @@ TEST(EightPoint, obtainPose) {
   Vec3 pt2;
   Mat3 K, E;
   MatX pose;
-  optimization::EightPoint estimator;
+  EightPoint estimator;
   std::vector<MatX> poses;
 
   // setup
@@ -314,7 +314,7 @@ TEST(EightPoint, obtainPose2) {
   Mat3 K, E;
   MatX pose;
   std::vector<MatX> poses;
-  optimization::EightPoint estimator;
+  EightPoint estimator;
   FastDetector fast;
   VisualOdometry vo;
 

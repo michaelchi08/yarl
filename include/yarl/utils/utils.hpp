@@ -1,6 +1,7 @@
 #ifndef YARL_UTILS_UTILS_HPP
 #define YARL_UTILS_UTILS_HPP
 
+#include "yarl/utils/config.hpp"
 #include "yarl/utils/data.hpp"
 #include "yarl/utils/file.hpp"
 #include "yarl/utils/log.hpp"

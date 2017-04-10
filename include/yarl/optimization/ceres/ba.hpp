@@ -192,6 +192,9 @@ public:
     Eigen::Vector3d x_est;
     Eigen::Vector2d x_est_pixel;
 
+    UNUSED(parameters);
+    UNUSED(residuals);
+
     // setup
     this->setupCameraInstrinsicsMatrix(K);
     // this->setupRotationMatrixFromQuaternion(parameters[0]);
@@ -218,6 +221,10 @@ public:
                         double *residuals,
                         double **jacobians) {
     // this->calculateReprojectionError(parameters, residuals);
+
+    UNUSED(parameters);
+    UNUSED(residuals);
+    UNUSED(jacobians);
 
     return true;
   }

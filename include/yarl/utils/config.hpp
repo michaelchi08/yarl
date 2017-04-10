@@ -1,5 +1,5 @@
-#ifndef UTILS_CONFIG_HPP
-#define UTILS_CONFIG_HPP
+#ifndef YARL_UTILS_CONFIG_HPP
+#define YARL_UTILS_CONFIG_HPP
 
 #include <type_traits>
 #include <iostream>
@@ -11,7 +11,10 @@
 #include <libxml/parser.h>
 #include <libxml/xpath.h>
 
-#include "yarl/utils/utils.hpp"
+#include "yarl/utils/file.hpp"
+#include "yarl/utils/log.hpp"
+#include "yarl/utils/math.hpp"
+#include "yarl/utils/string.hpp"
 
 namespace yarl {
 
