@@ -7,5 +7,21 @@
     <fy>554.38</fy>
     <cx>0.0</cx>
     <cy>0.0</cy>
+    <hz>60</hz>
   </camera>
+  <feature_points>
+    <nb_features>10</nb_features>
+    <x>
+      <min>-1.0</min>
+      <max>1.0</max>
+    </x>
+    <y>
+      <min>-1.0</min>
+      <max>1.0</max>
+    </y>
+    <z>
+      <min>-1.0</min>
+      <max>1.0</max>
+    </z>
+  </feature_points>
 </config>

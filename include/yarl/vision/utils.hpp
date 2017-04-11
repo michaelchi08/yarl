@@ -16,6 +16,7 @@ void cvmat2mat(cv::Mat A, MatX &B);
 void cvpts2mat(std::vector<cv::Point2f> points, MatX &mat);
 void cvmatconcat(cv::Mat img1, cv::Mat img2, cv::Mat &out);
 void projection_matrix(Mat3 K, Mat3 R, Vec3 t, MatX &P);
+void projection_matrix(Mat3 K, Vec3 rpy, Vec3 t, MatX &P);
 void normalize_2dpts(double image_width, double image_height, MatX &pts);
 
 }  // end of yarl namespace

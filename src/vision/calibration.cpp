@@ -94,49 +94,46 @@ int Calibration::saveImage(cv::Mat &image,
   return 0;
 }
 
-// int Calibration::calibrate(std::vector<std::vector<cv::Point2f>>
-// image_points,
-//                            cv::Size image_size) {
-//   bool camera_matrix_ok;
-//   bool distortion_coefficients_ok;
-//   std::vector<std::vector<cv::Point3f>> object_points(1);
-//
-//   // pre-check
-//   if (this->state != READY_TO_CALIBRATE) {
-//     log_info("calibrator is not ready to calibrate!");
-//     return -2;
-//   }
-//
-//   // hard-coding the object points - assuming chessboard is origin by
-//   setting
-//     // chessboard in the x-y plane (where z = 0).
-//     for (int i = 0; i < chessboard.nb_corners_rows; i++) {
-//     for (int j = 0; j < chessboard.nb_corners_columns; j++) {
-//       object_points[0].push_back(cv::Point3f(j, i, 0.0f));
-//     }
-//   }
-//   object_points.resize(image_points.size(), object_points[0]);
-//
-//   // calibrate camera
-//   this->reprojection_error =
-//     cv::calibrateCamera(object_points,
-//                         image_points,
-//                         image_size,
-//                         this->camera_matrix,
-//                         this->distortion_coefficients,
-//                         this->rotation_vectors,
-//                         this->translation_vectors);
-//
-//   // check results
-//   camera_matrix_ok = cv::checkRange(this->camera_matrix);
-//   distortion_coefficients_ok =
-//   cv::checkRange(this->distortion_coefficients);
-//   if (camera_matrix_ok && distortion_coefficients_ok) {
-//     return 0;
-//   } else {
-//     return -1;
-//   }
-// }
+int Calibration::calibrate(std::vector<std::vector<cv::Point2f>> image_points,
+                           cv::Size image_size) {
+  bool camera_matrix_ok;
+  bool distortion_coefficients_ok;
+  std::vector<std::vector<cv::Point3f>> object_points(1);
+
+  // pre-check
+  if (this->state != READY_TO_CALIBRATE) {
+    log_info("calibrator is not ready to calibrate!");
+    return -2;
+  }
+
+  // hard-coding the object points - assuming chessboard is origin by
+  // setting chessboard in the x-y plane (where z = 0).
+  for (int i = 0; i < chessboard.nb_corners_rows; i++) {
+    for (int j = 0; j < chessboard.nb_corners_columns; j++) {
+      object_points[0].push_back(cv::Point3f(j, i, 0.0f));
+    }
+  }
+  object_points.resize(image_points.size(), object_points[0]);
+
+  // calibrate camera
+  this->reprojection_error =
+    cv::calibrateCamera(object_points,
+                        image_points,
+                        image_size,
+                        this->camera_matrix,
+                        this->distortion_coefficients,
+                        this->rotation_vectors,
+                        this->translation_vectors);
+
+  // check results
+  camera_matrix_ok = cv::checkRange(this->camera_matrix);
+  distortion_coefficients_ok = cv::checkRange(this->distortion_coefficients);
+  if (camera_matrix_ok && distortion_coefficients_ok) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
 
 // static void recordMatrix(YAML::Emitter &out, cv::Mat &mat) {
 //   // begin

@@ -60,6 +60,12 @@ void projection_matrix(Mat3 K, Mat3 R, Vec3 t, MatX &P) {
   P = K * P;
 }
 
+void projection_matrix(Mat3 K, Vec3 rpy, Vec3 t, MatX &P) {
+  Mat3 R;
+  euler2rot(rpy, 321, R);
+  projection_matrix(K, R, t, P);
+}
+
 void normalize_2dpts(double image_width, double image_height, MatX &pts) {
   Mat3 N;
   MatX pts_h;
