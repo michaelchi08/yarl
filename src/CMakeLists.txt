@@ -2,10 +2,19 @@
 ADD_LIBRARY(
   yarl STATIC
   # CONTROL
-  control/gimbal/attitude_controller.cpp
-  control/quadrotor/attitude_controller.cpp
-  control/quadrotor/position_controller.cpp
+  control/gimbal/attitude.cpp
+  control/quadrotor/attitude.cpp
+  # control/quadrotor/landing.cpp
+  control/quadrotor/position.cpp
+  # control/quadrotor/tracking.cpp
+  control/quadrotor/velocity.cpp
   control/pid.cpp
+  # DRIVERS
+  drivers/i2c.cpp
+  drivers/mpu6050.cpp
+  drivers/mpu9250.cpp
+  drivers/pca9685.cpp
+  drivers/sbgc.cpp
   # ESTIMATION
   estimation/ekf.cpp
   estimation/kf.cpp

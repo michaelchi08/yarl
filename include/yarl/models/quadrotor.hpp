@@ -5,8 +5,8 @@
 #include <iostream>
 
 #include "yarl/utils/utils.hpp"
-#include "yarl/control/quadrotor/attitude_controller.hpp"
-#include "yarl/control/quadrotor/position_controller.hpp"
+#include "yarl/control/quadrotor/attitude.hpp"
+#include "yarl/control/quadrotor/position.hpp"
 
 namespace yarl {
 

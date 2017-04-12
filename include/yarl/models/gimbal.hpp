@@ -6,7 +6,7 @@
 #include <iomanip>
 
 #include "yarl/utils/utils.hpp"
-#include "yarl/control/gimbal/attitude_controller.hpp"
+#include "yarl/control/gimbal/attitude.hpp"
 
 namespace yarl {
 

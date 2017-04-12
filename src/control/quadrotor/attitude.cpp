@@ -1,4 +1,4 @@
-#include "yarl/control/quadrotor/attitude_controller.hpp"
+#include "yarl/control/quadrotor/attitude.hpp"
 
 namespace yarl {
 
