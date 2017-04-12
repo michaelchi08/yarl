@@ -11,8 +11,15 @@
 
 namespace yarl {
 
-void mat2cvmat(MatX A, cv::Mat &B);
-void cvmat2mat(cv::Mat A, MatX &B);
+double focal_length(double hfov, double image_width);
+Vec2 focal_length(double hfov,
+                  double vfov,
+                  double image_width,
+                  double image_height);
+double diag_focal_length(double hfov,
+                         double vfov,
+                         double image_width,
+                         double image_height);
 void cvpts2mat(std::vector<cv::Point2f> points, MatX &mat);
 void cvmatconcat(cv::Mat img1, cv::Mat img2, cv::Mat &out);
 void projection_matrix(Mat3 K, Mat3 R, Vec3 t, MatX &P);

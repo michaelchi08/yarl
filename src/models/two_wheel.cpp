@@ -5,11 +5,9 @@ namespace yarl {
 Vec3 two_wheel_model(Vec3 x, Vec2 u, float dt) {
   Vec3 g;
 
-  // clang-format off
-  g << x(0) + u(0) * cos(x(2)) * dt,
-       x(1) + u(0) * sin(x(2)) * dt,
-       x(2) + u(1) * dt;
-  // clang-format on
+  g(0) = x(0) + u(0) * cos(x(2)) * dt;
+  g(1) = x(1) + u(0) * sin(x(2)) * dt;
+  g(2) = x(2) + u(1) * dt;
 
   return g;
 }

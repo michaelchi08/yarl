@@ -2,22 +2,30 @@
 
 namespace yarl {
 
-void mat2cvmat(MatX A, cv::Mat &B) {
-  B = cv::Mat(A.rows(), A.cols(), CV_8UC1);
-  for (int i = 0; i < A.rows(); i++) {
-    for (int j = 0; j < A.cols(); j++) {
-      B.at<double>(i, j) = A(i, j);
-    }
-  }
+double focal_length(double hfov, double image_width) {
+  return (image_width / 2.0) / tan(deg2rad(hfov) / 2.0);
 }
 
-void cvmat2mat(cv::Mat A, MatX &B) {
-  B.resize(A.rows, A.cols);
-  for (int i = 0; i < A.rows; i++) {
-    for (int j = 0; j < A.cols; j++) {
-      B(i, j) = A.at<double>(i, j);
-    }
-  }
+Vec2 focal_length(double hfov,
+                  double vfov,
+                  double image_width,
+                  double image_height) {
+  Vec2 focal;
+
+  focal(0) = (image_width / 2.0) / tan(deg2rad(hfov) / 2.0);
+  focal(1) = (image_height / 2.0) / tan(deg2rad(vfov) / 2.0);
+
+  return focal;
+}
+
+double diag_focal_length(double hfov,
+                         double vfov,
+                         double image_width,
+                         double image_height) {
+  double fx, fy;
+  fx = (image_width / 2.0) / tan(deg2rad(hfov) / 2.0);
+  fy = (image_height / 2.0) / tan(deg2rad(vfov) / 2.0);
+  return 2 * atan(sqrt(pow(fx, 2)) + sqrt(pow(fy, 2)));
 }
 
 void cvpts2mat(std::vector<cv::Point2f> points, MatX &mat) {
@@ -54,10 +62,14 @@ void cvmatconcat(cv::Mat img1, cv::Mat img2, cv::Mat &out) {
 }
 
 void projection_matrix(Mat3 K, Mat3 R, Vec3 t, MatX &P) {
+  MatX extrinsics;
+
+  extrinsics.resize(3, 4);
+  extrinsics.block(0, 0, 3, 3) = R;
+  extrinsics.block(0, 3, 3, 1) = -R * t;
+
   P.resize(3, 4);
-  P.block(0, 0, 3, 3) = R;
-  P.block(0, 3, 3, 1) = -(R * t);
-  P = K * P;
+  P = K * extrinsics;
 }
 
 void projection_matrix(Mat3 K, Vec3 rpy, Vec3 t, MatX &P) {

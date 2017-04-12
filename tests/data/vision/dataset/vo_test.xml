@@ -5,8 +5,8 @@
     <image_height>640</image_height>
     <fx>554.38</fx>
     <fy>554.38</fy>
-    <cx>0.0</cx>
-    <cy>0.0</cy>
+    <cx>320.0</cx>
+    <cy>320.0</cy>
     <hz>60</hz>
   </camera>
   <feature_points>
