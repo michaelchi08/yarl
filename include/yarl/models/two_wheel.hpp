@@ -7,6 +7,7 @@ namespace yarl {
 
 Vec3 two_wheel_model(Vec3 x, Vec2 u, float dt);
 Mat3 two_wheel_linearized_model(Vec3 x, Vec2 u, float dt);
+Vec4 two_wheel_3d_model(Vec4 x, Vec3 u, float dt);
 
 }  // end of yarl namespace
 #endif

@@ -9,6 +9,7 @@ TestCamera::TestCamera(void) {
   this->hz = -1;
 
   this->dt = 0;
+  this->frame = -1;
 }
 
 bool TestCamera::update(double dt) {
@@ -16,10 +17,64 @@ bool TestCamera::update(double dt) {
 
   if (this->dt > (1.0 / this->hz)) {
     this->dt = 0.0;
+    this->frame++;
     return true;
   }
 
   return false;
+}
+
+int TestCamera::checkFeatures(double dt,
+                              const MatX &features,
+                              const Vec3 &rpy,
+                              const Vec3 &t,
+                              std::vector<std::pair<Vec2, Vec3>> &observed) {
+  Vec3 f_img, rpy_edn, t_edn;
+  std::pair<Vec2, Vec3> obs;
+  Vec4 f_3d;
+  Mat3 R;
+  MatX P;
+
+  // pre-check
+  if (this->update(dt) == false) {
+    return 1;
+  }
+
+  // rotation matrix - convert from nwu to edn then to rotation matrix R
+  nwu2edn(rpy, rpy_edn);
+  euler2rot(rpy_edn, 123, R);
+
+  // translation - convert translation from nwu to edn
+  nwu2edn(t, t_edn);
+
+  // projection matrix
+  projection_matrix(this->K, R, t_edn, P);
+
+  // check which features in 3d are observable from camera
+  for (int i = 0; i < features.cols(); i++) {
+    f_3d = features.block(0, i, 4, 1);
+    f_img = P * f_3d;
+
+    // check to see if feature is valid and infront of camera
+    if (fltcmp(f_img(2), 0.0) == 0) {
+      continue;  // go to next loop iteration
+    }
+
+    // normalize pixels
+    f_img(0) = f_img(0) / f_img(2);
+    f_img(1) = f_img(1) / f_img(2);
+    f_img(2) = f_img(2) / f_img(2);
+
+    // check to see if feature observed is within image plane
+    if ((f_img(0) < this->image_width) && (f_img(0) > 0)) {
+      if ((f_img(1) < this->image_height) && (f_img(1) > 0)) {
+        obs = std::make_pair(f_img.block(0, 0, 2, 1), f_3d.block(0, 0, 3, 1));
+        observed.push_back(obs);
+      }
+    }
+  }
+
+  return 0;
 }
 
 TestDataset::TestDataset(void) {
@@ -67,7 +122,7 @@ int TestDataset::configure(const std::string config_file) {
   // clang-format off
   this->camera.K << fx, 0.0, cx,
                     0.0, fy, cy,
-                    0.0, 0.0, 0.0;
+                    0.0, 0.0, 1.0;
   // clang-format on
 
   this->configured = true;
@@ -120,14 +175,55 @@ int TestDataset::generateRandom3DFeatures(MatX &features) {
   return 0;
 }
 
+int TestDataset::record3DFeatures(std::string output_path,
+                                  const MatX &features) {
+  return mat2csv(output_path, features.transpose());
+}
+
+int TestDataset::recordObservedFeatures(
+  double time,
+  std::string output_path,
+  std::vector<std::pair<Vec2, Vec3>> &observed) {
+  std::ofstream outfile(output_path);
+  Vec2 f_2d;
+  Vec3 f_3d;
+
+  // open file
+  if (outfile.good() != true) {
+    log_err("Failed to open file [%s] to record observed features!",
+            output_path.c_str());
+    return -1;
+  }
+
+  // time and number of observed features
+  outfile << time << std::endl;
+  outfile << observed.size() << std::endl;
+
+  // features
+  for (auto feature : observed) {
+    // feature in image frame
+    f_2d = feature.first.transpose();
+    outfile << f_2d(0) << "," << f_2d(1) << std::endl;
+
+    // feature in world frame
+    f_3d = feature.second.transpose();
+    outfile << f_3d(0) << "," << f_3d(1) << "," << f_3d(2) << std::endl;
+  }
+
+  // clean up
+  outfile.close();
+
+  return 0;
+}
+
 int TestDataset::generateTestData(std::string output_path) {
-  Vec3 x, t, rpy, f_img;
-  Vec4 f_3d;
+  Vec3 x, t, rpy;
   Vec2 u;
-  MatX features, P;
+  MatX features;
   double w, dt, time;
   std::ofstream output_file;
-  std::vector<std::pair<Vec3, Vec4>> features_observed;
+  std::vector<std::pair<Vec2, Vec3>> observed;
+  std::ostringstream oss;
 
   // pre-check
   if (this->configured == false) {
@@ -144,31 +240,21 @@ int TestDataset::generateTestData(std::string output_path) {
   dt = 0.01;
   time = 0.0;
   x << 0.0, 0.0, 0.0;
-  u << 1.0, w;
+  u << 1.0, 0;
 
-  // for (int i = 0; i < 200; i++) {
-  for (int i = 0; i < 20; i++) {
+  for (int i = 0; i < 2; i++) {
     // update state
     x = two_wheel_model(x, u, dt);
     time += dt;
 
-    // project 3d feature to image plane
-    if (this->camera.update(dt)) {
-      rpy << 0.0, 0.0, x(2);
-      t << x(0), x(1), 0.0;
-      projection_matrix(this->camera.K, rpy, t, P);
-
-      // check which features in 3d are observable from camera
-      features_observed.clear();
-      for (int j = 0; j < this->nb_features; j++) {
-        f_3d = features.block(0, j, 4, 1);
-        f_img = P * f_3d;
-        features_observed.push_back(std::make_pair(f_img, f_3d));
-
-        std::cout << f_img.transpose() << std::endl;
-        std::cout << f_3d.transpose() << std::endl;
-        std::cout << std::endl;
-      }
+    // check features
+    rpy << 0.0, 0.0, x(2);
+    t << x(0), x(1), 0.0;
+    if (this->camera.checkFeatures(dt, features, rpy, t, observed) == 0) {
+      oss.str("");
+      oss << "/tmp/observed_" << this->camera.frame << ".dat";
+      std::cout << oss.str() << std::endl;
+      this->recordObservedFeatures(time, oss.str(), observed);
     }
 
     // record state

@@ -33,10 +33,10 @@ TEST(VisionUtils, projection_matrix) {
        0.0, fy, cy,
        0.0, 0.0, 1.0;
 
-  rpy << deg2rad(0.0), deg2rad(10.0), deg2rad(0.0);
+  rpy << deg2rad(0.0), deg2rad(0.0), deg2rad(0.0);
   euler2rot(rpy, 123, R);
 
-  t << 0.0, 0.0, 1.0;
+  t << 0.0, 0.0, 0.0;
   // clang-format on
 
   projection_matrix(K, R, t, P);

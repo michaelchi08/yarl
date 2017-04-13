@@ -274,20 +274,27 @@ void cf2enu(Vec3 cf, Vec3 &enu) {
   enu(2) = -cf(1);
 }
 
-void nwu2enu(Vec3 nwu, Vec3 &enu) {
-  // NWU frame:  (x - forward, y - left, z - up)
-  // ENU frame:  (x - right, y - forward, z - up)
-  enu(0) = -nwu(1);
-  enu(1) = nwu(0);
-  enu(2) = nwu(2);
-}
-
 void ned2enu(Vec3 ned, Vec3 &enu) {
   // NED frame:  (x - forward, y - right, z - down)
   // ENU frame:  (x - right, y - forward, z - up)
   enu(0) = ned(1);
   enu(1) = ned(0);
   enu(2) = -ned(2);
+}
+
+void ned2nwu(Quaternion ned, Quaternion &nwu) {
+  nwu.w() = ned.w();
+  nwu.x() = ned.x();
+  nwu.y() = -ned.y();
+  nwu.z() = -ned.z();
+}
+
+void nwu2enu(Vec3 nwu, Vec3 &enu) {
+  // NWU frame:  (x - forward, y - left, z - up)
+  // ENU frame:  (x - right, y - forward, z - up)
+  enu(0) = -nwu(1);
+  enu(1) = nwu(0);
+  enu(2) = nwu(2);
 }
 
 void nwu2ned(Quaternion nwu, Quaternion &ned) {
@@ -297,11 +304,12 @@ void nwu2ned(Quaternion nwu, Quaternion &ned) {
   ned.z() = -nwu.z();
 }
 
-void ned2nwu(Quaternion ned, Quaternion &nwu) {
-  nwu.w() = ned.w();
-  nwu.x() = ned.x();
-  nwu.y() = -ned.y();
-  nwu.z() = -ned.z();
+void nwu2edn(Vec3 nwu, Vec3 &edn) {
+  // NWU frame:  (x - forward, y - left, z - up)
+  // EDN frame:  (x - right, y - down, z - forward)
+  edn(0) = -nwu(1);
+  edn(1) = -nwu(2);
+  edn(2) = nwu(0);
 }
 
 void target2body(Vec3 target_pos_if,

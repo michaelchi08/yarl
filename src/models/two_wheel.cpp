@@ -24,4 +24,16 @@ Mat3 two_wheel_linearized_model(Vec3 x, Vec2 u, float dt) {
   return G;
 }
 
+Vec4 two_wheel_3d_model(Vec4 x, Vec3 u, float dt) {
+  Vec4 g;
+
+  g(0) = x(0) + u(0) * cos(x(3)) * dt;
+  g(1) = x(1) + u(0) * sin(x(3)) * dt;
+  g(2) = x(2) + u(1) * dt;
+  g(3) = x(3) + u(2) * dt;
+
+  return g;
+}
+
+
 }  // end of yarl namespace

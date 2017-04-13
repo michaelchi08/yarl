@@ -15,9 +15,15 @@ public:
   double hz;
 
   double dt;
+  int frame;
 
   TestCamera(void);
   bool update(double dt);
+  int checkFeatures(double dt,
+                    const MatX &features,
+                    const Vec3 &rpy,
+                    const Vec3 &t,
+                    std::vector<std::pair<Vec2, Vec3>> &observed);
 };
 
 class TestDataset {
@@ -30,9 +36,14 @@ public:
   Vec2 feature_y_bounds;
   Vec2 feature_z_bounds;
 
+
   TestDataset(void);
   int configure(std::string config_file);
   int generateRandom3DFeatures(MatX &features);
+  int record3DFeatures(std::string output_path, const MatX &features);
+  int recordObservedFeatures(double time,
+                             std::string output_path,
+                             std::vector<std::pair<Vec2, Vec3>> &observed);
   int generateTestData(std::string output_path);
 };
 

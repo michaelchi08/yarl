@@ -66,16 +66,10 @@ void projection_matrix(Mat3 K, Mat3 R, Vec3 t, MatX &P) {
 
   extrinsics.resize(3, 4);
   extrinsics.block(0, 0, 3, 3) = R;
-  extrinsics.block(0, 3, 3, 1) = -R * t;
+  extrinsics.block(0, 3, 3, 1) = t;
 
   P.resize(3, 4);
   P = K * extrinsics;
-}
-
-void projection_matrix(Mat3 K, Vec3 rpy, Vec3 t, MatX &P) {
-  Mat3 R;
-  euler2rot(rpy, 321, R);
-  projection_matrix(K, R, t, P);
 }
 
 void normalize_2dpts(double image_width, double image_height, MatX &pts) {

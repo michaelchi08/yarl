@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 
+#include "yarl/utils/log.hpp"
 #include "yarl/utils/math.hpp"
 #include "yarl/utils/string.hpp"
 
@@ -28,7 +29,7 @@ public:
   void print(void);
 };
 
-class Velocity {
+class Twist {
 public:
   double linear_x;
   double linear_y;
@@ -38,7 +39,7 @@ public:
   double angular_y;
   double angular_z;
 
-  Velocity(void) {
+  Twist(void) {
     this->linear_x = 0;
     this->linear_y = 0;
     this->linear_z = 0;

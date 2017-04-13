@@ -63,7 +63,7 @@ int csvrows(std::string file_path) {
 
   // load file
   if (infile.good() != true) {
-    printf(E_CSV_DATA_LOAD, file_path.c_str());
+    log_err(E_CSV_DATA_LOAD, file_path.c_str());
     return -1;
   }
 
@@ -88,7 +88,7 @@ int csvcols(std::string file_path) {
 
   // load file
   if (infile.good() != true) {
-    printf(E_CSV_DATA_LOAD, file_path.c_str());
+    log_err(E_CSV_DATA_LOAD, file_path.c_str());
     return -1;
   }
 
@@ -110,7 +110,7 @@ int csvheader(std::string file_path, std::vector<std::string> &fields) {
 
   // load file
   if (infile.good() != true) {
-    printf(E_CSV_DATA_LOAD, file_path.c_str());
+    log_err(E_CSV_DATA_LOAD, file_path.c_str());
     return -1;
   }
 
@@ -133,7 +133,7 @@ int csv2mat(std::string file_path, bool header, MatX &data) {
 
   // load file
   if (infile.good() != true) {
-    printf(E_CSV_DATA_LOAD, file_path.c_str());
+    log_err(E_CSV_DATA_LOAD, file_path.c_str());
     return -1;
   }
 
@@ -171,7 +171,7 @@ int mat2csv(std::string file_path, MatX data) {
 
   // open file
   if (outfile.good() != true) {
-    printf(E_CSV_DATA_OPEN, file_path.c_str());
+    log_err(E_CSV_DATA_OPEN, file_path.c_str());
     return -1;
   }
 
