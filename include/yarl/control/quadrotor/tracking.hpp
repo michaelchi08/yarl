@@ -27,10 +27,13 @@ public:
   AttitudeCommand att_cmd;
 
   TrackingController(void);
-  int configure(std::string config_file);
-  AttitudeCommand calculate(Vec3 errors, double yaw, double dt);
-  AttitudeCommand calculate(
-    Vec3 target_pos_bf, Vec3 pos, Vec3 pos_prev, double yaw, double dt);
+  int configure(const std::string &config_file);
+  AttitudeCommand calculate(const Vec3 &errors, double yaw, double dt);
+  AttitudeCommand calculate(const Vec3 &target_pos_bf,
+                            const Vec3 &pos,
+                            const Vec3 &pos_prev,
+                            double yaw,
+                            double dt);
   void reset(void);
   void printOutputs(void);
   void printErrors(void);

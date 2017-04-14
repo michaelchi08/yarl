@@ -26,8 +26,8 @@ public:
   Vec4 att_cmd;
 
   VelocityController(void);
-  int configure(std::string config_file);
-  Vec4 calculate(Vec3 setpoints, Vec3 actual, double dt);
+  int configure(const std::string &config_file);
+  Vec4 calculate(const Vec3 &setpoints, const Vec3 &actual, double dt);
   void reset(void);
   void printOutputs(void);
   void printErrors(void);

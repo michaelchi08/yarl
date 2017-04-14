@@ -33,8 +33,8 @@ public:
   Vec3 p0;
 
   Trajectory(void);
-  int load(int index, std::string filepath, Vec3 pos);
-  int update(Vec3 pos, Vec2 &wp_pos, Vec2 &wp_vel, Vec2 &wp_inputs);
+  int load(int index, const std::string &filepath, const Vec3 &pos);
+  int update(const Vec3 pos, Vec2 &wp_pos, Vec2 &wp_vel, Vec2 &wp_inputs);
   void reset(void);
 };
 
@@ -48,10 +48,10 @@ public:
   double vel_thres;
 
   TrajectoryIndex(void);
-  int load(std::string index_file,
+  int load(const std::string &index_file,
            double pos_thres = 0.2,
            double vel_thres = 0.2);
-  int find(Vec3 pos, double v, Trajectory &traj);
+  int find(const Vec3 &pos, double v, const Trajectory &traj);
 };
 
 class LandingController {
@@ -98,29 +98,29 @@ public:
 
   LandingController(void);
   ~LandingController(void);
-  int configure(std::string config_file);
-  int loadTrajectory(Vec3 pos, Vec3 target_pos_bf, double v);
-  int prepBlackbox(std::string blackbox_file);
+  int configure(const std::string &config_file);
+  int loadTrajectory(const Vec3 &pos, const Vec3 &target_pos_bf, double v);
+  int prepBlackbox(const std::string &blackbox_file);
   int recordTrajectoryIndex(void);
-  int record(Vec3 pos,
-             Vec3 vel,
-             Vec2 wp_pos,
-             Vec2 wp_vel,
-             Vec2 wp_inputs,
-             Vec3 target_pos_bf,
-             Vec3 target_vel_bf,
-             Vec3 rpy,
+  int record(const Vec3 &pos,
+             const Vec3 &vel,
+             const Vec2 &wp_pos,
+             const Vec2 &wp_vel,
+             const Vec2 &wp_inputs,
+             const Vec3 &target_pos_bf,
+             const Vec3 &target_vel_bf,
+             const Vec3 &rpy,
              double thrust,
              double dt);
-  Vec4 calculateVelocityErrors(Vec3 v_errors,
-                               Vec3 p_errors,
+  Vec4 calculateVelocityErrors(const Vec3 &v_errors,
+                               const Vec3 &p_errors,
                                double yaw,
                                double dt);
-  int calculate(Vec3 target_pos_bf,
-                Vec3 target_vel_bf,
-                Vec3 pos,
-                Vec3 vel,
-                Quaternion orientation,
+  int calculate(const Vec3 &target_pos_bf,
+                const Vec3 &target_vel_bf,
+                const Vec3 &pos,
+                const Vec3 &vel,
+                const Quaternion &orientation,
                 double yaw,
                 double dt);
   void reset(void);

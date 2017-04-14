@@ -19,8 +19,11 @@ public:
   PID yaw_controller;
 
   AttitudeController(void);
-  Vec4 calculate(Vec4 setpoints, Vec4 actual, double dt);
-  Vec4 calculate(Vec4 psetpoints, Vec4 vsetpoints, Vec4 actual, double dt);
+  Vec4 calculate(const Vec4 &setpoints, const Vec4 &actual, double dt);
+  Vec4 calculate(const Vec4 &psetpoints,
+                 const Vec4 &vsetpoints,
+                 const Vec4 &actual,
+                 double dt);
 };
 
 }  // end of yarl namespace

@@ -16,7 +16,7 @@ EKF::EKF(void) {
   this->S_p = MatX();
 }
 
-int EKF::configure(VecX mu, MatX R, MatX Q) {
+int EKF::configure(const VecX &mu, const MatX &R, const MatX &Q) {
   int nb_states;
 
   nb_states = mu.size();
@@ -35,13 +35,13 @@ int EKF::configure(VecX mu, MatX R, MatX Q) {
   return 0;
 }
 
-int EKF::predictionUpdate(VecX g, MatX G) {
+int EKF::predictionUpdate(const VecX &g, const MatX &G) {
   mu_p = g;
   S_p = G * S * G.transpose() + R;
   return 0;
 }
 
-int EKF::measurementUpdate(VecX h, MatX H, VecX y) {
+int EKF::measurementUpdate(const VecX &h, const MatX &H, const VecX &y) {
   K = S_p * H.transpose() * (H * S_p * H.transpose() + Q).inverse();
   mu = mu_p + K * (y - h);
   S = (I - K * H) * S_p;

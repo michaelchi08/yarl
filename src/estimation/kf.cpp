@@ -19,7 +19,10 @@ KF::KF(void) {
   this->S_p = MatX();
 }
 
-int KF::configure(VecX mu, MatX R, MatX C, MatX Q) {
+int KF::configure(const VecX &mu,
+                  const MatX &R,
+                  const MatX &C,
+                  const MatX &Q) {
   int nb_states;
 
   nb_states = mu.size();
@@ -41,7 +44,7 @@ int KF::configure(VecX mu, MatX R, MatX C, MatX Q) {
   return 0;
 }
 
-int KF::estimate(MatX A, VecX y) {
+int KF::estimate(const MatX &A, const VecX &y) {
   // prediction update
   mu_p = A * mu;
   S_p = A * S * A.transpose() + R;

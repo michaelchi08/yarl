@@ -14,7 +14,9 @@ Trajectory::Trajectory(void) {
   this->p0 << 0.0, 0.0, 0.0;
 }
 
-int Trajectory::load(int index, std::string filepath, Vec3 p0) {
+int Trajectory::load(int index,
+                     const std::string &filepath,
+                     const Vec3 &pos) {
   MatX traj_data;
   Vec2 p, v, u, rel_p, rel_v;
 
@@ -62,12 +64,12 @@ int Trajectory::load(int index, std::string filepath, Vec3 p0) {
     this->rel_vel.push_back(rel_v);
   }
 
-  this->p0 = p0;
+  this->p0 = pos;
   this->loaded = true;
   return 0;
 }
 
-int Trajectory::update(Vec3 pos,
+int Trajectory::update(const Vec3 pos,
                        Vec2 &wp_pos,
                        Vec2 &wp_vel,
                        Vec2 &wp_inputs) {
@@ -151,7 +153,7 @@ TrajectoryIndex::TrajectoryIndex(void) {
   this->vel_thres = 0.0;
 }
 
-int TrajectoryIndex::load(std::string index_file,
+int TrajectoryIndex::load(const std::string &index_file,
                           double pos_thres,
                           double vel_thres) {
   // pre-check
@@ -179,7 +181,7 @@ int TrajectoryIndex::load(std::string index_file,
   return 0;
 }
 
-int TrajectoryIndex::find(Vec3 pos, double v, Trajectory &traj) {
+int TrajectoryIndex::find(const Vec3 &pos, double v, const Trajectory &traj) {
   bool p_ok, v_ok;
   std::vector<int> matches;
   std::string traj_file;
@@ -273,7 +275,7 @@ LandingController::~LandingController(void) {
   }
 }
 
-int LandingController::configure(std::string config_file) {
+int LandingController::configure(const std::string &config_file) {
   ConfigParser parser;
   std::string config_dir;
   std::string traj_index_file;
@@ -349,8 +351,8 @@ int LandingController::configure(std::string config_file) {
   return 0;
 }
 
-int LandingController::loadTrajectory(Vec3 pos,
-                                      Vec3 target_pos_bf,
+int LandingController::loadTrajectory(const Vec3 &pos,
+                                      const Vec3 &target_pos_bf,
                                       double v) {
   int retval;
 
@@ -371,7 +373,7 @@ int LandingController::loadTrajectory(Vec3 pos,
   return 0;
 }
 
-int LandingController::prepBlackbox(std::string blackbox_file) {
+int LandingController::prepBlackbox(const std::string &blackbox_file) {
   // setup
   this->blackbox.open(blackbox_file);
   if (!this->blackbox) {
@@ -426,14 +428,14 @@ int LandingController::recordTrajectoryIndex(void) {
                  << std::endl;
 }
 
-int LandingController::record(Vec3 pos,
-                              Vec3 vel,
-                              Vec2 wp_pos,
-                              Vec2 wp_vel,
-                              Vec2 wp_inputs,
-                              Vec3 target_pos_bf,
-                              Vec3 target_vel_bf,
-                              Vec3 rpy,
+int LandingController::record(const Vec3 &pos,
+                              const Vec3 &vel,
+                              const Vec2 &wp_pos,
+                              const Vec2 &wp_vel,
+                              const Vec2 &wp_inputs,
+                              const Vec3 &target_pos_bf,
+                              const Vec3 &target_vel_bf,
+                              const Vec3 &rpy,
                               double thrust,
                               double dt) {
   // pre-check
@@ -472,8 +474,8 @@ int LandingController::record(Vec3 pos,
   return 0;
 }
 
-Vec4 LandingController::calculateVelocityErrors(Vec3 v_errors,
-                                                Vec3 p_errors,
+Vec4 LandingController::calculateVelocityErrors(const Vec3 &v_errors,
+                                                const Vec3 &p_errors,
                                                 double yaw,
                                                 double dt) {
   double r, p, y, t;
@@ -528,11 +530,11 @@ Vec4 LandingController::calculateVelocityErrors(Vec3 v_errors,
   return this->outputs;
 }
 
-int LandingController::calculate(Vec3 target_pos_bf,
-                                 Vec3 target_vel_bf,
-                                 Vec3 pos,
-                                 Vec3 vel,
-                                 Quaternion orientation,
+int LandingController::calculate(const Vec3 &target_pos_bf,
+                                 const Vec3 &target_vel_bf,
+                                 const Vec3 &pos,
+                                 const Vec3 &vel,
+                                 const Quaternion &orientation,
                                  double yaw,
                                  double dt) {
   int retval;

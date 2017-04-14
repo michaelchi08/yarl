@@ -11,7 +11,9 @@ AttitudeController::AttitudeController(void) {
   this->yaw_controller = PID(200.0, 0.5, 10.0);
 }
 
-Vec4 AttitudeController::calculate(Vec4 setpoints, Vec4 actual, double dt) {
+Vec4 AttitudeController::calculate(const Vec4 &setpoints,
+                                   const Vec4 &actual,
+                                   double dt) {
   double r, p, y, t;
   Vec4 outputs;
   double actual_yaw, setpoint_yaw, error_yaw;
@@ -67,9 +69,9 @@ Vec4 AttitudeController::calculate(Vec4 setpoints, Vec4 actual, double dt) {
   return outputs;
 }
 
-Vec4 AttitudeController::calculate(Vec4 psetpoints,
-                                   Vec4 vsetpoints,
-                                   Vec4 actual,
+Vec4 AttitudeController::calculate(const Vec4 &psetpoints,
+                                   const Vec4 &vsetpoints,
+                                   const Vec4 &actual,
                                    double dt) {
   Vec4 setpoints;
   setpoints = psetpoints + vsetpoints;

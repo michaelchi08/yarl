@@ -22,9 +22,9 @@ struct EKF {
   MatX S_p;
 
   EKF(void);
-  int configure(VecX mu, MatX R, MatX Q);
-  int predictionUpdate(VecX g, MatX G);
-  int measurementUpdate(VecX h, MatX H, VecX y);
+  int configure(const VecX &mu, const MatX &R, const MatX &Q);
+  int predictionUpdate(const VecX &g, const MatX &G);
+  int measurementUpdate(const VecX &h, const MatX &H, const VecX &y);
 };
 
 }  // end of yarl namespace

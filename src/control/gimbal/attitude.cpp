@@ -7,7 +7,9 @@ AttitudeController::AttitudeController(void) {
   this->pitch_controller = PID(0.3, 0.0, 0.2);
 }
 
-VecX AttitudeController::calculate(Vec3 setpoints, Vec3 actual, double dt) {
+VecX AttitudeController::calculate(const Vec3 &setpoints,
+                                   const Vec3 &actual,
+                                   double dt) {
   Vec3 outputs;
 
   // check rate

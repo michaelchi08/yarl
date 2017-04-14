@@ -23,7 +23,7 @@ TrackingController::TrackingController(void) {
   this->att_cmd = AttitudeCommand();
 }
 
-int TrackingController::configure(std::string config_file) {
+int TrackingController::configure(const std::string &config_file) {
   ConfigParser parser;
 
   // load config
@@ -67,7 +67,7 @@ int TrackingController::configure(std::string config_file) {
   return 0;
 }
 
-AttitudeCommand TrackingController::calculate(Vec3 errors,
+AttitudeCommand TrackingController::calculate(const Vec3 &errors,
                                               double yaw,
                                               double dt) {
   double r, p, y, t;
@@ -110,9 +110,9 @@ AttitudeCommand TrackingController::calculate(Vec3 errors,
   return AttitudeCommand(this->outputs);
 }
 
-AttitudeCommand TrackingController::calculate(Vec3 target_pos_bf,
-                                              Vec3 pos,
-                                              Vec3 pos_prev,
+AttitudeCommand TrackingController::calculate(const Vec3 &target_pos_bf,
+                                              const Vec3 &pos,
+                                              const Vec3 &pos_prev,
                                               double yaw,
                                               double dt) {
   Vec3 errors;

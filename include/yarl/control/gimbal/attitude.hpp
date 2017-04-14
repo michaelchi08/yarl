@@ -17,7 +17,7 @@ public:
   Vec3 outputs;
 
   AttitudeController(void);
-  VecX calculate(Vec3 setpoints, Vec3 actual, double dt);
+  VecX calculate(const Vec3 &setpoints, const Vec3 &actual, double dt);
 };
 
 }  // end of yarl namespace

@@ -22,7 +22,7 @@ VelocityController::VelocityController(void) {
   this->att_cmd = Vec4();
 }
 
-int VelocityController::configure(std::string config_file) {
+int VelocityController::configure(const std::string &config_file) {
   ConfigParser parser;
 
   // load config
@@ -58,7 +58,9 @@ int VelocityController::configure(std::string config_file) {
   return 0;
 }
 
-Vec4 VelocityController::calculate(Vec3 setpoints, Vec3 actual, double dt) {
+Vec4 VelocityController::calculate(const Vec3 &setpoints,
+                                   const Vec3 &actual,
+                                   double dt) {
   double r, p, y, t;
   Vec3 errors, euler;
   Vec4 outputs;

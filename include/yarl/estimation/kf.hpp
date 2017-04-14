@@ -26,8 +26,8 @@ public:
   MatX S_p;
 
   KF(void);
-  int configure(VecX mu, MatX R, MatX C, MatX Q);
-  int estimate(MatX A, VecX y);
+  int configure(const VecX &mu, const MatX &R, const MatX &C, const MatX &Q);
+  int estimate(const MatX &A, const VecX &y);
 };
 
 }  // end of yarl namespace
