@@ -18,7 +18,7 @@ public:
   void clear(void);
   int best(Tree &tree);
   int evaluate(void);
-  int copyFrom(Population &p);
+  int copyFrom(const Population &p);
   void print(void);
 };
 

@@ -27,8 +27,11 @@ public:
 
   RANSAC(void);
   int configure(int max_iter, double threshold_ratio, double threshold_dist);
-  int randomSample(MatX &data, Vec2 &sample);
-  int computeDistances(MatX &data, Vec2 &p1, Vec2 &p2, VecX &dists);
+  int randomSample(const MatX &data, Vec2 &sample);
+  int computeDistances(const MatX &data,
+                       const Vec2 &p1,
+                       const Vec2 &p2,
+                       VecX &dists);
   int computeInliers(VecX &dists);
   int update(Vec2 &p1, Vec2 &p2);
   void printStats(void);

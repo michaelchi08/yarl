@@ -24,8 +24,12 @@ class HalsteadMetric {
 };
 
 // FUNCTIONS
-double mse(const Data desired, const std::string predict, VecX predicted);
-double sse(const Data desired, const std::string predict, VecX predicted);
+double mse(const Data &desired,
+           const std::string &predict,
+           const VecX &predicted);
+double sse(const Data &desired,
+           const std::string &predict,
+           const VecX &predicted);
 
 }  // end of gp namespace
 }  // end of yarl namespace

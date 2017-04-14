@@ -54,9 +54,9 @@ public:
   double error;
 
   LMAOpt(void);
-  int configure(LMASettings settings);
-  int evalFunction(VecX beta, double &error);
-  int calcGradients(VecX beta);
+  int configure(const LMASettings &settings);
+  int evalFunction(const VecX &beta, double &error);
+  int calcGradients(const VecX &beta);
   int iterate(void);
   int optimize(void);
 };

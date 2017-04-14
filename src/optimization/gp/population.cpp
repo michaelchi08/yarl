@@ -67,7 +67,7 @@ int Population::best(Tree &best) {
   return 0;
 }
 
-int Population::copyFrom(Population &population) {
+int Population::copyFrom(const Population &population) {
   Tree *tree;
 
   // generate population

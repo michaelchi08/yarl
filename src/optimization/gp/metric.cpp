@@ -3,7 +3,9 @@
 namespace yarl {
 namespace gp {
 
-double mse(const Data desired, std::string predict, VecX predicted) {
+double mse(const Data &desired,
+           const std::string &predict,
+           const VecX &predicted) {
   double error_sum, mse;
   int predict_index;
 
@@ -26,7 +28,9 @@ double mse(const Data desired, std::string predict, VecX predicted) {
   return mse;
 }
 
-double sse(Data desired, std::string predict, VecX predicted) {
+double sse(const Data &desired,
+           const std::string &predict,
+           const VecX &predicted) {
   double error_sum, sse;
   int predict_index;
 

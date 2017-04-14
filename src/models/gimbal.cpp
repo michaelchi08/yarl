@@ -24,7 +24,7 @@ GimbalModel::GimbalModel(void) {
   this->target_attitude_if << 0.0, 0.0, 0.0;
 }
 
-GimbalModel::GimbalModel(VecX pose) {
+GimbalModel::GimbalModel(const VecX &pose) {
   this->states = VecX(4);
   this->states(0) = pose(0);  // roll position
   this->states(1) = pose(1);  // roll velocity
@@ -46,7 +46,7 @@ GimbalModel::GimbalModel(VecX pose) {
   this->target_attitude_if << 0.0, 0.0, 0.0;
 }
 
-int GimbalModel::update(Vec3 motor_inputs, double dt) {
+int GimbalModel::update(const Vec3 &motor_inputs, double dt) {
   float ph, th;
   float ph_vel, th_vel;
   Vec3 euler, target;
@@ -96,7 +96,7 @@ Vec3 GimbalModel::attitudeControllerControl(double dt) {
   return motor_inputs;
 }
 
-void GimbalModel::setFrameOrientation(Quaternion frame_if) {
+void GimbalModel::setFrameOrientation(const Quaternion &frame_if) {
   Vec3 euler;
 
   // filter out yaw - we do not need it
@@ -107,13 +107,13 @@ void GimbalModel::setFrameOrientation(Quaternion frame_if) {
   euler2quat(euler, 321, this->frame_orientation);
 }
 
-void GimbalModel::setAttitude(Vec3 euler_if) {
+void GimbalModel::setAttitude(const Vec3 &euler_if) {
   this->target_attitude_if(0) = euler_if(0);
   this->target_attitude_if(1) = euler_if(1);
   this->target_attitude_if(2) = 0.0;
 }
 
-Vec3 GimbalModel::getTargetInBF(Vec3 target_cf) {
+Vec3 GimbalModel::getTargetInBF(const Vec3 &target_cf) {
   Vec3 target_nwu;
   Mat3 R;
   Vec3 t;
@@ -133,9 +133,9 @@ Vec3 GimbalModel::getTargetInBF(Vec3 target_cf) {
   return (R * target_nwu + t);
 }
 
-Vec3 GimbalModel::getTargetInBPF(Vec3 target_cf,
-                                 Quaternion body_if,
-                                 Quaternion joint_bf) {
+Vec3 GimbalModel::getTargetInBPF(const Vec3 &target_cf,
+                                 const Quaternion &body_if,
+                                 const Quaternion &joint_bf) {
   Vec3 p, target_bpf;
   Mat3 R_body, R_joint;
 
@@ -154,7 +154,7 @@ Vec3 GimbalModel::getTargetInBPF(Vec3 target_cf,
   return target_bpf;
 }
 
-void GimbalModel::trackTarget(Vec3 target_cf) {
+void GimbalModel::trackTarget(const Vec3 &target_cf) {
   double dist;
   Vec3 target;
 

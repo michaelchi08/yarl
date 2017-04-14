@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-Vec3 two_wheel_model(Vec3 x, Vec2 u, float dt) {
+Vec3 two_wheel_model(const Vec3 &x, const Vec2 &u, float dt) {
   Vec3 g;
 
   g(0) = x(0) + u(0) * cos(x(2)) * dt;
@@ -12,7 +12,7 @@ Vec3 two_wheel_model(Vec3 x, Vec2 u, float dt) {
   return g;
 }
 
-Mat3 two_wheel_linearized_model(Vec3 x, Vec2 u, float dt) {
+Mat3 two_wheel_linearized_model(const Vec3 &x, const Vec2 &u, float dt) {
   Mat3 G;
 
   // clang-format off
@@ -24,7 +24,7 @@ Mat3 two_wheel_linearized_model(Vec3 x, Vec2 u, float dt) {
   return G;
 }
 
-Vec4 two_wheel_3d_model(Vec4 x, Vec3 u, float dt) {
+Vec4 two_wheel_3d_model(const Vec4 &x, const Vec3 &u, float dt) {
   Vec4 g;
 
   g(0) = x(0) + u(0) * cos(x(3)) * dt;

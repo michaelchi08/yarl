@@ -12,7 +12,7 @@ Data::Data(void) {
   this->data = MatX();
 }
 
-int Data::load(const MatX data, std::vector<std::string> &fields) {
+int Data::load(const MatX &data, const std::vector<std::string> &fields) {
   // pre-eheck
   if (this->loaded) {
     this->fields.clear();
@@ -66,7 +66,7 @@ Dataset::Dataset(void) {
   this->predict = "";
 }
 
-int Dataset::load(Data d, float train, float valid, float test) {
+int Dataset::load(const Data &d, float train, float valid, float test) {
   double train_rows, valid_rows, test_rows;
   MatX train_mat, valid_mat, test_mat;
 

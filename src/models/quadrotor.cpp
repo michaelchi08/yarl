@@ -37,7 +37,7 @@ QuadrotorModel::QuadrotorModel(void) {
   this->position_controller = PositionController();
 }
 
-QuadrotorModel::QuadrotorModel(VecX pose) {
+QuadrotorModel::QuadrotorModel(const VecX &pose) {
   this->states = VecX(12);
   this->states(0) = pose(3);  // roll
   this->states(1) = pose(4);  // pitch
@@ -75,60 +75,48 @@ QuadrotorModel::QuadrotorModel(VecX pose) {
   this->position_controller = PositionController();
 }
 
-int QuadrotorModel::update(VecX motor_inputs, double dt) {
-  double ph, th, ps;
-  double p, q, r;
-  double x, y, z;
-  double vx, vy, vz;
+int QuadrotorModel::update(const VecX &motor_inputs, double dt) {
+  double ph = this->states(0);
+  double th = this->states(1);
+  double ps = this->states(2);
 
-  double Ix, Iy, Iz;
-  double kr, kt;
-  double tauf, taup, tauq, taur;
-  double m, g;
+  double p = this->states(3);
+  double q = this->states(4);
+  double r = this->states(5);
 
-  Mat4 A;
-  Vec4 tau;
+  double x = this->states(6);
+  double y = this->states(7);
+  double z = this->states(8);
 
-  // setup
-  ph = this->states(0);
-  th = this->states(1);
-  ps = this->states(2);
+  double vx = this->states(9);
+  double vy = this->states(10);
+  double vz = this->states(11);
 
-  p = this->states(3);
-  q = this->states(4);
-  r = this->states(5);
+  double Ix = this->Ix;
+  double Iy = this->Iy;
+  double Iz = this->Iz;
 
-  x = this->states(6);
-  y = this->states(7);
-  z = this->states(8);
+  double kr = this->kr;
+  double kt = this->kt;
 
-  vx = this->states(9);
-  vy = this->states(10);
-  vz = this->states(11);
-
-  Ix = this->Ix;
-  Iy = this->Iy;
-  Iz = this->Iz;
-
-  kr = this->kr;
-  kt = this->kt;
-
-  m = this->m;
-  g = this->g;
+  double m = this->m;
+  double g = this->g;
 
   // convert motor inputs to angular p, q, r and total thrust
   // clang-format off
+  Mat4 A;
   A << 1.0, 1.0, 1.0, 1.0,
        0.0, -this->l, 0.0, this->l,
        -this->l, 0.0, this->l, 0.0,
        -this->d, this->d, -this->d, this->d;
   // clang-format on
 
+  Vec4 tau;
   tau = A * motor_inputs;
-  tauf = tau(0);
-  taup = tau(1);
-  tauq = tau(2);
-  taur = tau(3);
+  double tauf = tau(0);
+  double taup = tau(1);
+  double tauq = tau(2);
+  double taur = tau(3);
 
   // update
   // clang-format off
@@ -254,18 +242,15 @@ VecX QuadrotorModel::getVelocity(void) {
 }
 
 void QuadrotorModel::printState(void) {
-  float x, y, z;
-  float phi, theta, psi;
-
   // phi, theta, psi
-  phi = this->states(0);
-  theta = this->states(1);
-  psi = this->states(2);
+  float phi = this->states(0);
+  float theta = this->states(1);
+  float psi = this->states(2);
 
   // x, y, z
-  x = this->states(6);
-  y = this->states(7);
-  z = this->states(8);
+  float x = this->states(6);
+  float y = this->states(7);
+  float z = this->states(8);
 
   // print states
   printf("x: %f\t", x);

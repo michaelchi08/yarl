@@ -38,7 +38,7 @@ LMAOpt::LMAOpt(void) {
   this->error = FLT_MAX;
 }
 
-int LMAOpt::configure(LMASettings settings) {
+int LMAOpt::configure(const LMASettings &settings) {
   this->configured = true;
 
   this->max_iter = settings.max_iter;
@@ -63,7 +63,7 @@ int LMAOpt::configure(LMASettings settings) {
   return 0;
 }
 
-int LMAOpt::evalFunction(VecX beta, double &error) {
+int LMAOpt::evalFunction(const VecX &beta, double &error) {
   // pre-check
   if (this->configured == false) {
     return -1;
@@ -82,7 +82,7 @@ int LMAOpt::evalFunction(VecX beta, double &error) {
   return 0;
 }
 
-int LMAOpt::calcGradients(VecX beta) {
+int LMAOpt::calcGradients(const VecX &beta) {
   // pre-check
   if (this->configured == false) {
     return -1;

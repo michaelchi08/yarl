@@ -6,13 +6,13 @@
 
 namespace yarl {
 
-double ackley(VecX x);
-double beale(VecX x);
-double booth(VecX x);
-double matyas(VecX x);
-double sphere(VecX x);
-double rosenbrock(VecX x, VecX beta);
-VecX rosenbrock_jacobian(VecX x, VecX beta);
+double ackley(const VecX &x);
+double beale(const VecX &x);
+double booth(const VecX &x);
+double matyas(const VecX &x);
+double sphere(const VecX &x);
+double rosenbrock(const VecX &x, const VecX &beta);
+VecX rosenbrock_jacobian(const VecX &x, const VecX &beta);
 
 }  // end of yarl namespace
 #endif

@@ -33,8 +33,8 @@ public:
   PositionController position_controller;
 
   QuadrotorModel(void);
-  QuadrotorModel(VecX pose);
-  int update(VecX motor_inputs, double dt);
+  QuadrotorModel(const VecX &pose);
+  int update(const VecX &motor_inputs, double dt);
   VecX attitudeControllerControl(double dt);
   VecX positionControllerControl(double dt);
   VecX velocityControllerControl(double dt);

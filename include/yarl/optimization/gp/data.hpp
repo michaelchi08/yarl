@@ -20,7 +20,7 @@ public:
   MatX data;
 
   Data(void);
-  int load(const MatX data, std::vector<std::string> &fields);
+  int load(const MatX &data, const std::vector<std::string> &fields);
   int load(const std::string &data_file);
   int fieldIndex(const std::string &field) const;
 };
@@ -32,7 +32,7 @@ class Dataset {
   std::string predict;
 
   Dataset(void);
-  int load(Data data, float train, float validation, float test);
+  int load(const Data &data, float train, float validation, float test);
 };
 
 }  // end of gp namespace

@@ -54,7 +54,7 @@ void Node::setAsConstant(double constant) {
   this->data = VecX();
 }
 
-void Node::setAsInput(std::string input) {
+void Node::setAsInput(const std::string &input) {
   // general
   this->type = INPUT;
   this->parent = NULL;
@@ -138,7 +138,7 @@ void Node::setAsBinaryFunc(int function_type) {
   this->data = VecX();
 }
 
-bool Node::isTermNode(void) {
+bool Node::isTermNode(void) const {
   if (this->type == CONST || this->type == INPUT || this->type == FEVAL) {
     return true;
   } else {
@@ -146,7 +146,7 @@ bool Node::isTermNode(void) {
   }
 }
 
-bool Node::isFuncNode(void) {
+bool Node::isFuncNode(void) const {
   if (this->type == UFUNC || this->type == BFUNC) {
     return true;
   } else {
@@ -154,7 +154,7 @@ bool Node::isFuncNode(void) {
   }
 }
 
-int Node::copyFrom(Node &target) {
+int Node::copyFrom(const Node &target) {
   // general
   this->type = target.type;
   this->parent = target.parent;
@@ -187,7 +187,7 @@ int Node::copyFrom(Node &target) {
   return 0;
 }
 
-int Node::deepCopyFrom(Node &target) {
+int Node::deepCopyFrom(const Node &target) {
   // general
   this->type = target.type;
   this->parent = target.parent;
@@ -216,7 +216,7 @@ int Node::deepCopyFrom(Node &target) {
   return 0;
 }
 
-bool Node::equals(Node &target) {
+bool Node::equals(const Node &target) {
   // pre-check
   if (this->type != target.type) {
     return false;
@@ -257,7 +257,7 @@ bool Node::equals(Node &target) {
   return true;
 }
 
-bool Node::deepEquals(Node &target) {
+bool Node::deepEquals(const Node &target) {
   int retval;
 
   if (this->isTermNode() && target.isTermNode()) {

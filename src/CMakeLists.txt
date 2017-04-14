@@ -40,7 +40,6 @@ ADD_LIBRARY(
   optimization/optimizers/lmaopt.cpp
   optimization/optimizers/ransac.cpp
   optimization/benchmark.cpp
-  optimization/testcase.cpp
   # UTILS
   utils/config.cpp
   utils/data.cpp

@@ -84,7 +84,7 @@ public:
   ~Tree(void);
   int configure(TreeConfig *tc, Data *data);
   void clear(void);
-  int copyFrom(Tree &t);
+  int copyFrom(const Tree &t);
   void updateTraverse(Node *node, int depth);
   void update(void);
   int build(int method, Node &node, int depth);

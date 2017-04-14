@@ -12,8 +12,8 @@ GDOpt::GDOpt(void) {
 }
 
 int GDOpt::configure(int max_iter,
-                     VecX eta,
-                     VecX x,
+                     const VecX &eta,
+                     const VecX &x,
                      std::function<double(VecX x)> f) {
   this->configured = true;
 

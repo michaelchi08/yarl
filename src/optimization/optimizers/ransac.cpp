@@ -30,7 +30,7 @@ int RANSAC::configure(int max_iter, double thresh_ratio, double thresh_dist) {
   return 0;
 }
 
-int RANSAC::randomSample(MatX &data, Vec2 &sample) {
+int RANSAC::randomSample(const MatX &data, Vec2 &sample) {
   int rand_index;
 
   // pre-check
@@ -49,7 +49,10 @@ int RANSAC::randomSample(MatX &data, Vec2 &sample) {
   return 0;
 }
 
-int RANSAC::computeDistances(MatX &data, Vec2 &p1, Vec2 &p2, VecX &dists) {
+int RANSAC::computeDistances(const MatX &data,
+                             const Vec2 &p1,
+                             const Vec2 &p2,
+                             VecX &dists) {
   double pdiff_norm;
   Vec2 pdiff, pdiff_unit, norm;
   MatX repmat(2, 1);

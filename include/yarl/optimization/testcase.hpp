@@ -30,7 +30,7 @@ public:
   int configure(void);
   void createR(double roll, double pitch, double yaw, Mat3 &R);
   void createR(double qx, double qy, double qz, double qw, Mat3 &R);
-  void createP(Mat3 K, Mat3 R, Vec3 t, MatX &P);
+  void createP(const Mat3 &K, const Mat3 &R, const Vec3 &t, MatX &P);
   void generateRandom3DPoints(TestRange range, int nb_pts, yarl::MatX &pts);
   void project3DTo2D(MatX P, MatX pts_3d, MatX &pts_2d);
   void project3DTo2D(Mat3 K, Mat3 R, Vec3 t, MatX pts_3d, MatX &pts_2d);

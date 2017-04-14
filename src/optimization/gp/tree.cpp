@@ -216,7 +216,7 @@ void Tree::clear(void) {
   this->tc = NULL;
 }
 
-int Tree::copyFrom(Tree &target) {
+int Tree::copyFrom(const Tree &target) {
   if (this->root == NULL) {
     this->root = new Node();
   }
