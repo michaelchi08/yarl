@@ -1,6 +1,10 @@
 #ifndef YARL_VISION_DATASET_HPP
 #define YARL_VISION_DATASET_HPP
 
+#include <errno.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
 #include "yarl/utils/utils.hpp"
 #include "yarl/vision/utils.hpp"
 #include "yarl/models/two_wheel.hpp"
@@ -38,13 +42,14 @@ public:
 
 
   TestDataset(void);
-  int configure(std::string config_file);
+  int configure(const std::string &config_file);
   int generateRandom3DFeatures(MatX &features);
-  int record3DFeatures(std::string output_path, const MatX &features);
+  int record3DFeatures(const std::string &output_path, const MatX &features);
   int recordObservedFeatures(double time,
-                             std::string output_path,
+                             const Vec3 &x,
+                             const std::string &output_path,
                              std::vector<std::pair<Vec2, Vec3>> &observed);
-  int generateTestData(std::string output_path);
+  int generateTestData(const std::string &output_path);
 };
 
 }  // end of yarl namespace

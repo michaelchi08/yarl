@@ -29,9 +29,9 @@ int TestCamera::checkFeatures(double dt,
                               const Vec3 &rpy,
                               const Vec3 &t,
                               std::vector<std::pair<Vec2, Vec3>> &observed) {
-  Vec3 f_img, rpy_edn, t_edn;
+  Vec3 f_2d, rpy_edn, t_edn;
   std::pair<Vec2, Vec3> obs;
-  Vec4 f_3d;
+  Vec4 f_3d, f_3d_edn;
   Mat3 R;
   MatX P;
 
@@ -48,28 +48,35 @@ int TestCamera::checkFeatures(double dt,
   nwu2edn(t, t_edn);
 
   // projection matrix
-  projection_matrix(this->K, R, t_edn, P);
+  projection_matrix(this->K, R, -R * t_edn, P);
 
   // check which features in 3d are observable from camera
+  observed.clear();
   for (int i = 0; i < features.cols(); i++) {
+    // convert feature in NWU to EDN coordinate system
     f_3d = features.block(0, i, 4, 1);
-    f_img = P * f_3d;
+    f_3d_edn(0) = -f_3d(1);
+    f_3d_edn(1) = -f_3d(2);
+    f_3d_edn(2) = f_3d(0);
+    f_3d_edn(3) = 1.0;
+
+    // project 3D world point to 2D image plane
+    f_2d = P * f_3d_edn;
 
     // check to see if feature is valid and infront of camera
-    if (fltcmp(f_img(2), 0.0) == 0) {
-      continue;  // go to next loop iteration
-    }
+    if (f_2d(2) >= 1.0) {
+      // normalize pixels
+      f_2d(0) = f_2d(0) / f_2d(2);
+      f_2d(1) = f_2d(1) / f_2d(2);
+      f_2d(2) = f_2d(2) / f_2d(2);
 
-    // normalize pixels
-    f_img(0) = f_img(0) / f_img(2);
-    f_img(1) = f_img(1) / f_img(2);
-    f_img(2) = f_img(2) / f_img(2);
-
-    // check to see if feature observed is within image plane
-    if ((f_img(0) < this->image_width) && (f_img(0) > 0)) {
-      if ((f_img(1) < this->image_height) && (f_img(1) > 0)) {
-        obs = std::make_pair(f_img.block(0, 0, 2, 1), f_3d.block(0, 0, 3, 1));
-        observed.push_back(obs);
+      // check to see if feature observed is within image plane
+      if ((f_2d(0) < this->image_width) && (f_2d(0) > 0)) {
+        if ((f_2d(1) < this->image_height) && (f_2d(1) > 0)) {
+          obs =
+            std::make_pair(f_2d.block(0, 0, 2, 1), f_3d.block(0, 0, 3, 1));
+          observed.push_back(obs);
+        }
       }
     }
   }
@@ -88,7 +95,7 @@ TestDataset::TestDataset(void) {
   this->feature_z_bounds = Vec2();
 }
 
-int TestDataset::configure(const std::string config_file) {
+int TestDataset::configure(const std::string &config_file) {
   ConfigParser parser;
   double fx, fy, cx, cy;
 
@@ -139,7 +146,7 @@ static void prep_header(std::ofstream &output_file) {
   // clang-format on
 }
 
-static void record_observation(std::ofstream &output_file, Vec3 &x) {
+static void record_observation(std::ofstream &output_file, const Vec3 &x) {
   output_file << x(0) << ",";
   output_file << x(1) << ",";
   output_file << x(2) << ",";
@@ -175,14 +182,16 @@ int TestDataset::generateRandom3DFeatures(MatX &features) {
   return 0;
 }
 
-int TestDataset::record3DFeatures(std::string output_path,
+int TestDataset::record3DFeatures(const std::string &output_path,
                                   const MatX &features) {
-  return mat2csv(output_path, features.transpose());
+  return mat2csv(output_path,
+                 features.block(0, 0, 3, features.cols()).transpose());
 }
 
 int TestDataset::recordObservedFeatures(
   double time,
-  std::string output_path,
+  const Vec3 &x,
+  const std::string &output_path,
   std::vector<std::pair<Vec2, Vec3>> &observed) {
   std::ofstream outfile(output_path);
   Vec2 f_2d;
@@ -198,6 +207,7 @@ int TestDataset::recordObservedFeatures(
   // time and number of observed features
   outfile << time << std::endl;
   outfile << observed.size() << std::endl;
+  outfile << x(0) << "," << x(1) << "," << x(2) << std::endl;
 
   // features
   for (auto feature : observed) {
@@ -216,12 +226,14 @@ int TestDataset::recordObservedFeatures(
   return 0;
 }
 
-int TestDataset::generateTestData(std::string output_path) {
+int TestDataset::generateTestData(const std::string &save_path) {
+  int retval;
   Vec3 x, t, rpy;
   Vec2 u;
   MatX features;
   double w, dt, time;
   std::ofstream output_file;
+  std::ofstream index_file;
   std::vector<std::pair<Vec2, Vec3>> observed;
   std::ostringstream oss;
 
@@ -230,19 +242,33 @@ int TestDataset::generateTestData(std::string output_path) {
     return -1;
   }
 
+  // mkdir calibration directory
+  retval = mkdir(save_path.c_str(), ACCESSPERMS);
+  if (retval != 0) {
+    switch (errno) {
+      case EACCES: log_err(MKDIR_PERMISSION_DENIED, save_path.c_str()); break;
+      case ENOTDIR: log_err(MKDIR_INVALID, save_path.c_str()); break;
+      case EEXIST: log_err(MKDIR_EXISTS, save_path.c_str()); break;
+      default: log_err(MKDIR_FAILED, save_path.c_str()); break;
+    }
+    return -2;
+  }
+
   // setup
-  output_file.open(output_path);
+  output_file.open(save_path + "/state.dat");
   prep_header(output_file);
+  index_file.open(save_path + "/index.dat");
   calculate_circle_angular_velocity(0.5, 1.0, w);
   this->generateRandom3DFeatures(features);
+  this->record3DFeatures("/tmp/test/features.dat", features);
 
   // initialize states
   dt = 0.01;
   time = 0.0;
   x << 0.0, 0.0, 0.0;
-  u << 1.0, 0;
+  u << 2.0, 0;
 
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 300; i++) {
     // update state
     x = two_wheel_model(x, u, dt);
     time += dt;
@@ -252,9 +278,10 @@ int TestDataset::generateTestData(std::string output_path) {
     t << x(0), x(1), 0.0;
     if (this->camera.checkFeatures(dt, features, rpy, t, observed) == 0) {
       oss.str("");
-      oss << "/tmp/observed_" << this->camera.frame << ".dat";
-      std::cout << oss.str() << std::endl;
-      this->recordObservedFeatures(time, oss.str(), observed);
+      oss << "/tmp/test/observed_" << this->camera.frame << ".dat";
+      this->recordObservedFeatures(time, x, oss.str(), observed);
+
+      index_file << oss.str() << std::endl;
     }
 
     // record state
@@ -263,6 +290,7 @@ int TestDataset::generateTestData(std::string output_path) {
 
   // clean up
   output_file.close();
+  index_file.close();
   return 0;
 }
 

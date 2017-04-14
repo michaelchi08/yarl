@@ -3,17 +3,17 @@
   <camera>
     <image_width>640</image_width>
     <image_height>640</image_height>
-    <fx>554.38</fx>
-    <fy>554.38</fy>
+    <fx>554.25</fx>
+    <fy>554.25</fy>
     <cx>320.0</cx>
     <cy>320.0</cy>
-    <hz>60</hz>
+    <hz>10</hz>
   </camera>
   <feature_points>
     <nb_features>10</nb_features>
     <x>
-      <min>-1.0</min>
-      <max>1.0</max>
+      <min>0.0</min>
+      <max>10.0</max>
     </x>
     <y>
       <min>-1.0</min>

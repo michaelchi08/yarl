@@ -14,12 +14,6 @@
 
 namespace yarl {
 
-// ERROR MESSAGES
-#define ECALIBDIRPERM "permission denied! while creating [%s]!"
-#define ECALIBNOTDIR "[%s] is not a dir!"
-#define ECALIBDIREXIST "[%s] already exists!"
-#define ECALIBDIR "failed to create [%s]!"
-
 // CALIBRATION STATES
 #define IDEL 0
 #define CAPTURING 1
