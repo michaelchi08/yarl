@@ -49,11 +49,11 @@ public:
   }
 };
 
-int csvrows(std::string file_path);
-int csvcols(std::string file_path);
-int csvheader(std::string file_path, std::vector<std::string> &fields);
-int csv2mat(std::string file_path, bool header, MatX &data);
-int mat2csv(std::string file_path, MatX data);
+int csvrows(const std::string &file_path);
+int csvcols(const std::string &file_path);
+int csvheader(const std::string &file_path, std::vector<std::string> &fields);
+int csv2mat(const std::string &file_path, bool header, MatX &data);
+int mat2csv(const std::string &file_path, MatX data);
 
 }  // end of yarl namespace
 #endif

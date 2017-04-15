@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-bool cvMatIsEqual(const cv::Mat m1, const cv::Mat m2) {
+bool cvMatIsEqual(const cv::Mat &m1, const cv::Mat &m2) {
   cv::Mat diff;
 
   // pre-check

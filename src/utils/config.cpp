@@ -19,84 +19,84 @@ ConfigParser::~ConfigParser(void) {
 }
 
 // clang-format off
-void ConfigParser::addParam(std::string key, bool *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, bool *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(BOOL, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, int *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, int *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(INT, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, float *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, float *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(FLOAT, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, double *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, double *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(DOUBLE, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, std::string *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, std::string *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(STRING, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, std::vector<bool> *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, std::vector<bool> *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(BOOL_ARRAY, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, std::vector<int> *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, std::vector<int> *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(INT_ARRAY, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, std::vector<float> *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, std::vector<float> *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(FLOAT_ARRAY, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, std::vector<double> *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, std::vector<double> *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(DOUBLE_ARRAY, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, std::vector<std::string> *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, std::vector<std::string> *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(STRING_ARRAY, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, Vec2 *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, Vec2 *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(VEC2, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, Vec3 *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, Vec3 *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(VEC3, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, Vec4 *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, Vec4 *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(VEC4, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, VecX *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, VecX *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(VECX, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, Mat2 *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, Mat2 *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(MAT2, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, Mat3 *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, Mat3 *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(MAT3, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, Mat4 *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, Mat4 *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(MAT4, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, MatX *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, MatX *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(MATX, out, optional);
 }
 
-void ConfigParser::addParam(std::string key, cv::Mat *out, bool optional) {
+void ConfigParser::addParam(const std::string &key, cv::Mat *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(CVMAT, out, optional);
 }
 // clang-format on
 
-int ConfigParser::setXMLPointer(std::string key) {
+int ConfigParser::setXMLPointer(const std::string &key) {
   xmlChar *xpath;
   xmlXPathContextPtr context;
 
@@ -144,7 +144,7 @@ void ConfigParser::resetXMLPointer(void) {
   }
 }
 
-int ConfigParser::getXMLValue(std::string key, std::string &value) {
+int ConfigParser::getXMLValue(const std::string &key, std::string &value) {
   int retval;
   xmlNode *xml_node;
   xmlChar *xml_value;
@@ -177,7 +177,7 @@ int ConfigParser::getXMLValue(std::string key, std::string &value) {
   return retval;
 }
 
-int ConfigParser::getXMLValues(std::string key,
+int ConfigParser::getXMLValues(const std::string &key,
                                std::vector<std::string> &values) {
   int retval;
   xmlNode *xml_node;
@@ -219,18 +219,19 @@ int ConfigParser::getXMLValues(std::string key,
   }
 }
 
-int ConfigParser::checkVector(std::string key, enum ConfigDataType type) {
+int ConfigParser::checkVector(const std::string &key,
+                              enum ConfigDataType type) {
   int retval;
-  std::string xml_value;
-  std::vector<std::string> data;
 
   // check key
+  std::string xml_value;
   retval = this->getXMLValue(key + "/vec", xml_value);
   if (retval != 0) {
     return retval;
   }
 
   // check number of values
+  std::vector<std::string> data;
   split(xml_value, ',', data);
   switch (type) {
     case VEC2: retval = (data.size() == 2) ? 0 : EVECINVSZ; break;
@@ -243,23 +244,26 @@ int ConfigParser::checkVector(std::string key, enum ConfigDataType type) {
   return retval;
 }
 
-int ConfigParser::checkMatrix(std::string key, enum ConfigDataType type) {
-  int retval, rows, cols;
-  std::string xml_value;
-  std::vector<std::string> data;
+int ConfigParser::checkMatrix(const std::string &key,
+                              enum ConfigDataType type) {
+  int retval;
 
   // get rows and cols
+  int rows;
   retval = this->parsePrimitive(key + "/rows", INT, &rows);
   if (retval != 0) {
     return retval;
   }
 
+  int cols;
   retval = this->parsePrimitive(key + "/cols", INT, &cols);
   if (retval != 0) {
     return retval;
   }
 
   // check data key
+  std::string xml_value;
+  std::vector<std::string> data;
   retval = this->getXMLValue(key + "/data", xml_value);
   if (retval != 0) {
     return retval;
@@ -284,7 +288,7 @@ int ConfigParser::checkMatrix(std::string key, enum ConfigDataType type) {
   return 0;
 }
 
-int ConfigParser::parsePrimitive(std::string key,
+int ConfigParser::parsePrimitive(const std::string &key,
                                  enum ConfigDataType type,
                                  void *out) {
   int retval;
@@ -326,13 +330,10 @@ int ConfigParser::parsePrimitive(std::string key,
   return 0;
 }
 
-int ConfigParser::parseArray(std::string key,
+int ConfigParser::parseArray(const std::string &key,
                              enum ConfigDataType type,
                              void *out) {
   int retval;
-  int i;
-  float f;
-  double d;
   std::vector<std::string> xml_values;
 
   // pre-check
@@ -356,15 +357,15 @@ int ConfigParser::parseArray(std::string key,
       }
 
     } else if (type == INT_ARRAY) {
-      i = atoi(v.c_str());
+      int i = atoi(v.c_str());
       reinterpret_cast<std::vector<int> *>(out)->push_back(i);
 
     } else if (type == FLOAT_ARRAY) {
-      f = static_cast<float>(atof(v.c_str()));
+      float f = static_cast<float>(atof(v.c_str()));
       reinterpret_cast<std::vector<float> *>(out)->push_back(f);
 
     } else if (type == DOUBLE_ARRAY) {
-      d = atof(v.c_str());
+      double d = atof(v.c_str());
       reinterpret_cast<std::vector<double> *>(out)->push_back(d);
 
     } else if (type == STRING_ARRAY) {
@@ -378,7 +379,7 @@ int ConfigParser::parseArray(std::string key,
   return 0;
 }
 
-int ConfigParser::parseVector(std::string key,
+int ConfigParser::parseVector(const std::string &key,
                               enum ConfigDataType type,
                               void *out) {
   int retval;
@@ -425,7 +426,7 @@ int ConfigParser::parseVector(std::string key,
   return 0;
 }
 
-int ConfigParser::parseMatrix(std::string key,
+int ConfigParser::parseMatrix(const std::string &key,
                               enum ConfigDataType type,
                               void *out) {
   int retval, rows, cols, idx;
@@ -525,7 +526,7 @@ int ConfigParser::parseMatrix(ConfigParam &param) {
   return this->parseMatrix(param.key, param.type, param.data);
 }
 
-int ConfigParser::load(const std::string config_file) {
+int ConfigParser::load(const std::string &config_file) {
   int retval;
 
   // pre-check

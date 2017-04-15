@@ -25,7 +25,7 @@ int fltcmp(double f1, double f2) {
   }
 }
 
-double median(std::vector<double> v) {
+double median(std::vector<double> &v) {
   double a, b;
 
   // sort values
@@ -52,7 +52,7 @@ double rad2deg(double r) {
   return r * (180 / M_PI);
 }
 
-void load_matrix(std::vector<double> x, int rows, int cols, MatX &y) {
+void load_matrix(const std::vector<double> x, int rows, int cols, MatX &y) {
   int idx;
 
   // setup
@@ -68,7 +68,7 @@ void load_matrix(std::vector<double> x, int rows, int cols, MatX &y) {
   }
 }
 
-void load_matrix(MatX A, std::vector<double> &x) {
+void load_matrix(const MatX &A, std::vector<double> &x) {
   for (int i = 0; i < A.cols(); i++) {
     for (int j = 0; j < A.rows(); j++) {
       x.push_back(A(j, i));
@@ -76,7 +76,7 @@ void load_matrix(MatX A, std::vector<double> &x) {
   }
 }
 
-int euler2quat(Vec3 euler, int euler_seq, Quaternion &q) {
+int euler2quat(const Vec3 &euler, int euler_seq, Quaternion &q) {
   double alpha, beta, gamma;
   double c1, c2, c3, s1, s2, s3;
   double w, x, y, z;
@@ -123,7 +123,7 @@ int euler2quat(Vec3 euler, int euler_seq, Quaternion &q) {
   return 0;
 }
 
-int euler2rot(Vec3 euler, int euler_seq, Mat3 &R) {
+int euler2rot(const Vec3 &euler, int euler_seq, Mat3 &R) {
   double R11, R12, R13, R21, R22, R23, R31, R32, R33;
   double phi, theta, psi;
 
@@ -168,7 +168,7 @@ int euler2rot(Vec3 euler, int euler_seq, Mat3 &R) {
   return 0;
 }
 
-int quat2euler(Quaternion q, int euler_seq, Vec3 &euler) {
+int quat2euler(const Quaternion &q, int euler_seq, Vec3 &euler) {
   double qw, qx, qy, qz;
   double qw2, qx2, qy2, qz2;
   double phi, theta, psi;
@@ -203,7 +203,7 @@ int quat2euler(Quaternion q, int euler_seq, Vec3 &euler) {
   return 0;
 }
 
-int quat2rot(Quaternion q, Mat3 &R) {
+int quat2rot(const Quaternion &q, Mat3 &R) {
   double qw, qx, qy, qz;
   // double qw2, qx2, qy2, qz2;
   double qx2, qy2, qz2;
@@ -250,7 +250,7 @@ int quat2rot(Quaternion q, Mat3 &R) {
   return 0;
 }
 
-void enu2nwu(Vec3 enu, Vec3 &nwu) {
+void enu2nwu(const Vec3 &enu, Vec3 &nwu) {
   // ENU frame:  (x - right, y - forward, z - up)
   // NWU frame:  (x - forward, y - left, z - up)
   nwu(0) = enu(1);
@@ -258,7 +258,7 @@ void enu2nwu(Vec3 enu, Vec3 &nwu) {
   nwu(2) = enu(2);
 }
 
-void cf2nwu(Vec3 cf, Vec3 &nwu) {
+void cf2nwu(const Vec3 &cf, Vec3 &nwu) {
   // camera frame:  (x - right, y - down, z - forward)
   // NWU frame:  (x - forward, y - left, z - up)
   nwu(0) = cf(2);
@@ -266,7 +266,7 @@ void cf2nwu(Vec3 cf, Vec3 &nwu) {
   nwu(2) = -cf(1);
 }
 
-void cf2enu(Vec3 cf, Vec3 &enu) {
+void cf2enu(const Vec3 &cf, Vec3 &enu) {
   // camera frame:  (x - right, y - down, z - forward)
   // ENU frame:  (x - right, y - forward, z - up)
   enu(0) = cf(0);
@@ -274,7 +274,7 @@ void cf2enu(Vec3 cf, Vec3 &enu) {
   enu(2) = -cf(1);
 }
 
-void ned2enu(Vec3 ned, Vec3 &enu) {
+void ned2enu(const Vec3 &ned, Vec3 &enu) {
   // NED frame:  (x - forward, y - right, z - down)
   // ENU frame:  (x - right, y - forward, z - up)
   enu(0) = ned(1);
@@ -282,14 +282,14 @@ void ned2enu(Vec3 ned, Vec3 &enu) {
   enu(2) = -ned(2);
 }
 
-void ned2nwu(Quaternion ned, Quaternion &nwu) {
+void ned2nwu(const Quaternion &ned, Quaternion &nwu) {
   nwu.w() = ned.w();
   nwu.x() = ned.x();
   nwu.y() = -ned.y();
   nwu.z() = -ned.z();
 }
 
-void nwu2enu(Vec3 nwu, Vec3 &enu) {
+void nwu2enu(const Vec3 &nwu, Vec3 &enu) {
   // NWU frame:  (x - forward, y - left, z - up)
   // ENU frame:  (x - right, y - forward, z - up)
   enu(0) = -nwu(1);
@@ -297,14 +297,14 @@ void nwu2enu(Vec3 nwu, Vec3 &enu) {
   enu(2) = nwu(2);
 }
 
-void nwu2ned(Quaternion nwu, Quaternion &ned) {
+void nwu2ned(const Quaternion &nwu, Quaternion &ned) {
   ned.w() = nwu.w();
   ned.x() = nwu.x();
   ned.y() = -nwu.y();
   ned.z() = -nwu.z();
 }
 
-void nwu2edn(Vec3 nwu, Vec3 &edn) {
+void nwu2edn(const Vec3 &nwu, Vec3 &edn) {
   // NWU frame:  (x - forward, y - left, z - up)
   // EDN frame:  (x - right, y - down, z - forward)
   edn(0) = -nwu(1);
@@ -312,9 +312,9 @@ void nwu2edn(Vec3 nwu, Vec3 &edn) {
   edn(2) = nwu(0);
 }
 
-void target2body(Vec3 target_pos_if,
-                 Vec3 body_pos_if,
-                 Quaternion body_orientation_if,
+void target2body(const Vec3 &target_pos_if,
+                 const Vec3 &body_pos_if,
+                 const Quaternion &body_orientation_if,
                  Vec3 &target_pos_bf) {
   Mat3 R;
   Vec3 pos_enu, pos_nwu;
@@ -330,9 +330,9 @@ void target2body(Vec3 target_pos_if,
   target_pos_bf = R * pos_nwu;
 }
 
-void target2body(Vec3 target_pos_if,
-                 Vec3 body_pos_if,
-                 Vec3 body_orientation_if,
+void target2body(const Vec3 &target_pos_if,
+                 const Vec3 &body_pos_if,
+                 const Vec3 &body_orientation_if,
                  Vec3 &target_pos_bf) {
   Mat3 R;
   Vec3 pos_enu, pos_nwu;
@@ -348,9 +348,9 @@ void target2body(Vec3 target_pos_if,
   target_pos_bf = R * pos_nwu;
 }
 
-void target2bodyplanar(Vec3 target_pos_if,
-                       Vec3 body_pos_if,
-                       Quaternion body_orientation_if,
+void target2bodyplanar(const Vec3 &target_pos_if,
+                       const Vec3 &body_pos_if,
+                       const Quaternion &body_orientation_if,
                        Vec3 &target_pos_bf) {
   Vec3 euler;
 
@@ -364,9 +364,9 @@ void target2bodyplanar(Vec3 target_pos_if,
   target2body(target_pos_if, body_pos_if, euler, target_pos_bf);
 }
 
-void target2bodyplanar(Vec3 target_pos_if,
-                       Vec3 body_pos_if,
-                       Vec3 body_orientation_if,
+void target2bodyplanar(const Vec3 &target_pos_if,
+                       const Vec3 &body_pos_if,
+                       const Vec3 &body_orientation_if,
                        Vec3 &target_pos_bf) {
   Vec3 euler;
 
@@ -377,9 +377,9 @@ void target2bodyplanar(Vec3 target_pos_if,
   target2body(target_pos_if, body_pos_if, euler, target_pos_bf);
 }
 
-void target2inertial(Vec3 target_pos_bf,
-                     Vec3 body_pos_if,
-                     Vec3 body_orientation_if,
+void target2inertial(const Vec3 &target_pos_bf,
+                     const Vec3 &body_pos_if,
+                     const Vec3 &body_orientation_if,
                      Vec3 &target_pos_if) {
   Mat3 R;
   Vec3 target_enu;
@@ -394,9 +394,9 @@ void target2inertial(Vec3 target_pos_bf,
   target_pos_if = (R * target_enu) + body_pos_if;
 }
 
-void target2inertial(Vec3 target_pos_bf,
-                     Vec3 body_pos_if,
-                     Quaternion body_orientation_if,
+void target2inertial(const Vec3 &target_pos_bf,
+                     const Vec3 &body_pos_if,
+                     const Quaternion &body_orientation_if,
                      Vec3 &target_pos_if) {
   Mat3 R;
   Vec3 target_enu;
@@ -411,7 +411,9 @@ void target2inertial(Vec3 target_pos_bf,
   target_pos_if = (R * target_enu) + body_pos_if;
 }
 
-void inertial2body(Vec3 enu_if, Quaternion orientation_if, Vec3 &nwu_bf) {
+void inertial2body(const Vec3 &enu_if,
+                   const Quaternion &orientation_if,
+                   Vec3 &nwu_bf) {
   Mat3 R;
   Vec3 euler, nwu_if;
 
@@ -428,7 +430,9 @@ void inertial2body(Vec3 enu_if, Quaternion orientation_if, Vec3 &nwu_bf) {
   nwu_bf = R * nwu_if;
 }
 
-void inertial2body(Vec3 enu_if, Vec3 orientation_if, Vec3 &nwu_bf) {
+void inertial2body(const Vec3 &enu_if,
+                   const Vec3 &orientation_if,
+                   Vec3 &nwu_bf) {
   Mat3 R;
   Vec3 nwu_if;
 
@@ -457,7 +461,7 @@ double wrapTo360(double euler_angle) {
   }
 }
 
-double cross_track_error(Vec2 p1, Vec2 p2, Vec2 pos) {
+double cross_track_error(const Vec2 &p1, const Vec2 &p2, const Vec2 &pos) {
   double x0, y0;
   double x1, y1;
   double x2, y2;
@@ -479,7 +483,7 @@ double cross_track_error(Vec2 p1, Vec2 p2, Vec2 pos) {
   return fabs(numerator) / denominator;
 }
 
-int point_left_right(Vec2 a, Vec2 b, Vec2 c) {
+int point_left_right(const Vec2 &a, const Vec2 &b, const Vec2 &c) {
   double x;
 
   x = (b(0) - a(0)) * (c(1) - a(1)) - (b(1) - a(1)) * (c(0) - a(0));
@@ -494,7 +498,10 @@ int point_left_right(Vec2 a, Vec2 b, Vec2 c) {
   return -1;
 }
 
-double closest_point(Vec2 a, Vec2 b, Vec2 p, Vec2 &closest) {
+double closest_point(const Vec2 &a,
+                     const Vec2 &b,
+                     const Vec2 &p,
+                     Vec2 &closest) {
   double t;
   Vec2 v1, v2;
 
@@ -513,7 +520,7 @@ double closest_point(Vec2 a, Vec2 b, Vec2 p, Vec2 &closest) {
   return t;
 }
 
-Vec2 linear_interpolation(Vec2 a, Vec2 b, double mu) {
+Vec2 linear_interpolation(const Vec2 &a, const Vec2 &b, double mu) {
   return a * (1 - mu) + b * mu;
 }
 

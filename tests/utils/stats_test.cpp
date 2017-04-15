@@ -23,7 +23,7 @@ TEST(Utils, linreg) {
   p << 20, 68;
   points.push_back(p);
 
-  linreg(points, &m, &c, &r);
+  linreg(points, m, c, r);
   std::cout << "m: " << m << std::endl;
   std::cout << "c: " << c << std::endl;
   std::cout << "r: " << r << std::endl;

@@ -6,7 +6,7 @@ inline static double square(double x) {
   return x * x;
 }
 
-int linreg(std::vector<Vec2> pts, double *m, double *c, double *r) {
+int linreg(const std::vector<Vec2> &pts, double &m, double &c, double &r) {
   // linear regression of form: y = mx + c
   Vec2 p;
   double sumx = 0.0;   // sum of x
@@ -27,22 +27,20 @@ int linreg(std::vector<Vec2> pts, double *m, double *c, double *r) {
   double denom = (pts.size() * sumx2 - square(sumx));
   if (denom == 0) {
     // singular matrix. can't solve the problem.
-    *m = 0;
-    *c = 0;
+    m = 0;
+    c = 0;
     if (r) {
-      *r = 0;
+      r = 0;
     }
     return -1;
   }
 
-  *m = (pts.size() * sumxy - sumx * sumy) / denom;
-  *c = (sumy * sumx2 - sumx * sumxy) / denom;
+  m = (pts.size() * sumxy - sumx * sumy) / denom;
+  c = (sumy * sumx2 - sumx * sumxy) / denom;
   // compute correlation coeff
-  if (r != NULL) {
-    *r = (sumxy - sumx * sumy / pts.size());
-    *r /= sqrt((sumx2 - square(sumx) / pts.size()) *
-               (sumy2 - square(sumy) / pts.size()));
-  }
+  r = (sumxy - sumx * sumy / pts.size());
+  r /= sqrt((sumx2 - square(sumx) / pts.size()) *
+            (sumy2 - square(sumy) / pts.size()));
 
   return 0;
 }

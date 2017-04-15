@@ -15,10 +15,10 @@ void rmtrailslash(std::string &path) {
   }
 }
 
-bool file_exists(const std::string &fp) {
+bool file_exists(const std::string &file_path) {
   FILE *file;
 
-  if ((file = fopen(fp.c_str(), "r"))) {
+  if ((file = fopen(file_path.c_str(), "r"))) {
     fclose(file);
     return true;
   } else {
@@ -26,7 +26,7 @@ bool file_exists(const std::string &fp) {
   }
 }
 
-std::vector<std::string> path_split(const std::string path) {
+std::vector<std::string> path_split(const std::string &path) {
   std::string s;
   std::vector<std::string> splits;
 
@@ -44,8 +44,8 @@ std::vector<std::string> path_split(const std::string path) {
   return splits;
 }
 
-void paths_combine(const std::string path1,
-                   const std::string path2,
+void paths_combine(const std::string &path1,
+                   const std::string &path2,
                    std::string &out) {
   int dirs_up;
   std::vector<std::string> splits1;

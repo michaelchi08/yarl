@@ -56,7 +56,7 @@ void Pose::print(void) {
 }
 
 // CSV
-int csvrows(std::string file_path) {
+int csvrows(const std::string &file_path) {
   int nb_rows;
   std::string line;
   std::fstream infile(file_path);
@@ -76,7 +76,7 @@ int csvrows(std::string file_path) {
   return nb_rows;
 }
 
-int csvcols(std::string file_path) {
+int csvcols(const std::string &file_path) {
   int nb_elements;
   std::string line;
   bool found_separator;
@@ -104,7 +104,8 @@ int csvcols(std::string file_path) {
   return (found_separator) ? nb_elements : 0;
 }
 
-int csvheader(std::string file_path, std::vector<std::string> &fields) {
+int csvheader(const std::string &file_path,
+              std::vector<std::string> &fields) {
   std::string line;
   std::fstream infile(file_path);
 
@@ -121,7 +122,7 @@ int csvheader(std::string file_path, std::vector<std::string> &fields) {
   return 0;
 }
 
-int csv2mat(std::string file_path, bool header, MatX &data) {
+int csv2mat(const std::string &file_path, bool header, MatX &data) {
   int line_no;
   int nb_rows;
   int nb_cols;
@@ -166,7 +167,7 @@ int csv2mat(std::string file_path, bool header, MatX &data) {
   return 0;
 }
 
-int mat2csv(std::string file_path, MatX data) {
+int mat2csv(const std::string &file_path, MatX data) {
   std::ofstream outfile(file_path);
 
   // open file

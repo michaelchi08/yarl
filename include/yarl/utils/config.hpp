@@ -89,45 +89,47 @@ public:
   ConfigParser(void);
   ~ConfigParser(void);
   // clang-format off
-  void addParam(std::string key, bool *out, bool optional = false);
-  void addParam(std::string key, int *out, bool optional = false);
-  void addParam(std::string key, float *out, bool optional = false);
-  void addParam(std::string key, double *out, bool optional = false);
-  void addParam(std::string key, std::string *out, bool optional = false);
-  void addParam(std::string key, std::vector<bool> *out, bool optional = false);
-  void addParam(std::string key, std::vector<int> *out, bool optional = false);
-  void addParam(std::string key, std::vector<float> *out, bool optional = false);
-  void addParam(std::string key, std::vector<double> *out, bool optional = false);
-  void addParam(std::string key, std::vector<std::string> *out, bool optional = false);
-  void addParam(std::string key, Vec2 *out, bool optional = false);
-  void addParam(std::string key, Vec3 *out, bool optional = false);
-  void addParam(std::string key, Vec4 *out, bool optional = false);
-  void addParam(std::string key, VecX *out, bool optional = false);
-  void addParam(std::string key, Mat2 *out, bool optional = false);
-  void addParam(std::string key, Mat3 *out, bool optional = false);
-  void addParam(std::string key, Mat4 *out, bool optional = false);
-  void addParam(std::string key, MatX *out, bool optional = false);
-  void addParam(std::string key, cv::Mat *out, bool optional = false);
+  void addParam(const std::string &key, bool *out, bool optional = false);
+  void addParam(const std::string &key, int *out, bool optional = false);
+  void addParam(const std::string &key, float *out, bool optional = false);
+  void addParam(const std::string &key, double *out, bool optional = false);
+  void addParam(const std::string &key, std::string *out, bool optional = false);
+  void addParam(const std::string &key, std::vector<bool> *out, bool optional = false);
+  void addParam(const std::string &key, std::vector<int> *out, bool optional = false);
+  void addParam(const std::string &key, std::vector<float> *out, bool optional = false);
+  void addParam(const std::string &key, std::vector<double> *out, bool optional = false);
+  void addParam(const std::string &key, std::vector<std::string> *out, bool optional = false);
+  void addParam(const std::string &key, Vec2 *out, bool optional = false);
+  void addParam(const std::string &key, Vec3 *out, bool optional = false);
+  void addParam(const std::string &key, Vec4 *out, bool optional = false);
+  void addParam(const std::string &key, VecX *out, bool optional = false);
+  void addParam(const std::string &key, Mat2 *out, bool optional = false);
+  void addParam(const std::string &key, Mat3 *out, bool optional = false);
+  void addParam(const std::string &key, Mat4 *out, bool optional = false);
+  void addParam(const std::string &key, MatX *out, bool optional = false);
+  void addParam(const std::string &key, cv::Mat *out, bool optional = false);
   // clang-format on
-  int setXMLPointer(std::string key);
+  int setXMLPointer(const std::string &key);
   void resetXMLPointer(void);
-  int getXMLValue(std::string key, std::string &value);
-  int getXMLValues(std::string key, std::vector<std::string> &values);
-  int checkVector(std::string key, enum ConfigDataType type);
-  int checkMatrix(std::string key, enum ConfigDataType type);
-  int parsePrimitive(std::string key, enum ConfigDataType type, void *out);
-  int parseArray(std::string key, enum ConfigDataType type, void *out);
-  int parseVector(std::string key, enum ConfigDataType type, void *out);
-  int parseMatrix(const std::string key, enum ConfigDataType type, void *out);
+  int getXMLValue(const std::string &key, std::string &value);
+  int getXMLValues(const std::string &key, std::vector<std::string> &values);
+  int checkVector(const std::string &key, enum ConfigDataType type);
+  int checkMatrix(const std::string &key, enum ConfigDataType type);
+  int parsePrimitive(const std::string &key,
+                     enum ConfigDataType type,
+                     void *out);
+  int parseArray(const std::string &key, enum ConfigDataType type, void *out);
+  int parseVector(const std::string &key,
+                  enum ConfigDataType type,
+                  void *out);
+  int parseMatrix(const std::string &key,
+                  enum ConfigDataType type,
+                  void *out);
   int parsePrimitive(ConfigParam &param);
   int parseArray(ConfigParam &param);
   int parseVector(ConfigParam &param);
   int parseMatrix(ConfigParam &param);
-  // int loadPrimitive(const ConfigParam param);
-  // int loadArray(const ConfigParam param);
-  // int loadVector(const ConfigParam param);
-  // int loadMatrix(const ConfigParam param);
-  int load(const std::string config_file);
+  int load(const std::string &config_file);
 };
 
 }  // end of yarl namespace
