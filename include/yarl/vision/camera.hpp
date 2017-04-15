@@ -10,7 +10,7 @@
 
 namespace yarl {
 
-class CameraConfig {
+struct CameraConfig {
 public:
   int camera_index;
   int image_width;
@@ -28,7 +28,8 @@ public:
 class Camera {
 public:
   bool configured;
-  cv::VideoCapture *capture;
+
+  cv::VideoCapture capture;
 
   int capture_index;
   int image_width;
@@ -39,10 +40,9 @@ public:
   Camera(void);
   ~Camera(void);
   int configure(int capture_index, int image_width, int image_height);
-  int configure(int capture_index, std::string calibration_file);
   int getFrame(cv::Mat &frame);
   int getUndistortFrame(cv::Mat &frame);
-  int saveFrame(cv::Mat &frame, std::string save_path);
+  int saveFrame(const cv::Mat &frame, const std::string &save_path);
   void close(void);
 };
 

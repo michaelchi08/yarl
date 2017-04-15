@@ -9,8 +9,7 @@
 
 namespace yarl {
 
-class Chessboard {
-public:
+struct Chessboard {
   bool configured;
 
   int nb_corners_rows;

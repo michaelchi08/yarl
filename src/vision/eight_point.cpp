@@ -33,17 +33,14 @@ void EightPoint::normalizePoints(MatX &pts1, MatX &pts2) {
   pts2 = (this->N * pts2.transpose()).transpose();
 }
 
-void EightPoint::formMatrixA(MatX &pts1, MatX &pts2, MatX &A) {
-  int rows;
-  VecX x1, x2, y1, y2, ones;
-
+void EightPoint::formMatrixA(const MatX &pts1, const MatX &pts2, MatX &A) {
   // setup
-  rows = pts1.rows();
-  x1 = pts1.block(0, 0, rows, 1);
-  x2 = pts2.block(0, 0, rows, 1);
-  y1 = pts1.block(0, 1, rows, 1);
-  y2 = pts2.block(0, 1, rows, 1);
-  ones = MatX::Ones(rows, 1);
+  int rows = pts1.rows();
+  VecX x1 = pts1.block(0, 0, rows, 1);
+  VecX x2 = pts2.block(0, 0, rows, 1);
+  VecX y1 = pts1.block(0, 1, rows, 1);
+  VecX y2 = pts2.block(0, 1, rows, 1);
+  VecX ones = MatX::Ones(rows, 1);
 
   // form matrix A; Af = 0
   A.resize(rows, 9);
@@ -58,7 +55,7 @@ void EightPoint::formMatrixA(MatX &pts1, MatX &pts2, MatX &A) {
   A.block(0, 8, rows, 1) = ones;
 }
 
-void EightPoint::approximateFundamentalMatrix(MatX &A, MatX &F) {
+void EightPoint::approximateFundamentalMatrix(const MatX &A, MatX &F) {
   MatX U, V;
   Eigen::JacobiSVD<MatX> svd;
 
@@ -96,7 +93,7 @@ void EightPoint::denormalizeFundamentalMatrix(MatX &F) {
   F = this->N.transpose() * F * this->N;
 }
 
-int EightPoint::estimate(MatX pts1, MatX pts2, MatX &F) {
+int EightPoint::estimate(MatX &pts1, MatX &pts2, MatX &F) {
   VecX S;
   MatX A;
 
@@ -117,7 +114,7 @@ int EightPoint::estimate(MatX pts1, MatX pts2, MatX &F) {
   return 0;
 }
 
-int EightPoint::estimate(MatX pts1, MatX pts2, Mat3 &K, Mat3 &E) {
+int EightPoint::estimate(MatX &pts1, MatX &pts2, Mat3 &K, Mat3 &E) {
   VecX S;
   MatX A, F;
 
@@ -141,35 +138,35 @@ int EightPoint::estimate(MatX pts1, MatX pts2, Mat3 &K, Mat3 &E) {
   return 0;
 }
 
-int EightPoint::obtainPossiblePoses(Mat3 E, std::vector<MatX> &poses) {
-  Mat3 W;
-  MatX U, V;
-  Vec3 T1, T2;
-  MatX R1, R2, P1, P2, P3, P4;
-  Eigen::JacobiSVD<MatX> svd;
-
+int EightPoint::obtainPossiblePoses(Mat3 &E, std::vector<MatX> &poses) {
   // pre-check
   if (this->configured == false) {
     return -1;
   }
 
   // setup
-  W << 0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0;
-  P1 = MatX::Zero(3, 4);
-  P2 = MatX::Zero(3, 4);
-  P3 = MatX::Zero(3, 4);
-  P4 = MatX::Zero(3, 4);
+  // clang-format off
+  Mat3 W;
+  W << 0.0, -1.0, 0.0,
+       1.0, 0.0, 0.0,
+       0.0, 0.0, 1.0;
+  MatX P1 = MatX::Zero(3, 4);
+  MatX P2 = MatX::Zero(3, 4);
+  MatX P3 = MatX::Zero(3, 4);
+  MatX P4 = MatX::Zero(3, 4);
+  // clang-format on
 
   // compute SVD of E
+  Eigen::JacobiSVD<MatX> svd;
   svd.compute(E, Eigen::ComputeFullU | Eigen::ComputeFullV);
-  U = svd.matrixU();
-  V = svd.matrixV();
+  MatX U = svd.matrixU();
+  MatX V = svd.matrixV();
 
   // construct 4 possible poses from essential matrix E
-  R1 = U * W * V.transpose();
-  R2 = U * W.transpose() * V.transpose();
-  T1 = U.block(0, 2, 3, 1);
-  T2 = -U.block(0, 2, 3, 1);
+  MatX R1 = U * W * V.transpose();
+  MatX R2 = U * W.transpose() * V.transpose();
+  Vec3 T1 = U.block(0, 2, 3, 1);
+  Vec3 T2 = -U.block(0, 2, 3, 1);
 
   // lambda = 1
   P1.block(0, 0, 3, 3) = R1;
@@ -192,23 +189,32 @@ int EightPoint::obtainPossiblePoses(Mat3 E, std::vector<MatX> &poses) {
   return 0;
 }
 
-int EightPoint::obtainPose(
-  Vec3 pt1, Vec3 pt2, Mat3 K1, Mat3 K2, std::vector<MatX> poses, MatX &pose) {
-  MatX P1(3, 4), P2(3, 4);
-  Mat4 A, V;
-  Vec4 p;
-  Vec3 x;
-  float out_norm, w, T, d1, d2;
-  Eigen::JacobiSVD<MatX> svd;
-
+int EightPoint::obtainPose(Vec3 &pt1,
+                           Vec3 &pt2,
+                           Mat3 &K1,
+                           Mat3 &K2,
+                           std::vector<MatX> &poses,
+                           MatX &pose) {
   // first camera matrix P1 (set as origin)
-  P1 << 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0;
+  // clang-format off
+  MatX P1(3, 4);
+  P1 << 1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0;
+  // clang-format on
 
   // normalize pt1 and pt2
   pt1 = K1.inverse() * pt1;
   pt2 = K2.inverse() * pt2;
 
   // for each camera matrix P, reproject the pair of points in 3D
+  MatX P2(3, 4);
+  Mat4 A, V;
+  Vec4 p;
+  Vec3 x;
+  float out_norm, w, T, d1, d2;
+  Eigen::JacobiSVD<MatX> svd;
+
   for (int i = 0; i < 4; i++) {
     // second camera matrix P2
     P2 = poses[i];

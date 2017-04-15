@@ -11,6 +11,7 @@
 namespace yarl {
 
 void rmtrailslash(std::string &path);
+std::string rmtrailslash(const std::string &path);
 bool file_exists(const std::string &file_path);
 std::vector<std::string> path_split(const std::string &path);
 void paths_combine(const std::string &path1,

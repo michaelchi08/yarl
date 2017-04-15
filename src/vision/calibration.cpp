@@ -11,17 +11,17 @@ Calibration::Calibration(void) {
   this->save_path = "./";
 }
 
-int Calibration::configure(std::string save_path,
-                           Chessboard &chessboard,
-                           cv::Size image_size,
+int Calibration::configure(const std::string &save_path,
+                           const Chessboard &chessboard,
+                           const cv::Size &image_size,
                            int nb_max_samples) {
   int retval;
 
   // setup
-  rmtrailslash(save_path);
+  std::string calib_dir = rmtrailslash(save_path);
 
   // mkdir calibration directory
-  retval = mkdir(save_path.c_str(), ACCESSPERMS);
+  retval = mkdir(calib_dir.c_str(), ACCESSPERMS);
   if (retval != 0) {
     switch (errno) {
       case EACCES: log_err(MKDIR_PERMISSION_DENIED, save_path.c_str()); break;
@@ -42,12 +42,8 @@ int Calibration::configure(std::string save_path,
   return 0;
 }
 
-bool Calibration::findChessboardCorners(cv::Mat &image,
+bool Calibration::findChessboardCorners(const cv::Mat &image,
                                         std::vector<cv::Point2f> &corners) {
-  int flags;
-  bool corners_found;
-  cv::Mat image_gray;
-
   // setup
   this->state = CAPTURING;
   if (corners.size()) {
@@ -55,10 +51,10 @@ bool Calibration::findChessboardCorners(cv::Mat &image,
   }
 
   // detect chessboard corners
-  flags = cv::CALIB_CB_ADAPTIVE_THRESH;
+  int flags = cv::CALIB_CB_ADAPTIVE_THRESH;
   flags += cv::CALIB_CB_NORMALIZE_IMAGE;
   flags += cv::CALIB_CB_FAST_CHECK;
-  corners_found = cv::findChessboardCorners(
+  bool corners_found = cv::findChessboardCorners(
     image, this->chessboard.board_size, corners, flags);
 
   // draw detected chessboard corners
@@ -68,12 +64,10 @@ bool Calibration::findChessboardCorners(cv::Mat &image,
   return corners_found;
 }
 
-int Calibration::saveImage(cv::Mat &image,
-                           std::vector<cv::Point2f> image_points) {
-  std::string image_path;
-
+int Calibration::saveImage(const cv::Mat &image,
+                           const std::vector<cv::Point2f> &img_points) {
   // pre-check
-  if ((int) image_points.size() != this->chessboard.nb_corners_total) {
+  if ((int) img_points.size() != this->chessboard.nb_corners_total) {
     log_info("failed to detect complete chessboard!");
     return -1;
   } else if (nb_samples >= nb_max_samples) {
@@ -84,7 +78,7 @@ int Calibration::saveImage(cv::Mat &image,
 
   // save image
   log_info("captured image [%d]", this->nb_samples);
-  image_path = this->save_path + "/";
+  std::string image_path = this->save_path + "/";
   image_path += "sample_" + std::to_string(this->nb_samples) + ".jpg";
   cv::imwrite(image_path, image);
 
@@ -94,12 +88,9 @@ int Calibration::saveImage(cv::Mat &image,
   return 0;
 }
 
-int Calibration::calibrate(std::vector<std::vector<cv::Point2f>> image_points,
-                           cv::Size image_size) {
-  bool camera_matrix_ok;
-  bool distortion_coefficients_ok;
-  std::vector<std::vector<cv::Point3f>> object_points(1);
-
+int Calibration::calibrate(
+  const std::vector<std::vector<cv::Point2f>> &img_points,
+  const cv::Size &image_size) {
   // pre-check
   if (this->state != READY_TO_CALIBRATE) {
     log_info("calibrator is not ready to calibrate!");
@@ -108,17 +99,18 @@ int Calibration::calibrate(std::vector<std::vector<cv::Point2f>> image_points,
 
   // hard-coding the object points - assuming chessboard is origin by
   // setting chessboard in the x-y plane (where z = 0).
+  std::vector<std::vector<cv::Point3f>> object_points;
   for (int i = 0; i < chessboard.nb_corners_rows; i++) {
     for (int j = 0; j < chessboard.nb_corners_columns; j++) {
       object_points[0].push_back(cv::Point3f(j, i, 0.0f));
     }
   }
-  object_points.resize(image_points.size(), object_points[0]);
+  object_points.resize(img_points.size(), object_points[0]);
 
   // calibrate camera
   this->reprojection_error =
     cv::calibrateCamera(object_points,
-                        image_points,
+                        img_points,
                         image_size,
                         this->camera_matrix,
                         this->distortion_coefficients,
@@ -126,81 +118,53 @@ int Calibration::calibrate(std::vector<std::vector<cv::Point2f>> image_points,
                         this->translation_vectors);
 
   // check results
-  camera_matrix_ok = cv::checkRange(this->camera_matrix);
-  distortion_coefficients_ok = cv::checkRange(this->distortion_coefficients);
-  if (camera_matrix_ok && distortion_coefficients_ok) {
+  bool camera_matrix_ok = cv::checkRange(this->camera_matrix);
+  bool distortion_ok = cv::checkRange(this->distortion_coefficients);
+  if (camera_matrix_ok && distortion_ok) {
     return 0;
   } else {
     return -1;
   }
 }
 
-// static void recordMatrix(YAML::Emitter &out, cv::Mat &mat) {
-//   // begin
-//   out << YAML::BeginMap;
-//
-//   // rows
-//   out << YAML::Key << "rows";
-//   out << YAML::Value << mat.rows;
-//
-//   // cols
-//   out << YAML::Key << "cols";
-//   out << YAML::Value << mat.cols;
-//
-//   // data
-//   out << YAML::Key << "data";
-//   out << YAML::Flow << YAML::BeginSeq;
-//   for (int i = 0; i < mat.rows; i++) {
-//     for (int j = 0; j < mat.cols; j++) {
-//       out << mat.at<double>(i, j);
-//     }
-//   }
-//   out << YAML::EndSeq;
-//
-//   // end
-//   out << YAML::EndMap;
-// }
+int Calibration::saveCalibrationOutputs(void) {
+  // setup
+  std::ofstream outfile;
+  outfile.open(this->save_path + "/" + CALIBRATION_FILENAME);
+  if (outfile.bad()) {
+    return -1;
+  }
 
-// int Calibration::saveCalibrationOutputs(void) {
-//   std::ofstream yaml_file;
-//
-//   // setup
-//   yaml_file.open(this->save_path + "/" + CALIBRATION_FILENAME);
-//   if (yaml_file.bad()) {
-//     return -1;
-//   }
-//
-//   // begin
-//   this->yaml_config << YAML::BeginMap;
-//
-//   // image width
-//   this->yaml_config << YAML::Key << "image_width";
-//   this->yaml_config << YAML::Value << this->image_size.width;
-//
-//   // image height
-//   this->yaml_config << YAML::Key << "image_height";
-//   this->yaml_config << YAML::Value << this->image_size.height;
-//
-//   // camera matrix
-//   this->yaml_config << YAML::Key << "camera_matrix";
-//   recordMatrix(this->yaml_config, this->camera_matrix);
-//
-//   // distortion coefficent
-//   this->yaml_config << YAML::Key << "distortion_coefficients";
-//   recordMatrix(this->yaml_config, this->distortion_coefficients);
-//
-//   // distortion coefficent
-//   this->yaml_config << YAML::Key << "reprojection_error";
-//   this->yaml_config << YAML::Value << this->reprojection_error;
-//
-//   // end
-//   this->yaml_config << YAML::EndMap;
-//
-//   // output yaml to file
-//   yaml_file << this->yaml_config.c_str();
-//   yaml_file.close();
-//
-//   return 0;
-// }
+  // image width and height
+  int img_width = this->image_size.width;
+  int img_height = this->image_size.height;
+  outfile << "<image_width>" << img_width << "</image_width>" << std::endl;
+  outfile << "<image_height>" << img_height << "</image_height>" << std::endl;
+
+  // camera matrix
+  double fx = this->camera_matrix.at<double>(0, 0);
+  double fy = this->camera_matrix.at<double>(1, 1);
+  double cx = this->camera_matrix.at<double>(0, 2);
+  double cy = this->camera_matrix.at<double>(1, 2);
+  outfile << "<fx>" << fx << "</fx>" << std::endl;
+  outfile << "<fy>" << fy << "</fy>" << std::endl;
+  outfile << "<cx>" << cx << "</cx>" << std::endl;
+  outfile << "<cy>" << cy << "</cy>" << std::endl;
+
+  // distortion coefficent
+  outfile << "<distortion_coefficients>";
+  // outfile << this->reprojection_error;
+  outfile << "</distortion_coefficients>" << std::endl;
+
+  // distortion coefficent
+  outfile << "<reprojection_error>";
+  outfile << this->reprojection_error;
+  outfile << "</reprojection_error>" << std::endl;
+
+  // close
+  outfile.close();
+
+  return 0;
+}
 
 }  // end of yarl namespace

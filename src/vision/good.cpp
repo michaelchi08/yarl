@@ -17,7 +17,8 @@ int GoodDetector::configure(void) {
   return 0;
 }
 
-int GoodDetector::detect(cv::Mat &image, std::vector<cv::Point2f> &points) {
+int GoodDetector::detect(const cv::Mat &image,
+                         std::vector<cv::Point2f> &points) {
   cv::goodFeaturesToTrack(image,
                           points,
                           this->max_corners,

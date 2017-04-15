@@ -15,9 +15,9 @@ public:
 
   FastDetector(void);
   int configure(int threshold, bool nonmax_suppression);
-  int detect(cv::Mat &image, std::vector<cv::KeyPoint> &keypoints);
-  int detect(cv::Mat &image, std::vector<cv::Point2f> &points);
-  int detect(cv::Mat &image, MatX &points);
+  int detect(const cv::Mat &image, std::vector<cv::KeyPoint> &keypoints);
+  int detect(const cv::Mat &image, std::vector<cv::Point2f> &points);
+  int detect(const cv::Mat &image, MatX &points);
 };
 
 }  // end of yarl namespace

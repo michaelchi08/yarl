@@ -28,7 +28,7 @@ double diag_focal_length(double hfov,
   return 2 * atan(sqrt(pow(fx, 2)) + sqrt(pow(fy, 2)));
 }
 
-void cvpts2mat(std::vector<cv::Point2f> points, MatX &mat) {
+void cvpts2mat(const std::vector<cv::Point2f> &points, MatX &mat) {
   cv::Point2f p;
 
   mat.resize(points.size(), 3);
@@ -40,13 +40,10 @@ void cvpts2mat(std::vector<cv::Point2f> points, MatX &mat) {
   }
 }
 
-void cvmatconcat(cv::Mat img1, cv::Mat img2, cv::Mat &out) {
-  cv::Size size1;
-  cv::Size size2;
-
+void cvmatconcat(const cv::Mat &img1, const cv::Mat &img2, cv::Mat &out) {
   // setup
-  size1 = img1.size();
-  size2 = img2.size();
+  cv::Size size1 = img1.size();
+  cv::Size size2 = img2.size();
   out = cv::Mat(size1.height, size1.width + size2.width, img1.type());
 
   // copy image 1 to the left
@@ -61,7 +58,7 @@ void cvmatconcat(cv::Mat img1, cv::Mat img2, cv::Mat &out) {
   out.adjustROI(0, 0, size1.width, 0);
 }
 
-void projection_matrix(Mat3 K, Mat3 R, Vec3 t, MatX &P) {
+void projection_matrix(const Mat3 &K, const Mat3 &R, const Vec3 &t, MatX &P) {
   MatX extrinsics;
 
   extrinsics.resize(3, 4);

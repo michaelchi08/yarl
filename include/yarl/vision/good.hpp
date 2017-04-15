@@ -20,7 +20,7 @@ public:
 
   GoodDetector(void);
   int configure(void);
-  int detect(cv::Mat &image, std::vector<cv::Point2f> &points);
+  int detect(const cv::Mat &image, std::vector<cv::Point2f> &points);
 };
 
 }  // end of yarl namespace

@@ -40,15 +40,16 @@ public:
   double reprojection_error;
 
   Calibration(void);
-  int configure(std::string calibration_path,
-                Chessboard &chessboard,
-                cv::Size image_size,
+  int configure(const std::string &save_path,
+                const Chessboard &chessboard,
+                const cv::Size &image_size,
                 int nb_max_samples);
-  bool findChessboardCorners(cv::Mat &image,
+  bool findChessboardCorners(const cv::Mat &image,
                              std::vector<cv::Point2f> &corners);
-  int saveImage(cv::Mat &image, std::vector<cv::Point2f> corners);
-  int calibrate(std::vector<std::vector<cv::Point2f>> image_points,
-                cv::Size image_size);
+  int saveImage(const cv::Mat &image,
+                const std::vector<cv::Point2f> &corners);
+  int calibrate(const std::vector<std::vector<cv::Point2f>> &image_points,
+                const cv::Size &image_size);
   int saveCalibrationOutputs(void);
 };
 

@@ -15,6 +15,22 @@ void rmtrailslash(std::string &path) {
   }
 }
 
+std::string rmtrailslash(const std::string &path) {
+  // pre-check
+  if (path.length() <= 0) {
+    return "";
+  }
+
+  // remove slash
+  std::string copy = path;
+  std::string::iterator it = copy.end() - 1;
+  if (*it == '/') {
+    copy.erase(it);
+  }
+
+  return copy;
+}
+
 bool file_exists(const std::string &file_path) {
   FILE *file;
 
