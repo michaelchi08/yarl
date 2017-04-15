@@ -17,9 +17,6 @@ Trajectory::Trajectory(void) {
 int Trajectory::load(int index,
                      const std::string &filepath,
                      const Vec3 &pos) {
-  MatX traj_data;
-  Vec2 p, v, u, rel_p, rel_v;
-
   // pre-check
   if (file_exists(filepath) == false) {
     log_err("File not found: %s", filepath.c_str());
@@ -38,6 +35,8 @@ int Trajectory::load(int index,
   // - rel_z
   // - rel_vx
   // - rel_vz
+  MatX traj_data;
+
   this->reset();
   this->index = index;
   csv2mat(filepath, true, traj_data);
@@ -50,6 +49,7 @@ int Trajectory::load(int index,
   }
 
   // set trajectory class
+  Vec2 p, v, u, rel_p, rel_v;
   for (int i = 0; i < traj_data.rows(); i++) {
     p << traj_data(i, 0), traj_data(i, 2);      // x, z
     v << traj_data(i, 1), traj_data(i, 3);      // vx, vz
@@ -73,12 +73,6 @@ int Trajectory::update(const Vec3 pos,
                        Vec2 &wp_pos,
                        Vec2 &wp_vel,
                        Vec2 &wp_inputs) {
-  double wp_percent;
-  Vec2 q_pos;
-  Vec2 wp_pos_start, wp_pos_end;
-  Vec2 wp_vel_start, wp_vel_end;
-  Vec2 wp_inputs_start, wp_inputs_end;
-
   // pre-check
   if (this->loaded == false) {
     return -1;
@@ -90,20 +84,20 @@ int Trajectory::update(const Vec3 pos,
   }
 
   // setup
-  wp_pos_start = this->pos.at(0);
-  wp_pos_end = this->pos.at(1);
+  Vec2 wp_pos_start = this->pos.at(0);
+  Vec2 wp_pos_end = this->pos.at(1);
 
-  wp_vel_start = this->vel.at(0);
-  wp_vel_end = this->vel.at(1);
+  Vec2 wp_vel_start = this->vel.at(0);
+  Vec2 wp_vel_end = this->vel.at(1);
 
-  wp_inputs_start = this->inputs.at(0);
-  wp_inputs_end = this->inputs.at(1);
+  Vec2 wp_inputs_start = this->inputs.at(0);
+  Vec2 wp_inputs_end = this->inputs.at(1);
 
-  q_pos(0) = (this->p0.block(0, 0, 2, 1) - pos.block(0, 0, 2, 1)).norm();
-  q_pos(1) = pos(2);
+  Vec2 q_pos(0) = (this->p0.block(0, 0, 2, 1) - pos.block(0, 0, 2, 1)).norm();
+  Vec2 q_pos(1) = pos(2);
 
   // find next waypoint position, velocity and inputs
-  wp_percent = closest_point(wp_pos_start, wp_pos_end, q_pos, wp_pos);
+  double wp_percent = closest_point(wp_pos_start, wp_pos_end, q_pos, wp_pos);
   wp_vel = linear_interpolation(wp_vel_start, wp_vel_end, wp_percent);
   wp_inputs =
     linear_interpolation(wp_inputs_start, wp_inputs_end, wp_percent);
@@ -182,10 +176,6 @@ int TrajectoryIndex::load(const std::string &index_file,
 }
 
 int TrajectoryIndex::find(const Vec3 &pos, double v, const Trajectory &traj) {
-  bool p_ok, v_ok;
-  std::vector<int> matches;
-  std::string traj_file;
-
   // pre-check
   if (this->loaded == false) {
     return -1;
@@ -199,6 +189,8 @@ int TrajectoryIndex::find(const Vec3 &pos, double v, const Trajectory &traj) {
 
   // find rows in the index that have same approx
   // start height (z) and velocity (v)
+  bool p_ok, v_ok;
+  std::vector<int> matches;
   for (int i = 0; i < this->index_data.rows(); i++) {
     p_ok = fabs(pos(2) - this->index_data(i, 1)) < this->pos_thres;
     v_ok = fabs(v - this->index_data(i, 2)) < this->vel_thres;
@@ -214,6 +206,7 @@ int TrajectoryIndex::find(const Vec3 &pos, double v, const Trajectory &traj) {
   }
 
   // load trajectory
+  std::string traj_file;
   traj_file = this->traj_dir + "/";
   traj_file += std::to_string((int) matches[0]) + ".csv";
   if (traj.load(matches[0], traj_file, pos) != 0) {
@@ -277,7 +270,6 @@ LandingController::~LandingController(void) {
 
 int LandingController::configure(const std::string &config_file) {
   ConfigParser parser;
-  std::string config_dir;
   std::string traj_index_file;
   std::string blackbox_file;
 
@@ -315,7 +307,7 @@ int LandingController::configure(const std::string &config_file) {
   }
 
   // load trajectory index
-  config_dir = std::string(dirname((char *) config_file.c_str()));
+  std::string config_dir = std::string(dirname((char *) config_file.c_str()));
   paths_combine(config_dir, traj_index_file, traj_index_file);
   if (this->traj_index.load(traj_index_file) != 0) {
     return -2;
@@ -354,10 +346,8 @@ int LandingController::configure(const std::string &config_file) {
 int LandingController::loadTrajectory(const Vec3 &pos,
                                       const Vec3 &target_pos_bf,
                                       double v) {
-  int retval;
-
   // find trajectory
-  retval = this->traj_index.find(pos, v, this->trajectory);
+  int retval = this->traj_index.find(pos, v, this->trajectory);
 
   // check retval
   if (retval == -2) {
@@ -381,44 +371,29 @@ int LandingController::prepBlackbox(const std::string &blackbox_file) {
   }
 
   // write header
-  this->blackbox << "dt"
-                 << ",";
-  this->blackbox << "x"
-                 << ",";
-  this->blackbox << "y"
-                 << ",";
-  this->blackbox << "z"
-                 << ",";
-  this->blackbox << "vx"
-                 << ",";
-  this->blackbox << "vy"
-                 << ",";
-  this->blackbox << "vz"
-                 << ",";
-  this->blackbox << "wp_pos_x"
-                 << ",";
-  this->blackbox << "wp_pos_z"
-                 << ",";
-  this->blackbox << "wp_vel_x"
-                 << ",";
-  this->blackbox << "wp_vel_z"
-                 << ",";
-  this->blackbox << "target_x_bf"
-                 << ",";
-  this->blackbox << "target_y_bf"
-                 << ",";
-  this->blackbox << "target_z_bf"
-                 << ",";
-  this->blackbox << "target_vx_bf"
-                 << ",";
-  this->blackbox << "target_vy_bf"
-                 << ",";
-  this->blackbox << "target_vz_bf"
-                 << ",";
-  this->blackbox << "roll";
-  this->blackbox << "pitch";
+  // clang-format off
+  this->blackbox << "dt" << ",";
+  this->blackbox << "x" << ",";
+  this->blackbox << "y" << ",";
+  this->blackbox << "z" << ",";
+  this->blackbox << "vx" << ",";
+  this->blackbox << "vy" << ",";
+  this->blackbox << "vz" << ",";
+  this->blackbox << "wp_pos_x" << ",";
+  this->blackbox << "wp_pos_z" << ",";
+  this->blackbox << "wp_vel_x" << ",";
+  this->blackbox << "wp_vel_z" << ",";
+  this->blackbox << "target_x_bf" << ",";
+  this->blackbox << "target_y_bf" << ",";
+  this->blackbox << "target_z_bf" << ",";
+  this->blackbox << "target_vx_bf" << ",";
+  this->blackbox << "target_vy_bf" << ",";
+  this->blackbox << "target_vz_bf" << ",";
+  this->blackbox << "roll" << ",";
+  this->blackbox << "pitch" << ",";
   this->blackbox << "yaw";
   this->blackbox << std::endl;
+  // clang-format on
 
   return 0;
 }
@@ -478,10 +453,6 @@ Vec4 LandingController::calculateVelocityErrors(const Vec3 &v_errors,
                                                 const Vec3 &p_errors,
                                                 double yaw,
                                                 double dt) {
-  double r, p, y, t;
-  Vec3 euler;
-  Mat3 R;
-
   // check rate
   this->dt += dt;
   if (this->dt < 0.01) {
@@ -489,6 +460,7 @@ Vec4 LandingController::calculateVelocityErrors(const Vec3 &v_errors,
   }
 
   // roll
+  double r, p, y, t;
   r = this->vy_k_p * v_errors(1);
   r += this->vy_k_i * p_errors(1);
   r += this->vy_k_d * (v_errors(1) - this->vy_error_prev) / this->dt;
@@ -538,26 +510,28 @@ int LandingController::calculate(const Vec3 &target_pos_bf,
                                  double yaw,
                                  double dt) {
   int retval;
-  Quaternion q;
-  Vec3 p_errors, v_errors, vel_bf, euler;
-  Vec2 wp_pos, wp_vel, wp_inputs, wp_rel_pos, wp_rel_vel;
 
   // obtain position and velocity waypoints
+  Vec2 wp_pos, wp_vel, wp_inputs, wp_rel_pos, wp_rel_vel;
   retval = this->trajectory.update(pos, wp_pos, wp_vel, wp_inputs);
   wp_rel_pos = this->trajectory.rel_pos.at(0);
   wp_rel_vel = this->trajectory.rel_vel.at(0);
 
   // calculate velocity in body frame
+  Vec3 euler, vel_bf;
+  Quaternion q;
   euler << 0, 0, yaw;
   euler2quat(euler, 321, q);
   inertial2body(vel, q, vel_bf);
 
   // calculate velocity errors (inertial version)
+  Vec3 v_errors;
   v_errors(0) = wp_vel(0) - vel_bf(0);
   v_errors(1) = target_vel_bf(1);
   v_errors(2) = wp_vel(1) - vel(2);
 
   // calculate position errors
+  Vec3 p_errors;
   p_errors(0) = wp_rel_pos(0) + target_pos_bf(0);
   p_errors(1) = target_pos_bf(1);
   p_errors(2) = wp_rel_pos(1) - pos(2);
@@ -610,11 +584,9 @@ void LandingController::reset(void) {
 }
 
 void LandingController::printOutputs(void) {
-  double r, p, t;
-
-  r = rad2deg(this->outputs(0));
-  p = rad2deg(this->outputs(1));
-  t = this->outputs(3);
+  double r = rad2deg(this->outputs(0));
+  double p = rad2deg(this->outputs(1));
+  double t = this->outputs(3);
 
   std::cout << "roll: " << std::setprecision(2) << r << "\t";
   std::cout << "pitch: " << std::setprecision(2) << p << "\t";

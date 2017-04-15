@@ -15,11 +15,6 @@ Vec4 PositionController::calculate(Vec3 setpoints,
                                    Vec4 actual,
                                    double yaw,
                                    double dt) {
-  double r, p, y, t;
-  Vec3 errors, euler;
-  Vec4 outputs;
-  Mat3 R;
-
   // check rate
   this->dt += dt;
   if (this->dt < 0.01) {
@@ -27,6 +22,8 @@ Vec4 PositionController::calculate(Vec3 setpoints,
   }
 
   // calculate RPY errors relative to quadrotor by incorporating yaw
+  Vec3 errors, euler;
+  Mat3 R;
   errors(0) = setpoints(0) - actual(0);
   errors(1) = setpoints(1) - actual(1);
   errors(2) = setpoints(2) - actual(2);
@@ -35,10 +32,11 @@ Vec4 PositionController::calculate(Vec3 setpoints,
   errors = R * errors;
 
   // roll, pitch, yaw and thrust
-  r = -this->y_controller.calculate(errors(1), 0.0, dt);
-  p = this->x_controller.calculate(errors(0), 0.0, dt);
-  y = yaw;
-  t = 0.5 + this->z_controller.calculate(errors(2), 0.0, dt);
+  double r = -this->y_controller.calculate(errors(1), 0.0, dt);
+  double p = this->x_controller.calculate(errors(0), 0.0, dt);
+  double y = yaw;
+  double t = 0.5 + this->z_controller.calculate(errors(2), 0.0, dt);
+  Vec4 outputs;
   outputs << r, p, y, t;
 
   // limit roll, pitch

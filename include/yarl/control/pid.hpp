@@ -1,9 +1,6 @@
 #ifndef YARL_CONTROL_PID_HPP
 #define YARL_CONTROL_PID_HPP
 
-#include <float.h>
-#include <math.h>
-
 namespace yarl {
 
 class PID {
