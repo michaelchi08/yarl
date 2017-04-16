@@ -2,79 +2,6 @@
 
 namespace yarl {
 
-QuadrotorModel::QuadrotorModel() {
-  this->states = VecX(12);
-  this->states(0) = 0.0;   // roll
-  this->states(1) = 0.0;   // pitch
-  this->states(2) = 0.0;   // yaw
-  this->states(3) = 0.0;   // angular velocity x
-  this->states(4) = 0.0;   // angular velocity y
-  this->states(5) = 0.0;   // angular velocity z
-  this->states(6) = 0.0;   // x
-  this->states(7) = 0.0;   // y
-  this->states(8) = 0.0;   // z
-  this->states(9) = 0.0;   // linear velocity x
-  this->states(10) = 0.0;  // linear velocity y
-  this->states(11) = 0.0;  // linear velocity z
-
-  this->Ix = 0.0963;  // inertial x
-  this->Iy = 0.0963;  // inertial y
-  this->Iz = 0.1927;  // inertial z
-
-  this->kr = 0.1;  // rotation drag constant
-  this->kt = 0.2;  // translation drag constant
-
-  this->l = 0.9;  // arm length
-  this->d = 1.0;  // drag
-
-  this->m = 1.0;   // mass of quad
-  this->g = 10.0;  // gravitational constant
-
-  this->attitude_setpoints = Vec4();
-  this->position_setpoints = VecX(3);
-
-  this->attitude_controller = AttitudeController();
-  this->position_controller = PositionController();
-}
-
-QuadrotorModel::QuadrotorModel(const VecX &pose) {
-  this->states = VecX(12);
-  this->states(0) = pose(3);  // roll
-  this->states(1) = pose(4);  // pitch
-  this->states(2) = pose(5);  // yaw
-  this->states(3) = 0.0;      // angular velocity x
-  this->states(4) = 0.0;      // angular velocity y
-  this->states(5) = 0.0;      // angular velocity z
-  this->states(6) = pose(0);  // x
-  this->states(7) = pose(1);  // y
-  this->states(8) = pose(2);  // z
-  this->states(9) = 0.0;      // linear velocity x
-  this->states(10) = 0.0;     // linear velocity y
-  this->states(11) = 0.0;     // linear velocity z
-
-  this->Ix = 0.0963;  // inertial x
-  this->Iy = 0.0963;  // inertial y
-  this->Iz = 0.1927;  // inertial z
-
-  this->kr = 0.1;  // rotation drag constant
-  this->kt = 0.2;  // translation drag constant;
-
-  this->l = 0.9;  // arm length
-  this->d = 1.0;  // drag
-
-  this->m = 1.0;   // mass of quad
-  this->g = 10.0;  // gravitational constant
-
-  this->attitude_setpoints = Vec4();
-  this->attitude_setpoints << 0.0, 0.0, 0.0, 0.5;
-
-  this->position_setpoints = VecX(3);
-  this->position_setpoints << pose(0), pose(1), pose(2);
-
-  this->attitude_controller = AttitudeController();
-  this->position_controller = PositionController();
-}
-
 int QuadrotorModel::update(const VecX &motor_inputs, double dt) {
   double ph = this->states(0);
   double th = this->states(1);
@@ -142,7 +69,7 @@ int QuadrotorModel::update(const VecX &motor_inputs, double dt) {
   return 0;
 }
 
-VecX QuadrotorModel::attitudeControllerControl(double dt) {
+Vec4 QuadrotorModel::attitudeControllerControl(double dt) {
   Vec4 actual_attitude;
   Vec4 motor_inputs;
 
@@ -160,7 +87,7 @@ VecX QuadrotorModel::attitudeControllerControl(double dt) {
   return motor_inputs;
 }
 
-VecX QuadrotorModel::positionControllerControl(double dt) {
+Vec4 QuadrotorModel::positionControllerControl(double dt) {
   Vec4 motor_inputs;
   Vec4 actual_position;
   Vec4 actual_attitude;

@@ -12,11 +12,11 @@ namespace yarl {
 
 class GimbalModel {
 public:
-  VecX states;
+  Vec4 states;
 
+  Pose camera_offset;
   double Ix;
   double Iy;
-  Pose camera_offset;
 
   Vec3 joint_setpoints;
   AttitudeController joint_controller;
@@ -25,8 +25,38 @@ public:
   Quaternion joint_orientation;
   Vec3 target_attitude_if;
 
-  GimbalModel();
-  GimbalModel(const VecX &pose);
+  GimbalModel()
+    : states(0.0, 0.0, 0.0, 0.0),
+
+      // downward facing camera (gimbal is NWU frame)
+      // NWU frame: (x - forward, y - left, z - up)
+      camera_offset(0.0, deg2rad(90.0), 0.0, 0.0, 0.0, 0.0),
+      Ix(0.01),
+      Iy(0.01),
+
+      joint_setpoints(0.0, 0.0, 0.0),
+      joint_controller(),
+
+      frame_orientation(0.0, 0.0, 0.0, 0.0),
+      joint_orientation(0.0, 0.0, 0.0, 0.0),
+      target_attitude_if(0.0, 0.0, 0.0) {}
+
+  GimbalModel(const VecX &pose)
+    : states(pose(0), pose(1), pose(2), pose(3)),
+
+      // downward facing camera (gimbal is NWU frame)
+      // NWU frame: (x - forward, y - left, z - up)
+      camera_offset(0.0, deg2rad(90.0), 0.0, 0.0, 0.0, 0.0),
+      Ix(0.01),
+      Iy(0.01),
+
+      joint_setpoints(0.0, 0.0, 0.0),
+      joint_controller(),
+
+      frame_orientation(0.0, 0.0, 0.0, 0.0),
+      joint_orientation(0.0, 0.0, 0.0, 0.0),
+      target_attitude_if(0.0, 0.0, 0.0) {}
+
   int update(const Vec3 &motor_inputs, double dt);
   Vec3 attitudeControllerControl(double dt);
   void setFrameOrientation(const Quaternion &frame_if);

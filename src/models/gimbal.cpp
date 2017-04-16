@@ -2,50 +2,6 @@
 
 namespace yarl {
 
-GimbalModel::GimbalModel() {
-  this->states = VecX(4);
-  this->states(0) = 0.0;  // roll position
-  this->states(1) = 0.0;  // roll velocity
-  this->states(2) = 0.0;  // pitch position
-  this->states(3) = 0.0;  // pitch velocity
-
-  this->Ix = 0.01;
-  this->Iy = 0.01;
-
-  // downward facing camera (gimbal is NWU frame)
-  // NWU frame: (x - forward, y - left, z - up)
-  this->camera_offset = Pose(0.0, deg2rad(90.0), 0.0, 0.0, 0.0, 0.0);
-
-  this->joint_setpoints = Vec3();
-  this->joint_controller = AttitudeController();
-
-  this->frame_orientation = Quaternion();
-  this->joint_orientation = Quaternion();
-  this->target_attitude_if << 0.0, 0.0, 0.0;
-}
-
-GimbalModel::GimbalModel(const VecX &pose) {
-  this->states = VecX(4);
-  this->states(0) = pose(0);  // roll position
-  this->states(1) = pose(1);  // roll velocity
-  this->states(2) = pose(3);  // pitch position
-  this->states(3) = pose(4);  // pitch velocity
-
-  this->Ix = 0.01;
-  this->Iy = 0.01;
-
-  // downward facing camera (gimbal is NWU frame)
-  // NWU frame: (x - forward, y - left, z - up)
-  this->camera_offset = Pose(0.0, deg2rad(90.0), 0.0, 0.0, 0.0, 0.0);
-
-  this->joint_setpoints = Vec3();
-  this->joint_controller = AttitudeController();
-
-  this->frame_orientation = Quaternion();
-  this->joint_orientation = Quaternion();
-  this->target_attitude_if << 0.0, 0.0, 0.0;
-}
-
 int GimbalModel::update(const Vec3 &motor_inputs, double dt) {
   float ph, th;
   float ph_vel, th_vel;

@@ -2,23 +2,6 @@
 
 namespace yarl {
 
-KF::KF() {
-  this->mu = VecX();
-
-  this->B = MatX();
-  this->R = MatX();
-
-  this->C = MatX();
-  this->Q = MatX();
-
-  this->S = MatX();
-  this->I = MatX();
-  this->K = MatX();
-
-  this->mu_p = VecX();
-  this->S_p = MatX();
-}
-
 int KF::configure(const VecX &mu,
                   const MatX &R,
                   const MatX &C,

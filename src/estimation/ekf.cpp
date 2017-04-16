@@ -2,20 +2,6 @@
 
 namespace yarl {
 
-EKF::EKF() {
-  this->mu = VecX();
-
-  this->R = MatX();
-  this->Q = MatX();
-
-  this->S = MatX();
-  this->I = MatX();
-  this->K = MatX();
-
-  this->mu_p = VecX();
-  this->S_p = MatX();
-}
-
 int EKF::configure(const VecX &mu, const MatX &R, const MatX &Q) {
   int nb_states;
 
