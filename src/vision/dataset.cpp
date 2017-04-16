@@ -266,7 +266,7 @@ int TestDataset::generateTestData(const std::string &save_path) {
   dt = 0.01;
   time = 0.0;
   x << 0.0, 0.0, 0.0;
-  u << 2.0, 0;
+  u << 1.0, w;
 
   for (int i = 0; i < 300; i++) {
     // update state

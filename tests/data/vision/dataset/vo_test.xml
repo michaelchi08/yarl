@@ -10,14 +10,14 @@
     <hz>10</hz>
   </camera>
   <feature_points>
-    <nb_features>10</nb_features>
+    <nb_features>100</nb_features>
     <x>
-      <min>0.0</min>
+      <min>-10.0</min>
       <max>10.0</max>
     </x>
     <y>
-      <min>-1.0</min>
-      <max>1.0</max>
+      <min>-10.0</min>
+      <max>10.0</max>
     </y>
     <z>
       <min>-1.0</min>
