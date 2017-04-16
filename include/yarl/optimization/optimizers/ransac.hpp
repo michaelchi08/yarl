@@ -25,7 +25,7 @@ public:
   int max_inliers;
   double model_params[2];
 
-  RANSAC(void);
+  RANSAC();
   int configure(int max_iter, double threshold_ratio, double threshold_dist);
   int randomSample(const MatX &data, Vec2 &sample);
   int computeDistances(const MatX &data,
@@ -34,7 +34,7 @@ public:
                        VecX &dists);
   int computeInliers(VecX &dists);
   int update(Vec2 &p1, Vec2 &p2);
-  void printStats(void);
+  void printStats();
   int optimize(MatX &data);
 };
 

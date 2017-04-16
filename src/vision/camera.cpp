@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-Camera::Camera(void) {
+Camera::Camera() {
   this->configured = false;
 
   this->capture_index = 0;
@@ -10,7 +10,7 @@ Camera::Camera(void) {
   this->image_height = 0;
 }
 
-Camera::~Camera(void) {
+Camera::~Camera() {
   if (this->capture.isOpened()) {
     this->capture.release();
   }
@@ -65,7 +65,7 @@ int Camera::saveFrame(const cv::Mat &frame, const std::string &save_path) {
   return 0;
 }
 
-void Camera::close(void) {
+void Camera::close() {
   if (this->capture.isOpened()) {
     this->capture.release();
   }

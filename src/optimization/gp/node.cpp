@@ -3,7 +3,7 @@
 namespace yarl {
 namespace gp {
 
-Node::Node(void) {
+Node::Node() {
   // general
   this->type = UINITI;
   this->parent = NULL;
@@ -24,7 +24,7 @@ Node::Node(void) {
   this->data = VecX();
 }
 
-Node::~Node(void) {
+Node::~Node() {
   for (int i = 0; i < this->arity; i++) {
     if (this->children[i] != NULL) {
       delete this->children[i];
@@ -138,7 +138,7 @@ void Node::setAsBinaryFunc(int function_type) {
   this->data = VecX();
 }
 
-bool Node::isTermNode(void) const {
+bool Node::isTermNode() const {
   if (this->type == CONST || this->type == INPUT || this->type == FEVAL) {
     return true;
   } else {
@@ -146,7 +146,7 @@ bool Node::isTermNode(void) const {
   }
 }
 
-bool Node::isFuncNode(void) const {
+bool Node::isFuncNode() const {
   if (this->type == UFUNC || this->type == BFUNC) {
     return true;
   } else {
@@ -279,7 +279,7 @@ bool Node::deepEquals(const Node &target) {
   return true;
 }
 
-std::string Node::toString(void) {
+std::string Node::toString() {
   std::ostringstream oss;
 
   // build node string
@@ -311,7 +311,7 @@ std::string Node::toString(void) {
   return oss.str();
 }
 
-void Node::print(void) {
+void Node::print() {
   std::cout << this->toString() << std::endl;
 }
 

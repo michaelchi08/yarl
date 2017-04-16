@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-TestCamera::TestCamera(void) {
+TestCamera::TestCamera() {
   this->K = Mat3();
   this->image_width = -1;
   this->image_height = -1;
@@ -84,7 +84,7 @@ int TestCamera::checkFeatures(double dt,
   return 0;
 }
 
-TestDataset::TestDataset(void) {
+TestDataset::TestDataset() {
   this->configured = false;
 
   this->camera = TestCamera();

@@ -3,7 +3,7 @@
 namespace yarl {
 
 // TRAJECTORY
-Trajectory::Trajectory(void) {
+Trajectory::Trajectory() {
   this->loaded = false;
   this->index = -1;
   this->pos.clear();
@@ -126,7 +126,7 @@ int Trajectory::update(const Vec3 pos,
   return 0;
 }
 
-void Trajectory::reset(void) {
+void Trajectory::reset() {
   this->loaded = false;
   this->pos.clear();
   this->vel.clear();
@@ -138,7 +138,7 @@ void Trajectory::reset(void) {
 
 
 // TRAJECTORY INDEX
-TrajectoryIndex::TrajectoryIndex(void) {
+TrajectoryIndex::TrajectoryIndex() {
   this->loaded = false;
 
   this->traj_dir = "";
@@ -218,7 +218,7 @@ int TrajectoryIndex::find(const Vec3 &pos, double v, const Trajectory &traj) {
 
 
 // LANDING CONTROLLER
-LandingController::LandingController(void) {
+LandingController::LandingController() {
   this->configured = false;
 
   this->dt = 0.0;
@@ -262,7 +262,7 @@ LandingController::LandingController(void) {
   this->blackbox;
 }
 
-LandingController::~LandingController(void) {
+LandingController::~LandingController() {
   if (this->blackbox_enable && this->blackbox) {
     this->blackbox.close();
   }
@@ -398,7 +398,7 @@ int LandingController::prepBlackbox(const std::string &blackbox_file) {
   return 0;
 }
 
-int LandingController::recordTrajectoryIndex(void) {
+int LandingController::recordTrajectoryIndex() {
   this->blackbox << "trajectory index: " << this->trajectory.index
                  << std::endl;
 }
@@ -577,13 +577,13 @@ int LandingController::calculate(const Vec3 &target_pos_bf,
   return 0;
 }
 
-void LandingController::reset(void) {
+void LandingController::reset() {
   // this->vx_controller.reset();
   // this->vy_controller.reset();
   // this->vz_controller.reset();
 }
 
-void LandingController::printOutputs(void) {
+void LandingController::printOutputs() {
   double r = rad2deg(this->outputs(0));
   double p = rad2deg(this->outputs(1));
   double t = this->outputs(3);
@@ -593,7 +593,7 @@ void LandingController::printOutputs(void) {
   std::cout << "throttle: " << std::setprecision(2) << t << std::endl;
 }
 
-// void LandingController::printErrors(void) {
+// void LandingController::printErrors() {
 //   double p, i, d;
 //
 //   p = this->vx_controller.error_p;

@@ -17,7 +17,7 @@ struct Chessboard {
   int nb_corners_total;
   cv::Size board_size;
 
-  Chessboard(void);
+  Chessboard();
   int configure(int nb_corners_columns, int nb_corners_rows);
 };
 

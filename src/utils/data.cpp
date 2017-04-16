@@ -3,7 +3,7 @@
 namespace yarl {
 
 // POSE
-Pose::Pose(void) {
+Pose::Pose() {
   this->position = Vec3::Zero(3, 1);
   this->orientation = Quaternion();
 }
@@ -27,11 +27,11 @@ Pose::Pose(double roll,
 }
 // clang-format on
 
-Mat3 Pose::rotationMatrix(void) {
+Mat3 Pose::rotationMatrix() {
   return this->orientation.toRotationMatrix();
 }
 
-void Pose::printPosition(void) {
+void Pose::printPosition() {
   std::cout << "position: [";
   std::cout << "%.2f, ", this->position(0);
   std::cout << "%.2f, ", this->position(1);
@@ -39,7 +39,7 @@ void Pose::printPosition(void) {
   std::cout << "]" << std::endl;
 }
 
-void Pose::printOrientation(void) {
+void Pose::printOrientation() {
   Vec3 euler;
 
   quat2euler(this->orientation, 321, euler);
@@ -50,7 +50,7 @@ void Pose::printOrientation(void) {
   std::cout << "]" << std::endl;
 }
 
-void Pose::print(void) {
+void Pose::print() {
   this->printPosition();
   this->printOrientation();
 }

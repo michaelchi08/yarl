@@ -53,7 +53,7 @@ double sse(const Data &desired,
   return sse;
 }
 
-HalsteadMetric::HalsteadMetric(void) {
+HalsteadMetric::HalsteadMetric() {
   this->nb_unique_operators = 0;
   this->nb_unique_operands = 0;
   this->nb_total_operators = 0;
@@ -66,7 +66,7 @@ HalsteadMetric::HalsteadMetric(void) {
   this->effort = 0.0;
 }
 
-int HalsteadMetric::calculate(void) {
+int HalsteadMetric::calculate() {
   float n1, n2;
   float N1, N2;
 
@@ -85,7 +85,7 @@ int HalsteadMetric::calculate(void) {
   return 0;
 }
 
-void HalsteadMetric::print(void) {
+void HalsteadMetric::print() {
   std::cout << "Unique operators: " << this->nb_unique_operators << std::endl;
   std::cout << "Unique operands: " << this->nb_unique_operands << std::endl;
 

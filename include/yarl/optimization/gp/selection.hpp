@@ -13,8 +13,8 @@ public:
   // tournament specifics
   int tournament_size;
 
-  Selection(void);
-  int configure(void);
+  Selection();
+  int configure();
   int tournamentSelection(Population &population, Population &selected);
 };
 

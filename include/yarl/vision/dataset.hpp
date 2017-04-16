@@ -21,7 +21,7 @@ public:
   double dt;
   int frame;
 
-  TestCamera(void);
+  TestCamera();
   bool update(double dt);
   int checkFeatures(double dt,
                     const MatX &features,
@@ -41,7 +41,7 @@ public:
   Vec2 feature_z_bounds;
 
 
-  TestDataset(void);
+  TestDataset();
   int configure(const std::string &config_file);
   int generateRandom3DFeatures(MatX &features);
   int record3DFeatures(const std::string &output_path, const MatX &features);

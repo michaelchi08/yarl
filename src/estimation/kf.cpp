@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-KF::KF(void) {
+KF::KF() {
   this->mu = VecX();
 
   this->B = MatX();

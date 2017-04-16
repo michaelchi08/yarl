@@ -2,15 +2,6 @@
 
 namespace yarl {
 
-PositionController::PositionController(void) {
-  this->dt = 0.0;
-  this->outputs << 0.0, 0.0, 0.0, 0.0;
-
-  this->x_controller = PID(0.5, 0.0, 0.035);
-  this->y_controller = PID(0.5, 0.0, 0.035);
-  this->z_controller = PID(0.3, 0.0, 0.018);
-}
-
 Vec4 PositionController::calculate(Vec3 setpoints,
                                    Vec4 actual,
                                    double yaw,

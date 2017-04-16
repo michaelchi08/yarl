@@ -39,7 +39,7 @@ public:
   std::vector<cv::Mat> translation_vectors;
   double reprojection_error;
 
-  Calibration(void);
+  Calibration();
   int configure(const std::string &save_path,
                 const Chessboard &chessboard,
                 const cv::Size &image_size,
@@ -50,7 +50,7 @@ public:
                 const std::vector<cv::Point2f> &corners);
   int calibrate(const std::vector<std::vector<cv::Point2f>> &image_points,
                 const cv::Size &image_size);
-  int saveCalibrationOutputs(void);
+  int saveCalibrationOutputs();
 };
 
 }  // end of yarl namespace

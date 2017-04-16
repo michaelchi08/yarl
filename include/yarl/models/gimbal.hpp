@@ -25,7 +25,7 @@ public:
   Quaternion joint_orientation;
   Vec3 target_attitude_if;
 
-  GimbalModel(void);
+  GimbalModel();
   GimbalModel(const VecX &pose);
   int update(const Vec3 &motor_inputs, double dt);
   Vec3 attitudeControllerControl(double dt);
@@ -36,8 +36,8 @@ public:
                       const Quaternion &body_if,
                       const Quaternion &joint_bf);
   void trackTarget(const Vec3 &target_cf);
-  Vec4 getState(void);
-  void printState(void);
+  Vec4 getState();
+  void printState();
 };
 
 }  // end of yarl namespace

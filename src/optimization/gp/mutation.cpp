@@ -4,7 +4,7 @@
 namespace yarl {
 namespace gp {
 
-Mutation::Mutation(void) {
+Mutation::Mutation() {
   this->probability = 0.0;
 
   this->subtree_build_method = UINITI;

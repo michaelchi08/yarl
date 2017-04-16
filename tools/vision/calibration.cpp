@@ -1,7 +1,7 @@
 #include "yarl/vision/calibration.hpp"
 #include "yarl/vision/camera.hpp"
 
-int main(void) {
+int main() {
   int retval;
   char key_pressed;
   cv::Mat image;

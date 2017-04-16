@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-EightPoint::EightPoint(void) {
+EightPoint::EightPoint() {
   this->configured = false;
 
   this->image_width = 0;

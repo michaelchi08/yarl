@@ -20,7 +20,7 @@ public:
   int image_height;
   Mat3 N;
 
-  EightPoint(void);
+  EightPoint();
   int configure(int image_width, int image_height);
   void normalizePoints(MatX &pts1, MatX &pts2);
   void formMatrixA(const MatX &pts1, const MatX &pts2, MatX &A);

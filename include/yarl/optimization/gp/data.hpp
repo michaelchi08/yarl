@@ -19,7 +19,7 @@ public:
   int cols;
   MatX data;
 
-  Data(void);
+  Data();
   int load(const MatX &data, const std::vector<std::string> &fields);
   int load(const std::string &data_file);
   int fieldIndex(const std::string &field) const;
@@ -31,7 +31,7 @@ class Dataset {
   Data test_data;
   std::string predict;
 
-  Dataset(void);
+  Dataset();
   int load(const Data &data, float train, float validation, float test);
 };
 

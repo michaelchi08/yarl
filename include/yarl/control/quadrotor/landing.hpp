@@ -32,10 +32,10 @@ public:
   std::deque<Vec2> rel_vel;
   Vec3 p0;
 
-  Trajectory(void);
+  Trajectory();
   int load(int index, const std::string &filepath, const Vec3 &pos);
   int update(const Vec3 pos, Vec2 &wp_pos, Vec2 &wp_vel, Vec2 &wp_inputs);
-  void reset(void);
+  void reset();
 };
 
 class TrajectoryIndex {
@@ -47,7 +47,7 @@ public:
   double pos_thres;
   double vel_thres;
 
-  TrajectoryIndex(void);
+  TrajectoryIndex();
   int load(const std::string &index_file,
            double pos_thres = 0.2,
            double vel_thres = 0.2);
@@ -96,12 +96,12 @@ public:
   double blackbox_rate;
   std::ofstream blackbox;
 
-  LandingController(void);
-  ~LandingController(void);
+  LandingController();
+  ~LandingController();
   int configure(const std::string &config_file);
   int loadTrajectory(const Vec3 &pos, const Vec3 &target_pos_bf, double v);
   int prepBlackbox(const std::string &blackbox_file);
-  int recordTrajectoryIndex(void);
+  int recordTrajectoryIndex();
   int record(const Vec3 &pos,
              const Vec3 &vel,
              const Vec2 &wp_pos,
@@ -123,9 +123,9 @@ public:
                 const Quaternion &orientation,
                 double yaw,
                 double dt);
-  void reset(void);
-  void printOutputs(void);
-  void printErrors(void);
+  void reset();
+  void printOutputs();
+  void printErrors();
 };
 
 }  // end of yarl namespace

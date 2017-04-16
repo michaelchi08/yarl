@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-EKF::EKF(void) {
+EKF::EKF() {
   this->mu = VecX();
 
   this->R = MatX();

@@ -25,12 +25,28 @@ public:
   Vec4 outputs;
   Vec4 att_cmd;
 
-  VelocityController(void);
+
+  VelocityController()
+    : configured(false),
+
+      dt(0.0),
+      vx_controller(0.0, 0.0, 0.0),
+      vy_controller(0.0, 0.0, 0.0),
+      vz_controller(0.0, 0.0, 0.0),
+
+      roll_limit{0.0, 0.0},
+      pitch_limit{0.0, 0.0},
+      throttle_limit{0.0, 0.0},
+
+      setpoints(0.0, 0.0, 0.0),
+      outputs(0.0, 0.0, 0.0, 0.0),
+      att_cmd() {}
+
   int configure(const std::string &config_file);
   Vec4 calculate(const Vec3 &setpoints, const Vec3 &actual, double dt);
-  void reset(void);
-  void printOutputs(void);
-  void printErrors(void);
+  void reset();
+  void printOutputs();
+  void printErrors();
 };
 
 }  // end of fs namespace

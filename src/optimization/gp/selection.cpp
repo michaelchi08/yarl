@@ -3,13 +3,13 @@
 namespace yarl {
 namespace gp {
 
-Selection::Selection(void) {
+Selection::Selection() {
   this->method = UINITI;
 
   this->tournament_size = UINITI;
 }
 
-int Selection::configure(void) {
+int Selection::configure() {
   return 0;
 }
 

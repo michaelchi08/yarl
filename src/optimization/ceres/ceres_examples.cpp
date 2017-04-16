@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-void runAutoDiffExample(void) {
+void runAutoDiffExample() {
   // The variable to solve for with its initial value.
   double x = 5.0;
   double initial_x = x;
@@ -27,7 +27,7 @@ void runAutoDiffExample(void) {
   std::cout << "x : " << initial_x << " -> " << x << "\n";
 }
 
-void runNumericalDiffExample(void) {
+void runNumericalDiffExample() {
   // The variable to solve for with its initial value.
   double x = 5.0;
   double initial_x = x;
@@ -53,7 +53,7 @@ void runNumericalDiffExample(void) {
   std::cout << "x : " << initial_x << " -> " << x << "\n";
 }
 
-void runAnalyticalDiffExample(void) {
+void runAnalyticalDiffExample() {
   // The variable to solve for with its initial value. It will be
   // mutated in place by the solver.
   double x = 0.5;
@@ -77,7 +77,7 @@ void runAnalyticalDiffExample(void) {
   std::cout << "x : " << initial_x << " -> " << x << "\n";
 }
 
-void runCurveFittingExample(void) {
+void runCurveFittingExample() {
   const int kNumObservations = 67;
   const double data[] = {
     0.000000e+00, 1.133898e+00, 7.500000e-02, 1.334902e+00, 1.500000e-01,

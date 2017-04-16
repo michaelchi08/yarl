@@ -3,26 +3,6 @@
 
 namespace yarl {
 
-TrackingController::TrackingController(void) {
-  this->configured = false;
-
-  this->dt = 0.0;
-  this->x_controller = PID(0.0, 0.0, 0.0);
-  this->y_controller = PID(0.0, 0.0, 0.0);
-  this->z_controller = PID(0.0, 0.0, 0.0);
-  this->hover_throttle = 0.0;
-
-  this->roll_limit[0] = 0.0;
-  this->roll_limit[1] = 0.0;
-  this->pitch_limit[0] = 0.0;
-  this->pitch_limit[1] = 0.0;
-  this->track_offset << 0.0, 0.0, 0.0;
-
-  this->setpoints << 0.0, 0.0, 0.0;
-  this->outputs << 0.0, 0.0, 0.0, 0.0;
-  this->att_cmd = AttitudeCommand();
-}
-
 int TrackingController::configure(const std::string &config_file) {
   ConfigParser parser;
 
@@ -124,13 +104,13 @@ AttitudeCommand TrackingController::calculate(const Vec3 &target_pos_bf,
   return this->calculate(errors, yaw, dt);
 }
 
-void TrackingController::reset(void) {
+void TrackingController::reset() {
   this->x_controller.reset();
   this->y_controller.reset();
   this->z_controller.reset();
 }
 
-void TrackingController::printOutputs(void) {
+void TrackingController::printOutputs() {
   double r, p, t;
 
   r = rad2deg(this->outputs(0));
@@ -142,7 +122,7 @@ void TrackingController::printOutputs(void) {
   std::cout << "throttle: " << std::setprecision(2) << t << std::endl;
 }
 
-void TrackingController::printErrors(void) {
+void TrackingController::printErrors() {
   double p, i, d;
 
   p = this->x_controller.error_p;

@@ -19,7 +19,7 @@ public:
   cv::Mat R;
   cv::Mat t;
 
-  VisualOdometry(void);
+  VisualOdometry();
   int configure(Mat3 K);
   int featureTracking(cv::Mat img_1,
                       cv::Mat img_2,

@@ -25,7 +25,7 @@ public:
   VecX mu_p;
   MatX S_p;
 
-  KF(void);
+  KF();
   int configure(const VecX &mu, const MatX &R, const MatX &C, const MatX &Q);
   int estimate(const MatX &A, const VecX &y);
 };

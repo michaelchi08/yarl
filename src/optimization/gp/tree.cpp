@@ -3,7 +3,7 @@
 namespace yarl {
 namespace gp {
 
-TreeConfig::TreeConfig(void) {
+TreeConfig::TreeConfig() {
   this->build_method = UINITI;
   this->max_depth = UINITI;
 
@@ -147,7 +147,7 @@ int TreeConfig::randomTerminal(Node &node) {
   return 0;
 }
 
-Tree::Tree(void) {
+Tree::Tree() {
   this->root = NULL;
   this->chromosome.clear();
 
@@ -169,7 +169,7 @@ Tree::Tree(void) {
   this->tc = NULL;
 }
 
-Tree::~Tree(void) {
+Tree::~Tree() {
   delete this->root;
 }
 
@@ -197,7 +197,7 @@ int Tree::configure(TreeConfig *tc, Data *data) {
   return 0;
 }
 
-void Tree::clear(void) {
+void Tree::clear() {
   this->root = NULL;
   this->chromosome.clear();
 
@@ -259,7 +259,7 @@ void Tree::updateTraverse(Node *node, int depth) {
   }
 }
 
-void Tree::update(void) {
+void Tree::update() {
   // reset chromosome, size and depth
   this->chromosome.clear();
   this->depth = 0;
@@ -309,7 +309,7 @@ int Tree::build(int method, Node &node, int depth) {
   return 0;
 }
 
-int Tree::generate(void) {
+int Tree::generate() {
   Node *root;
 
   // setup
@@ -591,18 +591,18 @@ static void traverse_equation(std::ostringstream &oss, Node &node) {
   }
 }
 
-std::string Tree::toString(void) {
+std::string Tree::toString() {
   std::ostringstream oss;
   traverse_equation(oss, *this->root);
   return oss.str();
 }
 
-void Tree::printEquation(void) {
+void Tree::printEquation() {
   std::cout << this->toString();
   std::cout << std::endl;
 }
 
-void Tree::printStack(void) {
+void Tree::printStack() {
   for (size_t i = 0; i < this->chromosome.size(); i++) {
     this->chromosome[i]->print();
   }

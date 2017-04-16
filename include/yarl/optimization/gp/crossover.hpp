@@ -10,7 +10,7 @@ class Crossover {
 public:
   float probability;
 
-  Crossover(void);
+  Crossover();
   int pointCrossover(Tree &t1, Tree &t2);
 };
 

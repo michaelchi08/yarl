@@ -2,15 +2,6 @@
 
 namespace yarl {
 
-AttitudeController::AttitudeController(void) {
-  this->dt = 0.0;
-  this->outputs << 0.0, 0.0, 0.0, 0.0;
-
-  this->roll_controller = PID(200.0, 0.5, 10.0);
-  this->pitch_controller = PID(200.0, 0.5, 10.0);
-  this->yaw_controller = PID(200.0, 0.5, 10.0);
-}
-
 Vec4 AttitudeController::calculate(const Vec4 &setpoints,
                                    const Vec4 &actual,
                                    double dt) {

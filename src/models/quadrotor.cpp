@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-QuadrotorModel::QuadrotorModel(void) {
+QuadrotorModel::QuadrotorModel() {
   this->states = VecX(12);
   this->states(0) = 0.0;   // roll
   this->states(1) = 0.0;   // pitch
@@ -209,7 +209,7 @@ void QuadrotorModel::setPosition(double x, double y, double z) {
   this->position_setpoints(2) = z;
 }
 
-VecX QuadrotorModel::getPose(void) {
+VecX QuadrotorModel::getPose() {
   VecX pose(6);
 
   // x, y, z
@@ -225,7 +225,7 @@ VecX QuadrotorModel::getPose(void) {
   return pose;
 }
 
-VecX QuadrotorModel::getVelocity(void) {
+VecX QuadrotorModel::getVelocity() {
   VecX velocities(6);
 
   // vx, vy, vz
@@ -241,7 +241,7 @@ VecX QuadrotorModel::getVelocity(void) {
   return velocities;
 }
 
-void QuadrotorModel::printState(void) {
+void QuadrotorModel::printState() {
   // phi, theta, psi
   float phi = this->states(0);
   float theta = this->states(1);

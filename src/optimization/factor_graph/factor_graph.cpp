@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-FactorGraph::FactorGraph(void) {
+FactorGraph::FactorGraph() {
   this->variables.clear();
   this->graph.clear();
 }
@@ -39,7 +39,7 @@ int FactorGraph::addBinaryFactor(size_t from, size_t to, double measurement) {
   return 0;
 }
 
-int FactorGraph::print(void) {
+int FactorGraph::print() {
   int index = 0;
 
   for (auto x : this->factors) {

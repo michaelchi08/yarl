@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-Calibration::Calibration(void) {
+Calibration::Calibration() {
   this->configured = false;
   this->state = IDEL;
 
@@ -127,7 +127,7 @@ int Calibration::calibrate(
   }
 }
 
-int Calibration::saveCalibrationOutputs(void) {
+int Calibration::saveCalibrationOutputs() {
   // setup
   std::ofstream outfile;
   outfile.open(this->save_path + "/" + CALIBRATION_FILENAME);

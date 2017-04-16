@@ -14,7 +14,7 @@ public:
   int subtree_build_method;
   int subtree_max_depth;
 
-  Mutation(void);
+  Mutation();
   int configure(float probability);
   int pointMutation(Tree &tree);
   int subtreeMutation(Tree &tree);

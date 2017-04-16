@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-GimbalModel::GimbalModel(void) {
+GimbalModel::GimbalModel() {
   this->states = VecX(4);
   this->states(0) = 0.0;  // roll position
   this->states(1) = 0.0;  // roll velocity
@@ -169,7 +169,7 @@ void GimbalModel::trackTarget(const Vec3 &target_cf) {
   this->target_attitude_if(2) = 0.0;
 }
 
-Vec4 GimbalModel::getState(void) {
+Vec4 GimbalModel::getState() {
   Vec4 pose;
 
   pose(0) = this->states(0);
@@ -180,7 +180,7 @@ Vec4 GimbalModel::getState(void) {
   return pose;
 }
 
-void GimbalModel::printState(void) {
+void GimbalModel::printState() {
   std::cout << "roll: ";
   std::cout << std::setprecision(2) << this->states(0) << "\t";
 

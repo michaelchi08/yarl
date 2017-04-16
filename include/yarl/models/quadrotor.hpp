@@ -32,7 +32,7 @@ public:
   AttitudeController attitude_controller;
   PositionController position_controller;
 
-  QuadrotorModel(void);
+  QuadrotorModel();
   QuadrotorModel(const VecX &pose);
   int update(const VecX &motor_inputs, double dt);
   VecX attitudeControllerControl(double dt);
@@ -41,9 +41,9 @@ public:
   void setAttitude(double roll, double pitch, double yaw, double z);
   void setPosition(double x, double y, double z);
   void setVelocity(double vx, double vy, double vz);
-  VecX getPose(void);
-  VecX getVelocity(void);
-  void printState(void);
+  VecX getPose();
+  VecX getVelocity();
+  void printState();
 };
 
 }  // end of yarl namespace

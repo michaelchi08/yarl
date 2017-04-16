@@ -97,12 +97,12 @@ class PCA9685 {
 public:
   drivers::I2C i2c;
 
-  PCA9685(void);
+  PCA9685();
   int configure(int freq);
   void setPWMFrequency(int freq);
   void setPWM(int8_t channel, int16_t off);
   void setAllPWM(int16_t off);
-  void reset(void);
+  void reset();
 };
 
 }  // end of motor namespace

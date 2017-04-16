@@ -4,10 +4,9 @@
 namespace yarl {
 namespace drivers {
 
-MPU9250::MPU9250(void) {
-}
+MPU9250::MPU9250() {}
 
-int MPU9250::configure(void) {
+int MPU9250::configure() {
   /* setup */
   this->i2c = drivers::I2C();
   this->i2c.setSlave(MPU9250_ADDRESS);
@@ -33,7 +32,7 @@ int MPU9250::configure(void) {
   return 0;
 }
 
-int MPU9250::ping(void) {
+int MPU9250::ping() {
   char data;
 
   /* print mpu9250 address */
@@ -64,7 +63,7 @@ int MPU9250::setGyroScale(int8_t scale) {
   return 0;
 }
 
-int MPU9250::getGyroScale(void) {
+int MPU9250::getGyroScale() {
   char data;
   uint8_t retval;
 
@@ -102,7 +101,7 @@ int MPU9250::setAccelScale(int8_t scale) {
   return 0;
 }
 
-int MPU9250::getAccelScale(void) {
+int MPU9250::getAccelScale() {
   char data;
   uint8_t retval;
 
@@ -135,7 +134,7 @@ int MPU9250::setAccelFchoice(int8_t fchoice) {
   return 0;
 }
 
-int MPU9250::getAccelFchoice(void) {
+int MPU9250::getAccelFchoice() {
   char data;
   uint8_t retval;
 

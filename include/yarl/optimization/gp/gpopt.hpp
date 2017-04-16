@@ -79,7 +79,7 @@ namespace yarl {
 //   int max_generations;
 //   double target_score;
 //
-//   GPConfig(void) {
+//   GPConfig() {
 //     this->nb_populations;
 //     this->nb_individuals;
 //

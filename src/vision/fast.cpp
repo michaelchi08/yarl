@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-FastDetector::FastDetector(void) {
+FastDetector::FastDetector() {
   this->configured = false;
   this->threshold = 20;
   this->nonmax_suppression = true;

@@ -4,8 +4,7 @@
 namespace yarl {
 namespace drivers {
 
-PCA9685::PCA9685(void) {
-}
+PCA9685::PCA9685() {}
 
 int PCA9685::configure(int freq) {
   char mode_1;
@@ -81,7 +80,7 @@ void PCA9685::setAllPWM(int16_t off) {
   this->i2c.writeByte(PCA9685_ALL_LED_OFF_H, off >> 8);
 }
 
-void PCA9685::reset(void) {
+void PCA9685::reset() {
   this->i2c.setSlave(0x00);
   this->i2c.writeRawByte(0x06);
   usleep(PCA9685_WAIT_MS);

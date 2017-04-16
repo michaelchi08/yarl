@@ -4,7 +4,7 @@
 
 namespace yarl {
 
-std::vector<MatX> generate_data(void) {
+std::vector<MatX> generate_data() {
   VecX input;
   VecX beta;
 

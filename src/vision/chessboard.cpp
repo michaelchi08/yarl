@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-Chessboard::Chessboard(void) {
+Chessboard::Chessboard() {
   this->configured = false;
 
   this->nb_corners_rows = 0;

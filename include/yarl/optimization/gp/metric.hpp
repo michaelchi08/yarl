@@ -18,9 +18,9 @@ class HalsteadMetric {
   float difficulty;
   float effort;
 
-  HalsteadMetric(void);
-  int calculate(void);
-  void print(void);
+  HalsteadMetric();
+  int calculate();
+  void print();
 };
 
 // FUNCTIONS

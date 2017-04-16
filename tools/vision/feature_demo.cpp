@@ -3,7 +3,7 @@
 #include "yarl/vision/camera.hpp"
 #include "yarl/vision/orb.hpp"
 
-int main(void) {
+int main() {
   int retval;
   char key_pressed;
   cv::Mat image;

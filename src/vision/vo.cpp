@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-VisualOdometry::VisualOdometry(void) {
+VisualOdometry::VisualOdometry() {
   this->configured = false;
 
   this->focal_length = 0.0;

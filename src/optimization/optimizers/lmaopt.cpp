@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-LMASettings::LMASettings(void) {
+LMASettings::LMASettings() {
   this->max_iter = 100;
   this->lambda = 0.01;
   this->function = nullptr;
@@ -15,7 +15,7 @@ LMASettings::LMASettings(void) {
   this->beta = MatX::Zero(1, 1);
 }
 
-LMAOpt::LMAOpt(void) {
+LMAOpt::LMAOpt() {
   this->configured = false;
 
   this->max_iter = 100;
@@ -102,7 +102,7 @@ int LMAOpt::calcGradients(const VecX &beta) {
   return 0;
 }
 
-int LMAOpt::iterate(void) {
+int LMAOpt::iterate() {
   MatX I, H_est, I_adaptive;
   VecX delta, beta_est;
   double error_est;
@@ -142,7 +142,7 @@ int LMAOpt::iterate(void) {
   return 0;
 }
 
-int LMAOpt::optimize(void) {
+int LMAOpt::optimize() {
   // pre-check
   if (this->configured == false) {
     log_err(ELMAC);

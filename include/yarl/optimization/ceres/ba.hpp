@@ -23,7 +23,7 @@ public:
 
   bool origin;
 
-  BAResidual(void) {
+  BAResidual() {
     this->fx = 0.0;
     this->fy = 0.0;
     this->cx = 0.0;
@@ -120,7 +120,7 @@ public:
 
   bool origin;
 
-  BAAnalyticalResidual(void) {
+  BAAnalyticalResidual() {
     this->fx = 0.0;
     this->fy = 0.0;
     this->cx = 0.0;
@@ -144,8 +144,7 @@ public:
     this->origin = origin;
   }
 
-  virtual ~BAAnalyticalResidual(void) {
-  }
+  virtual ~BAAnalyticalResidual() {}
 
   inline void setupCameraInstrinsicsMatrix(Eigen::Matrix3d &K) {
     K(0, 0) = this->fx;
@@ -242,8 +241,8 @@ public:
   double **c;
   double **x;
 
-  BundleAdjustment(void);
-  ~BundleAdjustment(void);
+  BundleAdjustment();
+  ~BundleAdjustment();
   int configure(Mat3 K, MatX x1_pts, MatX x2_pts);
   int solve(MatX pt3d);
 };

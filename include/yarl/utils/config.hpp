@@ -63,7 +63,7 @@ public:
   void *data;
   bool optional;
 
-  ConfigParam(void) {
+  ConfigParam() {
     this->type = TYPE_NOT_SET;
     this->key = "";
     this->data = NULL;
@@ -86,8 +86,8 @@ public:
   xmlDocPtr doc;
   xmlXPathObjectPtr obj;
 
-  ConfigParser(void);
-  ~ConfigParser(void);
+  ConfigParser();
+  ~ConfigParser();
   // clang-format off
   void addParam(const std::string &key, bool *out, bool optional = false);
   void addParam(const std::string &key, int *out, bool optional = false);
@@ -110,7 +110,7 @@ public:
   void addParam(const std::string &key, cv::Mat *out, bool optional = false);
   // clang-format on
   int setXMLPointer(const std::string &key);
-  void resetXMLPointer(void);
+  void resetXMLPointer();
   int getXMLValue(const std::string &key, std::string &value);
   int getXMLValues(const std::string &key, std::vector<std::string> &values);
   int checkVector(const std::string &key, enum ConfigDataType type);

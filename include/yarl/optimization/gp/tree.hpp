@@ -47,9 +47,9 @@ public:
   std::vector<double> constants;
   std::vector<std::string> inputs;
 
-  TreeConfig(void);
+  TreeConfig();
   int configure(int build_method, int max_depth);
-  void clear(void);
+  void clear();
   int randomUnaryFunction(Node &node);
   int randomBinaryFunction(Node &node);
   int randomFunction(Node &node);
@@ -80,22 +80,22 @@ public:
 
   TreeConfig *tc;
 
-  Tree(void);
-  ~Tree(void);
+  Tree();
+  ~Tree();
   int configure(TreeConfig *tc, Data *data);
-  void clear(void);
+  void clear();
   int copyFrom(const Tree &t);
   void updateTraverse(Node *node, int depth);
-  void update(void);
+  void update();
   int build(int method, Node &node, int depth);
-  int generate(void);
+  int generate();
   int prepData(const Data &data, const Node &node);
   int evaluateNode(const Data &d, const Node &n, Node &feval);
   int evaluateTraverse(const Data &d, Node &result);
   int evaluate(const Data &d, const std::string predict);
-  std::string toString(void);
-  void printEquation(void);
-  void printStack(void);
+  std::string toString();
+  void printEquation();
+  void printStack();
 };
 
 }  // end of gp namespace

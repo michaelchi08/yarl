@@ -19,13 +19,13 @@ public:
   VecX x;
   std::function<double(VecX x)> f;
 
-  GDOpt(void);
+  GDOpt();
   int configure(int max_iter,
                 const VecX &eta,
                 const VecX &x,
                 std::function<double(VecX x)> f);
   int calcGradient(VecX &df);
-  int optimize(void);
+  int optimize();
 };
 
 }  // end of yarl namespace

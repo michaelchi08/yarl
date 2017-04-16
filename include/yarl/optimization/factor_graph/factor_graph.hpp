@@ -45,7 +45,7 @@ public:
     this->measurement = new double(measurement);
   }
 
-  ~Factor(void) {
+  ~Factor() {
     switch (this->type) {
       case DOUBLE: delete static_cast<double *>(this->measurement); break;
       default: break;
@@ -60,10 +60,10 @@ public:
   std::set<size_t> variables;
   std::vector<std::shared_ptr<Factor>> factors;
 
-  FactorGraph(void);
+  FactorGraph();
   int addUnaryFactor(size_t at, double measurement);
   int addBinaryFactor(size_t from, size_t to, double measurement);
-  int print(void);
+  int print();
 };
 
 }  // end of yarl namespace

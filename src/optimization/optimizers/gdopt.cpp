@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-GDOpt::GDOpt(void) {
+GDOpt::GDOpt() {
   this->configured = false;
 
   this->max_iter = 1000;
@@ -50,7 +50,7 @@ int GDOpt::calcGradient(VecX &df) {
   return 0;
 }
 
-int GDOpt::optimize(void) {
+int GDOpt::optimize() {
   VecX df;
 
   // pre-check

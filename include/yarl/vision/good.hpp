@@ -18,8 +18,8 @@ public:
 
   cv::Mat mask;
 
-  GoodDetector(void);
-  int configure(void);
+  GoodDetector();
+  int configure();
   int detect(const cv::Mat &image, std::vector<cv::Point2f> &points);
 };
 

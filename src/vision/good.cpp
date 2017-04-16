@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-GoodDetector::GoodDetector(void) {
+GoodDetector::GoodDetector() {
   this->configured = false;
   this->max_corners = 1000;
   this->quality_level = 0.1;
@@ -12,7 +12,7 @@ GoodDetector::GoodDetector(void) {
   this->k = 0.04;
 }
 
-int GoodDetector::configure(void) {
+int GoodDetector::configure() {
   this->configured = true;
   return 0;
 }

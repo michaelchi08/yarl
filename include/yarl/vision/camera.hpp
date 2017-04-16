@@ -37,13 +37,13 @@ public:
   cv::Mat camera_mat;
   cv::Mat distortion_coef;
 
-  Camera(void);
-  ~Camera(void);
+  Camera();
+  ~Camera();
   int configure(int capture_index, int image_width, int image_height);
   int getFrame(cv::Mat &frame);
   int getUndistortFrame(cv::Mat &frame);
   int saveFrame(const cv::Mat &frame, const std::string &save_path);
-  void close(void);
+  void close();
 };
 
 }  // end of yarl namespace

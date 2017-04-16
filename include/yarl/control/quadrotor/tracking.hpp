@@ -26,7 +26,23 @@ public:
   Vec4 outputs;
   AttitudeCommand att_cmd;
 
-  TrackingController(void);
+  TrackingController()
+    : configured(false),
+
+      dt(0.0),
+      x_controller(0.0, 0.0, 0.0),
+      y_controller(0.0, 0.0, 0.0),
+      z_controller(0.0, 0.0, 0.0),
+
+      hover_throttle(0.0),
+      roll_limit{0.0, 0.0},
+      pitch_limit{0.0, 0.0},
+      track_offset(0.0, 0.0, 0.0),
+
+      setpoints(0.0, 0.0, 0.0),
+      outputs(0.0, 0.0, 0.0, 0.0),
+      att_cmd() {}
+
   int configure(const std::string &config_file);
   AttitudeCommand calculate(const Vec3 &errors, double yaw, double dt);
   AttitudeCommand calculate(const Vec3 &target_pos_bf,
@@ -34,9 +50,9 @@ public:
                             const Vec3 &pos_prev,
                             double yaw,
                             double dt);
-  void reset(void);
-  void printOutputs(void);
-  void printErrors(void);
+  void reset();
+  void printOutputs();
+  void printErrors();
 };
 
 }  // end of yarl namespace

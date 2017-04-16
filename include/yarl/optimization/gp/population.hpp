@@ -12,14 +12,14 @@ public:
   TreeConfig *tree_config;
   Data *data;
 
-  Population(void);
-  ~Population(void);
+  Population();
+  ~Population();
   int configure(int nb_individuals, TreeConfig *tree_config, Data *data);
-  void clear(void);
+  void clear();
   int best(Tree &tree);
-  int evaluate(void);
+  int evaluate();
   int copyFrom(const Population &p);
-  void print(void);
+  void print();
 };
 
 }  // end of gp namespace

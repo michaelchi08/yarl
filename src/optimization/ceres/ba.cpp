@@ -3,7 +3,7 @@
 namespace yarl {
 namespace ceres {
 
-BundleAdjustment::BundleAdjustment(void) {
+BundleAdjustment::BundleAdjustment() {
   this->configured = false;
 
   this->K = MatX::Zero(3, 3);
@@ -15,7 +15,7 @@ BundleAdjustment::BundleAdjustment(void) {
   this->x = NULL;
 }
 
-BundleAdjustment::~BundleAdjustment(void) {
+BundleAdjustment::~BundleAdjustment() {
   if (this->configured) {
     for (int i = 0; i < this->x1_pts.rows(); i++) {
       free(this->x[i]);

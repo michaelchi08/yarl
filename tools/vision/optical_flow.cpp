@@ -113,7 +113,7 @@ static void pts2mat(std::vector<cv::Point2f> points, yarl::MatX &mat) {
   }
 }
 
-int main(void) {
+int main() {
   // cv::Mat frame;
   // cv::Mat img_1;
   // cv::Mat img_2;

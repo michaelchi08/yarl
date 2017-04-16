@@ -3,13 +3,13 @@
 namespace yarl {
 namespace gp {
 
-Population::Population(void) {
+Population::Population() {
   this->individuals.clear();
   this->tree_config = NULL;
   this->data = NULL;
 }
 
-Population::~Population(void) {
+Population::~Population() {
   for (auto t : this->individuals) {
     delete t;
   }
@@ -38,7 +38,7 @@ int Population::configure(int nb_individuals,
   return 0;
 }
 
-void Population::clear(void) {
+void Population::clear() {
   for (auto t : this->individuals) {
     delete t;
   }
@@ -80,7 +80,7 @@ int Population::copyFrom(const Population &population) {
   return 0;
 }
 
-void Population::print(void) {
+void Population::print() {
   for (size_t i = 0; i < this->individuals.size(); i++) {
     this->individuals[i]->printEquation();
   }

@@ -20,13 +20,13 @@ public:
   Vec3 position;
   Quaternion orientation;
 
-  Pose(void);
+  Pose();
   Pose(Vec3 position, Quaternion orientation);
   Pose(double roll, double pitch, double yaw, double x, double y, double z);
-  Mat3 rotationMatrix(void);
-  void printPosition(void);
-  void printOrientation(void);
-  void print(void);
+  Mat3 rotationMatrix();
+  void printPosition();
+  void printOrientation();
+  void print();
 };
 
 class Twist {
@@ -39,7 +39,7 @@ public:
   double angular_y;
   double angular_z;
 
-  Twist(void) {
+  Twist() {
     this->linear_x = 0;
     this->linear_y = 0;
     this->linear_z = 0;

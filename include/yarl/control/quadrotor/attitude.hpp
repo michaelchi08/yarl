@@ -11,14 +11,21 @@ namespace yarl {
 
 class AttitudeController {
 public:
-  double dt;
-  Vec4 outputs;
-
   PID roll_controller;
   PID pitch_controller;
   PID yaw_controller;
 
-  AttitudeController(void);
+  double dt;
+  Vec4 outputs;
+
+  AttitudeController()
+    : roll_controller(200.0, 0.5, 10.0),
+      pitch_controller(200.0, 0.5, 10.0),
+      yaw_controller(200.0, 0.5, 10.0),
+
+      dt(0.0),
+      outputs(0.0, 0.0, 0.0, 0.0) {}
+
   Vec4 calculate(const Vec4 &setpoints, const Vec4 &actual, double dt);
   Vec4 calculate(const Vec4 &psetpoints,
                  const Vec4 &vsetpoints,

@@ -190,15 +190,15 @@ public:
   clock_t last_updated;
   float sample_rate;
 
-  MPU9250(void);
-  int configure(void);
-  int ping(void);
+  MPU9250();
+  int configure();
+  int ping();
   int setGyroScale(int8_t scale);
-  int getGyroScale(void);
+  int getGyroScale();
   int setAccelScale(int8_t scale);
-  int getAccelScale(void);
+  int getAccelScale();
   int setAccelFchoice(int8_t fchoice);
-  int getAccelFchoice(void);
+  int getAccelFchoice();
 };
 
 }  // end of drivers namespace

@@ -5,7 +5,7 @@
 namespace yarl {
 namespace gp {
 
-// int test_selection_config_defaults(void)
+// int test_selection_config_defaults()
 // {
 //     struct selection_config sc;
 //
@@ -16,7 +16,7 @@ namespace gp {
 //     return 0;
 // }
 //
-// int test_tournament_selection(void)
+// int test_tournament_selection()
 // {
 //     int i;
 //     struct selection_config sc;

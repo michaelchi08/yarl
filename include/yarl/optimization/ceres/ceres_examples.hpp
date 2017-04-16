@@ -24,8 +24,7 @@ struct NumericalDiffCostFunctor {
 
 class AnalyticalCostFunction : public ceres::SizedCostFunction<1, 1> {
 public:
-  virtual ~AnalyticalCostFunction() {
-  }
+  virtual ~AnalyticalCostFunction() {}
   virtual bool Evaluate(double const *const *parameters,
                         double *residuals,
                         double **jacobians) const {
@@ -41,8 +40,7 @@ public:
 };
 
 struct CurveFittingResidual {
-  CurveFittingResidual(double x, double y) : x(x), y(y) {
-  }
+  CurveFittingResidual(double x, double y) : x(x), y(y) {}
   template <typename T>
   bool operator()(const T *const m, const T *const c, T *residual) const {
     residual[0] = this->y - exp(m[0] * this->x + c[0]);
@@ -54,10 +52,10 @@ private:
   const double y;
 };
 
-void runAutoDiffExample(void);
-void runNumericalDiffExample(void);
-void runAnalyticalDiffExample(void);
-void runCurveFittingExample(void);
+void runAutoDiffExample();
+void runNumericalDiffExample();
+void runAnalyticalDiffExample();
+void runCurveFittingExample();
 
 }  // end of yarl namespace
 #endif

@@ -27,7 +27,7 @@ public:
   VecX y;
   VecX beta;
 
-  LMASettings(void);
+  LMASettings();
 };
 
 class LMAOpt {
@@ -53,12 +53,12 @@ public:
 
   double error;
 
-  LMAOpt(void);
+  LMAOpt();
   int configure(const LMASettings &settings);
   int evalFunction(const VecX &beta, double &error);
   int calcGradients(const VecX &beta);
-  int iterate(void);
-  int optimize(void);
+  int iterate();
+  int optimize();
 };
 
 }  // end of yarl namespace

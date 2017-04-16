@@ -3,7 +3,7 @@
 namespace yarl {
 namespace gp {
 
-Data::Data(void) {
+Data::Data() {
   this->loaded = false;
 
   this->fields.clear();
@@ -59,7 +59,7 @@ int Data::fieldIndex(const std::string &field) const {
   return 0;
 }
 
-Dataset::Dataset(void) {
+Dataset::Dataset() {
   this->train_data = Data();
   this->valid_data = Data();
   this->test_data = Data();

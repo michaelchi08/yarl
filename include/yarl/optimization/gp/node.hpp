@@ -50,21 +50,21 @@ public:
   // evaluation
   VecX data;
 
-  Node(void);
-  ~Node(void);
+  Node();
+  ~Node();
   void setAsConstant(double constant);
   void setAsInput(const std::string &input);
   void setAsFuncEval(int length);
   void setAsUnaryFunc(int function_type);
   void setAsBinaryFunc(int function_type);
-  bool isTermNode(void) const;
-  bool isFuncNode(void) const;
+  bool isTermNode() const;
+  bool isFuncNode() const;
   int copyFrom(const Node &target);
   int deepCopyFrom(const Node &target);
   bool equals(const Node &target);
   bool deepEquals(const Node &target);
-  std::string toString(void);
-  void print(void);
+  std::string toString();
+  void print();
 };
 
 }  // end of gp namespace

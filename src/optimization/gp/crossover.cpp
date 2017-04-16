@@ -4,7 +4,7 @@
 namespace yarl {
 namespace gp {
 
-Crossover::Crossover(void) {
+Crossover::Crossover() {
   this->probability = 0.0;
 }
 

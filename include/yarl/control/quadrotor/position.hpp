@@ -11,14 +11,21 @@ namespace yarl {
 
 class PositionController {
 public:
-  double dt;
-  Vec4 outputs;
-
   PID x_controller;
   PID y_controller;
   PID z_controller;
 
-  PositionController(void);
+  double dt;
+  Vec4 outputs;
+
+  PositionController()
+    : x_controller(0.5, 0.0, 0.035),
+      y_controller(0.5, 0.0, 0.035),
+      z_controller(0.3, 0.0, 0.018),
+
+      dt(0.0),
+      outputs(0.0, 0.0, 0.0, 0.0) {}
+
   Vec4 calculate(Vec3 setpoints, Vec4 actual, double yaw, double dt);
 };
 

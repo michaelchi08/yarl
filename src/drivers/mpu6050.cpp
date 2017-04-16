@@ -4,10 +4,9 @@
 namespace yarl {
 namespace drivers {
 
-MPU6050::MPU6050(void) {
-}
+MPU6050::MPU6050() {}
 
-int MPU6050::configure(void) {
+int MPU6050::configure() {
   int8_t retval;
 
   // setup
@@ -91,7 +90,7 @@ int MPU6050::configure(void) {
   return 0;
 }
 
-int MPU6050::ping(void) {
+int MPU6050::ping() {
   char buf;
 
   // print mpu6050 address
@@ -102,7 +101,7 @@ int MPU6050::ping(void) {
   return 0;
 }
 
-void MPU6050::accelerometerCalcAngle(void) {
+void MPU6050::accelerometerCalcAngle() {
   float x;
   float y;
   float z;
@@ -122,7 +121,7 @@ void MPU6050::gyroscopeCalcAngle(float dt) {
   this->gyro.pitch = (this->gyro.y * dt) + this->pitch;
 }
 
-int MPU6050::getData(void) {
+int MPU6050::getData() {
   char raw_data[14];
   int8_t raw_temp;
   float dt;
@@ -188,7 +187,7 @@ int MPU6050::getData(void) {
   return 0;
 }
 
-int MPU6050::calibrate(void) {
+int MPU6050::calibrate() {
   int16_t i;
 
   // let it stablize for a while first
@@ -221,7 +220,7 @@ int MPU6050::calibrate(void) {
   return 0;
 }
 
-void MPU6050::print(void) {
+void MPU6050::print() {
   printf("gyro_x: %f\n", this->gyro.x);
   printf("gyro_y: %f\n", this->gyro.y);
   printf("gyro_z: %f\n", this->gyro.z);
@@ -288,7 +287,7 @@ int MPU6050::setDPLFConfig(int setting) {
   return 0;
 }
 
-int MPU6050::getDPLFConfig(void) {
+int MPU6050::getDPLFConfig() {
   char data[1];
   int retval;
 
@@ -319,7 +318,7 @@ int MPU6050::setSampleRateDiv(int div) {
   return 0;
 }
 
-int MPU6050::getSampleRateDiv(void) {
+int MPU6050::getSampleRateDiv() {
   char data;
   int retval;
 
@@ -333,7 +332,7 @@ int MPU6050::getSampleRateDiv(void) {
   return data;
 }
 
-int MPU6050::getSampleRate(void) {
+int MPU6050::getSampleRate() {
   int rate_div;
   uint8_t dlpf_cfg;
   uint16_t sample_div;
@@ -381,7 +380,7 @@ int MPU6050::setGyroRange(int range) {
   return 0;
 }
 
-int MPU6050::getGyroRange(void) {
+int MPU6050::getGyroRange() {
   char data;
   int retval;
 
@@ -419,7 +418,7 @@ int MPU6050::setAccelRange(int range) {
   return 0;
 }
 
-int MPU6050::getAccelRange(void) {
+int MPU6050::getAccelRange() {
   char data;
   int retval;
 
@@ -437,7 +436,7 @@ int MPU6050::getAccelRange(void) {
   return data;
 }
 
-void MPU6050::info(void) {
+void MPU6050::info() {
   printf("gyro sensitivity: %f\n", this->gyro.sensitivity);
   printf("gyro offset_x: %f\n", this->gyro.offset_x);
   printf("gyro offset_y: %f\n", this->gyro.offset_y);

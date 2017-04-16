@@ -19,15 +19,15 @@ public:
   double z_min;
   double z_max;
 
-  TestRange(void);
+  TestRange();
 };
 
 class TestCase {
 public:
   bool configured;
 
-  TestCase(void);
-  int configure(void);
+  TestCase();
+  int configure();
   void createR(double roll, double pitch, double yaw, Mat3 &R);
   void createR(double qx, double qy, double qz, double qw, Mat3 &R);
   void createP(const Mat3 &K, const Mat3 &R, const Vec3 &t, MatX &P);

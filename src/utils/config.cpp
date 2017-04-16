@@ -2,13 +2,13 @@
 
 namespace yarl {
 
-ConfigParser::ConfigParser(void) {
+ConfigParser::ConfigParser() {
   this->config_loaded = false;
   this->doc = NULL;
   this->obj = NULL;
 }
 
-ConfigParser::~ConfigParser(void) {
+ConfigParser::~ConfigParser() {
   if (this->obj) {
     xmlXPathFreeObject(this->obj);
   }
@@ -137,7 +137,7 @@ int ConfigParser::setXMLPointer(const std::string &key) {
   return 0;
 }
 
-void ConfigParser::resetXMLPointer(void) {
+void ConfigParser::resetXMLPointer() {
   if (this->obj) {
     xmlXPathFreeObject(this->obj);
     this->obj = NULL;

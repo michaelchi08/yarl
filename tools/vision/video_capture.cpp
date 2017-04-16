@@ -1,6 +1,6 @@
 #include "yarl/vision/camera.hpp"
 
-int main(void) {
+int main() {
   yarl::Camera camera;
   cv::Mat image;
 

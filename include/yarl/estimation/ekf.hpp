@@ -21,7 +21,7 @@ struct EKF {
   VecX mu_p;
   MatX S_p;
 
-  EKF(void);
+  EKF();
   int configure(const VecX &mu, const MatX &R, const MatX &Q);
   int predictionUpdate(const VecX &g, const MatX &G);
   int measurementUpdate(const VecX &h, const MatX &H, const VecX &y);
