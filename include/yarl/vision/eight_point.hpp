@@ -20,11 +20,7 @@ public:
   int image_height;
   Mat3 N;
 
-  EightPoint() :
-    configured(false),
-    image_width(0),
-    image_height(0),
-    N() {}
+  EightPoint() : configured(false), image_width(0), image_height(0), N() {}
 
   int configure(int image_width, int image_height);
   void normalizePoints(MatX &pts1, MatX &pts2);

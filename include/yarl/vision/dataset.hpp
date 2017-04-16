@@ -21,14 +21,14 @@ public:
   double dt;
   int frame;
 
-  TestCamera() :
-    K(),
-    image_width(-1),
-    image_height(-1),
-    hz(-1),
+  TestCamera()
+    : K(),
+      image_width(-1),
+      image_height(-1),
+      hz(-1),
 
-    dt(0),
-    frame(-1) {}
+      dt(0),
+      frame(-1) {}
 
   bool update(double dt);
   int checkFeatures(double dt,
@@ -48,8 +48,8 @@ public:
   Vec2 feature_y_bounds;
   Vec2 feature_z_bounds;
 
-  TestDataset() :
-      configured(false),
+  TestDataset()
+    : configured(false),
       camera(),
       nb_features(-1),
       feature_x_bounds(),

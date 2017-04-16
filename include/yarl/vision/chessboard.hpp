@@ -17,12 +17,12 @@ struct Chessboard {
   int nb_corners_total;
   cv::Size board_size;
 
-  Chessboard() :
-    configured(false),
-    nb_corners_rows(0),
-    nb_corners_columns(0),
-    nb_corners_total(0),
-    board_size(0, 0) {}
+  Chessboard()
+    : configured(false),
+      nb_corners_rows(0),
+      nb_corners_columns(0),
+      nb_corners_total(0),
+      board_size(0, 0) {}
 
   int configure(int nb_corners_columns, int nb_corners_rows);
 };
