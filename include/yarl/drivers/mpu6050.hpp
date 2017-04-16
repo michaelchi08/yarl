@@ -147,6 +147,24 @@ public:
 
   float pitch;
   float roll;
+
+  MPU6050Gyroscope()
+    : sensitivity(0.0f),
+
+      raw_x(0),
+      raw_y(0),
+      raw_z(0),
+
+      offset_x(0.0f),
+      offset_y(0.0f),
+      offset_z(0.0f),
+
+      x(0.0f),
+      y(0.0f),
+      z(0.0f),
+
+      pitch(0.0f),
+      roll(0.0f) {}
 };
 
 class MPU6050Accelerometer {
@@ -167,6 +185,24 @@ public:
 
   float pitch;
   float roll;
+
+  MPU6050Accelerometer()
+    : sensitivity(0.0f),
+
+      raw_x(0),
+      raw_y(0),
+      raw_z(0),
+
+      offset_x(0.0f),
+      offset_y(0.0f),
+      offset_z(0.0f),
+
+      x(0.0f),
+      y(0.0f),
+      z(0.0f),
+
+      pitch(0.0f),
+      roll(0.0f) {}
 };
 
 class MPU6050 {
@@ -175,9 +211,9 @@ public:
   MPU6050Accelerometer accel;
   drivers::I2C i2c;
 
-  float temperature;
   float pitch;
   float roll;
+  float temperature;
 
   float pitch_offset;
   float roll_offset;
@@ -186,7 +222,22 @@ public:
   float sample_rate;
   int8_t dplf_config;
 
-  MPU6050();
+  MPU6050()
+    : gyro(),
+      accel(),
+      i2c(),
+
+      pitch(0.0f),
+      roll(0.0f),
+      temperature(0.0f),
+
+      pitch_offset(0.0f),
+      roll_offset(0.0f),
+
+      last_updated(clock()),
+      sample_rate(-1.0f),
+      dplf_config(0) {}
+
   int configure();
   int ping();
   void accelerometerCalcAngle();

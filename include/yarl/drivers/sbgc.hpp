@@ -119,6 +119,13 @@ public:
   uint8_t *data;
   uint8_t data_checksum;
 
+  SBGCFrame()
+    : cmd_id(0),
+      data_size(0),
+      header_checksum(0),
+      data(nullptr),
+      data_checksum(0) {}
+
   void printFrame();
 
   void buildDataChecksum();
@@ -147,6 +154,20 @@ public:
   int system_error;
   int battery_level;
 
+  SBGCRealtimeData()
+    : accel(0.0, 0.0, 0.0),
+      gyro(0.0, 0.0, 0.0),
+
+      camera_angles(0.0, 0.0, 0.0),
+      frame_angles(0.0, 0.0, 0.0),
+      rc_angles(0.0, 0.0, 0.0),
+      encoder_angles(0.0, 0.0, 0.0),
+
+      cycle_time(0),
+      i2c_error_count(0),
+      system_error(0),
+      battery_level(0) {}
+
   void printData();
 };
 
@@ -164,8 +185,30 @@ public:
   uint16_t board_features;
   uint8_t connection_flags;
 
-  SBGC();
-  SBGC(std::string port);
+  SBGC()
+    : configured(false),
+      data(),
+      port(),
+      serial(-1),
+
+      board_version(0),
+      firmware_version(0),
+      debug_mode(0),
+      board_features(0),
+      connection_flags(0) {}
+
+  SBGC(std::string port)
+    : configured(false),
+      data(),
+      port(port),
+      serial(-1),
+
+      board_version(0),
+      firmware_version(0),
+      debug_mode(0),
+      board_features(0),
+      connection_flags(0) {}
+
   int connect();
   int disconnect();
   int sendFrame(SBGCFrame &cmd);

@@ -4,30 +4,12 @@
 namespace yarl {
 namespace drivers {
 
-MPU9250::MPU9250() {}
-
 int MPU9250::configure() {
   /* setup */
   this->i2c = drivers::I2C();
   this->i2c.setSlave(MPU9250_ADDRESS);
 
-  /* set initial values */
-  this->gyro.offset_x = 0.0f;
-  this->gyro.offset_y = 0.0f;
-  this->gyro.offset_z = 0.0f;
-  this->gyro.pitch = 0.0f;
-  this->gyro.roll = 0.0f;
-
-  this->accel.offset_x = 0.0f;
-  this->accel.offset_y = 0.0f;
-  this->accel.offset_z = 0.0f;
-  this->accel.pitch = 0.0f;
-  this->accel.roll = 0.0f;
-
-  this->pitch = 0.0f;
-  this->roll = 0.0f;
-
-  this->sample_rate = -1.0;
+  // this->last_updated = clock();
 
   return 0;
 }

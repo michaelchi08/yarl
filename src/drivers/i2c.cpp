@@ -4,14 +4,6 @@
 namespace yarl {
 namespace drivers {
 
-I2C::I2C() {
-  this->fd = -1;
-}
-
-I2C::~I2C() {
-  close(this->fd);
-}
-
 int I2C::setup() {
   int fd;
   int adapter_nr;

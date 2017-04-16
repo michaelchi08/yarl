@@ -205,32 +205,6 @@ void SBGCRealtimeData::printData() {
 }
 
 
-SBGC::SBGC() {
-  this->configured = false;
-
-  this->port = "";
-  this->serial = -1;
-
-  this->board_version = 0;
-  this->firmware_version = 0;
-  this->debug_mode = 0;
-  this->board_features = 0;
-  this->connection_flags = 0;
-}
-
-SBGC::SBGC(std::string port) {
-  this->configured = false;
-
-  this->port = port;
-  this->serial = -1;
-
-  this->board_version = 0;
-  this->firmware_version = 0;
-  this->debug_mode = 0;
-  this->board_features = 0;
-  this->connection_flags = 0;
-}
-
 int SBGC::connect() {
   // open serial port
   this->serial = open(this->port.c_str(), O_RDWR | O_NOCTTY | O_SYNC);

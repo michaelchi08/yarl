@@ -27,8 +27,13 @@ class I2C {
 public:
   int fd;
 
-  I2C();
-  ~I2C();
+  I2C() : fd(-1) {}
+  ~I2C() {
+    if (this->fd != -1) {
+      close(this->fd);
+    }
+  }
+
   int setup();
   int setSlave(char slave_addr);
   int readBytes(char reg_addr, char *data, size_t length);

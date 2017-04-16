@@ -132,6 +132,24 @@ public:
 
   float pitch;
   float roll;
+
+  MPU9250Gyroscope()
+    : sensitivity(0.0f),
+
+      raw_x(0),
+      raw_y(0),
+      raw_z(0),
+
+      offset_x(0.0f),
+      offset_y(0.0f),
+      offset_z(0.0f),
+
+      x(0.0f),
+      y(0.0f),
+      z(0.0f),
+
+      pitch(0.0f),
+      roll(0.0f) {}
 };
 
 class MPU9250Accelerometer {
@@ -152,6 +170,24 @@ public:
 
   float pitch;
   float roll;
+
+  MPU9250Accelerometer()
+    : sensitivity(0.0f),
+
+      raw_x(0),
+      raw_y(0),
+      raw_z(0),
+
+      offset_x(0.0f),
+      offset_y(0.0f),
+      offset_z(0.0f),
+
+      x(0.0f),
+      y(0.0f),
+      z(0.0f),
+
+      pitch(0.0f),
+      roll(0.0f) {}
 };
 
 class MPU9250Magnetometer {
@@ -171,6 +207,23 @@ public:
   float z;
 
   float heading;
+
+  MPU9250Magnetometer()
+    : sensitivity(0.0f),
+
+      raw_x(0),
+      raw_y(0),
+      raw_z(0),
+
+      offset_x(0.0f),
+      offset_y(0.0f),
+      offset_z(0.0f),
+
+      x(0.0f),
+      y(0.0f),
+      z(0.0f),
+
+      heading(0.0f) {}
 };
 
 class MPU9250 {
@@ -180,9 +233,9 @@ public:
   MPU9250Magnetometer mag;
   drivers::I2C i2c;
 
-  float temperature;
   float pitch;
   float roll;
+  float temperature;
 
   float pitch_offset;
   float roll_offset;
@@ -190,7 +243,22 @@ public:
   clock_t last_updated;
   float sample_rate;
 
-  MPU9250();
+  MPU9250()
+    : gyro(),
+      accel(),
+      mag(),
+      i2c(),
+
+      pitch(0.0f),
+      roll(0.0f),
+      temperature(0.0f),
+
+      pitch_offset(0.0f),
+      roll_offset(0.0f),
+
+      last_updated(0),
+      sample_rate(-1.0f) {}
+
   int configure();
   int ping();
   int setGyroScale(int8_t scale);

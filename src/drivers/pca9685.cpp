@@ -4,8 +4,6 @@
 namespace yarl {
 namespace drivers {
 
-PCA9685::PCA9685() {}
-
 int PCA9685::configure(int freq) {
   char mode_1;
 

@@ -4,8 +4,6 @@
 namespace yarl {
 namespace drivers {
 
-MPU6050::MPU6050() {}
-
 int MPU6050::configure() {
   int8_t retval;
 
@@ -13,30 +11,6 @@ int MPU6050::configure() {
   this->i2c = drivers::I2C();
   this->i2c.setup();
   this->i2c.setSlave(MPU6050_ADDRESS);
-
-  // set intial values
-  this->gyro.offset_x = 0.0f;
-  this->gyro.offset_y = 0.0f;
-  this->gyro.offset_z = 0.0f;
-  this->gyro.pitch = 0.0f;
-  this->gyro.roll = 0.0f;
-
-  this->accel.offset_x = 0.0f;
-  this->accel.offset_y = 0.0f;
-  this->accel.offset_z = 0.0f;
-  this->accel.pitch = 0.0f;
-  this->accel.roll = 0.0f;
-
-  this->pitch_offset = 0.0f;
-  this->roll_offset = 0.0f;
-
-  this->pitch = 0.0f;
-  this->roll = 0.0f;
-  this->temperature = 0.0f;
-
-  this->last_updated = clock();
-  this->sample_rate = -1.0;
-  this->dplf_config = 0;
 
   // set dplf
   this->setDPLFConfig(6);
