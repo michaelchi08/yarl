@@ -25,7 +25,17 @@ public:
   int max_inliers;
   double model_params[2];
 
-  RANSAC();
+  RANSAC() :
+    configured(false),
+
+    max_iter(0),
+    thresh_ratio(1.0),
+    thresh_dist(0.0),
+
+    iter(0),
+    max_inliers(0),
+    model_params{0.0, 0.0} {}
+
   int configure(int max_iter, double threshold_ratio, double threshold_dist);
   int randomSample(const MatX &data, Vec2 &sample);
   int computeDistances(const MatX &data,

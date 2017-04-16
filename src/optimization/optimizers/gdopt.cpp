@@ -2,15 +2,6 @@
 
 namespace yarl {
 
-GDOpt::GDOpt() {
-  this->configured = false;
-
-  this->max_iter = 1000;
-  this->eta = VecX();
-  this->x = VecX();
-  this->f = nullptr;
-}
-
 int GDOpt::configure(int max_iter,
                      const VecX &eta,
                      const VecX &x,

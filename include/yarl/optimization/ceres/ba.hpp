@@ -23,29 +23,27 @@ public:
 
   bool origin;
 
-  BAResidual() {
-    this->fx = 0.0;
-    this->fy = 0.0;
-    this->cx = 0.0;
-    this->cy = 0.0;
+  BAResidual()
+    : fx(0.0),
+      fy(0.0),
+      cx(0.0),
+      cy(0.0),
 
-    this->x = 0.0;
-    this->y = 0.0;
+      x(0.0),
+      y(0.0),
 
-    this->origin = false;
-  }
+      origin(false) {}
 
-  BAResidual(Mat3 K, Vec2 x, bool origin) {
-    this->fx = K(0, 0);
-    this->fy = K(1, 1);
-    this->cx = K(0, 2);
-    this->cy = K(1, 2);
+  BAResidual(Mat3 K, Vec2 x, bool origin)
+    : fx(K(0, 0)),
+      fy(K(1, 1)),
+      cx(K(0, 2)),
+      cy(K(1, 2)),
 
-    this->x = x(0);
-    this->y = x(1);
+      x(x(0)),
+      y(x(1)),
 
-    this->origin = origin;
-  }
+      origin(origin) {}
 
   template <typename T>
   bool operator()(const T *const q,
@@ -120,29 +118,27 @@ public:
 
   bool origin;
 
-  BAAnalyticalResidual() {
-    this->fx = 0.0;
-    this->fy = 0.0;
-    this->cx = 0.0;
-    this->cy = 0.0;
+  BAAnalyticalResidual()
+    : fx(0.0),
+      fy(0.0),
+      cx(0.0),
+      cy(0.0),
 
-    this->x = 0.0;
-    this->y = 0.0;
+      x(0.0),
+      y(0.0),
 
-    this->origin = false;
-  }
+      origin(false) {}
 
-  BAAnalyticalResidual(Mat3 K, Vec2 x, bool origin) {
-    this->fx = K(0, 0);
-    this->fy = K(1, 1);
-    this->cx = K(0, 2);
-    this->cy = K(1, 2);
+  BAAnalyticalResidual(Mat3 K, Vec2 x, bool origin)
+    : fx(K(0, 0)),
+      fy(K(1, 1)),
+      cx(K(0, 2)),
+      cy(K(1, 2)),
 
-    this->x = x(0);
-    this->y = x(1);
+      x(x(0)),
+      y(x(1)),
 
-    this->origin = origin;
-  }
+      origin(origin) {}
 
   virtual ~BAAnalyticalResidual() {}
 
@@ -241,8 +237,38 @@ public:
   double **c;
   double **x;
 
-  BundleAdjustment();
-  ~BundleAdjustment();
+  BundleAdjustment()
+    : configured(false),
+
+      K(),
+      x1_pts(),
+      x2_pts(),
+
+      q(NULL),
+      c(NULL),
+      x(NULL) {
+    this->K = MatX::Zero(3, 3);
+    this->x1_pts.resize(0, 0);
+    this->x2_pts.resize(0, 0);
+  }
+
+  ~BundleAdjustment() {
+    if (this->configured) {
+      for (int i = 0; i < this->x1_pts.rows(); i++) {
+        free(this->x[i]);
+      }
+      free(this->q[0]);
+      free(this->q[1]);
+
+      free(this->c[0]);
+      free(this->c[1]);
+
+      free(this->x);
+      free(this->q);
+      free(this->c);
+    }
+  }
+
   int configure(Mat3 K, MatX x1_pts, MatX x2_pts);
   int solve(MatX pt3d);
 };

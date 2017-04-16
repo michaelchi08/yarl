@@ -3,15 +3,6 @@
 namespace yarl {
 namespace gp {
 
-TreeConfig::TreeConfig() {
-  this->build_method = UINITI;
-  this->max_depth = UINITI;
-
-  this->unary_functions.clear();
-  this->binary_functions.clear();
-  this->constants.clear();
-}
-
 int TreeConfig::configure(int build_method, int max_depth) {
   // build parameters
   this->build_method = build_method;
@@ -147,31 +138,6 @@ int TreeConfig::randomTerminal(Node &node) {
   return 0;
 }
 
-Tree::Tree() {
-  this->root = NULL;
-  this->chromosome.clear();
-
-  this->nb_inputs = 0;
-  this->nb_constants = 0;
-  this->nb_functions = 0;
-
-  this->size = 0;
-  this->depth = 0;
-
-  this->error = 0;
-  this->score = 0;
-  this->hits = 0;
-  this->evaluated = 0;
-
-  this->f_in = MatX();
-  this->f_out = VecX();
-
-  this->tc = NULL;
-}
-
-Tree::~Tree() {
-  delete this->root;
-}
 
 int Tree::configure(TreeConfig *tc, Data *data) {
   this->root = NULL;

@@ -27,7 +27,17 @@ public:
   VecX y;
   VecX beta;
 
-  LMASettings();
+  LMASettings()
+    : max_iter(100),
+      lambda(0.01),
+      function(nullptr),
+      jacobian(nullptr),
+      nb_inputs(0),
+      nb_params(0),
+
+      x(),
+      y(),
+      beta() {}
 };
 
 class LMAOpt {
@@ -53,7 +63,28 @@ public:
 
   double error;
 
-  LMAOpt();
+  LMAOpt()
+    : configured(false),
+
+      max_iter(100),
+      lambda(0.01),
+      function(nullptr),
+      jacobian(nullptr),
+      nb_inputs(0),
+      nb_params(0),
+
+      x(),
+      y(),
+      beta(),
+
+      y_est(),
+      diff(),
+
+      J(),
+      H(),
+
+      error(FLT_MAX) {}
+
   int configure(const LMASettings &settings);
   int evalFunction(const VecX &beta, double &error);
   int calcGradients(const VecX &beta);

@@ -18,7 +18,18 @@ class HalsteadMetric {
   float difficulty;
   float effort;
 
-  HalsteadMetric();
+  HalsteadMetric()
+    : nb_unique_operators(0),
+      nb_unique_operands(0),
+      nb_total_operators(0),
+      nb_total_operands(0),
+
+      vocab(0),
+      length(0),
+      volume(0.0),
+      difficulty(0.0),
+      effort(0.0) {}
+
   int calculate();
   void print();
 };

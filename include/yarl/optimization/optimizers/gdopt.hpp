@@ -19,7 +19,8 @@ public:
   VecX x;
   std::function<double(VecX x)> f;
 
-  GDOpt();
+  GDOpt() : configured(false), max_iter(1000), eta(), x(), f(nullptr) {}
+
   int configure(int max_iter,
                 const VecX &eta,
                 const VecX &x,

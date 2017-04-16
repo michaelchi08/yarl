@@ -2,19 +2,6 @@
 
 namespace yarl {
 
-RANSAC::RANSAC() {
-  this->configured = false;
-
-  this->max_iter = 0;
-  this->thresh_ratio = 1.0;
-  this->thresh_dist = 0.0;
-
-  this->iter = 0;
-  this->max_inliers = 0;
-  this->model_params[0] = 0.0;
-  this->model_params[1] = 0.0;
-}
-
 int RANSAC::configure(int max_iter, double thresh_ratio, double thresh_dist) {
   this->configured = true;
 

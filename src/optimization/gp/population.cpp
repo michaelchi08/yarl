@@ -3,21 +3,6 @@
 namespace yarl {
 namespace gp {
 
-Population::Population() {
-  this->individuals.clear();
-  this->tree_config = NULL;
-  this->data = NULL;
-}
-
-Population::~Population() {
-  for (auto t : this->individuals) {
-    delete t;
-  }
-  this->individuals.clear();
-  this->tree_config = NULL;
-  this->data = NULL;
-}
-
 int Population::configure(int nb_individuals,
                           TreeConfig *tree_config,
                           Data *data) {

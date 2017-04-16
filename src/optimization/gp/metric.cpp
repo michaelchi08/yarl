@@ -53,18 +53,6 @@ double sse(const Data &desired,
   return sse;
 }
 
-HalsteadMetric::HalsteadMetric() {
-  this->nb_unique_operators = 0;
-  this->nb_unique_operands = 0;
-  this->nb_total_operators = 0;
-  this->nb_total_operands = 0;
-
-  this->vocab = 0;
-  this->length = 0;
-  this->volume = 0.0;
-  this->difficulty = 0.0;
-  this->effort = 0.0;
-}
 
 int HalsteadMetric::calculate() {
   float n1, n2;

@@ -12,8 +12,17 @@ public:
   TreeConfig *tree_config;
   Data *data;
 
-  Population();
-  ~Population();
+  Population() : individuals(), tree_config(NULL), data(NULL) {}
+
+  ~Population() {
+    for (auto t : this->individuals) {
+      delete t;
+    }
+    this->individuals.clear();
+    this->tree_config = NULL;
+    this->data = NULL;
+  }
+
   int configure(int nb_individuals, TreeConfig *tree_config, Data *data);
   void clear();
   int best(Tree &tree);

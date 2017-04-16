@@ -3,15 +3,6 @@
 namespace yarl {
 namespace gp {
 
-Data::Data() {
-  this->loaded = false;
-
-  this->fields.clear();
-  this->rows = 0;
-  this->cols = 0;
-  this->data = MatX();
-}
-
 int Data::load(const MatX &data, const std::vector<std::string> &fields) {
   // pre-eheck
   if (this->loaded) {
@@ -59,12 +50,6 @@ int Data::fieldIndex(const std::string &field) const {
   return 0;
 }
 
-Dataset::Dataset() {
-  this->train_data = Data();
-  this->valid_data = Data();
-  this->test_data = Data();
-  this->predict = "";
-}
 
 int Dataset::load(const Data &d, float train, float valid, float test) {
   double train_rows, valid_rows, test_rows;

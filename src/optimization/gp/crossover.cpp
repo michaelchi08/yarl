@@ -4,10 +4,6 @@
 namespace yarl {
 namespace gp {
 
-Crossover::Crossover() {
-  this->probability = 0.0;
-}
-
 int Crossover::pointCrossover(Tree &tree1, Tree &tree2) {
   int index1, index2;
   Node *node1, *node2;

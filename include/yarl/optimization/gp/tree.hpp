@@ -47,7 +47,14 @@ public:
   std::vector<double> constants;
   std::vector<std::string> inputs;
 
-  TreeConfig();
+  TreeConfig()
+    : build_method(UINITI),
+      max_depth(UINITI),
+
+      unary_functions(),
+      binary_functions(),
+      constants() {}
+
   int configure(int build_method, int max_depth);
   void clear();
   int randomUnaryFunction(Node &node);
@@ -80,8 +87,31 @@ public:
 
   TreeConfig *tc;
 
-  Tree();
-  ~Tree();
+  Tree()
+    : root(NULL),
+      chromosome(),
+
+      nb_inputs(0),
+      nb_constants(0),
+      nb_functions(0),
+
+      size(0),
+      depth(0),
+
+      error(0),
+      score(0),
+      hits(0),
+      evaluated(0),
+
+      f_in(),
+      f_out(),
+
+      tc(NULL) {}
+
+  ~Tree() {
+    delete this->root;
+  }
+
   int configure(TreeConfig *tc, Data *data);
   void clear();
   int copyFrom(const Tree &t);

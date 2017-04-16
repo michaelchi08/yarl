@@ -2,42 +2,6 @@
 
 namespace yarl {
 
-LMASettings::LMASettings() {
-  this->max_iter = 100;
-  this->lambda = 0.01;
-  this->function = nullptr;
-  this->jacobian = nullptr;
-  this->nb_inputs = 0;
-  this->nb_params = 0;
-
-  this->x = MatX::Zero(1, 1);
-  this->y = MatX::Zero(1, 1);
-  this->beta = MatX::Zero(1, 1);
-}
-
-LMAOpt::LMAOpt() {
-  this->configured = false;
-
-  this->max_iter = 100;
-  this->lambda = 0.01;
-  this->function = nullptr;
-  this->jacobian = nullptr;
-  this->nb_inputs = 0;
-  this->nb_params = 0;
-
-  this->x = MatX::Zero(1, 1);
-  this->y = MatX::Zero(1, 1);
-  this->beta = MatX::Zero(1, 1);
-
-  this->y_est = MatX::Zero(1, 1);
-  this->diff = MatX::Zero(1, 1);
-
-  this->J = MatX::Zero(1, 1);
-  this->H = MatX::Zero(1, 1);
-
-  this->error = FLT_MAX;
-}
-
 int LMAOpt::configure(const LMASettings &settings) {
   this->configured = true;
 

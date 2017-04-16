@@ -3,36 +3,6 @@
 namespace yarl {
 namespace gp {
 
-Node::Node() {
-  // general
-  this->type = UINITI;
-  this->parent = NULL;
-  this->nth_child = UINITI;
-
-  // constant
-  this->nval = UINITI;
-
-  // input
-  this->input = "";
-
-  // function
-  this->fval = UINITI;
-  this->arity = UINITI;
-  this->children = {NULL, NULL};
-
-  // evaluation
-  this->data = VecX();
-}
-
-Node::~Node() {
-  for (int i = 0; i < this->arity; i++) {
-    if (this->children[i] != NULL) {
-      delete this->children[i];
-      this->children[i] = NULL;
-    }
-  }
-}
-
 void Node::setAsConstant(double constant) {
   // general
   this->type = CONST;

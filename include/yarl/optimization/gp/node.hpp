@@ -50,8 +50,35 @@ public:
   // evaluation
   VecX data;
 
-  Node();
-  ~Node();
+  Node()
+    :  // general
+      type(UINITI),
+      parent(NULL),
+      nth_child(UINITI),
+
+      // constant
+      nval(UINITI),
+
+      // input
+      input(),
+
+      // function
+      fval(UINITI),
+      arity(UINITI),
+      children{NULL, NULL},
+
+      // evaluation
+      data() {}
+
+  ~Node() {
+    for (int i = 0; i < this->arity; i++) {
+      if (this->children[i] != NULL) {
+        delete this->children[i];
+        this->children[i] = NULL;
+      }
+    }
+  }
+
   void setAsConstant(double constant);
   void setAsInput(const std::string &input);
   void setAsFuncEval(int length);

@@ -4,13 +4,6 @@
 namespace yarl {
 namespace gp {
 
-Mutation::Mutation() {
-  this->probability = 0.0;
-
-  this->subtree_build_method = UINITI;
-  this->subtree_max_depth = UINITI;
-}
-
 int Mutation::configure(float probability) {
   this->probability = probability;
 
