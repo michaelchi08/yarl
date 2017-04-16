@@ -19,7 +19,11 @@ public:
   cv::Mat R;
   cv::Mat t;
 
-  VisualOdometry();
+  VisualOdometry() :
+      configured(false),
+      focal_length(0.0),
+      principle_point() {}
+
   int configure(Mat3 K);
   int featureTracking(cv::Mat img_1,
                       cv::Mat img_2,

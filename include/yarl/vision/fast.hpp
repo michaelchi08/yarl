@@ -13,7 +13,11 @@ public:
   int threshold;
   bool nonmax_suppression;
 
-  FastDetector();
+  FastDetector() :
+    configured(false),
+    threshold(20),
+    nonmax_suppression(true) {}
+
   int configure(int threshold, bool nonmax_suppression);
   int detect(const cv::Mat &image, std::vector<cv::KeyPoint> &keypoints);
   int detect(const cv::Mat &image, std::vector<cv::Point2f> &points);

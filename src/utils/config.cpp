@@ -2,22 +2,6 @@
 
 namespace yarl {
 
-ConfigParser::ConfigParser() {
-  this->config_loaded = false;
-  this->doc = NULL;
-  this->obj = NULL;
-}
-
-ConfigParser::~ConfigParser() {
-  if (this->obj) {
-    xmlXPathFreeObject(this->obj);
-  }
-
-  if (this->config_loaded) {
-    xmlFreeDoc(this->doc);
-  }
-}
-
 // clang-format off
 void ConfigParser::addParam(const std::string &key, bool *out, bool optional) {
   CONFIG_PARSER_ADD_PARAM(BOOL, out, optional);

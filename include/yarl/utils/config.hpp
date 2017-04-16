@@ -86,8 +86,18 @@ public:
   xmlDocPtr doc;
   xmlXPathObjectPtr obj;
 
-  ConfigParser();
-  ~ConfigParser();
+  ConfigParser() : config_loaded(false), params(), doc(NULL), obj(NULL) {}
+
+  ~ConfigParser() {
+    if (this->obj) {
+      xmlXPathFreeObject(this->obj);
+    }
+
+    if (this->config_loaded) {
+      xmlFreeDoc(this->doc);
+    }
+  }
+
   // clang-format off
   void addParam(const std::string &key, bool *out, bool optional = false);
   void addParam(const std::string &key, int *out, bool optional = false);

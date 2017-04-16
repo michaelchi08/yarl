@@ -21,7 +21,15 @@ public:
   double dt;
   int frame;
 
-  TestCamera();
+  TestCamera() :
+    K(),
+    image_width(-1),
+    image_height(-1),
+    hz(-1),
+
+    dt(0),
+    frame(-1) {}
+
   bool update(double dt);
   int checkFeatures(double dt,
                     const MatX &features,
@@ -40,8 +48,14 @@ public:
   Vec2 feature_y_bounds;
   Vec2 feature_z_bounds;
 
+  TestDataset() :
+      configured(false),
+      camera(),
+      nb_features(-1),
+      feature_x_bounds(),
+      feature_y_bounds(),
+      feature_z_bounds() {}
 
-  TestDataset();
   int configure(const std::string &config_file);
   int generateRandom3DFeatures(MatX &features);
   int record3DFeatures(const std::string &output_path, const MatX &features);

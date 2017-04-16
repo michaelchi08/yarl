@@ -2,18 +2,6 @@
 
 namespace yarl {
 
-EightPoint::EightPoint() {
-  this->configured = false;
-
-  this->image_width = 0;
-  this->image_height = 0;
-  // clang-format off
-  this->N << 0.0, 0.0, 0.0,
-             0.0, 0.0, 0.0,
-             0.0, 0.0, 0.0;
-  // clang-format on
-}
-
 int EightPoint::configure(int image_width, int image_height) {
   this->configured = true;
 

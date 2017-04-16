@@ -2,16 +2,6 @@
 
 namespace yarl {
 
-TestCamera::TestCamera() {
-  this->K = Mat3();
-  this->image_width = -1;
-  this->image_height = -1;
-  this->hz = -1;
-
-  this->dt = 0;
-  this->frame = -1;
-}
-
 bool TestCamera::update(double dt) {
   this->dt += dt;
 
@@ -84,16 +74,6 @@ int TestCamera::checkFeatures(double dt,
   return 0;
 }
 
-TestDataset::TestDataset() {
-  this->configured = false;
-
-  this->camera = TestCamera();
-
-  this->nb_features = -1;
-  this->feature_x_bounds = Vec2();
-  this->feature_y_bounds = Vec2();
-  this->feature_z_bounds = Vec2();
-}
 
 int TestDataset::configure(const std::string &config_file) {
   ConfigParser parser;

@@ -2,15 +2,6 @@
 
 namespace yarl {
 
-Calibration::Calibration() {
-  this->configured = false;
-  this->state = IDEL;
-
-  this->nb_samples = 0;
-  this->nb_max_samples = 10;
-  this->save_path = "./";
-}
-
 int Calibration::configure(const std::string &save_path,
                            const Chessboard &chessboard,
                            const cv::Size &image_size,

@@ -20,9 +20,18 @@ public:
   Vec3 position;
   Quaternion orientation;
 
-  Pose();
-  Pose(Vec3 position, Quaternion orientation);
-  Pose(double roll, double pitch, double yaw, double x, double y, double z);
+  Pose() : position(0.0, 0.0, 0.0), orientation(0.0, 0.0, 0.0, 0.0) {}
+
+  Pose(Vec3 position, Quaternion orientation)
+    : position(position), orientation(orientation) {}
+
+  Pose(double roll, double pitch, double yaw, double x, double y, double z) {
+    Vec3 euler;
+    euler << roll, pitch, yaw;
+    euler2quat(euler, 321, this->orientation);
+    this->position << x, y, z;
+  }
+
   Mat3 rotationMatrix();
   void printPosition();
   void printOrientation();
@@ -39,14 +48,13 @@ public:
   double angular_y;
   double angular_z;
 
-  Twist() {
-    this->linear_x = 0;
-    this->linear_y = 0;
-    this->linear_z = 0;
-    this->angular_x = 0;
-    this->angular_y = 0;
-    this->angular_z = 0;
-  }
+  Twist()
+    : linear_x(0),
+      linear_y(0),
+      linear_z(0),
+      angular_x(0),
+      angular_y(0),
+      angular_z(0) {}
 };
 
 int csvrows(const std::string &file_path);

@@ -2,12 +2,6 @@
 
 namespace yarl {
 
-FastDetector::FastDetector() {
-  this->configured = false;
-  this->threshold = 20;
-  this->nonmax_suppression = true;
-}
-
 int FastDetector::configure(int threshold, bool nonmax_suppression) {
   this->configured = true;
   this->threshold = threshold;

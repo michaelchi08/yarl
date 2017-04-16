@@ -2,31 +2,6 @@
 
 namespace yarl {
 
-// POSE
-Pose::Pose() {
-  this->position = Vec3::Zero(3, 1);
-  this->orientation = Quaternion();
-}
-
-Pose::Pose(Vec3 position, Quaternion orientation) {
-  this->position = position;
-  this->orientation = orientation;
-}
-
-// clang-format off
-Pose::Pose(double roll,
-           double pitch,
-           double yaw,
-           double x,
-           double y,
-           double z) {
-  Vec3 euler;
-  euler << roll, pitch, yaw;
-  euler2quat(euler, 321, this->orientation);
-  this->position << x, y, z;
-}
-// clang-format on
-
 Mat3 Pose::rotationMatrix() {
   return this->orientation.toRotationMatrix();
 }

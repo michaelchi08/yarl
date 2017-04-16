@@ -2,15 +2,6 @@
 
 namespace yarl {
 
-Chessboard::Chessboard() {
-  this->configured = false;
-
-  this->nb_corners_rows = 0;
-  this->nb_corners_columns = 0;
-  this->nb_corners_total = 0;
-  this->board_size = cv::Size(0, 0);
-}
-
 int Chessboard::configure(int nb_corners_columns, int nb_corners_rows) {
   this->configured = true;
 

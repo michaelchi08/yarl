@@ -10,21 +10,6 @@
 
 namespace yarl {
 
-struct CameraConfig {
-public:
-  int camera_index;
-  int image_width;
-  int image_height;
-
-  float exposure;
-  float gain;
-
-  cv::Mat camera_mat;
-  cv::Mat rectification_mat;
-  cv::Mat distortion_coef;
-  cv::Mat projection_mat;
-};
-
 class Camera {
 public:
   bool configured;
@@ -37,8 +22,21 @@ public:
   cv::Mat camera_mat;
   cv::Mat distortion_coef;
 
-  Camera();
-  ~Camera();
+  Camera()
+    : configured(false),
+      capture(),
+      capture_index(-1),
+      image_width(0),
+      image_height(0),
+      camera_mat(),
+      distortion_coef() {}
+
+  ~Camera() {
+    if (this->capture.isOpened()) {
+      this->capture.release();
+    }
+  }
+
   int configure(int capture_index, int image_width, int image_height);
   int getFrame(cv::Mat &frame);
   int getUndistortFrame(cv::Mat &frame);

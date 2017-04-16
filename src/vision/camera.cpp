@@ -2,20 +2,6 @@
 
 namespace yarl {
 
-Camera::Camera() {
-  this->configured = false;
-
-  this->capture_index = 0;
-  this->image_width = 0;
-  this->image_height = 0;
-}
-
-Camera::~Camera() {
-  if (this->capture.isOpened()) {
-    this->capture.release();
-  }
-}
-
 int Camera::configure(int capture_index, int image_width, int image_height) {
   // setup
   this->configured = true;

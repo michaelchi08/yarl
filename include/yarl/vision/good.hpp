@@ -18,7 +18,15 @@ public:
 
   cv::Mat mask;
 
-  GoodDetector();
+  GoodDetector() :
+    configured(false),
+    max_corners(1000),
+    quality_level(0.1),
+    min_dist(10),
+    block_size(3),
+    use_harris(false),
+    k(0.04) {}
+
   int configure();
   int detect(const cv::Mat &image, std::vector<cv::Point2f> &points);
 };

@@ -2,16 +2,6 @@
 
 namespace yarl {
 
-GoodDetector::GoodDetector() {
-  this->configured = false;
-  this->max_corners = 1000;
-  this->quality_level = 0.1;
-  this->min_dist = 10;
-  this->block_size = 3;
-  this->use_harris = false;
-  this->k = 0.04;
-}
-
 int GoodDetector::configure() {
   this->configured = true;
   return 0;

@@ -39,7 +39,14 @@ public:
   std::vector<cv::Mat> translation_vectors;
   double reprojection_error;
 
-  Calibration();
+  Calibration()
+    : configured(false),
+      state(IDEL),
+
+      nb_samples(0),
+      nb_max_samples(10),
+      save_path("./") {}
+
   int configure(const std::string &save_path,
                 const Chessboard &chessboard,
                 const cv::Size &image_size,
