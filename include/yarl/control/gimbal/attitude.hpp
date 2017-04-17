@@ -9,6 +9,10 @@
 
 namespace yarl {
 
+/**
+ * Attitude Controller for a Gimbal, this class implements a simple 2-axis
+ * roll and pitch PID controller
+ */
 class AttitudeController {
 public:
   PID roll_controller;

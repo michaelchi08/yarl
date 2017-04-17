@@ -4,31 +4,19 @@
 
 namespace yarl {
 
-TEST(Factor, constructor) {
-  Factor f1(2, 100);
-  ASSERT_EQ(1, f1.arity);
-  ASSERT_EQ(2, f1.connections[0]);
-  ASSERT_EQ(100, *static_cast<double *>(f1.measurement));
-
-  Factor f2(1, 2, 100);
-  ASSERT_EQ(2, f2.arity);
-  ASSERT_EQ(1, f2.connections[0]);
-  ASSERT_EQ(2, f2.connections[1]);
-  ASSERT_EQ(100, *static_cast<double *>(f2.measurement));
-}
-
 TEST(FactorGraph, addUnaryFactor) {
   FactorGraph graph;
-  graph.addUnaryFactor(1, 2);
+  graph.addUnaryFactor<double>(VariableType::POSE, 1, 2.0);
 
-  ASSERT_EQ(1, (int) graph.graph.size());
-  ASSERT_EQ(1, (int) graph.factors.size());
+  ASSERT_EQ(1u, graph.graph.size());
+  ASSERT_EQ(1u, graph.factors.size());
 }
 
 TEST(FactorGraph, addBinaryFactor) {
   FactorGraph graph;
 
-  graph.addBinaryFactor(1, 2, 2);
+  graph.addBinaryFactor<double>(
+    VariableType::POSE, 1, VariableType::POSE, 2, 2);
   ASSERT_EQ(2, (int) graph.graph.size());
   ASSERT_EQ(1, (int) graph.factors.size());
 }
@@ -36,9 +24,17 @@ TEST(FactorGraph, addBinaryFactor) {
 TEST(FactorGraph, print) {
   FactorGraph graph;
 
-  graph.addUnaryFactor(1, 2);
-  graph.addBinaryFactor(1, 2, 2);
-  graph.addBinaryFactor(2, 3, 2);
+  graph.addUnaryFactor(VariableType::POSE, 1, 2);
+  graph.addBinaryFactor(VariableType::POSE, 1, VariableType::POSE, 2, 2);
+  graph.addBinaryFactor(VariableType::POSE, 2, VariableType::POSE, 3, 2);
+
+  Vec2 measurement;
+  measurement << 100.0, 200.0;
+  graph.addBinaryFactor(
+    VariableType::POSE, 1, VariableType::POSE, 1, measurement);
+  graph.addBinaryFactor(
+    VariableType::POSE, 2, VariableType::POSE, 2, measurement);
+
   graph.print();
 }
 

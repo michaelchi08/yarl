@@ -63,7 +63,7 @@ The `ConfigDataType` is an enum used by `ConfigParam` to denote the yaml value t
         void *data;
         bool optional;
 
-        ConfigParam(void);
+        ConfigParam();
     };
 
     }  // end of wave namespace
@@ -92,7 +92,7 @@ By default an instance of `ConfigParam` will have:
         YAML::Node root;
         std::vector<ConfigParam> params;
 
-        ConfigParser(void);
+        ConfigParser();
         void addParam(std::string key, bool *out, bool optional = false);
         void addParam(std::string key, int *out, bool optional = false);
         void addParam(std::string key, float *out, bool optional = false);
@@ -127,7 +127,7 @@ By default an instance of `ConfigParam` will have:
 
 ### Constructor
 
-    ConfigParser(void)
+    ConfigParser()
 
 The default `ConfigParser` does not take any arguments, by default it sets:
 

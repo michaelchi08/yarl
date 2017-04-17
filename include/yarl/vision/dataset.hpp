@@ -22,13 +22,7 @@ public:
   int frame;
 
   TestCamera()
-    : K(),
-      image_width(-1),
-      image_height(-1),
-      hz(-1),
-
-      dt(0),
-      frame(-1) {}
+    : image_width(-1), image_height(-1), K(), hz(-1), dt(0), frame(-1) {}
 
   bool update(double dt);
   int checkFeatures(double dt,
