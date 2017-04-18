@@ -11,6 +11,7 @@ public:
   float probability;
 
   Crossover() : probability(0.0) {}
+
   int pointCrossover(Tree &t1, Tree &t2);
 };
 

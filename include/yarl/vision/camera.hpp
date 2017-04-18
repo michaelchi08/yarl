@@ -15,7 +15,6 @@ public:
   bool configured;
 
   cv::VideoCapture capture;
-
   int capture_index;
   int image_width;
   int image_height;

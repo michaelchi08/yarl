@@ -1,6 +1,7 @@
 # wave/utils/filesystem.hpp
 
-This module contains file system functions that C++ did not come with, for example `file_exists()` checks if a file exists at a certain path.
+This module contains file system functions that C++ did not come with, for
+example `file_exists()` checks if a file exists at a certain path.
 
 
 ## Functions
@@ -13,7 +14,8 @@ Checks to see if `file_name` exists, returns boolean.
 
     std::vector<std::string> path_split(const std::string path);
 
-Splits `path` with the `/` token, returns separated path elements in the form of `std::vector<std::string>`.
+Splits `path` with the `/` token, returns separated path elements in the form
+of `std::vector<std::string>`.
 
 ---
 
@@ -21,7 +23,8 @@ Splits `path` with the `/` token, returns separated path elements in the form of
                        const std::string path2,
                        std::string &out);
 
-Combines `path1` with `path2`, the result is written to `out`. This function is modeled after python's `os.path.join` function. Example usage:
+Combines `path1` with `path2`, the result is written to `out`. This function is
+modeled after python's `os.path.join` function. Example usage:
 
     paths_combine("/a/b", "c/d", out) --> out = "/a/b/c/d"
     paths_combine("/a/b", "../", out) --> out = "/a"

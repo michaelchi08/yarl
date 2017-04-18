@@ -1,6 +1,7 @@
 # wave/utils
 
-The `wave.utils` module contains utility functions for our slam core code development, the module is composed of:
+The `wave.utils` module contains utility functions for our slam core code
+development, the module is composed of:
 
 - [config](#api/utils/config)
 - [data](#api/utils/data)

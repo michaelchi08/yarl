@@ -42,7 +42,6 @@ public:
   Calibration()
     : configured(false),
       state(IDEL),
-
       nb_samples(0),
       nb_max_samples(10),
       save_path("./") {}

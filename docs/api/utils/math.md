@@ -23,7 +23,9 @@ This module contains utility mathematical functions that do not fit anywhere els
 
     }  // end of wave namespace
 
-These type definitions are shorthands for declaring `Eigen::Vector`, `Eigen::Matrix` and `Eigen::Quaternion` objects. At current we assume all slam code development will be using double precision floating points.
+These type definitions are shorthands for declaring `Eigen::Vector`,
+`Eigen::Matrix` and `Eigen::Quaternion` objects. At current we assume all slam
+code development will be using double precision floating points.
 
 
 ## Functions
@@ -31,13 +33,15 @@ These type definitions are shorthands for declaring `Eigen::Vector`, `Eigen::Mat
     int randi(int ub, int lb);
     double randf(double ub, double lb);
 
-Generates random integer or float with a upper bound `ub` and lower bound `lb` using a uniform random distribution.
+Generates random integer or float with a upper bound `ub` and lower bound `lb`
+using a uniform random distribution.
 
 ---
 
     int fltcmp(double f1, double f2, double threshold = 0.0001);
 
-Compares two floating point numbers `f1` and `f2` with an error threshold defined by `threshold`.
+Compares two floating point numbers `f1` and `f2` with an error threshold
+defined by `threshold`.
 
 Returns:
 
@@ -63,7 +67,8 @@ Convert degrees `d` to radians `r` and vice versa.
     void vec2mat(std::vector<double> x, int rows, int cols, MatX &y);
     void mat2vec(MatX A, std::vector<double> &x);
 
-Convert between vector `x` to matrix `y` of size `rows` and `cols` and vice versa.
+Convert between vector `x` to matrix `y` of size `rows` and `cols` and vice
+versa.
 
 ---
 
