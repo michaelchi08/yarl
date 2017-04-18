@@ -25,7 +25,7 @@ ADD_LIBRARY(
   # OPTIMIZATION
   optimization/ceres/ba.cpp
   optimization/ceres/ceres_examples.cpp
-  optimization/factor_graph/factor_graph.cpp
+  # optimization/factor_graph/factor_graph.cpp
   optimization/gp/crossover.cpp
   optimization/gp/data.cpp
   optimization/gp/gpopt.cpp

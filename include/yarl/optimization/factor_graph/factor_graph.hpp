@@ -22,13 +22,13 @@ public:
 
   FactorGraph() : graph{}, variables{}, factors{} {}
 
-  template <typename T>
-  int addUnaryFactor(VariableType type, size_t at, const T &measurement) {
+  template <typename V, typename T>
+  int addUnaryFactor(size_t at, const T &z) {
     // store variable and factor
-    auto variable = std::make_shared<Variable>(type, at);
+    auto variable = std::make_shared<V>(at);
     this->variables.insert(variable);
 
-    auto factor = std::make_shared<Factor>(variable, measurement);
+    auto factor = std::make_shared<UnaryFactor<T>>(variable, z);
     this->factors.push_back(factor);
 
     // store key-factor pair
@@ -38,20 +38,16 @@ public:
     return 0;
   }
 
-  template <typename T>
-  int addBinaryFactor(VariableType from_type,
-                      size_t from,
-                      VariableType to_type,
-                      size_t to,
-                      const T &measurement) {
+  template <typename VA, typename VB, typename T>
+  int addBinaryFactor(size_t from, size_t to, const T &z) {
     // store variables and factor
-    auto from_var = std::make_shared<Variable>(from_type, from);
+    auto from_var = std::make_shared<VA>(from);
     this->variables.insert(from_var);
 
-    auto to_var = std::make_shared<Variable>(to_type, to);
+    auto to_var = std::make_shared<VB>(to);
     this->variables.insert(to_var);
 
-    auto factor = std::make_shared<Factor>(from_var, to_var, measurement);
+    auto factor = std::make_shared<BinaryFactor<T>>(from_var, to_var, z);
     this->factors.push_back(factor);
 
     // store key-factor pairs
