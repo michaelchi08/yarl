@@ -16,4 +16,4 @@ make
 
 # run tests
 export LD_LIBRARY_PATH=/usr/local/lib
-./tests/yarl_tests --silence-stdout
+./tests/yarl_tests --gtest_filter=-Camera.* --silence-stdout
