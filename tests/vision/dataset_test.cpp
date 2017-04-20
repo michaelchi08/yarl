@@ -2,7 +2,7 @@
 #include "yarl/vision/dataset.hpp"
 
 #define TEST_CONFIG "tests/data/vision/dataset/vo_test.xml"
-#define TEST_OUTPUT "/tmp/test"
+#define TEST_OUTPUT "/tmp/dataset_test"
 
 namespace yarl {
 

@@ -11,7 +11,7 @@ int Camera::configure(int capture_index, int image_width, int image_height) {
   this->image_height = image_height;
 
   // open camera
-  if (this->capture.isOpened() == 0) {
+  if (this->capture.isOpened() == false) {
     log_err("failed to open webcam!");
     return -1;
   }
