@@ -9,10 +9,10 @@ namespace yarl {
 TEST(ConfigParam, constructor) {
   ConfigParam param;
 
-  ASSERT_EQ(TYPE_NOT_SET, param.type);
-  ASSERT_EQ("", param.key);
-  ASSERT_EQ(NULL, param.data);
-  ASSERT_FALSE(param.optional);
+  EXPECT_EQ(TYPE_NOT_SET, param.type);
+  EXPECT_EQ("", param.key);
+  EXPECT_EQ(NULL, param.data);
+  EXPECT_FALSE(param.optional);
 }
 
 TEST(ConfigParser, constructor) {
@@ -68,10 +68,10 @@ TEST(ConfigParser, addParam) {
   parser.addParam("matrix", &matx);
   parser.addParam("matrix", &cvmat);
 
-  ASSERT_EQ(19, (int) parser.params.size());
-  ASSERT_EQ(BOOL, parser.params[0].type);
-  ASSERT_EQ("bool", parser.params[0].key);
-  ASSERT_TRUE(parser.params[0].data != NULL);
+  EXPECT_EQ(19, (int) parser.params.size());
+  EXPECT_EQ(BOOL, parser.params[0].type);
+  EXPECT_EQ("bool", parser.params[0].key);
+  EXPECT_TRUE(parser.params[0].data != NULL);
 }
 
 TEST(ConfigParser, setXMLPointer) {
@@ -83,18 +83,18 @@ TEST(ConfigParser, setXMLPointer) {
 
   // test xpath
   retval = parser.setXMLPointer("/config/int");
-  ASSERT_EQ(0, retval);
-  ASSERT_EQ(1, parser.obj->type);
+  EXPECT_EQ(0, retval);
+  EXPECT_EQ(1, parser.obj->type);
 
   // test bad xpath
   retval = parser.setXMLPointer("#");
-  ASSERT_EQ(EXPATHINV, retval);
-  ASSERT_EQ(NULL, parser.obj);
+  EXPECT_EQ(EXPATHINV, retval);
+  EXPECT_EQ(NULL, parser.obj);
 
   // test no results
   retval = parser.setXMLPointer("/config/bogus");
-  ASSERT_EQ(EXPATHRES, retval);
-  ASSERT_EQ(NULL, parser.obj);
+  EXPECT_EQ(EXPATHRES, retval);
+  EXPECT_EQ(NULL, parser.obj);
 }
 
 TEST(ConfigParser, getXMLValue) {
@@ -105,10 +105,10 @@ TEST(ConfigParser, getXMLValue) {
   // setup
   parser.load(TEST_CONFIG);
 
-  // test and assert
+  // test
   retval = parser.getXMLValue("/config/int", value);
-  ASSERT_EQ(0, retval);
-  ASSERT_EQ("1", value);
+  EXPECT_EQ(0, retval);
+  EXPECT_EQ("1", value);
 }
 
 TEST(ConfigParser, getXMLValues) {
@@ -119,11 +119,11 @@ TEST(ConfigParser, getXMLValues) {
   // setup
   parser.load(TEST_CONFIG);
 
-  // test and assert
+  // test
   retval = parser.getXMLValues("/config/int_array/item", values);
-  ASSERT_EQ(0, retval);
-  ASSERT_EQ(4, (int) values.size());
-  ASSERT_EQ("0", values[0]);
+  EXPECT_EQ(0, retval);
+  EXPECT_EQ(4, (int) values.size());
+  EXPECT_EQ("0", values[0]);
 }
 
 TEST(ConfigParser, checkVector) {
@@ -134,19 +134,19 @@ TEST(ConfigParser, checkVector) {
   parser.load(TEST_CONFIG);
 
   retval = parser.checkVector("/config/vector2", VEC2);
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 
   retval = parser.checkVector("/config/vector3", VEC3);
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 
   retval = parser.checkVector("/config/vector4", VEC4);
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 
   retval = parser.checkVector("/config/vectorX", VECX);
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 
   retval = parser.checkVector("/config/vectorX", VEC2);
-  ASSERT_EQ(EVECINVSZ, retval);
+  EXPECT_EQ(EVECINVSZ, retval);
 }
 
 TEST(ConfigParser, checkMatrix) {
@@ -157,19 +157,19 @@ TEST(ConfigParser, checkMatrix) {
   parser.load(TEST_CONFIG);
 
   retval = parser.checkMatrix("/config/matrix2", MAT2);
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 
   retval = parser.checkMatrix("/config/matrix3", MAT3);
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 
   retval = parser.checkMatrix("/config/matrix4", MAT4);
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 
   retval = parser.checkMatrix("/config/matrixX", MATX);
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 
   retval = parser.checkMatrix("/config/matrix4", MATX);
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 }
 
 TEST(ConfigParser, parsePrimitive) {
@@ -193,7 +193,7 @@ TEST(ConfigParser, parsePrimitive) {
   param.key = "/config/int";
   param.data = &i;
   parser.parsePrimitive(param);
-  ASSERT_EQ(1, i);
+  EXPECT_EQ(1, i);
 
   // FLOAT
   param.optional = false;
@@ -201,7 +201,7 @@ TEST(ConfigParser, parsePrimitive) {
   param.key = "/config/float";
   param.data = &f;
   parser.parsePrimitive(param);
-  ASSERT_FLOAT_EQ(1.0, f);
+  EXPECT_FLOAT_EQ(1.0, f);
 
   // DOUBLE
   param.optional = false;
@@ -209,7 +209,7 @@ TEST(ConfigParser, parsePrimitive) {
   param.key = "/config/double";
   param.data = &d;
   parser.parsePrimitive(param);
-  ASSERT_FLOAT_EQ(1.0, d);
+  EXPECT_FLOAT_EQ(1.0, d);
 
   // STRING
   param.optional = false;
@@ -217,7 +217,7 @@ TEST(ConfigParser, parsePrimitive) {
   param.key = "/config/string";
   param.data = &s;
   parser.parsePrimitive(param);
-  ASSERT_EQ("Hello World", s);
+  EXPECT_EQ("Hello World", s);
 }
 
 TEST(ConfigParser, parseArray) {
@@ -240,7 +240,7 @@ TEST(ConfigParser, parseArray) {
   parser.parseArray(param.key, param.type, param.data);
 
   for (int i = 0; i < 4; i++) {
-    ASSERT_EQ(i, i_array[i]);
+    EXPECT_EQ(i, i_array[i]);
   }
 
   // FLOAT
@@ -251,7 +251,7 @@ TEST(ConfigParser, parseArray) {
   parser.parseArray(param.key, param.type, param.data);
 
   for (int i = 0; i < 4; i++) {
-    ASSERT_FLOAT_EQ((float) i, f_array[i]);
+    EXPECT_FLOAT_EQ((float) i, f_array[i]);
   }
 
   // DOUBLE
@@ -262,7 +262,7 @@ TEST(ConfigParser, parseArray) {
   parser.parseArray(param.key, param.type, param.data);
 
   for (int i = 0; i < 4; i++) {
-    ASSERT_FLOAT_EQ((double) i, d_array[i]);
+    EXPECT_FLOAT_EQ((double) i, d_array[i]);
   }
 
   // STRING
@@ -272,10 +272,10 @@ TEST(ConfigParser, parseArray) {
   param.data = &s_array;
   parser.parseArray(param.key, param.type, param.data);
 
-  ASSERT_EQ("A", s_array[0]);
-  ASSERT_EQ("B", s_array[1]);
-  ASSERT_EQ("C", s_array[2]);
-  ASSERT_EQ("D", s_array[3]);
+  EXPECT_EQ("A", s_array[0]);
+  EXPECT_EQ("B", s_array[1]);
+  EXPECT_EQ("C", s_array[2]);
+  EXPECT_EQ("D", s_array[3]);
 }
 
 TEST(ConfigParser, parseVector) {
@@ -296,8 +296,8 @@ TEST(ConfigParser, parseVector) {
   param.data = &vec2;
   parser.parseVector(param.key, param.type, param.data);
 
-  ASSERT_FLOAT_EQ(1.0, vec2(0));
-  ASSERT_FLOAT_EQ(2.0, vec2(1));
+  EXPECT_FLOAT_EQ(1.0, vec2(0));
+  EXPECT_FLOAT_EQ(2.0, vec2(1));
 
   // VECTOR 3
   param.optional = false;
@@ -306,9 +306,9 @@ TEST(ConfigParser, parseVector) {
   param.data = &vec3;
   parser.parseVector(param.key, param.type, param.data);
 
-  ASSERT_FLOAT_EQ(1.0, vec3(0));
-  ASSERT_FLOAT_EQ(2.0, vec3(1));
-  ASSERT_FLOAT_EQ(3.0, vec3(2));
+  EXPECT_FLOAT_EQ(1.0, vec3(0));
+  EXPECT_FLOAT_EQ(2.0, vec3(1));
+  EXPECT_FLOAT_EQ(3.0, vec3(2));
 
   // VECTOR 4
   param.optional = false;
@@ -317,10 +317,10 @@ TEST(ConfigParser, parseVector) {
   param.data = &vec4;
   parser.parseVector(param.key, param.type, param.data);
 
-  ASSERT_FLOAT_EQ(1.0, vec4(0));
-  ASSERT_FLOAT_EQ(2.0, vec4(1));
-  ASSERT_FLOAT_EQ(3.0, vec4(2));
-  ASSERT_FLOAT_EQ(4.0, vec4(3));
+  EXPECT_FLOAT_EQ(1.0, vec4(0));
+  EXPECT_FLOAT_EQ(2.0, vec4(1));
+  EXPECT_FLOAT_EQ(3.0, vec4(2));
+  EXPECT_FLOAT_EQ(4.0, vec4(3));
 
   // VECTOR X
   param.optional = false;
@@ -330,7 +330,7 @@ TEST(ConfigParser, parseVector) {
   parser.parseVector(param.key, param.type, param.data);
 
   for (int i = 0; i < 5; i++) {
-    ASSERT_FLOAT_EQ(i + 1, vecx(i));
+    EXPECT_FLOAT_EQ(i + 1, vecx(i));
   }
 }
 
@@ -354,10 +354,10 @@ TEST(ConfigParser, parseMatrix) {
   param.data = &mat2;
   parser.parseMatrix(param);
 
-  ASSERT_FLOAT_EQ(1.0, mat2(0, 0));
-  ASSERT_FLOAT_EQ(2.0, mat2(0, 1));
-  ASSERT_FLOAT_EQ(3.0, mat2(1, 0));
-  ASSERT_FLOAT_EQ(4.0, mat2(1, 1));
+  EXPECT_FLOAT_EQ(1.0, mat2(0, 0));
+  EXPECT_FLOAT_EQ(2.0, mat2(0, 1));
+  EXPECT_FLOAT_EQ(3.0, mat2(1, 0));
+  EXPECT_FLOAT_EQ(4.0, mat2(1, 1));
 
   // MATRIX 3
   param.optional = false;
@@ -369,7 +369,7 @@ TEST(ConfigParser, parseMatrix) {
   index = 0;
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
-      ASSERT_FLOAT_EQ(index + 1.0, mat3(i, j));
+      EXPECT_FLOAT_EQ(index + 1.0, mat3(i, j));
       index++;
     }
   }
@@ -384,7 +384,7 @@ TEST(ConfigParser, parseMatrix) {
   index = 0;
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
-      ASSERT_FLOAT_EQ(index + 1.0, mat4(i, j));
+      EXPECT_FLOAT_EQ(index + 1.0, mat4(i, j));
       index++;
     }
   }
@@ -399,7 +399,7 @@ TEST(ConfigParser, parseMatrix) {
   index = 0;
   for (int i = 0; i < 5; i++) {
     for (int j = 0; j < 5; j++) {
-      ASSERT_FLOAT_EQ(index + 1.0, matx(i, j));
+      EXPECT_FLOAT_EQ(index + 1.0, matx(i, j));
       index++;
     }
   }
@@ -414,7 +414,7 @@ TEST(ConfigParser, parseMatrix) {
   index = 0;
   for (int i = 0; i < 5; i++) {
     for (int j = 0; j < 5; j++) {
-      ASSERT_FLOAT_EQ(index + 1.0, cvmat.at<double>(i, j));
+      EXPECT_FLOAT_EQ(index + 1.0, cvmat.at<double>(i, j));
       index++;
     }
   }

@@ -7,14 +7,14 @@ namespace yarl {
 TEST(Testcase, constructor) {
   TestCase testcase;
 
-  ASSERT_FALSE(testcase.configured);
+  EXPECT_FALSE(testcase.configured);
 }
 
 TEST(Testcase, configure) {
   TestCase testcase;
 
   testcase.configure();
-  ASSERT_TRUE(testcase.configured);
+  EXPECT_TRUE(testcase.configured);
 }
 
 TEST(TestCase, createP) {
@@ -34,17 +34,17 @@ TEST(TestCase, createP) {
   t << 1.0, 2.0, 3.0;
   // clang-format on
 
-  // test and assert
+  // test
   testcase.createP(K, R, t, P);
   // std::cout << P << std::endl;
 
-  ASSERT_FLOAT_EQ(1.0, P(0, 0));
-  ASSERT_FLOAT_EQ(1.0, P(1, 1));
-  ASSERT_FLOAT_EQ(1.0, P(2, 2));
+  EXPECT_FLOAT_EQ(1.0, P(0, 0));
+  EXPECT_FLOAT_EQ(1.0, P(1, 1));
+  EXPECT_FLOAT_EQ(1.0, P(2, 2));
 
-  ASSERT_FLOAT_EQ(-1.0, P(0, 3));
-  ASSERT_FLOAT_EQ(-2.0, P(1, 3));
-  ASSERT_FLOAT_EQ(-3.0, P(2, 3));
+  EXPECT_FLOAT_EQ(-1.0, P(0, 3));
+  EXPECT_FLOAT_EQ(-2.0, P(1, 3));
+  EXPECT_FLOAT_EQ(-3.0, P(2, 3));
 }
 
 TEST(Testcase, generateRandom3DPoints) {
@@ -65,14 +65,14 @@ TEST(Testcase, generateRandom3DPoints) {
   testcase.generateRandom3DPoints(range, 10, pts);
 
   for (int i = 0; i < 10; i++) {
-    ASSERT_TRUE(pts(i, 0) > 0.0);
-    ASSERT_TRUE(pts(i, 0) < 1.0);
+    EXPECT_TRUE(pts(i, 0) > 0.0);
+    EXPECT_TRUE(pts(i, 0) < 1.0);
 
-    ASSERT_TRUE(pts(i, 1) > 0.0);
-    ASSERT_TRUE(pts(i, 1) < 1.0);
+    EXPECT_TRUE(pts(i, 1) > 0.0);
+    EXPECT_TRUE(pts(i, 1) < 1.0);
 
-    ASSERT_TRUE(pts(i, 2) > 0.0);
-    ASSERT_TRUE(pts(i, 2) < 1.0);
+    EXPECT_TRUE(pts(i, 2) > 0.0);
+    EXPECT_TRUE(pts(i, 2) < 1.0);
   }
 }
 

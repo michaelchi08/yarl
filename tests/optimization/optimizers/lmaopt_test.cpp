@@ -72,25 +72,25 @@ void test_settings(LMASettings &settings) {
 TEST(LMAOpt, constructor) {
   LMAOpt opt;
 
-  ASSERT_FALSE(opt.configured);
-  ASSERT_EQ(100, opt.max_iter);
-  ASSERT_FLOAT_EQ(0.01, opt.lambda);
-  ASSERT_EQ(nullptr, opt.function);
-  ASSERT_EQ(nullptr, opt.jacobian);
-  ASSERT_EQ(0, opt.nb_inputs);
-  ASSERT_EQ(0, opt.nb_params);
+  EXPECT_FALSE(opt.configured);
+  EXPECT_EQ(100, opt.max_iter);
+  EXPECT_FLOAT_EQ(0.01, opt.lambda);
+  EXPECT_EQ(nullptr, opt.function);
+  EXPECT_EQ(nullptr, opt.jacobian);
+  EXPECT_EQ(0, opt.nb_inputs);
+  EXPECT_EQ(0, opt.nb_params);
 
-  ASSERT_FLOAT_EQ(0.0, opt.x(0));
-  ASSERT_FLOAT_EQ(0.0, opt.y(0));
-  ASSERT_FLOAT_EQ(0.0, opt.beta(0));
+  EXPECT_FLOAT_EQ(0.0, opt.x(0, 0));
+  EXPECT_FLOAT_EQ(0.0, opt.y(0));
+  EXPECT_FLOAT_EQ(0.0, opt.beta(0));
 
-  ASSERT_FLOAT_EQ(0.0, opt.y_est(0));
-  ASSERT_FLOAT_EQ(0.0, opt.diff(0));
+  EXPECT_FLOAT_EQ(0.0, opt.y_est(0));
+  EXPECT_FLOAT_EQ(0.0, opt.diff(0));
 
-  ASSERT_FLOAT_EQ(0.0, opt.J(0));
-  ASSERT_FLOAT_EQ(0.0, opt.H(0));
+  EXPECT_FLOAT_EQ(0.0, opt.J(0));
+  EXPECT_FLOAT_EQ(0.0, opt.H(0));
 
-  ASSERT_EQ(FLT_MAX, opt.error);
+  EXPECT_EQ(FLT_MAX, opt.error);
 }
 
 TEST(LMAOpt, configure) {
@@ -100,25 +100,25 @@ TEST(LMAOpt, configure) {
   test_settings(settings);
   opt.configure(settings);
 
-  ASSERT_TRUE(opt.configured);
-  ASSERT_EQ(settings.max_iter, opt.max_iter);
-  ASSERT_FLOAT_EQ(settings.lambda, opt.lambda);
-  ASSERT_NE(nullptr, opt.function);
-  ASSERT_NE(nullptr, opt.jacobian);
-  ASSERT_EQ(settings.nb_inputs, opt.nb_inputs);
-  ASSERT_EQ(settings.nb_params, opt.nb_params);
+  EXPECT_TRUE(opt.configured);
+  EXPECT_EQ(settings.max_iter, opt.max_iter);
+  EXPECT_FLOAT_EQ(settings.lambda, opt.lambda);
+  EXPECT_NE(nullptr, opt.function);
+  EXPECT_NE(nullptr, opt.jacobian);
+  EXPECT_EQ(settings.nb_inputs, opt.nb_inputs);
+  EXPECT_EQ(settings.nb_params, opt.nb_params);
 
-  ASSERT_FLOAT_EQ(settings.x(0), opt.x(0));
-  ASSERT_FLOAT_EQ(settings.y(0), opt.y(0));
-  ASSERT_FLOAT_EQ(settings.beta(0), opt.beta(0));
+  EXPECT_FLOAT_EQ(settings.x(0), opt.x(0));
+  EXPECT_FLOAT_EQ(settings.y(0), opt.y(0));
+  EXPECT_FLOAT_EQ(settings.beta(0), opt.beta(0));
 
-  ASSERT_FLOAT_EQ(0.0, opt.y_est(0));
-  ASSERT_FLOAT_EQ(0.0, opt.diff(0));
+  EXPECT_FLOAT_EQ(0.0, opt.y_est(0));
+  EXPECT_FLOAT_EQ(0.0, opt.diff(0));
 
-  ASSERT_FLOAT_EQ(0.0, opt.J(0, 0));
-  ASSERT_FLOAT_EQ(0.0, opt.H(0, 0));
+  EXPECT_FLOAT_EQ(0.0, opt.J(0, 0));
+  EXPECT_FLOAT_EQ(0.0, opt.H(0, 0));
 
-  ASSERT_EQ(FLT_MAX, opt.error);
+  EXPECT_EQ(FLT_MAX, opt.error);
 }
 
 TEST(LMAOpt, evalFunction) {
@@ -130,9 +130,9 @@ TEST(LMAOpt, evalFunction) {
   test_settings(settings);
   opt.configure(settings);
 
-  // test and assert
+  // test
   opt.evalFunction(opt.beta, error);
-  ASSERT_FLOAT_EQ(0.0, error);
+  EXPECT_FLOAT_EQ(0.0, error);
 }
 
 TEST(LMAOpt, calcGradients) {
@@ -146,11 +146,11 @@ TEST(LMAOpt, calcGradients) {
   J_before = opt.J;
   H_before = opt.H;
 
-  // test and assert
+  // test
   opt.calcGradients(opt.beta);
 
-  ASSERT_FALSE(J_before.isApprox(opt.J));
-  ASSERT_FALSE(H_before.isApprox(opt.H));
+  EXPECT_FALSE(J_before.isApprox(opt.J));
+  EXPECT_FALSE(H_before.isApprox(opt.H));
 }
 
 TEST(LMAOpt, iterate) {
@@ -166,7 +166,7 @@ TEST(LMAOpt, iterate) {
   opt.beta << 1.0, 90.0;
   beta_before = opt.beta;
 
-  // test and assert
+  // test
   opt.evalFunction(opt.beta, opt.error);
   opt.calcGradients(opt.beta);
 
@@ -174,7 +174,7 @@ TEST(LMAOpt, iterate) {
   opt.iterate();
   std::cout << "beta: " << opt.beta.transpose() << std::endl;
 
-  ASSERT_FALSE(beta_before.isApprox(opt.beta));
+  EXPECT_FALSE(beta_before.isApprox(opt.beta));
 }
 
 TEST(LMAOpt, optimize) {

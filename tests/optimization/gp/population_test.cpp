@@ -8,9 +8,9 @@ namespace gp {
 TEST(Population, constructor) {
   Population p;
 
-  ASSERT_EQ(0u, p.individuals.size());
-  ASSERT_EQ(NULL, p.tree_config);
-  ASSERT_EQ(NULL, p.data);
+  EXPECT_EQ(0u, p.individuals.size());
+  EXPECT_EQ(NULL, p.tree_config);
+  EXPECT_EQ(NULL, p.data);
 }
 
 TEST(Population, configure) {
@@ -20,9 +20,9 @@ TEST(Population, configure) {
 
   tree_config.configure(GROW_METHOD, 2);
   p.configure(10, &tree_config, &data);
-  ASSERT_EQ(10u, p.individuals.size());
-  ASSERT_TRUE(&tree_config == p.tree_config);
-  ASSERT_TRUE(&data == p.data);
+  EXPECT_EQ(10u, p.individuals.size());
+  EXPECT_TRUE(&tree_config == p.tree_config);
+  EXPECT_TRUE(&data == p.data);
 }
 
 TEST(Population, clear) {
@@ -33,9 +33,9 @@ TEST(Population, clear) {
   p.configure(10, &tree_config, &data);
   p.clear();
 
-  ASSERT_EQ(0u, p.individuals.size());
-  ASSERT_TRUE(&tree_config == p.tree_config);
-  ASSERT_TRUE(&data == p.data);
+  EXPECT_EQ(0u, p.individuals.size());
+  EXPECT_TRUE(&tree_config == p.tree_config);
+  EXPECT_TRUE(&data == p.data);
 }
 
 TEST(Population, best) {
@@ -58,7 +58,7 @@ TEST(Population, best) {
   p.individuals[9]->score = 0.0;
   p.best(tree);
 
-  ASSERT_FLOAT_EQ(3.0, tree.score);
+  EXPECT_FLOAT_EQ(3.0, tree.score);
 }
 
 TEST(Population, copyFrom) {
@@ -85,9 +85,9 @@ TEST(Population, copyFrom) {
   std::cout << "Population 2: " << std::endl;
   p2.print();
 
-  // assert
-  ASSERT_EQ(p2.individuals.size(), p1.individuals.size());
-  ASSERT_EQ(s1, s2);
+  // EXPECT
+  EXPECT_EQ(p2.individuals.size(), p1.individuals.size());
+  EXPECT_EQ(s1, s2);
 }
 
 }  // end of gp namespace

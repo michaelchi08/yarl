@@ -10,16 +10,16 @@ namespace yarl {
 TEST(RANSAC, constructor) {
   RANSAC ransac;
 
-  ASSERT_FALSE(ransac.configured);
+  EXPECT_FALSE(ransac.configured);
 
-  ASSERT_EQ(ransac.max_iter, 0);
-  ASSERT_FLOAT_EQ(ransac.thresh_ratio, 1.0);
-  ASSERT_FLOAT_EQ(ransac.thresh_dist, 0.0);
+  EXPECT_EQ(ransac.max_iter, 0);
+  EXPECT_FLOAT_EQ(ransac.thresh_ratio, 1.0);
+  EXPECT_FLOAT_EQ(ransac.thresh_dist, 0.0);
 
-  ASSERT_EQ(ransac.iter, 0);
-  ASSERT_EQ(ransac.max_inliers, 0);
-  ASSERT_FLOAT_EQ(ransac.model_params[0], 0.0);
-  ASSERT_FLOAT_EQ(ransac.model_params[1], 0.0);
+  EXPECT_EQ(ransac.iter, 0);
+  EXPECT_EQ(ransac.max_inliers, 0);
+  EXPECT_FLOAT_EQ(ransac.model_params[0], 0.0);
+  EXPECT_FLOAT_EQ(ransac.model_params[1], 0.0);
 }
 
 TEST(RANSAC, configure) {
@@ -27,16 +27,16 @@ TEST(RANSAC, configure) {
 
   ransac.configure(10, 0.8, 0.1);
 
-  ASSERT_TRUE(ransac.configured);
+  EXPECT_TRUE(ransac.configured);
 
-  ASSERT_EQ(ransac.max_iter, 10);
-  ASSERT_FLOAT_EQ(ransac.thresh_ratio, 0.8);
-  ASSERT_FLOAT_EQ(ransac.thresh_dist, 0.1);
+  EXPECT_EQ(ransac.max_iter, 10);
+  EXPECT_FLOAT_EQ(ransac.thresh_ratio, 0.8);
+  EXPECT_FLOAT_EQ(ransac.thresh_dist, 0.1);
 
-  ASSERT_EQ(ransac.iter, 0);
-  ASSERT_EQ(ransac.max_inliers, 0);
-  ASSERT_FLOAT_EQ(ransac.model_params[0], 0.0);
-  ASSERT_FLOAT_EQ(ransac.model_params[1], 0.0);
+  EXPECT_EQ(ransac.iter, 0);
+  EXPECT_EQ(ransac.max_inliers, 0);
+  EXPECT_FLOAT_EQ(ransac.model_params[0], 0.0);
+  EXPECT_FLOAT_EQ(ransac.model_params[1], 0.0);
 }
 
 TEST(RANSAC, RandomSample) {
@@ -52,13 +52,13 @@ TEST(RANSAC, RandomSample) {
   }
   ransac.configure(10, 0.8, 0.1);
 
-  // test and assert
+  // test
   sample << -1, -1;
   retval = ransac.randomSample(data, sample);
 
-  ASSERT_EQ(retval, 0);
-  ASSERT_NE(sample(0), -1);
-  ASSERT_NE(sample(1), -1);
+  EXPECT_EQ(retval, 0);
+  EXPECT_NE(sample(0), -1);
+  EXPECT_NE(sample(1), -1);
 }
 
 TEST(RANSAC, computeDistances) {
@@ -76,12 +76,12 @@ TEST(RANSAC, computeDistances) {
   }
   ransac.configure(10, 0.8, 0.1);
 
-  // test and assert
+  // test
   ransac.randomSample(data, p1);
   ransac.randomSample(data, p2);
   retval = ransac.computeDistances(data, p1, p2, dists);
 
-  ASSERT_EQ(retval, 0);
+  EXPECT_EQ(retval, 0);
 }
 
 TEST(RANSAC, computeInliers) {
@@ -93,15 +93,15 @@ TEST(RANSAC, computeInliers) {
   dists << 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0;
   ransac.configure(10, 0.8, 0.5);
 
-  // test and assert
+  // test
   retval = ransac.computeInliers(dists);
-  ASSERT_EQ(retval, 0);
-  ASSERT_EQ((int) ransac.inliers.size(), 5);
-  ASSERT_EQ(ransac.inliers[0], 0);
-  ASSERT_EQ(ransac.inliers[1], 1);
-  ASSERT_EQ(ransac.inliers[2], 2);
-  ASSERT_EQ(ransac.inliers[3], 3);
-  ASSERT_EQ(ransac.inliers[4], 4);
+  EXPECT_EQ(retval, 0);
+  EXPECT_EQ((int) ransac.inliers.size(), 5);
+  EXPECT_EQ(ransac.inliers[0], 0);
+  EXPECT_EQ(ransac.inliers[1], 1);
+  EXPECT_EQ(ransac.inliers[2], 2);
+  EXPECT_EQ(ransac.inliers[3], 3);
+  EXPECT_EQ(ransac.inliers[4], 4);
 }
 
 TEST(RANSAC, update) {
@@ -121,12 +121,12 @@ TEST(RANSAC, update) {
   p1 << 1.0, 2.0;
   p2 << 3.0, 4.0;
 
-  // test and assert
+  // test
   retval = ransac.update(p1, p2);
-  ASSERT_EQ(ransac.max_inliers, 4);
-  ASSERT_EQ(retval, 0);
-  ASSERT_FLOAT_EQ(ransac.model_params[0], 1.0);
-  ASSERT_FLOAT_EQ(ransac.model_params[1], 1.0);
+  EXPECT_EQ(ransac.max_inliers, 4);
+  EXPECT_EQ(retval, 0);
+  EXPECT_FLOAT_EQ(ransac.model_params[0], 1.0);
+  EXPECT_FLOAT_EQ(ransac.model_params[1], 1.0);
 }
 
 TEST(RANSAC, optimize) {
@@ -139,7 +139,7 @@ TEST(RANSAC, optimize) {
   x = data.transpose();
   ransac.configure(40, 0.5, 5);
 
-  // test and assert
+  // test
   clock_t begin = clock();
   ransac.optimize(x);
   clock_t end = clock();
@@ -147,10 +147,10 @@ TEST(RANSAC, optimize) {
   double secs = double(end - begin) / CLOCKS_PER_SEC;
   std::cout << "elasped: " << secs << " seconds" << std::endl;
 
-  // ASSERT_TRUE(ransac.model_params[0] < 23);
-  // ASSERT_TRUE(ransac.model_params[0] > 18);
-  // ASSERT_TRUE(ransac.model_params[1] < 13);
-  // ASSERT_TRUE(ransac.model_params[1] > 8);
+  // EXPECT_TRUE(ransac.model_params[0] < 23);
+  // EXPECT_TRUE(ransac.model_params[0] > 18);
+  // EXPECT_TRUE(ransac.model_params[1] < 13);
+  // EXPECT_TRUE(ransac.model_params[1] > 8);
 }
 
 }  // end of yarl namespace

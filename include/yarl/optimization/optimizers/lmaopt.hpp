@@ -65,24 +65,19 @@ public:
 
   LMAOpt()
     : configured(false),
-
       max_iter(100),
       lambda(0.01),
       function(nullptr),
       jacobian(nullptr),
       nb_inputs(0),
       nb_params(0),
-
-      x(),
-      y(),
-      beta(),
-
-      y_est(),
-      diff(),
-
-      J(),
-      H(),
-
+      x(MatX(1, 1)),
+      y(VecX(1)),
+      beta(VecX(1)),
+      y_est(VecX(1)),
+      diff(VecX(1)),
+      J(MatX(1, 1)),
+      H(MatX(1, 1)),
       error(FLT_MAX) {}
 
   int configure(const LMASettings &settings);

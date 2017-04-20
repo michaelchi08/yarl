@@ -261,7 +261,6 @@ int SBGC::sendFrame(SBGCFrame &cmd) {
 
 int SBGC::readFrame(uint8_t read_length, SBGCFrame &frame) {
   int retval;
-  uint8_t byte;
   int16_t nb_bytes;
   uint8_t buffer[150];
 
@@ -317,8 +316,6 @@ int SBGC::off() {
 }
 
 int SBGC::reset() {
-  int retval;
-
   if (this->off() || this->on()) {
     std::cout << "failed to reset SBGC!" << std::endl;
     return -1;

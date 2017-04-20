@@ -13,7 +13,7 @@ namespace yarl {
 // TEST(VisualOdometry, constructor) {
 //   VisualOdometry vo;
 //
-//   ASSERT_EQ(false, vo.configured);
+//   EXPECT_EQ(false, vo.configured);
 // }
 //
 // TEST(VisualOdometry, configure) {
@@ -26,7 +26,7 @@ namespace yarl {
 //   K(1, 2) = 3.0;
 //
 //   vo.configure(K);
-//   ASSERT_EQ(true, vo.configured);
+//   EXPECT_EQ(true, vo.configured);
 // }
 //
 // TEST(VisualOdometry, featureTracking) {
@@ -50,11 +50,11 @@ namespace yarl {
 //   img_2 = cv::imread(TEST_IMAGE_2);
 //   fast.detect(img_1, cvpts1);
 //
-//   // test and assert
+//   // test
 //   vo.featureTracking(img_1, img_2, cvpts1, cvpts2, errors, status);
-//   ASSERT_EQ(cvpts2.size(), cvpts1.size());
-//   ASSERT_EQ(cvpts2.size(), errors.size());
-//   ASSERT_EQ(cvpts2.size(), status.size());
+//   EXPECT_EQ(cvpts2.size(), cvpts1.size());
+//   EXPECT_EQ(cvpts2.size(), errors.size());
+//   EXPECT_EQ(cvpts2.size(), status.size());
 //
 //   // // record tracked points
 //   // MatX pts1, pts2;
@@ -98,12 +98,12 @@ namespace yarl {
 //     // fast.detect(img_1, pts_1);
 //     //
 //     //
-//     // // test and assert
+//     // // test
 //     // std::cout << pts_1.size() << std::endl;
 //     // vo.featureTracking(img_1, img_2, pts_1, pts_2, errors, status);
-//     // ASSERT_EQ(pts_1.size() == pts_2.size());
-//     // ASSERT_EQ(errors.size() == pts_2.size());
-//     // ASSERT_EQ(status.size() == pts_2.size());
+//     // EXPECT_EQ(pts_1.size() == pts_2.size());
+//     // EXPECT_EQ(errors.size() == pts_2.size());
+//     // EXPECT_EQ(status.size() == pts_2.size());
 //     //
 //     // vo.displayOpticalFlow(img_2, pts_1, pts_2);
 //     // cv::imshow("Frame 1", img_1);

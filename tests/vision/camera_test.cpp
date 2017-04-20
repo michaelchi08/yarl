@@ -8,11 +8,11 @@ namespace yarl {
 // TEST(Camera, constructor) {
 //   Camera camera;
 //
-//   ASSERT_EQ(false, camera.configured);
-//   ASSERT_EQ(NULL, camera.capture);
-//   ASSERT_EQ(0, camera.capture_index);
-//   ASSERT_EQ(0, camera.image_width);
-//   ASSERT_EQ(0, camera.image_height);
+//   EXPECT_EQ(false, camera.configured);
+//   EXPECT_EQ(NULL, camera.capture);
+//   EXPECT_EQ(0, camera.capture_index);
+//   EXPECT_EQ(0, camera.image_width);
+//   EXPECT_EQ(0, camera.image_height);
 // }
 //
 // TEST(Camera, configure) {
@@ -22,12 +22,12 @@ namespace yarl {
 //
 //   // configure camera with index, image dimensions
 //   retval = camera.configure(0, 320, 240);
-//   ASSERT_EQ(0, retval);
+//   EXPECT_EQ(0, retval);
 //   camera.close();
 //
 //   // configure camera with index, calibration file
 //   camera.configure(0, CALIB_FILE);
-//   ASSERT_EQ(0, retval);
+//   EXPECT_EQ(0, retval);
 //   camera.close();
 // }
 //

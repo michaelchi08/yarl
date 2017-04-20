@@ -1,10 +1,13 @@
 #ifndef YARL_OPTIMIZATION_GPOPT_HPP
 #define YARL_OPTIMIZATION_GPOPT_HPP
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
 
 #include "yarl/optimization/gp/tree.hpp"
+#include "yarl/optimization/gp/population.hpp"
+
+namespace yarl {
+namespace gp {
 
 // ERROR MESSAGES
 #define E_SR_INVALID_MODE "invalid symbolic regression mode!"
@@ -22,79 +25,32 @@
 #define MODEL_OUTPUT_FILE "/tmp/model_output.dat"
 #define DATA_OUTPUT_FILE "/tmp/data_output.dat"
 
-// // STRUCTURES
-// struct config {
-//   // details
-//   int nb_populations;
-//   int nb_individuals;
-//
-//   // populations
-//   struct population **p;
-//   struct population **selected;
-//
-//   // genetic operators
-//   struct selection_config selection;
-//   struct crossover_config crossover;
-//   struct mutation_config mutation;
-//
-//   // termination criteria
-//   int max_generations;
-//   double target_score;
-// };
-//
-// // FUNCTIONS
-// struct config *sr_setup(int nb_populations,
-//                         int nb_individuals,
-//                         struct tree_config *tc);
-// void sr_destroy(void *target);
-// int sr_reproduce(struct config *c);
-// void sr_evaluate(struct config *c, struct data *d, char *predict);
-// void sr_exchange_best(struct config *c);
-// struct tree *sr_best(struct config *c);
-// void sr_print_best(struct config *c, struct dataset *d, int generation);
-// int sr_record_best(struct config *c, struct dataset *d);
-// int sr_record_generation(struct config *c, int generation);
-// int sr_evolve_terminate(struct config *c);
-// void sr_print(struct config *c, int generation);
-// int sr_evolve(struct config *c, struct dataset *d);
+class GPOpt {
+public:
+  bool configured;
+  Population population;
 
-namespace yarl {
+  // termination criteria
+  int max_generations;
+  double target_score;
 
-// class GPConfig {
-// public:
-//   // details
-//   int nb_populations;
-//   int nb_individuals;
-//
-//   // populations
-//   struct population **p;
-//   struct population **selected;
-//
-//   // genetic operators
-//   struct selection_config selection;
-//   struct crossover_config crossover;
-//   struct mutation_config mutation;
-//
-//   // termination criteria
-//   int max_generations;
-//   double target_score;
-//
-//   GPConfig() {
-//     this->nb_populations;
-//     this->nb_individuals;
-//
-//     // population
-//
-//     // genetic operators
-//     this->selection_config selection;
-//     this->crossover_config crossover;
-//     this->mutation_config mutation;
-//
-//     // termination criteria
-//     this->max_generations;
-//     this->target_score;
-//   }
-// };
+  // stats
+  int generation;
+  Tree best;
 
+  GPOpt()
+    : configured{false},
+      population{},
+      max_generations{100},
+      target_score{0.0},
+      generation{0},
+      best{} {}
+
+  int configure(const std::string &config_file);
+  int iterate();
+  int solve();
+};
+
+}  // end of gp namespace
 }  // end of yarl namespace
 #endif

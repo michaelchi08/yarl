@@ -67,10 +67,10 @@ MatX load_data(std::string file_path) {
 TEST(EightPoint, constructor) {
   EightPoint estimator;
 
-  ASSERT_FALSE(estimator.configured);
+  EXPECT_FALSE(estimator.configured);
 
-  ASSERT_EQ(0, estimator.image_width);
-  ASSERT_EQ(0, estimator.image_height);
+  EXPECT_EQ(0, estimator.image_width);
+  EXPECT_EQ(0, estimator.image_height);
 }
 
 TEST(EightPoint, configure) {
@@ -79,11 +79,11 @@ TEST(EightPoint, configure) {
   // setup
   estimator.configure(800, 600);
 
-  // test and assert
-  ASSERT_TRUE(estimator.configured);
+  // test
+  EXPECT_TRUE(estimator.configured);
 
-  ASSERT_EQ(800, estimator.image_width);
-  ASSERT_EQ(600, estimator.image_height);
+  EXPECT_EQ(800, estimator.image_width);
+  EXPECT_EQ(600, estimator.image_height);
 }
 
 TEST(EightPoint, normalizePoints) {
@@ -96,18 +96,18 @@ TEST(EightPoint, normalizePoints) {
   pts2 = load_data(TEST_2_DATA);
   estimator.configure(800, 600);
 
-  // test and assert
+  // test
   estimator.normalizePoints(pts1, pts2);
   for (int i = 0; i < pts1.rows(); i++) {
-    ASSERT_TRUE(pts1(i, 0) < 1.0);
-    ASSERT_TRUE(pts1(i, 0) > -1.0);
-    ASSERT_TRUE(pts1(i, 1) < 1.0);
-    ASSERT_TRUE(pts1(i, 1) > -1.0);
+    EXPECT_TRUE(pts1(i, 0) < 1.0);
+    EXPECT_TRUE(pts1(i, 0) > -1.0);
+    EXPECT_TRUE(pts1(i, 1) < 1.0);
+    EXPECT_TRUE(pts1(i, 1) > -1.0);
 
-    ASSERT_TRUE(pts2(i, 0) < 1.0);
-    ASSERT_TRUE(pts2(i, 0) > -1.0);
-    ASSERT_TRUE(pts2(i, 1) < 1.0);
-    ASSERT_TRUE(pts2(i, 1) > -1.0);
+    EXPECT_TRUE(pts2(i, 0) < 1.0);
+    EXPECT_TRUE(pts2(i, 0) > -1.0);
+    EXPECT_TRUE(pts2(i, 1) < 1.0);
+    EXPECT_TRUE(pts2(i, 1) > -1.0);
   }
 }
 
@@ -123,22 +123,22 @@ TEST(EightPoint, formMatrixA) {
   estimator.configure(800, 600);
   estimator.normalizePoints(pts1, pts2);
 
-  // test and assert
+  // test
   estimator.formMatrixA(pts1, pts2, A);
 
-  ASSERT_EQ(pts1.rows(), A.rows());
-  ASSERT_EQ(9, A.cols());
+  EXPECT_EQ(pts1.rows(), A.rows());
+  EXPECT_EQ(9, A.cols());
 
   for (int i = 0; i < pts1.rows(); i++) {
-    ASSERT_FLOAT_EQ(pts1(i, 0) * pts2(i, 0), A(i, 0));
-    ASSERT_FLOAT_EQ(pts1(i, 1) * pts2(i, 0), A(i, 1));
-    ASSERT_FLOAT_EQ(pts2(i, 0), A(i, 2));
-    ASSERT_FLOAT_EQ(pts1(i, 0) * pts2(i, 1), A(i, 3));
-    ASSERT_FLOAT_EQ(pts1(i, 1) * pts2(i, 1), A(i, 4));
-    ASSERT_FLOAT_EQ(pts2(i, 1), A(i, 5));
-    ASSERT_FLOAT_EQ(pts1(i, 0), A(i, 6));
-    ASSERT_FLOAT_EQ(pts1(i, 1), A(i, 7));
-    ASSERT_FLOAT_EQ(1.0, A(i, 8));
+    EXPECT_FLOAT_EQ(pts1(i, 0) * pts2(i, 0), A(i, 0));
+    EXPECT_FLOAT_EQ(pts1(i, 1) * pts2(i, 0), A(i, 1));
+    EXPECT_FLOAT_EQ(pts2(i, 0), A(i, 2));
+    EXPECT_FLOAT_EQ(pts1(i, 0) * pts2(i, 1), A(i, 3));
+    EXPECT_FLOAT_EQ(pts1(i, 1) * pts2(i, 1), A(i, 4));
+    EXPECT_FLOAT_EQ(pts2(i, 1), A(i, 5));
+    EXPECT_FLOAT_EQ(pts1(i, 0), A(i, 6));
+    EXPECT_FLOAT_EQ(pts1(i, 1), A(i, 7));
+    EXPECT_FLOAT_EQ(1.0, A(i, 8));
   }
 }
 
@@ -155,10 +155,10 @@ TEST(EightPoint, approximateFundamentalMatrix) {
   estimator.normalizePoints(pts1, pts2);
   estimator.formMatrixA(pts1, pts2, A);
 
-  // test and assert
+  // test
   estimator.approximateFundamentalMatrix(A, F);
-  ASSERT_EQ(3, F.rows());
-  ASSERT_EQ(3, F.cols());
+  EXPECT_EQ(3, F.rows());
+  EXPECT_EQ(3, F.cols());
 }
 
 TEST(EightPoint, refineFundamentalMatrix) {
@@ -175,10 +175,10 @@ TEST(EightPoint, refineFundamentalMatrix) {
   estimator.formMatrixA(pts1, pts2, A);
   estimator.approximateFundamentalMatrix(A, F);
 
-  // test and assert
+  // test
   estimator.refineFundamentalMatrix(F);
-  ASSERT_EQ(3, F.rows());
-  ASSERT_EQ(3, F.cols());
+  EXPECT_EQ(3, F.rows());
+  EXPECT_EQ(3, F.cols());
 }
 
 TEST(EightPoint, denormalizeFundamentalMatrix) {
@@ -196,7 +196,7 @@ TEST(EightPoint, denormalizeFundamentalMatrix) {
   estimator.approximateFundamentalMatrix(A, F);
   estimator.refineFundamentalMatrix(F);
 
-  // test and assert
+  // test
   estimator.denormalizeFundamentalMatrix(F);
 }
 
@@ -251,7 +251,7 @@ TEST(EightPoint, obtainPossiblePoses) {
     0.000000, 0.000000, 1.000000;
   estimator.estimate(pts1, pts2, K, E);
 
-  // test and assert
+  // test
   estimator.obtainPossiblePoses(E, poses);
 
   std::cout << poses[0] << std::endl;
@@ -282,7 +282,7 @@ TEST(EightPoint, obtainPose) {
   estimator.estimate(pts1, pts2, K, E);
   estimator.obtainPossiblePoses(E, poses);
 
-  // test and assert
+  // test
   pt1 = pts1.block(0, 0, 1, 3).transpose();
   pt2 = pts2.block(0, 0, 1, 3).transpose();
   estimator.obtainPose(pt1, pt2, K, K, poses, pose);

@@ -15,16 +15,16 @@ TEST(Data, load) {
   csv2mat(TEST_DATA, true, mat);
   csvheader(TEST_DATA, fields);
   retval = data.load(mat, fields);
-  ASSERT_EQ(0, retval);
-  ASSERT_EQ(19, data.rows);
-  ASSERT_EQ(2, data.cols);
-  ASSERT_EQ(2, (int) data.fields.size());
+  EXPECT_EQ(0, retval);
+  EXPECT_EQ(19, data.rows);
+  EXPECT_EQ(2, data.cols);
+  EXPECT_EQ(2, (int) data.fields.size());
 
   retval = data.load(TEST_DATA);
-  ASSERT_EQ(0, retval);
-  ASSERT_EQ(19, data.rows);
-  ASSERT_EQ(2, data.cols);
-  ASSERT_EQ(2, (int) data.fields.size());
+  EXPECT_EQ(0, retval);
+  EXPECT_EQ(19, data.rows);
+  EXPECT_EQ(2, data.cols);
+  EXPECT_EQ(2, (int) data.fields.size());
 }
 
 TEST(Data, fieldIndex) {
@@ -34,13 +34,13 @@ TEST(Data, fieldIndex) {
   data.load(TEST_DATA);
 
   index = data.fieldIndex("x");
-  ASSERT_EQ(0, index);
+  EXPECT_EQ(0, index);
 
   index = data.fieldIndex("y");
-  ASSERT_EQ(1, index);
+  EXPECT_EQ(1, index);
 
   index = data.fieldIndex("z");
-  ASSERT_EQ(-1, index);
+  EXPECT_EQ(-1, index);
 }
 
 }  // end of gp namespace

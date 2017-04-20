@@ -16,15 +16,15 @@ TEST(BAResidual, constructor) {
   K << 1.0, 0.0, 3.0, 0.0, 2.0, 4.0, 0.0, 0.0, 1.0;
   x << 130, 62;
 
-  // test and assert
+  // test
   ceres::BAResidual r(K, x, true);
-  ASSERT_FLOAT_EQ(K(0, 0), r.fx);
-  ASSERT_FLOAT_EQ(K(1, 1), r.fy);
-  ASSERT_FLOAT_EQ(K(0, 2), r.cx);
-  ASSERT_FLOAT_EQ(K(1, 2), r.cy);
-  ASSERT_FLOAT_EQ(x(0), r.x);
-  ASSERT_FLOAT_EQ(x(1), r.y);
-  ASSERT_FLOAT_EQ(true, r.origin);
+  EXPECT_FLOAT_EQ(K(0, 0), r.fx);
+  EXPECT_FLOAT_EQ(K(1, 1), r.fy);
+  EXPECT_FLOAT_EQ(K(0, 2), r.cx);
+  EXPECT_FLOAT_EQ(K(1, 2), r.cy);
+  EXPECT_FLOAT_EQ(x(0), r.x);
+  EXPECT_FLOAT_EQ(x(1), r.y);
+  EXPECT_FLOAT_EQ(true, r.origin);
 }
 
 TEST(BAResidual, test) {
@@ -62,7 +62,7 @@ TEST(BAResidual, test) {
 
 TEST(BundleAdjustment, constructor) {
   ceres::BundleAdjustment ba;
-  ASSERT_FALSE(ba.configured);
+  EXPECT_FALSE(ba.configured);
 }
 
 TEST(BundleAdjustment, configure) {
@@ -74,17 +74,17 @@ TEST(BundleAdjustment, configure) {
   csv2mat(TEST_DATA_1, false, x1_pts);
   csv2mat(TEST_DATA_2, false, x2_pts);
 
-  // test and assert
+  // test
   // K << 1, 2, 3, 4, 5, 6, 7, 8, 9;
   K << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0;
   ba.configure(K, x1_pts, x2_pts);
 
-  ASSERT_TRUE(ba.configured);
-  ASSERT_EQ(x1_pts, ba.x1_pts);
-  ASSERT_EQ(x2_pts, ba.x2_pts);
-  // ASSERT_FLOAT_EQ(K(0, 0), ba.K(0, 0));
-  // ASSERT_FLOAT_EQ(K(1, 1), ba.K(1, 1));
-  // ASSERT_FLOAT_EQ(K(2, 2), ba.K(2, 2));
+  EXPECT_TRUE(ba.configured);
+  EXPECT_EQ(x1_pts, ba.x1_pts);
+  EXPECT_EQ(x2_pts, ba.x2_pts);
+  // EXPECT_FLOAT_EQ(K(0, 0), ba.K(0, 0));
+  // EXPECT_FLOAT_EQ(K(1, 1), ba.K(1, 1));
+  // EXPECT_FLOAT_EQ(K(2, 2), ba.K(2, 2));
 }
 
 TEST(BundleAdjustment, solve) {
@@ -104,7 +104,7 @@ TEST(BundleAdjustment, solve) {
   ba.configure(K, x1_pts, x2_pts);
   std::cout << mtoc(&t) << " ms" << std::endl << std::endl;
 
-  // test and assert
+  // test
   tic(&t);
   ba.solve(pts3d);
   std::cout << mtoc(&t) << " ms" << std::endl << std::endl;

@@ -8,12 +8,12 @@ namespace yarl {
 TEST(Calibration, constructor) {
   Calibration calibration;
 
-  ASSERT_FALSE(calibration.configured);
-  ASSERT_EQ(IDEL, calibration.state);
+  EXPECT_FALSE(calibration.configured);
+  EXPECT_EQ(IDEL, calibration.state);
 
-  ASSERT_EQ(0, calibration.nb_samples);
-  ASSERT_EQ(10, calibration.nb_max_samples);
-  ASSERT_EQ("./", calibration.save_path);
+  EXPECT_EQ(0, calibration.nb_samples);
+  EXPECT_EQ(10, calibration.nb_max_samples);
+  EXPECT_EQ("./", calibration.save_path);
 }
 
 TEST(Calibration, configure) {
@@ -25,9 +25,9 @@ TEST(Calibration, configure) {
   chess.configure(4, 4);
   calib.configure("/tmp/test", chess, cv::Size(600, 600), 10);
 
-  ASSERT_EQ(0, calib.nb_samples);
-  ASSERT_EQ(10, calib.nb_max_samples);
-  ASSERT_EQ("/tmp/test", calib.save_path);
+  EXPECT_EQ(0, calib.nb_samples);
+  EXPECT_EQ(10, calib.nb_max_samples);
+  EXPECT_EQ("/tmp/test", calib.save_path);
 }
 
 TEST(Calibration, findChessboardCorners) {
@@ -44,10 +44,10 @@ TEST(Calibration, findChessboardCorners) {
   chess.configure(7, 7);
   calib.configure("/tmp/test", chess, cv::Size(600, 600), 10);
 
-  // test and assert
+  // test
   retval = calib.findChessboardCorners(image, corners);
-  ASSERT_TRUE(retval);
-  ASSERT_EQ(49, (int) corners.size());
+  EXPECT_TRUE(retval);
+  EXPECT_EQ(49, (int) corners.size());
 
   // cv::imshow("test", image);
   // cv::waitKey(1000);
@@ -69,9 +69,9 @@ TEST(Calibration, saveImage) {
   calib.findChessboardCorners(image, corners);
   calib.saveImage(image, corners);
 
-  // test and assert
+  // test
   image_file.open("/tmp/test/sample_0.jpg", std::ifstream::in);
-  ASSERT_TRUE(image_file.good());
+  EXPECT_TRUE(image_file.good());
 }
 
 // TEST(Calibration, saveCalibrationOutputs) {
@@ -108,10 +108,10 @@ TEST(Calibration, saveImage) {
 //     }
 //   }
 //
-//   // test and assert
+//   // test
 //   calib.saveCalibrationOutputs();
 //   yaml_file.open("/tmp/test/calibration.yaml", std::ifstream::in);
-//   ASSERT_TRUE(yaml_file.good());
+//   EXPECT_TRUE(yaml_file.good());
 // }
 
 }  // end of yarl namespace

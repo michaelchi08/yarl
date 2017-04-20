@@ -13,24 +13,22 @@ struct Factor {
   std::vector<std::shared_ptr<Variable>> variables;
 
   Factor() : arity{0}, variables{} {}
-
   Factor(const std::shared_ptr<Variable> &at) : arity{1}, variables{at} {}
-
   Factor(const std::shared_ptr<Variable> &from,
          const std::shared_ptr<Variable> &to)
     : arity{2}, variables{from, to} {}
 
-  std::string toString() {
+  virtual std::string toString() {
     std::ostringstream oss;
 
     switch (this->arity) {
       case 1:
-        oss << "[factor_type: unary, ";
+        oss << "[factor_arity: unary, ";
         oss << "at: " << this->variables[0]->toString();
         oss << "]";
         break;
       case 2:
-        oss << "[factor_type: binary, ";
+        oss << "[factor_arity: binary, ";
         oss << "from: " << this->variables[0]->toString();
         oss << ", ";
         oss << "to: " << this->variables[1]->toString();
@@ -42,7 +40,7 @@ struct Factor {
     return oss.str();
   }
 
-  void print() {
+  virtual void print() {
     std::cout << this->toString() << std::endl;
   }
 };

@@ -38,10 +38,10 @@ TEST(TreeConfig, configure) {
   TreeConfig tc;
 
   tc.configure(FULL_METHOD, 2);
-  ASSERT_EQ(5, (int) tc.unary_functions.size());
-  ASSERT_EQ(5, (int) tc.binary_functions.size());
-  ASSERT_EQ(11, (int) tc.constants.size());
-  ASSERT_EQ(0, (int) tc.inputs.size());
+  EXPECT_EQ(5, (int) tc.unary_functions.size());
+  EXPECT_EQ(5, (int) tc.binary_functions.size());
+  EXPECT_EQ(11, (int) tc.constants.size());
+  EXPECT_EQ(0, (int) tc.inputs.size());
 }
 
 TEST(TreeConfig, randomUnaryFunction) {
@@ -52,9 +52,9 @@ TEST(TreeConfig, randomUnaryFunction) {
   tc.configure(FULL_METHOD, 2);
   for (int i = 0; i < 10; i++) {
     retval = tc.randomUnaryFunction(node);
-    ASSERT_EQ(0, retval);
-    ASSERT_EQ(UFUNC, node.type);
-    ASSERT_EQ(1, node.arity);
+    EXPECT_EQ(0, retval);
+    EXPECT_EQ(UFUNC, node.type);
+    EXPECT_EQ(1, node.arity);
   }
 }
 
@@ -66,9 +66,9 @@ TEST(TreeConfig, randomBinaryFunction) {
   tc.configure(FULL_METHOD, 2);
   for (int i = 0; i < 10; i++) {
     retval = tc.randomBinaryFunction(node);
-    ASSERT_EQ(0, retval);
-    ASSERT_EQ(BFUNC, node.type);
-    ASSERT_EQ(2, node.arity);
+    EXPECT_EQ(0, retval);
+    EXPECT_EQ(BFUNC, node.type);
+    EXPECT_EQ(2, node.arity);
   }
 }
 
@@ -80,9 +80,9 @@ TEST(TreeConfig, randomFunction) {
   tc.configure(FULL_METHOD, 2);
   for (int i = 0; i < 10; i++) {
     retval = tc.randomFunction(node);
-    ASSERT_EQ(0, retval);
-    ASSERT_TRUE(node.type == UFUNC || node.type == BFUNC);
-    ASSERT_TRUE(node.arity == 1 || node.arity == 2);
+    EXPECT_EQ(0, retval);
+    EXPECT_TRUE(node.type == UFUNC || node.type == BFUNC);
+    EXPECT_TRUE(node.arity == 1 || node.arity == 2);
   }
 }
 
@@ -96,8 +96,8 @@ TEST(TreeConfig, randomInput) {
   tc.inputs.push_back("y");
   for (int i = 0; i < 10; i++) {
     retval = tc.randomInput(node);
-    ASSERT_EQ(0, retval);
-    ASSERT_EQ(INPUT, node.type);
+    EXPECT_EQ(0, retval);
+    EXPECT_EQ(INPUT, node.type);
   }
 }
 
@@ -109,8 +109,8 @@ TEST(TreeConfig, randomConstant) {
   tc.configure(FULL_METHOD, 2);
   for (int i = 0; i < 10; i++) {
     retval = tc.randomConstant(node);
-    ASSERT_EQ(0, retval);
-    ASSERT_EQ(CONST, node.type);
+    EXPECT_EQ(0, retval);
+    EXPECT_EQ(CONST, node.type);
   }
 }
 
@@ -122,27 +122,27 @@ TEST(TreeConfig, randomTerminal) {
   tc.configure(FULL_METHOD, 2);
   for (int i = 0; i < 10; i++) {
     retval = tc.randomTerminal(node);
-    ASSERT_EQ(0, retval);
-    ASSERT_TRUE(node.type == INPUT || node.type == CONST);
+    EXPECT_EQ(0, retval);
+    EXPECT_TRUE(node.type == INPUT || node.type == CONST);
   }
 }
 
 TEST(Tree, constructor) {
   Tree tree;
 
-  ASSERT_EQ(0, (int) tree.chromosome.size());
+  EXPECT_EQ(0, (int) tree.chromosome.size());
 
-  ASSERT_EQ(0, tree.nb_inputs);
-  ASSERT_EQ(0, tree.nb_constants);
-  ASSERT_EQ(0, tree.nb_functions);
+  EXPECT_EQ(0, tree.nb_inputs);
+  EXPECT_EQ(0, tree.nb_constants);
+  EXPECT_EQ(0, tree.nb_functions);
 
-  ASSERT_EQ(0, tree.size);
-  ASSERT_EQ(0, tree.depth);
+  EXPECT_EQ(0, tree.size);
+  EXPECT_EQ(0, tree.depth);
 
-  ASSERT_EQ(0, tree.error);
-  ASSERT_EQ(0, tree.score);
-  ASSERT_EQ(0, tree.hits);
-  ASSERT_EQ(0, tree.evaluated);
+  EXPECT_EQ(0, tree.error);
+  EXPECT_EQ(0, tree.score);
+  EXPECT_EQ(0, tree.hits);
+  EXPECT_EQ(0, tree.evaluated);
 }
 
 TEST(Tree, configure) {
@@ -152,21 +152,21 @@ TEST(Tree, configure) {
 
   data.load(TEST_SINE_DATA);
   tree.configure(&tc, &data);
-  ASSERT_EQ(0, (int) tree.chromosome.size());
+  EXPECT_EQ(0, (int) tree.chromosome.size());
 
-  ASSERT_EQ(0, tree.nb_inputs);
-  ASSERT_EQ(0, tree.nb_constants);
-  ASSERT_EQ(0, tree.nb_functions);
+  EXPECT_EQ(0, tree.nb_inputs);
+  EXPECT_EQ(0, tree.nb_constants);
+  EXPECT_EQ(0, tree.nb_functions);
 
-  ASSERT_EQ(0, tree.size);
-  ASSERT_EQ(0, tree.depth);
+  EXPECT_EQ(0, tree.size);
+  EXPECT_EQ(0, tree.depth);
 
-  ASSERT_EQ(0, tree.error);
-  ASSERT_EQ(0, tree.score);
-  ASSERT_EQ(0, tree.hits);
-  ASSERT_EQ(0, tree.evaluated);
+  EXPECT_EQ(0, tree.error);
+  EXPECT_EQ(0, tree.score);
+  EXPECT_EQ(0, tree.hits);
+  EXPECT_EQ(0, tree.evaluated);
 
-  ASSERT_TRUE(&tc == tree.tc);
+  EXPECT_TRUE(&tc == tree.tc);
 }
 
 TEST(Tree, clear) {
@@ -177,19 +177,19 @@ TEST(Tree, clear) {
   data.load(TEST_SINE_DATA);
   tree.configure(&tc, &data);
   tree.clear();
-  ASSERT_EQ(0, (int) tree.chromosome.size());
+  EXPECT_EQ(0, (int) tree.chromosome.size());
 
-  ASSERT_EQ(0, tree.nb_inputs);
-  ASSERT_EQ(0, tree.nb_constants);
-  ASSERT_EQ(0, tree.nb_functions);
+  EXPECT_EQ(0, tree.nb_inputs);
+  EXPECT_EQ(0, tree.nb_constants);
+  EXPECT_EQ(0, tree.nb_functions);
 
-  ASSERT_EQ(0, tree.size);
-  ASSERT_EQ(0, tree.depth);
+  EXPECT_EQ(0, tree.size);
+  EXPECT_EQ(0, tree.depth);
 
-  ASSERT_EQ(0, tree.error);
-  ASSERT_EQ(0, tree.score);
-  ASSERT_EQ(0, tree.hits);
-  ASSERT_EQ(0, tree.evaluated);
+  EXPECT_EQ(0, tree.error);
+  EXPECT_EQ(0, tree.score);
+  EXPECT_EQ(0, tree.hits);
+  EXPECT_EQ(0, tree.evaluated);
 }
 
 TEST(Tree, copyFrom) {
@@ -200,19 +200,19 @@ TEST(Tree, copyFrom) {
   t2.copyFrom(t1);
 
   s = t2.root->toString();
-  ASSERT_EQ("F[SIN]", s);
+  EXPECT_EQ("F[SIN]", s);
 
   s = t2.root->children[0]->children[0]->toString();
-  ASSERT_EQ("F[RAD]", s);
+  EXPECT_EQ("F[RAD]", s);
 
   s = t2.root->children[0]->toString();
-  ASSERT_EQ("F[MUL]", s);
+  EXPECT_EQ("F[MUL]", s);
 
   s = t2.root->children[0]->children[0]->children[0]->toString();
-  ASSERT_EQ("T[100]", s);
+  EXPECT_EQ("T[100]", s);
 
   s = t2.root->children[0]->children[1]->toString();
-  ASSERT_EQ("T[x]", s);
+  EXPECT_EQ("T[x]", s);
 }
 
 TEST(Tree, update) {
@@ -221,12 +221,12 @@ TEST(Tree, update) {
   setupSineTree(t);
   t.update();
 
-  ASSERT_EQ(5, (int) t.chromosome.size());
-  ASSERT_EQ("T[100]", t.chromosome[0]->toString());
-  ASSERT_EQ("F[RAD]", t.chromosome[1]->toString());
-  ASSERT_EQ("T[x]", t.chromosome[2]->toString());
-  ASSERT_EQ("F[MUL]", t.chromosome[3]->toString());
-  ASSERT_EQ("F[SIN]", t.chromosome[4]->toString());
+  EXPECT_EQ(5, (int) t.chromosome.size());
+  EXPECT_EQ("T[100]", t.chromosome[0]->toString());
+  EXPECT_EQ("F[RAD]", t.chromosome[1]->toString());
+  EXPECT_EQ("T[x]", t.chromosome[2]->toString());
+  EXPECT_EQ("F[MUL]", t.chromosome[3]->toString());
+  EXPECT_EQ("F[SIN]", t.chromosome[4]->toString());
 }
 
 TEST(Tree, generate) {
@@ -256,14 +256,14 @@ TEST(Tree, prepData) {
   node.setAsInput("x");
   node.nth_child = 0;
   t.prepData(data, node);
-  ASSERT_FLOAT_EQ(0.0, t.f_in(0, 0));
-  ASSERT_FLOAT_EQ(10.0, t.f_in(10, 0));
+  EXPECT_FLOAT_EQ(0.0, t.f_in(0, 0));
+  EXPECT_FLOAT_EQ(10.0, t.f_in(10, 0));
 
   // prep const data
   node.setAsConstant(23.0);
   node.nth_child = 0;
   t.prepData(data, node);
-  ASSERT_FLOAT_EQ(23.0, t.f_in(10, 0));
+  EXPECT_FLOAT_EQ(23.0, t.f_in(10, 0));
 
   // prep feval data
   node.type = FEVAL;
@@ -273,7 +273,7 @@ TEST(Tree, prepData) {
     node.data(i) = 23.0;
   }
   t.prepData(data, node);
-  ASSERT_FLOAT_EQ(23.0, t.f_in(10, 0));
+  EXPECT_FLOAT_EQ(23.0, t.f_in(10, 0));
 }
 
 TEST(Tree, evaluateNode) {
@@ -299,26 +299,26 @@ TEST(Tree, evaluateNode) {
   // test add
   node.setAsBinaryFunc(ADD);
   t.evaluateNode(data, node, feval);
-  ASSERT_FLOAT_EQ(2.0, feval.data(0));
-  ASSERT_FLOAT_EQ(5.0, feval.data(1));
-  ASSERT_FLOAT_EQ(8.0, feval.data(2));
-  ASSERT_FLOAT_EQ(11.0, feval.data(3));
+  EXPECT_FLOAT_EQ(2.0, feval.data(0));
+  EXPECT_FLOAT_EQ(5.0, feval.data(1));
+  EXPECT_FLOAT_EQ(8.0, feval.data(2));
+  EXPECT_FLOAT_EQ(11.0, feval.data(3));
 
   // test sub
   node.setAsBinaryFunc(SUB);
   t.evaluateNode(data, node, feval);
-  ASSERT_FLOAT_EQ(-2.0, feval.data(0));
-  ASSERT_FLOAT_EQ(-3.0, feval.data(1));
-  ASSERT_FLOAT_EQ(-4.0, feval.data(2));
-  ASSERT_FLOAT_EQ(-5.0, feval.data(3));
+  EXPECT_FLOAT_EQ(-2.0, feval.data(0));
+  EXPECT_FLOAT_EQ(-3.0, feval.data(1));
+  EXPECT_FLOAT_EQ(-4.0, feval.data(2));
+  EXPECT_FLOAT_EQ(-5.0, feval.data(3));
 
   // test mul
   node.setAsBinaryFunc(MUL);
   t.evaluateNode(data, node, feval);
-  ASSERT_FLOAT_EQ(0.0, feval.data(0));
-  ASSERT_FLOAT_EQ(4.0, feval.data(1));
-  ASSERT_FLOAT_EQ(12.0, feval.data(2));
-  ASSERT_FLOAT_EQ(24.0, feval.data(3));
+  EXPECT_FLOAT_EQ(0.0, feval.data(0));
+  EXPECT_FLOAT_EQ(4.0, feval.data(1));
+  EXPECT_FLOAT_EQ(12.0, feval.data(2));
+  EXPECT_FLOAT_EQ(24.0, feval.data(3));
 }
 
 TEST(Tree, evaluate) {

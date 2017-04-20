@@ -9,12 +9,12 @@ namespace yarl {
 TEST(TestCamera, constructor) {
   TestCamera camera;
 
-  ASSERT_EQ(-1, camera.image_width);
-  ASSERT_EQ(-1, camera.image_height);
-  ASSERT_EQ(-1, camera.hz);
+  EXPECT_EQ(-1, camera.image_width);
+  EXPECT_EQ(-1, camera.image_height);
+  EXPECT_EQ(-1, camera.hz);
 
-  ASSERT_EQ(0, camera.dt);
-  ASSERT_EQ(-1, camera.frame);
+  EXPECT_EQ(0, camera.dt);
+  EXPECT_EQ(-1, camera.frame);
 }
 
 TEST(TestCamera, update) {
@@ -24,11 +24,11 @@ TEST(TestCamera, update) {
   // setup
   camera.hz = 100;
 
-  // test and assert
+  // test
   retval = camera.update(0.1);
-  ASSERT_TRUE(retval);
-  ASSERT_EQ(0, camera.frame);
-  ASSERT_FLOAT_EQ(0.0, camera.dt);
+  EXPECT_TRUE(retval);
+  EXPECT_EQ(0, camera.frame);
+  EXPECT_FLOAT_EQ(0.0, camera.dt);
 }
 
 TEST(TestCamera, checkFeatures) {
@@ -53,15 +53,15 @@ TEST(TestCamera, checkFeatures) {
               0.0, 0.0, 1.0;
   // clang-format on
 
-  // test and assert
+  // test
   camera.checkFeatures(0.1, features, rpy, t, observed);
 }
 
 TEST(TestDataset, constructor) {
   TestDataset dataset;
 
-  ASSERT_EQ(-1, dataset.camera.image_width);
-  ASSERT_EQ(-1, dataset.camera.image_height);
+  EXPECT_EQ(-1, dataset.camera.image_width);
+  EXPECT_EQ(-1, dataset.camera.image_height);
 }
 
 TEST(TestDataset, configure) {
@@ -69,13 +69,13 @@ TEST(TestDataset, configure) {
   int retval;
 
   retval = dataset.configure(TEST_CONFIG);
-  ASSERT_EQ(0, retval);
-  ASSERT_EQ(640, dataset.camera.image_width);
-  ASSERT_EQ(640, dataset.camera.image_height);
-  ASSERT_FLOAT_EQ(554.25, dataset.camera.K(0, 0));
-  ASSERT_FLOAT_EQ(554.25, dataset.camera.K(1, 1));
-  ASSERT_FLOAT_EQ(0.0, dataset.camera.K(2, 0));
-  ASSERT_FLOAT_EQ(0.0, dataset.camera.K(2, 1));
+  EXPECT_EQ(0, retval);
+  EXPECT_EQ(640, dataset.camera.image_width);
+  EXPECT_EQ(640, dataset.camera.image_height);
+  EXPECT_FLOAT_EQ(554.25, dataset.camera.K(0, 0));
+  EXPECT_FLOAT_EQ(554.25, dataset.camera.K(1, 1));
+  EXPECT_FLOAT_EQ(0.0, dataset.camera.K(2, 0));
+  EXPECT_FLOAT_EQ(0.0, dataset.camera.K(2, 1));
 }
 
 TEST(TestDataset, generateTestData) {
@@ -85,7 +85,7 @@ TEST(TestDataset, generateTestData) {
   dataset.configure(TEST_CONFIG);
   retval = dataset.generateTestData(TEST_OUTPUT);
 
-  ASSERT_EQ(0, retval);
+  EXPECT_EQ(0, retval);
 }
 
 }  // end of yarl namespace

@@ -18,14 +18,14 @@ TEST(Pose, checkPose) {
   float x, y, z;
 
   // check Pose with no arguments (q = identity, position = 0);
-  ASSERT_FLOAT_EQ(0.0, testPose.orientation.x());
-  ASSERT_FLOAT_EQ(0.0, testPose.orientation.y());
-  ASSERT_FLOAT_EQ(0.0, testPose.orientation.z());
-  ASSERT_FLOAT_EQ(0.0, testPose.orientation.w());
+  EXPECT_FLOAT_EQ(0.0, testPose.orientation.x());
+  EXPECT_FLOAT_EQ(0.0, testPose.orientation.y());
+  EXPECT_FLOAT_EQ(0.0, testPose.orientation.z());
+  EXPECT_FLOAT_EQ(0.0, testPose.orientation.w());
 
-  ASSERT_FLOAT_EQ(0.0, testPose.position(0));
-  ASSERT_FLOAT_EQ(0.0, testPose.position(1));
-  ASSERT_FLOAT_EQ(0.0, testPose.position(2));
+  EXPECT_FLOAT_EQ(0.0, testPose.position(0));
+  EXPECT_FLOAT_EQ(0.0, testPose.position(1));
+  EXPECT_FLOAT_EQ(0.0, testPose.position(2));
 
   // test initalizeing with floats,
   roll = 0.0;
@@ -36,14 +36,14 @@ TEST(Pose, checkPose) {
   z = 22.0;
 
   testPose = Pose(roll, pitch, yaw, x, y, z);
-  ASSERT_FLOAT_EQ(0, testPose.orientation.x());
-  ASSERT_FLOAT_EQ(0, testPose.orientation.y());
-  ASSERT_FLOAT_EQ(0, testPose.orientation.z());
-  ASSERT_FLOAT_EQ(1, testPose.orientation.w());
+  EXPECT_FLOAT_EQ(0, testPose.orientation.x());
+  EXPECT_FLOAT_EQ(0, testPose.orientation.y());
+  EXPECT_FLOAT_EQ(0, testPose.orientation.z());
+  EXPECT_FLOAT_EQ(1, testPose.orientation.w());
 
-  ASSERT_FLOAT_EQ(x, testPose.position(0));
-  ASSERT_FLOAT_EQ(y, testPose.position(1));
-  ASSERT_FLOAT_EQ(z, testPose.position(2));
+  EXPECT_FLOAT_EQ(x, testPose.position(0));
+  EXPECT_FLOAT_EQ(y, testPose.position(1));
+  EXPECT_FLOAT_EQ(z, testPose.position(2));
 
   // test initializing non zero roll, pitch, yaw
   roll = 10.0;
@@ -54,25 +54,25 @@ TEST(Pose, checkPose) {
   euler2quat(euler, 321, q_test);
   testPose = Pose(roll, pitch, yaw, x, y, z);
 
-  ASSERT_FLOAT_EQ(q_test.x(), testPose.orientation.x());
-  ASSERT_FLOAT_EQ(q_test.y(), testPose.orientation.y());
-  ASSERT_FLOAT_EQ(q_test.z(), testPose.orientation.z());
-  ASSERT_FLOAT_EQ(q_test.w(), testPose.orientation.w());
+  EXPECT_FLOAT_EQ(q_test.x(), testPose.orientation.x());
+  EXPECT_FLOAT_EQ(q_test.y(), testPose.orientation.y());
+  EXPECT_FLOAT_EQ(q_test.z(), testPose.orientation.z());
+  EXPECT_FLOAT_EQ(q_test.w(), testPose.orientation.w());
 
-  ASSERT_FLOAT_EQ(x, testPose.position(0));
-  ASSERT_FLOAT_EQ(y, testPose.position(1));
-  ASSERT_FLOAT_EQ(z, testPose.position(2));
+  EXPECT_FLOAT_EQ(x, testPose.position(0));
+  EXPECT_FLOAT_EQ(y, testPose.position(1));
+  EXPECT_FLOAT_EQ(z, testPose.position(2));
 
   // test inializing with quaterion and a postion vector
   testPose = Pose(Vec3(x, y, z), q_test);
-  ASSERT_FLOAT_EQ(q_test.x(), testPose.orientation.x());
-  ASSERT_FLOAT_EQ(q_test.y(), testPose.orientation.y());
-  ASSERT_FLOAT_EQ(q_test.z(), testPose.orientation.z());
-  ASSERT_FLOAT_EQ(q_test.w(), testPose.orientation.w());
+  EXPECT_FLOAT_EQ(q_test.x(), testPose.orientation.x());
+  EXPECT_FLOAT_EQ(q_test.y(), testPose.orientation.y());
+  EXPECT_FLOAT_EQ(q_test.z(), testPose.orientation.z());
+  EXPECT_FLOAT_EQ(q_test.w(), testPose.orientation.w());
 
-  ASSERT_FLOAT_EQ(x, testPose.position(0));
-  ASSERT_FLOAT_EQ(y, testPose.position(1));
-  ASSERT_FLOAT_EQ(z, testPose.position(2));
+  EXPECT_FLOAT_EQ(x, testPose.position(0));
+  EXPECT_FLOAT_EQ(y, testPose.position(1));
+  EXPECT_FLOAT_EQ(z, testPose.position(2));
 
   // test that rotation matrix makes sense
   roll = M_PI / 2;
@@ -83,19 +83,19 @@ TEST(Pose, checkPose) {
   rotation_mtx = testPose.rotationMatrix();
   euler << roll, pitch, yaw;
   euler2quat(euler, 321, q_test);
-  ASSERT_TRUE(rotation_mtx == q_test.toRotationMatrix());
+  EXPECT_TRUE(rotation_mtx == q_test.toRotationMatrix());
 }
 
 TEST(Utils, csvrows) {
   int rows;
   rows = csvrows(TEST_DATA);
-  ASSERT_EQ(281, rows);
+  EXPECT_EQ(281, rows);
 }
 
 TEST(Utils, csvcols) {
   int cols;
   cols = csvcols(TEST_DATA);
-  ASSERT_EQ(2, cols);
+  EXPECT_EQ(2, cols);
 }
 
 TEST(Utils, csvheader) {
@@ -105,19 +105,19 @@ TEST(Utils, csvheader) {
   for (size_t i = 0; i < fields.size(); i++) {
     std::cout << "[" << fields[i] << "]" << std::endl;
   }
-  ASSERT_EQ(2, (int) fields.size());
+  EXPECT_EQ(2, (int) fields.size());
 }
 
 TEST(Utils, csv2mat) {
   MatX data;
 
   csv2mat(TEST_DATA, true, data);
-  ASSERT_EQ(280, data.rows());
-  ASSERT_EQ(2, data.cols());
-  ASSERT_FLOAT_EQ(-2.22482078596, data(0, 0));
-  ASSERT_FLOAT_EQ(9.9625789766, data(0, 1));
-  ASSERT_FLOAT_EQ(47.0485650525, data(279, 0));
-  ASSERT_FLOAT_EQ(613.503760567, data(279, 1));
+  EXPECT_EQ(280, data.rows());
+  EXPECT_EQ(2, data.cols());
+  EXPECT_FLOAT_EQ(-2.22482078596, data(0, 0));
+  EXPECT_FLOAT_EQ(9.9625789766, data(0, 1));
+  EXPECT_FLOAT_EQ(47.0485650525, data(279, 0));
+  EXPECT_FLOAT_EQ(613.503760567, data(279, 1));
 }
 
 TEST(Utils, mat2csv) {
@@ -130,7 +130,7 @@ TEST(Utils, mat2csv) {
 
   for (int i = 0; i < x.rows(); i++) {
     for (int j = 0; j < x.cols(); j++) {
-      ASSERT_NEAR(x(i, j), y(i, j), 0.1);
+      EXPECT_NEAR(x(i, j), y(i, j), 0.1);
     }
   }
 }

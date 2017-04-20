@@ -1,55 +1,21 @@
 #include "yarl/optimization/gp/gpopt.hpp"
 
-// struct config *sr_setup(int nb_populations,
-//                         int nb_individuals,
-//                         struct tree_config *tc) {
-//   int i;
-//   struct config *c;
-//
-//   // setup
-//   c = (struct config *) malloc(sizeof(struct config));
-//
-//   // details
-//   c->nb_populations = nb_populations;
-//   c->nb_individuals = nb_individuals;
-//
-//   // population
-//   c->p = (struct population **) malloc(sizeof(struct population *) *
-//                                        nb_populations);
-//   c->selected = (struct population **) malloc(sizeof(struct population *) *
-//                                               nb_populations);
-//   for (i = 0; i < nb_populations; i++) {
-//     c->p[i] = population_generate(tc, nb_individuals);
-//     c->selected[i] = population_new(nb_individuals);
-//   }
-//
-//   // genetic operators
-//   selection_config_defaults(&c->selection);
-//   crossover_config_defaults(&c->crossover);
-//   mutation_config_defaults(&c->mutation);
-//
-//   // termination criteria
-//   c->max_generations = 500;
-//   c->target_score = 0.0;
-//
-//   return c;
-// }
-//
-// void sr_destroy(void *target) {
-//   int i;
-//   struct config *c;
-//
-//   c = (struct config *) target;
-//   for (i = 0; i < c->nb_populations; i++) {
-//     population_destroy(c->p[i]);
-//     population_destroy(c->selected[i]);
-//   }
-//   free(c->p);
-//   free(c->selected);
-//
-//   free(c);
-// }
-//
+namespace yarl {
+namespace gp {
+
+int GPOpt::configure(const std::string &config_file) {
+  return 0;
+}
+
+int GPOpt::iterate() {
+  return 0;
+}
+
+int GPOpt::solve() {
+  return 0;
+}
+
+
 // int sr_reproduce(struct config *c) {
 //   int i;
 //   int j;
@@ -334,3 +300,6 @@
 //
 //   return 0;
 // }
+
+}  // end of gp namespace
+}  // end of yarl namespace

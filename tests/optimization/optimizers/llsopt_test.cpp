@@ -16,8 +16,8 @@ TEST(lls, solve) {
   // clang-format on
 
   llsopt_solve(A, b, x);
-  ASSERT_FLOAT_EQ(x(0), 3.5);
-  ASSERT_FLOAT_EQ(x(1), 1.4);
+  EXPECT_FLOAT_EQ(x(0), 3.5);
+  EXPECT_FLOAT_EQ(x(1), 1.4);
 }
 
 }  // end of yarl namespace

@@ -47,7 +47,7 @@ static void setupSubTree(Tree &t) {
 TEST(Crossover, constructor) {
   Crossover crossover;
 
-  ASSERT_FLOAT_EQ(0.0, crossover.probability);
+  EXPECT_FLOAT_EQ(0.0, crossover.probability);
 }
 
 TEST(Crossover, pointCrossover) {
@@ -60,7 +60,7 @@ TEST(Crossover, pointCrossover) {
   setupAddTree(t1);
   setupSubTree(t2);
 
-  // test and assert
+  // test
   s1 = t1.toString();
   s2 = t2.toString();
 
@@ -76,11 +76,11 @@ TEST(Crossover, pointCrossover) {
   std::cout << "crossed t2: " << s4 << std::endl;
   std::cout << std::endl;
 
-  ASSERT_FLOAT_EQ(1.0, crossover.probability);
-  ASSERT_TRUE(s1.compare(s3) != 0);
-  ASSERT_TRUE(s1.compare(s4) != 0);
-  ASSERT_TRUE(s2.compare(s3) != 0);
-  ASSERT_TRUE(s2.compare(s4) != 0);
+  EXPECT_FLOAT_EQ(1.0, crossover.probability);
+  EXPECT_TRUE(s1.compare(s3) != 0);
+  EXPECT_TRUE(s1.compare(s4) != 0);
+  EXPECT_TRUE(s2.compare(s3) != 0);
+  EXPECT_TRUE(s2.compare(s4) != 0);
 }
 
 }  // end of gp namespace

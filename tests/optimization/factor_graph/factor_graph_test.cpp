@@ -9,16 +9,16 @@ TEST(FactorGraph, addUnaryFactor) {
   graph.addUnaryFactor<PoseVar, double>(1, 2.0);
   graph.addUnaryFactor<PoseVar, int>(1, 1);
 
-  ASSERT_EQ(2u, graph.graph.size());
-  ASSERT_EQ(2u, graph.factors.size());
+  EXPECT_EQ(2u, graph.graph.size());
+  EXPECT_EQ(2u, graph.factors.size());
 }
 
 TEST(FactorGraph, addBinaryFactor) {
   FactorGraph graph;
 
   graph.addBinaryFactor<PoseVar, PoseVar, double>(1, 2, 2);
-  ASSERT_EQ(2u, graph.graph.size());
-  ASSERT_EQ(1u, graph.factors.size());
+  EXPECT_EQ(2u, graph.graph.size());
+  EXPECT_EQ(1u, graph.factors.size());
 }
 
 TEST(FactorGraph, print) {
