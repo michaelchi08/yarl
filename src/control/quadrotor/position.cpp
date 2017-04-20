@@ -2,17 +2,17 @@
 
 namespace yarl {
 
-Vec4 PositionController::calculate(Vec3 setpoints,
-                                   Vec4 actual,
-                                   double yaw,
-                                   double dt) {
+Vec4 PositionController::update(Vec3 setpoints,
+                                Vec4 actual,
+                                double yaw,
+                                double dt) {
   // check rate
   this->dt += dt;
   if (this->dt < 0.01) {
     return this->outputs;
   }
 
-  // calculate RPY errors relative to quadrotor by incorporating yaw
+  // update RPY errors relative to quadrotor by incorporating yaw
   Vec3 errors, euler;
   Mat3 R;
   errors(0) = setpoints(0) - actual(0);
@@ -23,10 +23,10 @@ Vec4 PositionController::calculate(Vec3 setpoints,
   errors = R * errors;
 
   // roll, pitch, yaw and thrust
-  double r = -this->y_controller.calculate(errors(1), 0.0, dt);
-  double p = this->x_controller.calculate(errors(0), 0.0, dt);
+  double r = -this->y_controller.update(errors(1), 0.0, dt);
+  double p = this->x_controller.update(errors(0), 0.0, dt);
   double y = yaw;
-  double t = 0.5 + this->z_controller.calculate(errors(2), 0.0, dt);
+  double t = 0.5 + this->z_controller.update(errors(2), 0.0, dt);
   Vec4 outputs;
   outputs << r, p, y, t;
 

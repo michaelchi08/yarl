@@ -79,7 +79,7 @@ Vec4 QuadrotorModel::attitudeControllerControl(double dt) {
                      this->states(1),  // pitch
                      this->states(2),  // yaw
                      this->states(8);  // z
-  motor_inputs = this->attitude_controller.calculate(this->attitude_setpoints,
+  motor_inputs = this->attitude_controller.update(this->attitude_setpoints,
                                                      actual_attitude,
                                                      dt);
   // clang-format on
@@ -98,7 +98,7 @@ Vec4 QuadrotorModel::positionControllerControl(double dt) {
   actual_position(1) = this->states(7);  // y
   actual_position(2) = this->states(8);  // z
   actual_position(3) = this->states(2);  // yaw
-  this->attitude_setpoints = this->position_controller.calculate(
+  this->attitude_setpoints = this->position_controller.update(
     this->position_setpoints,
     actual_position,
     0.0,
@@ -110,7 +110,7 @@ Vec4 QuadrotorModel::positionControllerControl(double dt) {
   actual_attitude(1) = this->states(1);  // pitch
   actual_attitude(2) = this->states(2);  // yaw
   actual_attitude(3) = this->states(8);  // z
-  motor_inputs = this->attitude_controller.calculate(
+  motor_inputs = this->attitude_controller.update(
     this->attitude_setpoints,
     actual_attitude,
     dt

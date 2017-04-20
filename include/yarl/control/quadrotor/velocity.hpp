@@ -43,7 +43,7 @@ public:
       att_cmd() {}
 
   int configure(const std::string &config_file);
-  Vec4 calculate(const Vec3 &setpoints, const Vec3 &actual, double dt);
+  Vec4 update(const Vec3 &setpoints, const Vec3 &actual, double dt);
   void reset();
   void printOutputs();
   void printErrors();

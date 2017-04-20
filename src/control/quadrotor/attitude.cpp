@@ -2,16 +2,16 @@
 
 namespace yarl {
 
-Vec4 AttitudeController::calculate(const Vec4 &setpoints,
-                                   const Vec4 &actual,
-                                   double dt) {
+Vec4 AttitudeController::update(const Vec4 &setpoints,
+                                const Vec4 &actual,
+                                double dt) {
   // check rate
   this->dt += dt;
   if (this->dt < 0.001) {
     return this->outputs;
   }
 
-  // calculate yaw error
+  // update yaw error
   double actual_yaw = rad2deg(actual(2));
   double setpoint_yaw = rad2deg(setpoints(2));
   double error_yaw = setpoint_yaw - actual_yaw;
@@ -24,9 +24,9 @@ Vec4 AttitudeController::calculate(const Vec4 &setpoints,
 
   // roll pitch yaw
   double r, p, y;
-  r = this->roll_controller.calculate(setpoints(0), actual(0), this->dt);
-  p = this->pitch_controller.calculate(setpoints(1), actual(1), this->dt);
-  y = this->yaw_controller.calculate(error_yaw, 0.0, this->dt);
+  r = this->roll_controller.update(setpoints(0), actual(0), this->dt);
+  p = this->pitch_controller.update(setpoints(1), actual(1), this->dt);
+  y = this->yaw_controller.update(error_yaw, 0.0, this->dt);
 
   // thrust
   double max_thrust = 5.0;
@@ -57,13 +57,13 @@ Vec4 AttitudeController::calculate(const Vec4 &setpoints,
   return outputs;
 }
 
-Vec4 AttitudeController::calculate(const Vec4 &psetpoints,
-                                   const Vec4 &vsetpoints,
-                                   const Vec4 &actual,
-                                   double dt) {
+Vec4 AttitudeController::update(const Vec4 &psetpoints,
+                                const Vec4 &vsetpoints,
+                                const Vec4 &actual,
+                                double dt) {
   Vec4 setpoints;
   setpoints = psetpoints + vsetpoints;
-  return this->calculate(setpoints, actual, dt);
+  return this->update(setpoints, actual, dt);
 }
 
 }  // end of yarl namespace

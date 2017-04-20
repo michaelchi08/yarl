@@ -44,12 +44,12 @@ public:
       att_cmd() {}
 
   int configure(const std::string &config_file);
-  AttitudeCommand calculate(const Vec3 &errors, double yaw, double dt);
-  AttitudeCommand calculate(const Vec3 &target_pos_bf,
-                            const Vec3 &pos,
-                            const Vec3 &pos_prev,
-                            double yaw,
-                            double dt);
+  AttitudeCommand update(const Vec3 &errors, double yaw, double dt);
+  AttitudeCommand update(const Vec3 &target_pos_bf,
+                         const Vec3 &pos,
+                         const Vec3 &pos_prev,
+                         double yaw,
+                         double dt);
   void reset();
   void printOutputs();
   void printErrors();

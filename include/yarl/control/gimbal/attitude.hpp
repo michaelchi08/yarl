@@ -27,7 +27,7 @@ public:
       dt(0.0),
       outputs(0.0, 0.0, 0.0) {}
 
-  VecX calculate(const Vec3 &setpoints, const Vec3 &actual, double dt);
+  VecX update(const Vec3 &setpoints, const Vec3 &actual, double dt);
 };
 
 }  // end of yarl namespace

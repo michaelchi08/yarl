@@ -26,7 +26,7 @@ public:
       dt(0.0),
       outputs(0.0, 0.0, 0.0, 0.0) {}
 
-  Vec4 calculate(Vec3 setpoints, Vec4 actual, double yaw, double dt);
+  Vec4 update(Vec3 setpoints, Vec4 actual, double yaw, double dt);
 };
 
 }  // end of yarl namespace

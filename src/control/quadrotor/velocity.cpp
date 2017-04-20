@@ -38,9 +38,9 @@ int VelocityController::configure(const std::string &config_file) {
   return 0;
 }
 
-Vec4 VelocityController::calculate(const Vec3 &setpoints,
-                                   const Vec3 &actual,
-                                   double dt) {
+Vec4 VelocityController::update(const Vec3 &setpoints,
+                                const Vec3 &actual,
+                                double dt) {
   double r, p, y, t;
   Vec3 errors, euler;
   Vec4 outputs;
@@ -52,17 +52,17 @@ Vec4 VelocityController::calculate(const Vec3 &setpoints,
     return this->outputs;
   }
 
-  // calculate errors
+  // update errors
   errors(0) = setpoints(0) - actual(0);
   errors(1) = setpoints(1) - actual(1);
   errors(2) = setpoints(2) - actual(2);
 
   // roll, pitch, yaw and throttle (assuming NWU frame)
   // clang-format off
-  r = -this->vy_controller.calculate(errors(1), 0.0, this->dt);
-  p = this->vx_controller.calculate(errors(0), 0.0, this->dt);
+  r = -this->vy_controller.update(errors(1), 0.0, this->dt);
+  p = this->vx_controller.update(errors(0), 0.0, this->dt);
   y = 0.0;
-  t = this->vz_controller.calculate(errors(2), 0.0, this->dt);
+  t = this->vz_controller.update(errors(2), 0.0, this->dt);
   t /= fabs(cos(r) * cos(p));  // adjust throttle for roll and pitch
   // clang-format o
 

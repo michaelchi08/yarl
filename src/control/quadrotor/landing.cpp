@@ -449,10 +449,10 @@ int LandingController::record(const Vec3 &pos,
   return 0;
 }
 
-Vec4 LandingController::calculateVelocityErrors(const Vec3 &v_errors,
-                                                const Vec3 &p_errors,
-                                                double yaw,
-                                                double dt) {
+Vec4 LandingController::updateVelocityErrors(const Vec3 &v_errors,
+                                             const Vec3 &p_errors,
+                                             double yaw,
+                                             double dt) {
   // check rate
   this->dt += dt;
   if (this->dt < 0.01) {
@@ -502,13 +502,13 @@ Vec4 LandingController::calculateVelocityErrors(const Vec3 &v_errors,
   return this->outputs;
 }
 
-int LandingController::calculate(const Vec3 &target_pos_bf,
-                                 const Vec3 &target_vel_bf,
-                                 const Vec3 &pos,
-                                 const Vec3 &vel,
-                                 const Quaternion &orientation,
-                                 double yaw,
-                                 double dt) {
+int LandingController::update(const Vec3 &target_pos_bf,
+                              const Vec3 &target_vel_bf,
+                              const Vec3 &pos,
+                              const Vec3 &vel,
+                              const Quaternion &orientation,
+                              double yaw,
+                              double dt) {
   int retval;
 
   // obtain position and velocity waypoints
@@ -517,27 +517,27 @@ int LandingController::calculate(const Vec3 &target_pos_bf,
   wp_rel_pos = this->trajectory.rel_pos.at(0);
   wp_rel_vel = this->trajectory.rel_vel.at(0);
 
-  // calculate velocity in body frame
+  // update velocity in body frame
   Vec3 euler, vel_bf;
   Quaternion q;
   euler << 0, 0, yaw;
   euler2quat(euler, 321, q);
   inertial2body(vel, q, vel_bf);
 
-  // calculate velocity errors (inertial version)
+  // update velocity errors (inertial version)
   Vec3 v_errors;
   v_errors(0) = wp_vel(0) - vel_bf(0);
   v_errors(1) = target_vel_bf(1);
   v_errors(2) = wp_vel(1) - vel(2);
 
-  // calculate position errors
+  // update position errors
   Vec3 p_errors;
   p_errors(0) = wp_rel_pos(0) + target_pos_bf(0);
   p_errors(1) = target_pos_bf(1);
   p_errors(2) = wp_rel_pos(1) - pos(2);
 
-  // calculate feed-back controls
-  this->outputs = this->calculateVelocityErrors(v_errors, p_errors, yaw, dt);
+  // update feed-back controls
+  this->outputs = this->updateVelocityErrors(v_errors, p_errors, yaw, dt);
 
   // add in feed-forward controls
   this->outputs(0) += 0.0;           // roll

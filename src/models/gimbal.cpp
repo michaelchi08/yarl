@@ -42,7 +42,7 @@ Vec3 GimbalModel::attitudeControllerControl(double dt) {
   // attitude controller
   // clang-format off
   actual_attitude << this->states(0), this->states(2), 0.0;
-  motor_inputs = this->joint_controller.calculate(
+  motor_inputs = this->joint_controller.update(
     this->joint_setpoints,
     actual_attitude,
     dt
@@ -118,7 +118,7 @@ void GimbalModel::trackTarget(const Vec3 &target_cf) {
   target = this->getTargetInBPF(
     target_cf, this->frame_orientation, this->joint_orientation);
 
-  // calculate gimbal setpoints
+  // update gimbal setpoints
   dist = target.norm();
   this->target_attitude_if(0) = asin(target(1) / dist);
   this->target_attitude_if(1) = -asin(target(0) / dist);

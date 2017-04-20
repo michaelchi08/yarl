@@ -40,7 +40,7 @@ public:
       k_i(k_i),
       k_d(k_d) {}
 
-  double calculate(double setpoint, double input, double dt);
+  double update(double setpoint, double input, double dt);
 };
 
 }  // end of yarl namespace

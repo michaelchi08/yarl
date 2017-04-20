@@ -112,17 +112,17 @@ public:
              const Vec3 &rpy,
              double thrust,
              double dt);
-  Vec4 calculateVelocityErrors(const Vec3 &v_errors,
-                               const Vec3 &p_errors,
-                               double yaw,
-                               double dt);
-  int calculate(const Vec3 &target_pos_bf,
-                const Vec3 &target_vel_bf,
-                const Vec3 &pos,
-                const Vec3 &vel,
-                const Quaternion &orientation,
-                double yaw,
-                double dt);
+  Vec4 updateVelocityErrors(const Vec3 &v_errors,
+                            const Vec3 &p_errors,
+                            double yaw,
+                            double dt);
+  int update(const Vec3 &target_pos_bf,
+             const Vec3 &target_vel_bf,
+             const Vec3 &pos,
+             const Vec3 &vel,
+             const Quaternion &orientation,
+             double yaw,
+             double dt);
   void reset();
   void printOutputs();
   void printErrors();
