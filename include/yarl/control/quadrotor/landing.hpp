@@ -11,6 +11,7 @@
 
 
 namespace yarl {
+namespace control {
 
 #define ETROWS "Trajectory [%s] has 0 rows!"
 #define ETCOLS "Trajectory [%s] invalid number of cols!"
@@ -128,5 +129,6 @@ public:
   void printErrors();
 };
 
+}  // end of control namespace
 }  // end of yarl namespace
 #endif

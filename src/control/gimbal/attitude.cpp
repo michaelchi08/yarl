@@ -1,6 +1,7 @@
 #include "yarl/control/gimbal/attitude.hpp"
 
 namespace yarl {
+namespace control {
 
 VecX AttitudeController::update(const Vec3 &setpoints,
                                 const Vec3 &actual,
@@ -24,4 +25,5 @@ VecX AttitudeController::update(const Vec3 &setpoints,
   return outputs;
 }
 
+}  // end of control namespace
 }  // end of yarl namespace

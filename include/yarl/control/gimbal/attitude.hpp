@@ -8,11 +8,8 @@
 #include "yarl/control/pid.hpp"
 
 namespace yarl {
+namespace control {
 
-/**
- * Attitude Controller for a Gimbal, this class implements a simple 2-axis
- * roll and pitch PID controller
- */
 class AttitudeController {
 public:
   PID roll_controller;
@@ -30,5 +27,6 @@ public:
   VecX update(const Vec3 &setpoints, const Vec3 &actual, double dt);
 };
 
+}  // end of control namespace
 }  // end of yarl namespace
 #endif

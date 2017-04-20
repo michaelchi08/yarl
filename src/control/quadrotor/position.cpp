@@ -1,6 +1,7 @@
 #include "yarl/control/quadrotor/position.hpp"
 
 namespace yarl {
+namespace control {
 
 Vec4 PositionController::update(Vec3 setpoints,
                                 Vec4 actual,
@@ -67,5 +68,5 @@ Vec4 PositionController::update(Vec3 setpoints,
   return outputs;
 }
 
-
+}  // end of control namespace
 }  // end of yarl namespace

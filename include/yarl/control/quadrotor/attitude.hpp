@@ -8,6 +8,7 @@
 #include "yarl/control/pid.hpp"
 
 namespace yarl {
+namespace control {
 
 class AttitudeController {
 public:
@@ -33,5 +34,6 @@ public:
               double dt);
 };
 
+}  // end of control namespace
 }  // end of yarl namespace
 #endif

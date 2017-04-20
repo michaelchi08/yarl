@@ -1,6 +1,7 @@
 #include "yarl/control/quadrotor/velocity.hpp"
 
 namespace yarl {
+namespace control {
 
 int VelocityController::configure(const std::string &config_file) {
   ConfigParser parser;
@@ -136,4 +137,5 @@ void VelocityController::printErrors() {
   std::cout << "\terror_d: " << std::setprecision(2) << d << std::endl;
 }
 
+}  // end of control namespace
 }  // end of yarl namespace

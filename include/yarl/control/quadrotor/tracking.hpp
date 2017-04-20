@@ -7,6 +7,7 @@
 #include "yarl/control/pid_controller.hpp"
 
 namespace yarl {
+namespace control {
 
 class TrackingController {
 public:
@@ -55,5 +56,6 @@ public:
   void printErrors();
 };
 
+}  // end of control namespace
 }  // end of yarl namespace
 #endif

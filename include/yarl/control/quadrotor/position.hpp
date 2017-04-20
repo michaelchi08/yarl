@@ -8,6 +8,7 @@
 #include "yarl/control/pid.hpp"
 
 namespace yarl {
+namespace control {
 
 class PositionController {
 public:
@@ -29,5 +30,6 @@ public:
   Vec4 update(Vec3 setpoints, Vec4 actual, double yaw, double dt);
 };
 
+}  // end of control namespace
 }  // end of yarl namespace
 #endif

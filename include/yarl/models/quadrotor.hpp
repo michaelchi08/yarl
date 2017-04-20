@@ -30,8 +30,8 @@ public:
   Vec4 attitude_setpoints;
   Vec3 position_setpoints;
 
-  AttitudeController attitude_controller;
-  PositionController position_controller;
+  control::AttitudeController attitude_controller;
+  control::PositionController position_controller;
 
   QuadrotorModel()
     : states(),

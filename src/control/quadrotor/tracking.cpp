@@ -1,7 +1,7 @@
 #include "yarl/control/quadrotor/tracking.hpp"
 
-
 namespace yarl {
+namespace control {
 
 int TrackingController::configure(const std::string &config_file) {
   ConfigParser parser;
@@ -153,4 +153,5 @@ void TrackingController::printErrors() {
   std::cout << "\terror_d: " << std::setprecision(2) << i << std::endl;
 }
 
+}  // end of control namespace
 }  // end of yarl namespace

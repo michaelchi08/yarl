@@ -2,6 +2,7 @@
 #define YARL_CONTROL_PID_HPP
 
 namespace yarl {
+namespace control {
 
 class PID {
 public:
@@ -43,5 +44,6 @@ public:
   double update(double setpoint, double input, double dt);
 };
 
+}  // end of control namespace
 }  // end of yarl namespace
 #endif

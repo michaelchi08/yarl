@@ -7,6 +7,7 @@
 #include "yarl/control/pid.hpp"
 
 namespace yarl {
+namespace control {
 
 class VelocityController {
 public:
@@ -49,5 +50,6 @@ public:
   void printErrors();
 };
 
+}  // end of control namespace
 }  // end of fs namespace
 #endif

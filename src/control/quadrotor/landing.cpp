@@ -1,6 +1,7 @@
 #include "yarl/control/quadrotor/landing.hpp"
 
 namespace yarl {
+namespace control {
 
 // TRAJECTORY
 Trajectory::Trajectory() {
@@ -624,4 +625,5 @@ void LandingController::printOutputs() {
 //   std::cout << "\terror_d: " << std::setprecision(2) << i << std::endl;
 // }
 
+}  // end of control namespace
 }  // end of yarl namespace

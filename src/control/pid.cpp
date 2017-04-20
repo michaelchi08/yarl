@@ -1,6 +1,7 @@
 #include "yarl/control/pid.hpp"
 
 namespace yarl {
+namespace control {
 
 double PID::update(double setpoint, double actual, double dt) {
   // update errors
@@ -19,4 +20,5 @@ double PID::update(double setpoint, double actual, double dt) {
   return output;
 }
 
+}  // end of control namespace
 }  // end of yarl namespace

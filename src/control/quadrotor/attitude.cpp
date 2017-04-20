@@ -1,6 +1,7 @@
 #include "yarl/control/quadrotor/attitude.hpp"
 
 namespace yarl {
+namespace control {
 
 Vec4 AttitudeController::update(const Vec4 &setpoints,
                                 const Vec4 &actual,
@@ -66,4 +67,5 @@ Vec4 AttitudeController::update(const Vec4 &psetpoints,
   return this->update(setpoints, actual, dt);
 }
 
+}  // end of control namespace
 }  // end of yarl namespace

@@ -19,7 +19,7 @@ public:
   double Iy;
 
   Vec3 joint_setpoints;
-  AttitudeController joint_controller;
+  control::AttitudeController joint_controller;
 
   Quaternion frame_orientation;
   Quaternion joint_orientation;
