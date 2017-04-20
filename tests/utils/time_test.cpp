@@ -3,7 +3,7 @@
 
 namespace yarl {
 
-TEST(Utils, ticAndtoc) {
+TEST(Utils, ticAndToc) {
   struct timespec start;
 
   tic(&start);

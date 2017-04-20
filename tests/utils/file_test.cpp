@@ -4,8 +4,8 @@
 namespace yarl {
 
 TEST(Utils, file_exists) {
-  EXPECT_TRUE(file_exists("tests/data/utils/config.yaml"));
-  EXPECT_FALSE(file_exists("tests/data/utils/bogus.yaml"));
+  EXPECT_TRUE(file_exists("tests/data/utils/config.xml"));
+  EXPECT_FALSE(file_exists("tests/data/utils/bogus.xml"));
 }
 
 TEST(Utils, path_split) {
