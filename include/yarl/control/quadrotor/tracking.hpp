@@ -4,7 +4,7 @@
 #include <iomanip>
 
 #include "yarl/utils/utils.hpp"
-#include "yarl/control/pid_controller.hpp"
+#include "yarl/control/pid.hpp"
 
 namespace yarl {
 namespace control {
@@ -25,7 +25,6 @@ public:
 
   Vec3 setpoints;
   Vec4 outputs;
-  AttitudeCommand att_cmd;
 
   TrackingController()
     : configured(false),
@@ -41,16 +40,15 @@ public:
       track_offset(0.0, 0.0, 0.0),
 
       setpoints(0.0, 0.0, 0.0),
-      outputs(0.0, 0.0, 0.0, 0.0),
-      att_cmd() {}
+      outputs(0.0, 0.0, 0.0, 0.0) {}
 
   int configure(const std::string &config_file);
-  AttitudeCommand update(const Vec3 &errors, double yaw, double dt);
-  AttitudeCommand update(const Vec3 &target_pos_bf,
-                         const Vec3 &pos,
-                         const Vec3 &pos_prev,
-                         double yaw,
-                         double dt);
+  Vec4 update(const Vec3 &errors, double yaw, double dt);
+  Vec4 update(const Vec3 &target_pos_bf,
+              const Vec3 &pos,
+              const Vec3 &pos_prev,
+              double yaw,
+              double dt);
   void reset();
   void printOutputs();
   void printErrors();

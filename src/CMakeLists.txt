@@ -6,7 +6,7 @@ ADD_LIBRARY(
   control/quadrotor/attitude.cpp
   # control/quadrotor/landing.cpp
   control/quadrotor/position.cpp
-  # control/quadrotor/tracking.cpp
+  control/quadrotor/tracking.cpp
   control/quadrotor/velocity.cpp
   control/pid.cpp
   # DRIVERS

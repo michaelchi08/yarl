@@ -41,6 +41,7 @@ public:
       k_i(k_i),
       k_d(k_d) {}
 
+  void reset();
   double update(double setpoint, double input, double dt);
 };
 

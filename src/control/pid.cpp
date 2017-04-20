@@ -3,6 +3,15 @@
 namespace yarl {
 namespace control {
 
+void PID::reset() {
+  this->error_prev = 0.0;
+  this->error_sum = 0.0;
+
+  this->error_p = 0.0;
+  this->error_i = 0.0;
+  this->error_d = 0.0;
+}
+
 double PID::update(double setpoint, double actual, double dt) {
   // update errors
   double error = setpoint - actual;

@@ -4,10 +4,15 @@ ADD_EXECUTABLE(
   # TARGET
   yarl_tests
   # TESTS
-  # OPTIMIZATION CERES
+  # CONTROL
+  # control/quadrotor/landing_test.cpp
+  # control/quadrotor/position_test.cpp
+  # control/quadrotor/tracking_test.cpp
+  # control/quadrotor/velocity_test.cpp
+  control/pid_test.cpp
+  # OPTIMIZATION
   optimization/ceres/ba_test.cpp
   optimization/ceres/ceres_examples_test.cpp
-  # OPTIMIZATION GP
   optimization/gp/crossover_test.cpp
   optimization/gp/data_test.cpp
   optimization/gp/gpopt_test.cpp
@@ -15,12 +20,10 @@ ADD_EXECUTABLE(
   optimization/gp/node_test.cpp
   optimization/gp/population_test.cpp
   optimization/gp/tree_test.cpp
-  # OPTIMIZATION OPTIMIZERS
   optimization/optimizers/gdopt_test.cpp
   optimization/optimizers/llsopt_test.cpp
   optimization/optimizers/lmaopt_test.cpp
   optimization/optimizers/ransac_test.cpp
-  # OPTIMIZATION FACTOR GRAPH
   optimization/factor_graph/factor_graph_test.cpp
   optimization/factor_graph/factor_test.cpp
   optimization/factor_graph/variable_test.cpp

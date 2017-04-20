@@ -8,26 +8,26 @@ int TrackingController::configure(const std::string &config_file) {
 
   // load config
   // clang-format off
-  parser.addParam<double>("roll_controller.k_p", &this->y_controller.k_p);
-  parser.addParam<double>("roll_controller.k_i", &this->y_controller.k_i);
-  parser.addParam<double>("roll_controller.k_d", &this->y_controller.k_d);
+  parser.addParam("roll_controller.k_p", &this->y_controller.k_p);
+  parser.addParam("roll_controller.k_i", &this->y_controller.k_i);
+  parser.addParam("roll_controller.k_d", &this->y_controller.k_d);
 
-  parser.addParam<double>("pitch_controller.k_p", &this->x_controller.k_p);
-  parser.addParam<double>("pitch_controller.k_i", &this->x_controller.k_i);
-  parser.addParam<double>("pitch_controller.k_d", &this->x_controller.k_d);
+  parser.addParam("pitch_controller.k_p", &this->x_controller.k_p);
+  parser.addParam("pitch_controller.k_i", &this->x_controller.k_i);
+  parser.addParam("pitch_controller.k_d", &this->x_controller.k_d);
 
-  parser.addParam<double>("throttle_controller.k_p", &this->z_controller.k_p);
-  parser.addParam<double>("throttle_controller.k_i", &this->z_controller.k_i);
-  parser.addParam<double>("throttle_controller.k_d", &this->z_controller.k_d);
-  parser.addParam<double>("throttle_controller.hover_throttle", &this->hover_throttle);
+  parser.addParam("throttle_controller.k_p", &this->z_controller.k_p);
+  parser.addParam("throttle_controller.k_i", &this->z_controller.k_i);
+  parser.addParam("throttle_controller.k_d", &this->z_controller.k_d);
+  parser.addParam("throttle_controller.hover_throttle", &this->hover_throttle);
 
-  parser.addParam<double>("roll_limit.min", &this->roll_limit[0]);
-  parser.addParam<double>("roll_limit.max", &this->roll_limit[1]);
+  parser.addParam("roll_limit.min", &this->roll_limit[0]);
+  parser.addParam("roll_limit.max", &this->roll_limit[1]);
 
-  parser.addParam<double>("pitch_limit.min", &this->pitch_limit[0]);
-  parser.addParam<double>("pitch_limit.max", &this->pitch_limit[1]);
+  parser.addParam("pitch_limit.min", &this->pitch_limit[0]);
+  parser.addParam("pitch_limit.max", &this->pitch_limit[1]);
 
-  parser.addParam<Vec3>("track_offset", &this->track_offset);
+  parser.addParam("track_offset", &this->track_offset);
   // clang-format on
   if (parser.load(config_file) != 0) {
     return -1;
@@ -47,11 +47,9 @@ int TrackingController::configure(const std::string &config_file) {
   return 0;
 }
 
-AttitudeCommand TrackingController::update(const Vec3 &errors,
-                                           double yaw,
-                                           double dt) {
+Vec4 TrackingController::update(const Vec3 &errors, double yaw, double dt) {
   double r, p, y, t;
-  Vec3 euler;
+  Vec3 err, euler;
   Mat3 R;
 
   // check rate
@@ -61,14 +59,14 @@ AttitudeCommand TrackingController::update(const Vec3 &errors,
   }
 
   // add offsets
-  errors = errors + this->track_offset;
+  err = errors + this->track_offset;
 
   // roll, pitch, yaw and throttle (assuming NWU frame)
   // clang-format off
-  r = -this->y_controller.update(errors(1), 0.0, this->dt);
-  p = this->x_controller.update(errors(0), 0.0, this->dt);
+  r = -this->y_controller.update(err(1), 0.0, this->dt);
+  p = this->x_controller.update(err(0), 0.0, this->dt);
   y = yaw;
-  t = this->hover_throttle + this->z_controller.update(errors(2), 0.0, this->dt);
+  t = this->hover_throttle + this->z_controller.update(err(2), 0.0, this->dt);
   t /= fabs(cos(r) * cos(p));  // adjust throttle for roll and pitch
   // clang-format o
 
@@ -83,20 +81,19 @@ AttitudeCommand TrackingController::update(const Vec3 &errors,
   t = (t > 1.0) ? 1.0 : t;
 
   // keep track of setpoints and outputs
-  this->setpoints = errors;
+  this->setpoints = err;
   this->outputs << r, p, y, t;
   this->dt = 0.0;
 
-  return AttitudeCommand(this->outputs);
+  return this->outputs;
 }
 
-AttitudeCommand TrackingController::update(const Vec3 &target_pos_bf,
+Vec4 TrackingController::update(const Vec3 &target_pos_bf,
                                               const Vec3 &pos,
                                               const Vec3 &pos_prev,
                                               double yaw,
                                               double dt) {
   Vec3 errors;
-
   errors(0) = target_pos_bf(0);
   errors(1) = target_pos_bf(1);
   errors(2) = pos_prev(2) - pos(2);
@@ -111,11 +108,9 @@ void TrackingController::reset() {
 }
 
 void TrackingController::printOutputs() {
-  double r, p, t;
-
-  r = rad2deg(this->outputs(0));
-  p = rad2deg(this->outputs(1));
-  t = this->outputs(3);
+  double r = rad2deg(this->outputs(0));
+  double p = rad2deg(this->outputs(1));
+  double t = this->outputs(3);
 
   std::cout << "roll: " << std::setprecision(2) << r << "\t";
   std::cout << "pitch: " << std::setprecision(2) << p << "\t";
@@ -123,16 +118,14 @@ void TrackingController::printOutputs() {
 }
 
 void TrackingController::printErrors() {
-  double p, i, d;
-
-  p = this->x_controller.error_p;
-  i = this->x_controller.error_i;
-  d = this->x_controller.error_d;
+  double p = this->x_controller.error_p;
+  double i = this->x_controller.error_i;
+  double d = this->x_controller.error_d;
 
   std::cout << "x_controller: " << std::endl;
   std::cout << "\terror_p: " << std::setprecision(2) << p << "\t";
   std::cout << "\terror_i: " << std::setprecision(2) << i << "\t";
-  std::cout << "\terror_d: " << std::setprecision(2) << i << std::endl;
+  std::cout << "\terror_d: " << std::setprecision(2) << d << std::endl;
 
   p = this->y_controller.error_p;
   i = this->y_controller.error_i;
@@ -141,7 +134,7 @@ void TrackingController::printErrors() {
   std::cout << "y_controller: " << std::endl;
   std::cout << "\terror_p: " << std::setprecision(2) << p << "\t";
   std::cout << "\terror_i: " << std::setprecision(2) << i << "\t";
-  std::cout << "\terror_d: " << std::setprecision(2) << i << std::endl;
+  std::cout << "\terror_d: " << std::setprecision(2) << d << std::endl;
 
   p = this->z_controller.error_p;
   i = this->z_controller.error_i;
@@ -150,7 +143,7 @@ void TrackingController::printErrors() {
   std::cout << "z_controller: " << std::endl;
   std::cout << "\terror_p: " << std::setprecision(2) << p << "\t";
   std::cout << "\terror_i: " << std::setprecision(2) << i << "\t";
-  std::cout << "\terror_d: " << std::setprecision(2) << i << std::endl;
+  std::cout << "\terror_d: " << std::setprecision(2) << d << std::endl;
 }
 
 }  // end of control namespace

@@ -88,11 +88,11 @@ Vec4 VelocityController::update(const Vec3 &setpoints,
   return outputs;
 }
 
-// void VelocityController::reset() {
-//   this->vx_controller.reset();
-//   this->vy_controller.reset();
-//   this->vz_controller.reset();
-// }
+void VelocityController::reset() {
+  this->vx_controller.reset();
+  this->vy_controller.reset();
+  this->vz_controller.reset();
+}
 
 void VelocityController::printOutputs() {
   double r, p, t;
