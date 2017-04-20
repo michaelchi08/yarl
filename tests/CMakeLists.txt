@@ -10,6 +10,7 @@ ADD_EXECUTABLE(
   # OPTIMIZATION GP
   optimization/gp/crossover_test.cpp
   optimization/gp/data_test.cpp
+  optimization/gp/gpopt_test.cpp
   optimization/gp/mutation_test.cpp
   optimization/gp/node_test.cpp
   optimization/gp/population_test.cpp
