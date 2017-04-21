@@ -44,19 +44,11 @@ static void setupSubTree(Tree &t) {
   t.update();
 }
 
-TEST(Crossover, constructor) {
-  Crossover crossover;
-
-  EXPECT_FLOAT_EQ(0.0, crossover.probability);
-}
-
-TEST(Crossover, pointCrossover) {
-  Crossover crossover;
+TEST(Crossover, point_crossover) {
   Tree t1, t2;
   std::string s1, s2, s3, s4;
 
   // setup
-  crossover.probability = 1.0;
   setupAddTree(t1);
   setupSubTree(t2);
 
@@ -67,7 +59,7 @@ TEST(Crossover, pointCrossover) {
   std::cout << "t1: " << s1 << std::endl;
   std::cout << "t2: " << s2 << std::endl;
 
-  crossover.pointCrossover(t1, t2);
+  point_crossover(1.0, t1, t2);
 
   s3 = t1.toString();
   s4 = t2.toString();
@@ -76,7 +68,6 @@ TEST(Crossover, pointCrossover) {
   std::cout << "crossed t2: " << s4 << std::endl;
   std::cout << std::endl;
 
-  EXPECT_FLOAT_EQ(1.0, crossover.probability);
   EXPECT_TRUE(s1.compare(s3) != 0);
   EXPECT_TRUE(s1.compare(s4) != 0);
   EXPECT_TRUE(s2.compare(s3) != 0);

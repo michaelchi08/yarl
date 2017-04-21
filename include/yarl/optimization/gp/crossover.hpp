@@ -6,14 +6,7 @@
 namespace yarl {
 namespace gp {
 
-class Crossover {
-public:
-  float probability;
-
-  Crossover() : probability(0.0) {}
-
-  int pointCrossover(Tree &t1, Tree &t2);
-};
+int point_crossover(double probability, Tree &t1, Tree &t2);
 
 }  // end of gp namespace
 }  // end of yarl namespace

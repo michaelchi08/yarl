@@ -4,12 +4,12 @@
 namespace yarl {
 namespace gp {
 
-int Crossover::pointCrossover(Tree &tree1, Tree &tree2) {
+int point_crossover(double probability, Tree &tree1, Tree &tree2) {
   int index1, index2;
   Node *node1, *node2;
 
   // pre-check
-  if (randf(0.0, 1.0) > this->probability) {
+  if (randf(0.0, 1.0) > probability) {
     return 0;
   }
 

@@ -4,15 +4,6 @@
 namespace yarl {
 namespace gp {
 
-int Mutation::configure(float probability) {
-  this->probability = probability;
-
-  this->subtree_build_method = GROW_METHOD;
-  this->subtree_max_depth = 2;
-
-  return 0;
-}
-
 static void mutate_node(Tree &tree, Node *node) {
   Node new_node;
 
@@ -34,9 +25,9 @@ static void mutate_node(Tree &tree, Node *node) {
   }
 }
 
-int Mutation::pointMutation(Tree &tree) {
+int point_mutation(double probability, Tree &tree) {
   for (int i = 0; i < tree.size; i++) {
-    if (this->probability > randf(0, 1.0)) {
+    if (probability > randf(0, 1.0)) {
       mutate_node(tree, tree.chromosome[i]);
     }
   }
@@ -44,19 +35,22 @@ int Mutation::pointMutation(Tree &tree) {
   return 0;
 }
 
-int Mutation::subtreeMutation(Tree &tree) {
+int subtree_mutation(double probability,
+                     int build_method,
+                     int max_depth,
+                     Tree &tree) {
   int index;
   Node *node;
   Tree subtree;
   TreeConfig config;
 
   // pre-check
-  if (randf(0.0, 1.0) > this->probability) {
+  if (randf(0.0, 1.0) > probability) {
     return 0;
   }
 
   // setup
-  config.configure(this->subtree_build_method, this->subtree_max_depth);
+  config.configure(build_method, max_depth);
   subtree.tc = &config;
   subtree.generate();
 

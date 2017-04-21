@@ -25,39 +25,18 @@ static void setupAddTree(Tree &t, TreeConfig *tc) {
   t.update();
 }
 
-TEST(Mutation, constructor) {
-  Mutation mutation;
-
-  EXPECT_FLOAT_EQ(0.0, mutation.probability);
-
-  EXPECT_EQ(UINITI, mutation.subtree_build_method);
-  EXPECT_EQ(UINITI, mutation.subtree_max_depth);
-}
-
-TEST(Mutation, configure) {
-  Mutation mutation;
-
-  mutation.configure(1.0);
-  EXPECT_FLOAT_EQ(1.0, mutation.probability);
-
-  // EXPECT_EQ(UINITI, mutation.subtree_build_method);
-  // EXPECT_EQ(UINITI, mutation.subtree_max_depth);
-}
-
-TEST(Mutation, pointMutation) {
-  Mutation mutation;
+TEST(Mutation, point_mutation) {
   Tree tree;
   TreeConfig config;
   std::string s1, s2;
 
   // setup
-  mutation.configure(1.0);
   config.configure(GROW_METHOD, 2);
   setupAddTree(tree, &config);
 
   // test
   s1 = tree.toString();
-  mutation.pointMutation(tree);
+  point_mutation(1.0, tree);
   s2 = tree.toString();
 
   std::cout << "tree: " << s1 << std::endl;
@@ -67,19 +46,17 @@ TEST(Mutation, pointMutation) {
 }
 
 TEST(Mutation, subtreeMutation) {
-  Mutation mutation;
   Tree tree;
   TreeConfig config;
   std::string s1, s2;
 
   // setup
-  mutation.configure(1.0);
   config.configure(GROW_METHOD, 2);
   setupAddTree(tree, &config);
 
   // test
   s1 = tree.toString();
-  mutation.subtreeMutation(tree);
+  subtree_mutation(1.0, GROW_METHOD, 2, tree);
   s2 = tree.toString();
 
   std::cout << "tree: " << s1 << std::endl;

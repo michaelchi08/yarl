@@ -6,23 +6,11 @@
 namespace yarl {
 namespace gp {
 
-class Mutation {
-public:
-  float probability;
-
-  // subtree mutation specific
-  int subtree_build_method;
-  int subtree_max_depth;
-
-  Mutation()
-    : probability(0.0),
-      subtree_build_method(UINITI),
-      subtree_max_depth(UINITI) {}
-
-  int configure(float probability);
-  int pointMutation(Tree &tree);
-  int subtreeMutation(Tree &tree);
-};
+int point_mutation(double probability, Tree &tree);
+int subtree_mutation(double probability,
+                     int build_method,
+                     int max_depth,
+                     Tree &tree);
 
 }  // end of gp namespace
 }  // end of yarl namespace
