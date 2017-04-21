@@ -4,6 +4,13 @@ namespace yarl {
 namespace gp {
 
 int TreeConfig::configure(int build_method, int max_depth) {
+  // pre-check
+  if (build_method < 1 || build_method > 3) {
+    return -1;
+  } else if (max_depth < 2 || max_depth > 5) {
+    return -2;
+  }
+
   // build parameters
   this->build_method = build_method;
   this->max_depth = max_depth;

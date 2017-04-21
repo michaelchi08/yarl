@@ -27,6 +27,7 @@ public:
 };
 
 class Dataset {
+public:
   Data train_data;
   Data valid_data;
   Data test_data;
@@ -35,6 +36,10 @@ class Dataset {
   Dataset() : train_data(), valid_data(), test_data(), predict() {}
 
   int load(const Data &data, float train, float validation, float test);
+  int load(const std::string &data_file,
+           float train,
+           float validation,
+           float test);
 };
 
 }  // end of gp namespace

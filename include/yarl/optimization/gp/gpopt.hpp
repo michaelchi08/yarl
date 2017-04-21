@@ -16,6 +16,7 @@ public:
 
   Population population;
   TreeConfig tree_config;
+  Dataset dataset;
   Data data;
 
   // termination criteria

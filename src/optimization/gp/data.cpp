@@ -56,7 +56,8 @@ int Dataset::load(const Data &d, float train, float valid, float test) {
   MatX train_mat, valid_mat, test_mat;
 
   // pre-check
-  if (fltcmp((train + valid + test), 1.0) == 0) {
+  if (fltcmp((train + valid + test), 1.0) != 0) {
+    log_err("train + valid + test != 1.0");
     return -1;
   }
 
@@ -74,6 +75,19 @@ int Dataset::load(const Data &d, float train, float valid, float test) {
   this->test_data.load(test_mat, d.fields);
 
   return 0;
+}
+
+int Dataset::load(const std::string &data_file,
+                  float train,
+                  float valid,
+                  float test) {
+  Data data;
+
+  if (data.load(data_file) != 0) {
+    return -2;
+  }
+
+  return this->load(data, train, valid, test);
 }
 
 }  // end of gp namespace

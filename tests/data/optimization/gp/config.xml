@@ -2,4 +2,17 @@
 <config>
   <max_generations>200</max_generations>
   <target_score>0.0</target_score>
+  <nb_individuals>100</nb_individuals>
+
+  <dataset>
+    <data>polynomial.csv</data>
+    <train>0.7</train>
+    <test>0.2</test>
+    <valid>0.1</valid>
+  </dataset>
+
+  <tree_config>
+    <method>1</method>
+    <depth>2</depth>
+  </tree_config>
 </config>

@@ -7,9 +7,12 @@
 #include <numeric>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 namespace yarl {
 
+std::string basefile(const std::string &path);
+std::string basedir(const std::string &path);
 void rmtrailslash(std::string &path);
 std::string rmtrailslash(const std::string &path);
 bool file_exists(const std::string &file_path);

@@ -2,6 +2,14 @@
 
 namespace yarl {
 
+std::string basefile(const std::string &path) {
+  return path.substr(path.find_last_of("\\/") + 1, path.length());
+}
+
+std::string basedir(const std::string &path) {
+  return path.substr(0, path.find_last_of("\\/"));
+}
+
 void rmtrailslash(std::string &path) {
   // pre-check
   if (path.length() <= 0) {
