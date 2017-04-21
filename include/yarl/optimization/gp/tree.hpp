@@ -112,7 +112,7 @@ public:
     delete this->root;
   }
 
-  int configure(TreeConfig *tc, Data *data);
+  int configure(TreeConfig *tc);
   void clear();
   int copyFrom(const Tree &t);
   void updateTraverse(Node *node, int depth);

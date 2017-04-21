@@ -148,23 +148,9 @@ TEST(Tree, constructor) {
 TEST(Tree, configure) {
   Tree tree;
   TreeConfig tc;
-  Data data;
 
-  data.load(TEST_SINE_DATA);
-  tree.configure(&tc, &data);
+  tree.configure(&tc);
   EXPECT_EQ(0, (int) tree.chromosome.size());
-
-  EXPECT_EQ(0, tree.nb_inputs);
-  EXPECT_EQ(0, tree.nb_constants);
-  EXPECT_EQ(0, tree.nb_functions);
-
-  EXPECT_EQ(0, tree.size);
-  EXPECT_EQ(0, tree.depth);
-
-  EXPECT_EQ(0, tree.error);
-  EXPECT_EQ(0, tree.score);
-  EXPECT_EQ(0, tree.hits);
-  EXPECT_EQ(0, tree.evaluated);
 
   EXPECT_TRUE(&tc == tree.tc);
 }
@@ -172,10 +158,8 @@ TEST(Tree, configure) {
 TEST(Tree, clear) {
   Tree tree;
   TreeConfig tc;
-  Data data;
 
-  data.load(TEST_SINE_DATA);
-  tree.configure(&tc, &data);
+  tree.configure(&tc);
   tree.clear();
   EXPECT_EQ(0, (int) tree.chromosome.size());
 
@@ -232,11 +216,9 @@ TEST(Tree, update) {
 TEST(Tree, generate) {
   Tree t;
   TreeConfig tc;
-  Data data;
 
-  data.load(TEST_SINE_DATA);
   tc.configure(FULL_METHOD, 2);
-  t.configure(&tc, &data);
+  t.configure(&tc);
   t.generate();
   t.printStack();
 }
@@ -250,7 +232,9 @@ TEST(Tree, prepData) {
   // setup
   tc.configure(FULL_METHOD, 2);
   data.load(TEST_SINE_DATA);
-  t.configure(&tc, &data);
+  t.configure(&tc);
+  t.f_in = MatX(data.rows, 2);
+  t.f_out = VecX(data.rows);
 
   // prep input data
   node.setAsInput("x");
@@ -286,7 +270,9 @@ TEST(Tree, evaluateNode) {
   // setup
   tc.configure(FULL_METHOD, 2);
   data.load(TEST_SIMPLE_DATA);
-  t.configure(&tc, &data);
+  t.configure(&tc);
+  t.f_in = MatX(data.rows, 2);
+  t.f_out = VecX(data.rows);
 
   node.setAsInput("x");
   node.nth_child = 0;
@@ -332,7 +318,7 @@ TEST(Tree, evaluate) {
   data.load(TEST_SINE_DATA);
   tc.configure(FULL_METHOD, 2);
   tc.inputs.push_back("x");
-  t.configure(&tc, &data);
+  t.configure(&tc);
 
   setupSineTree(t);
   t.update();
@@ -350,7 +336,7 @@ TEST(Tree, toString) {
 
   tc.configure(FULL_METHOD, 2);
   data.load(TEST_SINE_DATA);
-  t.configure(&tc, &data);
+  t.configure(&tc);
   t.generate();
   t.toString();
 }
@@ -362,7 +348,7 @@ TEST(Tree, printEquation) {
 
   tc.configure(FULL_METHOD, 2);
   data.load(TEST_SINE_DATA);
-  t.configure(&tc, &data);
+  t.configure(&tc);
   t.generate();
   t.printEquation();
 }

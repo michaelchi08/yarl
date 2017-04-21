@@ -146,25 +146,7 @@ int TreeConfig::randomTerminal(Node &node) {
 }
 
 
-int Tree::configure(TreeConfig *tc, Data *data) {
-  this->root = NULL;
-  this->chromosome.clear();
-
-  this->nb_inputs = 0;
-  this->nb_constants = 0;
-  this->nb_functions = 0;
-
-  this->size = 0;
-  this->depth = 0;
-
-  this->error = 0;
-  this->score = 0;
-  this->hits = 0;
-  this->evaluated = 0;
-
-  this->f_in = MatX(data->rows, 2);
-  this->f_out = VecX(data->rows);
-
+int Tree::configure(TreeConfig *tc) {
   this->tc = tc;
 
   return 0;
@@ -506,6 +488,10 @@ int Tree::evaluate(const Data &d, const std::string predict) {
   }
 
   // setup
+  this->f_in = MatX(d.rows, 2);
+  this->f_out = VecX(d.rows);
+
+  // evaluate
   retval = this->evaluateTraverse(d, result);
   if (retval != 0) {
     this->error = -FLT_MAX;

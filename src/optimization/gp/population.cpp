@@ -15,7 +15,7 @@ int Population::configure(int nb_individuals,
   // generate population
   for (int i = 0; i < nb_individuals; i++) {
     tree = new Tree();
-    tree->configure(this->tree_config, this->data);
+    tree->configure(this->tree_config);
     tree->generate();
     this->individuals.push_back(tree);
   }
