@@ -10,42 +10,36 @@ TEST(Population, constructor) {
 
   EXPECT_EQ(0u, p.individuals.size());
   EXPECT_EQ(NULL, p.tree_config);
-  EXPECT_EQ(NULL, p.data);
 }
 
 TEST(Population, configure) {
   Population p;
   TreeConfig tree_config;
-  Data data;
 
   tree_config.configure(GROW_METHOD, 2);
-  p.configure(10, &tree_config, &data);
+  p.configure(10, &tree_config);
   EXPECT_EQ(10u, p.individuals.size());
   EXPECT_TRUE(&tree_config == p.tree_config);
-  EXPECT_TRUE(&data == p.data);
 }
 
 TEST(Population, clear) {
   Population p;
   TreeConfig tree_config;
-  Data data;
 
-  p.configure(10, &tree_config, &data);
+  p.configure(10, &tree_config);
   p.clear();
 
   EXPECT_EQ(0u, p.individuals.size());
   EXPECT_TRUE(&tree_config == p.tree_config);
-  EXPECT_TRUE(&data == p.data);
 }
 
 TEST(Population, best) {
   Population p;
   TreeConfig tree_config;
-  Data data;
   Tree tree;
 
   tree_config.configure(GROW_METHOD, 2);
-  p.configure(10, &tree_config, &data);
+  p.configure(10, &tree_config);
   p.individuals[0]->score = 0.0;
   p.individuals[1]->score = 0.0;
   p.individuals[2]->score = 0.0;
@@ -64,13 +58,12 @@ TEST(Population, best) {
 TEST(Population, copyFrom) {
   Population p1, p2;
   TreeConfig tree_config;
-  Data data;
   Tree tree;
   std::string s1, s2;
 
   // setup
   tree_config.configure(GROW_METHOD, 2);
-  p1.configure(5, &tree_config, &data);
+  p1.configure(5, &tree_config);
 
   // test
   p2.copyFrom(p1);

@@ -14,10 +14,10 @@ class GPOpt {
 public:
   bool configured;
 
+  // general
   Population population;
   TreeConfig tree_config;
   Dataset dataset;
-  Data data;
 
   // termination criteria
   int max_generations;
@@ -31,7 +31,7 @@ public:
     : configured{false},
       population{},
       tree_config{},
-      data{},
+      dataset{},
       max_generations{100},
       target_score{0.0},
       generation{0},

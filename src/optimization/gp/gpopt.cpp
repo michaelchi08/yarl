@@ -33,8 +33,7 @@ int GPOpt::configure(const std::string &config_file) {
   }
 
   // setup population
-  retval = this->population.configure(
-    nb_individuals, &this->tree_config, &this->data);
+  retval = this->population.configure(nb_individuals, &this->tree_config);
   if (retval != 0) {
     log_err("Failed to configure population!");
     return -2;
@@ -61,6 +60,8 @@ int GPOpt::configure(const std::string &config_file) {
 }
 
 int GPOpt::iterate() {
+  this->population.evaluate(this->dataset.train_data, this->dataset.predict);
+
   return 0;
 }
 

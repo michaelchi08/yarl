@@ -3,14 +3,11 @@
 namespace yarl {
 namespace gp {
 
-int Population::configure(int nb_individuals,
-                          TreeConfig *tree_config,
-                          Data *data) {
+int Population::configure(int nb_individuals, TreeConfig *tree_config) {
   Tree *tree;
 
   // setup
   this->tree_config = tree_config;
-  this->data = data;
 
   // generate population
   for (int i = 0; i < nb_individuals; i++) {
@@ -23,20 +20,20 @@ int Population::configure(int nb_individuals,
   return 0;
 }
 
-void Population::clear() {
+int Population::evaluate(const Data &data, const std::string &predict) {
   for (auto t : this->individuals) {
-    delete t;
+    if (t->evaluate(data, predict) != 0) {
+      return -1;
+    }
   }
-  this->individuals.clear();
+
+  return 0;
 }
 
 int Population::best(Tree &best) {
-  int best_index;
-  double best_score;
-
   // setup
-  best_index = 0;
-  best_score = this->individuals[0]->score;
+  int best_index = 0;
+  double best_score = this->individuals[0]->score;
 
   // find best
   for (size_t i = 1; i < this->individuals.size(); i++) {
@@ -63,6 +60,13 @@ int Population::copyFrom(const Population &population) {
   }
 
   return 0;
+}
+
+void Population::clear() {
+  for (auto t : this->individuals) {
+    delete t;
+  }
+  this->individuals.clear();
 }
 
 void Population::print() {
