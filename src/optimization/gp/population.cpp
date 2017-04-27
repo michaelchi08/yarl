@@ -22,9 +22,7 @@ int Population::configure(int nb_individuals, TreeConfig *tree_config) {
 
 int Population::evaluate(const Data &data, const std::string &predict) {
   for (auto t : this->individuals) {
-    if (t->evaluate(data, predict) != 0) {
-      return -1;
-    }
+    t->evaluate(data, predict);
   }
 
   return 0;

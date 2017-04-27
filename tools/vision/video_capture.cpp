@@ -14,7 +14,7 @@ int main() {
   // setup camera
   retval = camera.configure(0, 640, 480);
   if (retval != 0) {
-    LOG_ERROR("failed to configure camera!");
+    log_errorOR("failed to configure camera!");
     return -1;
   }
 
@@ -27,7 +27,7 @@ int main() {
   video_writer = cv::VideoWriter();
   video_writer.open(file_name, fourcc, fps, video_resolution);
   if (video_writer.isOpened() != true) {
-    LOG_ERROR("cannot open video writer!");
+    log_errorOR("cannot open video writer!");
     return -1;
 
   } else {

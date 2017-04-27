@@ -81,7 +81,7 @@ int TestDataset::configure(const std::string &config_file) {
 
   // pre-check
   if (file_exists(config_file) == false) {
-    log_err("File does not exist [%s]!", config_file.c_str());
+    log_error("File does not exist [%s]!", config_file.c_str());
     return -1;
   }
 
@@ -101,7 +101,7 @@ int TestDataset::configure(const std::string &config_file) {
   parser.addParam("/config/feature_points/z/min", &this->feature_z_bounds(0));
   parser.addParam("/config/feature_points/z/max", &this->feature_z_bounds(1));
   if (parser.load(config_file) != 0) {
-    log_err("Failed to load [%s]!", config_file.c_str());
+    log_error("Failed to load [%s]!", config_file.c_str());
     return -2;
   }
 
@@ -179,8 +179,8 @@ int TestDataset::recordObservedFeatures(
 
   // open file
   if (outfile.good() != true) {
-    log_err("Failed to open file [%s] to record observed features!",
-            output_path.c_str());
+    log_error("Failed to open file [%s] to record observed features!",
+              output_path.c_str());
     return -1;
   }
 
@@ -226,10 +226,12 @@ int TestDataset::generateTestData(const std::string &save_path) {
   retval = mkdir(save_path.c_str(), ACCESSPERMS);
   if (retval != 0) {
     switch (errno) {
-      case EACCES: log_err(MKDIR_PERMISSION_DENIED, save_path.c_str()); break;
-      case ENOTDIR: log_err(MKDIR_INVALID, save_path.c_str()); break;
-      case EEXIST: log_err(MKDIR_EXISTS, save_path.c_str()); break;
-      default: log_err(MKDIR_FAILED, save_path.c_str()); break;
+      case EACCES:
+        log_error(MKDIR_PERMISSION_DENIED, save_path.c_str());
+        break;
+      case ENOTDIR: log_error(MKDIR_INVALID, save_path.c_str()); break;
+      case EEXIST: log_error(MKDIR_EXISTS, save_path.c_str()); break;
+      default: log_error(MKDIR_FAILED, save_path.c_str()); break;
     }
     return -2;
   }

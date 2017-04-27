@@ -126,6 +126,7 @@ public:
   std::string toString();
   void printEquation();
   void printStack();
+  void print();
 };
 
 }  // end of gp namespace

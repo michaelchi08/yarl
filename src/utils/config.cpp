@@ -87,7 +87,7 @@ int ConfigParser::setXMLPointer(const std::string &key) {
   // create xpath context
   context = xmlXPathNewContext(this->doc);
   if (context == NULL) {
-    log_err("Failed to create XPath context");
+    log_error("Failed to create XPath context");
     xmlXPathFreeContext(context);
     return EXPATHCTX;
   }
@@ -106,13 +106,13 @@ int ConfigParser::setXMLPointer(const std::string &key) {
 
   // check xpath results
   if (this->obj == NULL) {
-    log_err("Invalid XPath [%s]", key.c_str());
+    log_error("Invalid XPath [%s]", key.c_str());
     xmlXPathFreeObject(this->obj);
     this->obj = NULL;
     return EXPATHINV;
 
   } else if (xmlXPathNodeSetIsEmpty(this->obj->nodesetval)) {
-    log_err("XPath [%s] not found!", key.c_str());
+    log_error("XPath [%s] not found!", key.c_str());
     xmlXPathFreeObject(this->obj);
     this->obj = NULL;
     return EXPATHRES;
@@ -515,14 +515,14 @@ int ConfigParser::load(const std::string &config_file) {
 
   // pre-check
   if (file_exists(config_file) == false) {
-    log_err("File not found: %s", config_file.c_str());
+    log_error("File not found: %s", config_file.c_str());
     return -1;
   }
 
   // load and parse file
   this->doc = xmlReadFile(config_file.c_str(), NULL, XML_PARSE_NOERROR);
   if (this->doc == NULL) {
-    log_err("Failed to parse [%s]!", config_file.c_str());
+    log_error("Failed to parse [%s]!", config_file.c_str());
     return -2;
   } else {
     this->config_loaded = true;

@@ -109,7 +109,7 @@ int LMAOpt::iterate() {
 int LMAOpt::optimize() {
   // pre-check
   if (this->configured == false) {
-    log_err(ELMAC);
+    log_error(ELMAC);
     return -1;
   }
 

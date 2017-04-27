@@ -22,8 +22,28 @@ TEST(GPOpt, configure) {
   retval = opt.configure(TEST_CONFIG);
 
   EXPECT_EQ(0, retval);
-  EXPECT_EQ(200, opt.max_generations);
+  EXPECT_EQ(5, opt.max_generations);
   EXPECT_DOUBLE_EQ(0.0, opt.target_score);
+}
+
+TEST(GPOpt, iterate) {
+  int retval;
+  GPOpt opt;
+
+  retval = opt.configure(TEST_CONFIG);
+  opt.iterate();
+
+  EXPECT_EQ(0, retval);
+}
+
+TEST(GPOpt, solve) {
+  int retval;
+  GPOpt opt;
+
+  retval = opt.configure(TEST_CONFIG);
+  opt.solve();
+
+  EXPECT_EQ(0, retval);
 }
 
 }  // end of gp namespace

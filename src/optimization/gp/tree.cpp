@@ -393,7 +393,7 @@ int Tree::evaluateNode(const Data &d, const Node &n, Node &feval) {
         feval.data(i) = cos(this->f_in(i, 0));
       }
       break;
-    default: log_err("Invalid function %d\n", n.type); exit(-1);
+    default: log_error("Invalid function %d\n", n.type); exit(-1);
   }
 
   feval.nth_child = n.nth_child;  // keep track nth-child of node
@@ -406,13 +406,11 @@ eval_error:
 int Tree::evaluateTraverse(const Data &d, Node &result) {
   std::stack<Node *> s;
   Node *n;
-  Node *left;
-  Node *right;
   Node *feval;
 
   // setup
-  left = NULL;
-  right = NULL;
+  Node *left = NULL;
+  Node *right = NULL;
 
   // evaluate tree
   for (size_t i = 0; i < this->chromosome.size(); i++) {
@@ -439,7 +437,10 @@ int Tree::evaluateTraverse(const Data &d, Node &result) {
 
         // evaluate
         feval = new Node();
-        this->evaluateNode(d, *n, *feval);
+        if (this->evaluateNode(d, *n, *feval) != 0) {
+          delete feval;
+          goto eval_error;
+        }
         s.push(feval);
         break;
 
@@ -464,15 +465,37 @@ int Tree::evaluateTraverse(const Data &d, Node &result) {
 
         // evaluate
         feval = new Node();
-        this->evaluateNode(d, *n, *feval);
+        if (this->evaluateNode(d, *n, *feval) != 0) {
+          delete feval;
+          goto eval_error;
+        }
         s.push(feval);
         break;
     }
   }
-  result.copyFrom(*s.top());
-  delete s.top();
+  this->printEquation();
+  n = s.top();
+  n->print();
+  if (n->type == FEVAL) {
+    result.copyFrom(*n);
+    delete n;
+  } else {
+    return -2;
+  }
 
   return 0;
+
+eval_error:
+  while (s.empty() == false) {
+    auto n = s.top();
+    if (n->type == FEVAL) {
+      delete n;
+      n = NULL;
+    }
+    s.pop();
+  }
+
+  return -2;
 }
 
 int Tree::evaluate(const Data &d, const std::string predict) {
@@ -503,6 +526,7 @@ int Tree::evaluate(const Data &d, const std::string predict) {
   // caclulate error
   this->hits = 0;
   this->error = mse(d, predict, result.data);
+  // std::cout << this->error << std::endl;
 
   // calculate score
   this->score = -this->error - this->size;
@@ -565,6 +589,11 @@ void Tree::printStack() {
   for (size_t i = 0; i < this->chromosome.size(); i++) {
     this->chromosome[i]->print();
   }
+}
+
+void Tree::print() {
+  std::cout << "tree: " << this->toString() << "\t";
+  std::cout << "score: " << this->score << std::endl;
 }
 
 }  // end of gp namespace

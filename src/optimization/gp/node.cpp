@@ -259,6 +259,9 @@ std::string Node::toString() {
   } else if (this->type == INPUT) {
     oss << "T[" << this->input << "]";
 
+  } else if (this->type == FEVAL) {
+    oss << "T[FEVAL]";
+
   } else if (this->type == UFUNC) {
     switch (this->fval) {
       case LOG: oss << "F[LOG]"; break;

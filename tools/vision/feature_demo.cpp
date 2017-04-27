@@ -15,13 +15,13 @@ int main() {
   // setup
   retval = camera.configure(0, 320, 240);
   if (retval != 0) {
-    LOG_ERROR("failed to configure camera!");
+    log_errorOR("failed to configure camera!");
     return -1;
   }
 
   retval = orb.configure();
   if (retval != 0) {
-    LOG_ERROR("failed to configure ORB detector!");
+    log_errorOR("failed to configure ORB detector!");
     return -1;
   }
 

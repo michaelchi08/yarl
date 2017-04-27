@@ -6,6 +6,9 @@
 #include "yarl/utils/utils.hpp"
 #include "yarl/optimization/gp/tree.hpp"
 #include "yarl/optimization/gp/population.hpp"
+#include "yarl/optimization/gp/selection.hpp"
+#include "yarl/optimization/gp/crossover.hpp"
+#include "yarl/optimization/gp/mutation.hpp"
 
 namespace yarl {
 namespace gp {
@@ -18,6 +21,11 @@ public:
   Population population;
   TreeConfig tree_config;
   Dataset dataset;
+
+  // genetic operators
+  SelectionConfig selection_config;
+  CrossoverConfig crossover_config;
+  MutationConfig mutation_config;
 
   // termination criteria
   int max_generations;
@@ -40,6 +48,7 @@ public:
   int configure(const std::string &config_file);
   int iterate();
   int solve();
+  void printBest();
 };
 
 }  // end of gp namespace

@@ -307,6 +307,38 @@ TEST(Tree, evaluateNode) {
   EXPECT_FLOAT_EQ(24.0, feval.data(3));
 }
 
+TEST(Tree, evaluateTraverse) {
+  Tree t;
+  Data data;
+
+  // setup
+  data.load(TEST_SINE_DATA);
+
+  Node *n1 = new Node();
+  Node *n2 = new Node();
+  Node *n3 = new Node();
+  Node *n4 = new Node();
+
+  n1->setAsBinaryFunc(DIV);
+  n2->setAsConstant(1.0);
+  n3->setAsUnaryFunc(LOG);
+  n4->setAsConstant(0.0);
+
+  n1->children[0] = n2;
+  n1->children[1] = n3;
+
+  n3->children[0] = n4;
+
+  t.root = n1;
+  t.f_in = MatX(data.rows, 2);
+  t.f_out = VecX(data.rows);
+  t.update();
+
+  // test
+  Node result;
+  t.evaluateTraverse(data, result);
+}
+
 TEST(Tree, evaluate) {
   Data data;
   TreeConfig tc;

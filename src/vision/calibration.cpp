@@ -15,10 +15,12 @@ int Calibration::configure(const std::string &save_path,
   retval = mkdir(calib_dir.c_str(), ACCESSPERMS);
   if (retval != 0) {
     switch (errno) {
-      case EACCES: log_err(MKDIR_PERMISSION_DENIED, save_path.c_str()); break;
-      case ENOTDIR: log_err(MKDIR_INVALID, save_path.c_str()); break;
-      case EEXIST: log_err(MKDIR_EXISTS, save_path.c_str()); break;
-      default: log_err(MKDIR_FAILED, save_path.c_str()); break;
+      case EACCES:
+        log_error(MKDIR_PERMISSION_DENIED, save_path.c_str());
+        break;
+      case ENOTDIR: log_error(MKDIR_INVALID, save_path.c_str()); break;
+      case EEXIST: log_error(MKDIR_EXISTS, save_path.c_str()); break;
+      default: log_error(MKDIR_FAILED, save_path.c_str()); break;
     }
     return -1;
   }

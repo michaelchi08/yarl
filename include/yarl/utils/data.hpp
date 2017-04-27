@@ -12,8 +12,8 @@
 namespace yarl {
 
 // CSV ERROR MESSAGES
-#define E_CSV_DATA_LOAD "Error! failed to load test data [%s]!!"
-#define E_CSV_DATA_OPEN "Error! failed to open file for output [%s]!!"
+#define E_CSV_DATA_LOAD "Error! failed to load test data [%s]!"
+#define E_CSV_DATA_OPEN "Error! failed to open file for output [%s]!"
 
 class Pose {
 public:

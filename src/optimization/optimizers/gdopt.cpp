@@ -22,7 +22,7 @@ int GDOpt::calcGradient(VecX &df) {
 
   // pre-check
   if (this->configured == false) {
-    log_err(EGDC);
+    log_error(EGDC);
     return -1;
   }
 
@@ -46,7 +46,7 @@ int GDOpt::optimize() {
 
   // pre-check
   if (this->configured == false) {
-    log_err(EGDC);
+    log_error(EGDC);
     return -1;
   }
 

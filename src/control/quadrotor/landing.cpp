@@ -20,7 +20,7 @@ int Trajectory::load(int index,
                      const Vec3 &pos) {
   // pre-check
   if (file_exists(filepath) == false) {
-    log_err("File not found: %s", filepath.c_str());
+    log_error("File not found: %s", filepath.c_str());
     return -1;
   }
 
@@ -42,10 +42,10 @@ int Trajectory::load(int index,
   this->index = index;
   csv2mat(filepath, true, traj_data);
   if (traj_data.rows() == 0) {
-    log_err(ETROWS, filepath.c_str());
+    log_error(ETROWS, filepath.c_str());
     return -2;
   } else if (traj_data.cols() != 10) {
-    log_err(ETCOLS, filepath.c_str());
+    log_error(ETCOLS, filepath.c_str());
     return -2;
   }
 
@@ -153,7 +153,7 @@ int TrajectoryIndex::load(const std::string &index_file,
                           double vel_thres) {
   // pre-check
   if (file_exists(index_file) == false) {
-    log_err("File not found: %s", index_file.c_str());
+    log_error("File not found: %s", index_file.c_str());
     return -1;
   }
 
@@ -165,10 +165,10 @@ int TrajectoryIndex::load(const std::string &index_file,
   this->vel_thres = vel_thres;
 
   if (this->index_data.rows() == 0) {
-    log_err(ETIROWS, index_file.c_str());
+    log_error(ETIROWS, index_file.c_str());
     return -2;
   } else if (this->index_data.cols() != 3) {
-    log_err(ETICOLS, index_file.c_str());
+    log_error(ETICOLS, index_file.c_str());
     return -2;
   }
 
@@ -317,15 +317,16 @@ int LandingController::configure(const std::string &config_file) {
   // prepare blackbox file
   if (this->blackbox_enable) {
     if (blackbox_file == "") {
-      log_err("blackbox file is not set!");
+      log_error("blackbox file is not set!");
       return -3;
     } else if (this->prepBlackbox(blackbox_file) != 0) {
-      log_err("Failed to open blackbox file at [%s]", blackbox_file.c_str());
+      log_error("Failed to open blackbox file at [%s]",
+                blackbox_file.c_str());
       return -3;
     }
 
     if (this->blackbox_rate == FLT_MAX) {
-      log_err("blackbox rate is not set!");
+      log_error("blackbox rate is not set!");
       return -3;
     }
   }
@@ -352,10 +353,10 @@ int LandingController::loadTrajectory(const Vec3 &pos,
 
   // check retval
   if (retval == -2) {
-    log_err(ETIFAIL, pos(2), v);
+    log_error(ETIFAIL, pos(2), v);
     return -1;
   } else if (retval == -3) {
-    log_err(ETLOAD);
+    log_error(ETLOAD);
     return -1;
   } else {
     log_info(TLOAD, pos(2), v);
@@ -562,16 +563,16 @@ int LandingController::update(const Vec3 &target_pos_bf,
 
   // check if we are too far off track with trajectory
   if (p_errors(0) > this->trajectory_threshold(0)) {
-    log_err("Trajectory error in the x-axis is too large!");
-    log_err("error: %f > %f", p_errors(0), this->trajectory_threshold(0));
+    log_error("Trajectory error in the x-axis is too large!");
+    log_error("error: %f > %f", p_errors(0), this->trajectory_threshold(0));
     return -1;
   } else if (p_errors(1) > this->trajectory_threshold(1)) {
-    log_err("Trajectory error in the y-axis is too large!");
-    log_err("error: %f > %f", p_errors(1), this->trajectory_threshold(1));
+    log_error("Trajectory error in the y-axis is too large!");
+    log_error("error: %f > %f", p_errors(1), this->trajectory_threshold(1));
     return -1;
   } else if (p_errors(2) > this->trajectory_threshold(2)) {
-    log_err("Trajectory error in the z-axis is too large!");
-    log_err("error: %f > %f", p_errors(2), this->trajectory_threshold(2));
+    log_error("Trajectory error in the z-axis is too large!");
+    log_error("error: %f > %f", p_errors(2), this->trajectory_threshold(2));
     return -1;
   }
 

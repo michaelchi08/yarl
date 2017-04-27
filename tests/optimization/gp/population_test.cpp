@@ -1,6 +1,7 @@
 #include "yarl/test.hpp"
 #include "yarl/optimization/gp/population.hpp"
 
+#define TEST_DATA "./tests/data/optimization/gp/sine.csv"
 
 namespace yarl {
 namespace gp {
@@ -20,6 +21,17 @@ TEST(Population, configure) {
   p.configure(10, &tree_config);
   EXPECT_EQ(10u, p.individuals.size());
   EXPECT_TRUE(&tree_config == p.tree_config);
+}
+
+TEST(Population, evaluate) {
+  Population p;
+  Data d;
+  TreeConfig tree_config;
+
+  tree_config.configure(GROW_METHOD, 2);
+  d.load(TEST_DATA);
+  p.configure(10, &tree_config);
+  p.evaluate(d, "x");
 }
 
 TEST(Population, clear) {

@@ -57,7 +57,7 @@ int Dataset::load(const Data &d, float train, float valid, float test) {
 
   // pre-check
   if (fltcmp((train + valid + test), 1.0) != 0) {
-    log_err("train + valid + test != 1.0");
+    log_error("train + valid + test != 1.0");
     return -1;
   }
 

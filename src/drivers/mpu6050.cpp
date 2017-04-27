@@ -473,14 +473,14 @@ int MPU6050::record(std::string output_path, int nb_samples) {
     // get data
     retval = this->getData();
     if (retval == -1) {
-      log_err("failed to obtain data from MPU6050!");
+      log_error("failed to obtain data from MPU6050!");
       return -1;
     }
 
     // record data
     this->recordData(output_file);
     if (retval == -1) {
-      log_err("failed to record MPU6050 data!");
+      log_error("failed to record MPU6050 data!");
       return -1;
     }
   }

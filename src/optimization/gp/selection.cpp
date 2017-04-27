@@ -19,12 +19,12 @@ int tournament_selection(int tournament_size,
   Tree *best, *contender, *t;
 
   for (size_t j = 0; j < population.individuals.size(); j++) {
-    index = randi(0, population.individuals.size() - 1);
+    index = randi(0, population.individuals.size());
     best = population.individuals[index];
 
     // select best in tournament
     for (int i = 0; i < tournament_size; i++) {
-      index = randi(0, population.individuals.size() - 1);
+      index = randi(0, population.individuals.size());
       contender = population.individuals[index];
 
       if (contender->score > best->score) {

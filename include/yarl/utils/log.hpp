@@ -6,7 +6,7 @@
 #define __FILENAME__ \
   (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
-#define log_err(M, ...)              \
+#define log_error(M, ...)            \
   fprintf(stderr,                    \
           "[ERROR] [%s:%d] " M "\n", \
           __FILENAME__,              \

@@ -6,18 +6,15 @@
 namespace yarl {
 namespace gp {
 
-class Selection {
-public:
-  int method;
-
-  // tournament specifics
+struct SelectionConfig {
   int tournament_size;
 
-  Selection() : method(UINITI), tournament_size(UINITI) {}
-
-  int configure(int method);
-  int tournamentSelection(Population &population, Population &selected);
+  SelectionConfig() : tournament_size{2} {}
 };
+
+int tournament_selection(int tournament_size,
+                         const Population &population,
+                         Population &selected);
 
 }  // end of gp namespace
 }  // end of yarl namespace
