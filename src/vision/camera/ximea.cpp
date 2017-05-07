@@ -4,7 +4,7 @@
 namespace awesomo {
 
 XimeaCamera::XimeaCamera(void) {
-  this->ximea= NULL;
+  this->ximea = NULL;
 }
 
 
@@ -84,12 +84,12 @@ int XimeaCamera::initialize(void) {
   log_info("Ximea Camera Started Successfully\n");
   return 0;
 
-// ximea_error:
-//   if (this->ximea) {
-//     xiCloseDevice(this->ximea);
-//   }
-//   return -1;
-// }
+  // ximea_error:
+  //   if (this->ximea) {
+  //     xiCloseDevice(this->ximea);
+  //   }
+  //   return -1;
+  // }
 }
 
 int XimeaCamera::checkState(XI_RETURN retval, std::string where) {
@@ -105,8 +105,7 @@ int XimeaCamera::checkState(XI_RETURN retval, std::string where) {
 }
 
 
-int XimeaCamera::setGain(float gain_db)
-{
+int XimeaCamera::setGain(float gain_db) {
   XI_RETURN retval;
 
   retval = xiSetParamFloat(this->ximea, XI_PRM_GAIN, gain_db);
@@ -156,10 +155,7 @@ int XimeaCamera::getFrame(cv::Mat &image) {
       .copyTo(image);
 
     // resize the image to reflect camera mode
-    cv::resize(
-      image,
-      image,
-      cv::Size(640, 480));
+    cv::resize(image, image, cv::Size(640, 480));
     // cv::Size(this->config.image_width, this->config.image_height));
     return 0;
   }

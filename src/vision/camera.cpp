@@ -24,8 +24,6 @@ int Camera::configure(int capture_index, int image_width, int image_height) {
 }
 
 int Camera::configure(const std::string &config_path) {
-
-
   return 0;
 }
 

@@ -17,7 +17,7 @@ namespace awesomo {
 #define XIMEA_CHECK(STATE, WHERE)                \
   if (STATE != XI_OK) {                          \
     printf("Error after %s (%d)", WHERE, STATE); \
-    ximea_error();                            \
+    ximea_error();                               \
   }
 
 class XimeaCamera : public Camera {

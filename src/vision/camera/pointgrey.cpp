@@ -289,11 +289,13 @@ int PointGreyCamera::printFormat7Capabilities(void) {
     "Image Unit size: (%u, %u)\n"
     "Offset Unit size: (%u, %u)\n"
     "Pixel format bitfield: 0x%08x\n",
-    info.maxWidth, info.maxHeight,
-    info.imageHStepSize, info.imageVStepSize,
-    info.offsetHStepSize, info.offsetVStepSize,
-    info.pixelFormatBitField
-  );
+    info.maxWidth,
+    info.maxHeight,
+    info.imageHStepSize,
+    info.imageVStepSize,
+    info.offsetHStepSize,
+    info.offsetVStepSize,
+    info.pixelFormatBitField);
 
   return 0;
 }
@@ -312,9 +314,8 @@ int PointGreyCamera::setFormat7(int mode,
   FlyCapture2::Format7ImageSettings settings;
 
   // get format7 settings
-  this->pointgrey->GetFormat7Configuration(&settings,
-                                           &packet_size,
-                                           &psize_percentage);
+  this->pointgrey->GetFormat7Configuration(
+    &settings, &packet_size, &psize_percentage);
 
   // set mode
   switch (mode) {
@@ -322,11 +323,11 @@ int PointGreyCamera::setFormat7(int mode,
     case 1: settings.mode = FlyCapture2::MODE_1; break;
     case 2: settings.mode = FlyCapture2::MODE_2; break;
     default:
-        log_error("Format7 mode [%d] not implemented yet!", mode);
-        return -2;
+      log_error("Format7 mode [%d] not implemented yet!", mode);
+      return -2;
   }
   settings.width = width;
-  settings.height =  height;
+  settings.height = height;
   settings.offsetX = 0;
   settings.offsetY = 0;
   if (pixel_format == "MONO8") {
@@ -343,21 +344,17 @@ int PointGreyCamera::setFormat7(int mode,
   }
 
   // validate settings
-  error = this->pointgrey->ValidateFormat7Settings(
-    &settings,
-    &valid,
-    &packet_info
-  );
+  error =
+    this->pointgrey->ValidateFormat7Settings(&settings, &valid, &packet_info);
   if (error != FlyCapture2::PGRERROR_OK) {
-    log_error("Format7 settings are invalid!, could not configure the camera");
+    log_error(
+      "Format7 settings are invalid!, could not configure the camera");
     return -1;
   }
 
   // send settings
   error = this->pointgrey->SetFormat7Configuration(
-    &settings,
-    packet_info.maxBytesPerPacket
-  );
+    &settings, packet_info.maxBytesPerPacket);
   if (error != FlyCapture2::PGRERROR_OK) {
     log_error("Could not configure the camera with Format7!");
     return -1;
@@ -367,7 +364,9 @@ int PointGreyCamera::setFormat7(int mode,
   return 0;
 }
 
-std::pair<int, int> PointGreyCamera::centerROI(int size, int max_size, int step) {
+std::pair<int, int> PointGreyCamera::centerROI(int size,
+                                               int max_size,
+                                               int step) {
   if (size == 0 || size > max_size) {
     size = max_size;
   }
