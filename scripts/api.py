@@ -46,143 +46,379 @@ def clean_doc(element):
     return result
 
 
-# def function_docstr(fn):
-#     fn_name = fn[0]
-#     fn_args = pydoc.inspect.formatargspec(*pydoc.inspect.getargspec(fn[1]))
-#     fn_doc = clean_docstr(fn[1].__doc__)
-#
-#     return {"type": "function",
-#             "name": fn_name,
-#             "args": fn_args,
-#             "docstr": fn_doc}
+def clean_define(df):
+    if df[-3:] == "HPP" or df[0] == "_":
+        return None
+
+    nb_lines = len(df.split("\n"))
+    if nb_lines > 1:
+        df = df.split("\n")[0]
+        df = df.rstrip(" \\")
+
+    return df
 
 
-# def method_docstr(mh):
-#     mh_name = mh[0]
-#     mh_args = pydoc.inspect.formatargspec(*pydoc.inspect.getargspec(mh[1]))
-#     mh_doc = clean_docstr(mh[1].__doc__)
-#
-#     return {"type": "method",
-#             "name": mh_name,
-#             "args": mh_args,
-#             "docstr": mh_doc}
-#
+def api_string(return_type,
+               def_name,
+               def_params,
+               is_static=False,
+               is_virtual=False):
+    retval = ""
+    retval += "virtual " if is_virtual else ""
+    retval += "static " if is_static else ""
+    retval += return_type + " "
+    retval += def_name
+    retval += "("
+
+    param_string = []
+    for param in def_params:
+        if param["type"][-1] in ["*", "&"]:
+            param_string.append(param["type"] + param["name"])
+        else:
+            param_string.append(param["type"] + " " + param["name"])
+
+    indent_spaces = " " * (len(retval) + 4)
+    retval += (",\n" + indent_spaces).join(param_string)
+    retval += ")"
+
+    return retval
+
+
+def enum_doc(em):
+    # setup
+    em_name = em["name"]
+    em_doc = clean_doc(em)
+    em_namespace = em["namespace"]
+
+    # return enum doc
+    return {"type": "enum",
+            "name": em_name,
+            "namespace": em_namespace,
+            "values": em["values"],
+            "doc": em_doc}
+
+
+def function_doc(fn):
+    # setup
+    fn_name = fn["name"]
+    fn_return = fn["rtnType"]
+    fn_doc = clean_doc(fn)
+
+    # parse parameters
+    fn_params = []
+    for param in fn["parameters"]:
+        fn_params.append({"name": param["name"], "type": param["type"]})
+
+    # return method doc
+    return {"type": "function",
+            "return": fn_return,
+            "name": fn_name,
+            "params": fn_params,
+            "api_doc": fn_doc,
+            "api_string": api_string(fn_return, fn_name, fn_params)}
+
+
+def constructor_doc(mh, cl_name):
+    # pre-check
+    if mh["name"] != cl_name:
+        return None
+
+    return method_doc(mh, cl_name)
+
+
+def method_doc(mh, cl_name):
+    # pre-check
+    if mh["name"] == cl_name:
+        return None
+
+    # setup
+    mh_name = mh["name"]
+    mh_static = mh["static"]
+    mh_return = mh["rtnType"]
+    mh_template = mh["template"]
+    mh_virtual = mh["virtual"]
+    mh_doc = clean_doc(mh)
+
+    # parse parameters
+    mh_params = []
+    for param in mh["parameters"]:
+        mh_params.append({"name": param["name"],
+                          "type": param["type"]})
+
+    # return method doc
+    return {"type": "method",
+            "static": mh_static,
+            "return": mh_return,
+            "template": mh_template,
+            "virtual": mh_virtual,
+            "name": mh_name,
+            "params": mh_params,
+            "api_doc": mh_doc,
+            "api_string": api_string(mh_return,
+                                     mh_name,
+                                     mh_params,
+                                     mh_static,
+                                     mh_virtual)}
+
+
+def group_definitions(definitions):
+    defs = {}
+
+    # group definitions
+    for df in definitions:
+        if df["name"] not in defs and df["type"] == "method":
+            defs[df["name"]] = {
+                "type": "method",
+                "static": df["static"],
+                "return": [df["return"]],
+                "template": df["template"],
+                "virtual": df["virtual"],
+                "name": df["name"],
+                "params": [df["params"]],
+                "api_doc": df["api_doc"],
+                "api_string": [df["api_string"]]
+            }
+
+        elif df["name"] not in defs and df["type"] == "function":
+            defs[df["name"]] = {
+                "type": "function",
+                "return": [df["return"]],
+                "name": df["name"],
+                "params": [df["params"]],
+                "api_doc": df["doc"] if "doc" in df else None,
+                "api_string": [df["api_string"]]
+            }
+
+        elif df["name"] in defs:
+            defs[df["name"]]["return"].append(df["return"])
+            defs[df["name"]]["params"].append(df["params"])
+            defs[df["name"]]["api_string"].append(df["api_string"])
+
+    # return result
+    results = []
+    for key, value in defs.items():
+        results.append(value)
+
+    return results
+
 
 def class_doc(cl):
-    # public_methods = []
-    # private_methods = []
+    # pre-check
+    if cl["declaration_method"] != "class":
+        return None
 
-    for mh in cl['methods']['public']:  # iterate over public functions
-        mh_name = clean_name(mh["debug"])
-        mh_doc = clean_doc(mh)
-        print(mh_name)
-        print(mh_doc)
+    # setup
+    cl_name = cl["name"]
+    cl_inherits = cl["inherits"]
+    cl_namespace = cl["namespace"]
+    cl_doc = clean_doc(cl)
 
-    # return {"type": "class",
-    #         "name": cl_name,
-    #         # "doc": cl_doc,
-    #         "public_methods": public_methods,
-    #         "private_methods": private_methods}
+    # iterate over properties, constructors, public and private methods
+    cl_properties = []
+    for pp in cl["properties"]["public"]:
+        cl_properties.append(pp)
+
+    constructors = []
+    for mh in cl["methods"]["public"]:
+        doc = constructor_doc(mh, cl_name)
+        if doc:
+            constructors.append(doc)
+
+    public_methods = []
+    for mh in cl["methods"]["public"]:
+        doc = method_doc(mh, cl_name)
+        if doc:
+            public_methods.append(doc)
+    public_methods = group_definitions(public_methods)
+
+    private_methods = []
+    for mh in cl["methods"]["private"]:
+        doc = method_doc(mh, cl_name)
+        if doc:
+            private_methods.append(doc)
+    private_methods = group_definitions(private_methods)
+
+    # return class doc
+    return {"type": "class",
+            "inherits": cl_inherits,
+            "namespace": cl_namespace,
+            "name": cl_name,
+            "doc": cl_doc,
+            "properties": cl_properties,
+            "constructors": constructors,
+            "public_methods": public_methods,
+            "private_methods": private_methods}
 
 
-# def docstr(file_path):
-#     classes = []
-#     functions = []
-#
-#     # setup
-#     module_name = file_path.replace(".py", "").replace("/", ".")
-#     print("-> {}".format(module_name))
-#
-#     # load module
-#     module = pydoc.safeimport(module_name)
-#     if module is None:
-#         raise RuntimeError("Module {} not found!".format(module_name))
-#     module_doc = clean_docstr(module.__doc__)
-#
-#     # inspect classes
-#     for cl in pydoc.inspect.getmembers(module, pydoc.inspect.isclass):
-#         if cl[1].__module__ == module_name:
-#             classes.append(class_docstr(cl))
-#
-#     # inspect functions
-#     for fn in pydoc.inspect.getmembers(module, pydoc.inspect.isfunction):
-#         if fn[1].__module__ == module_name:
-#             functions.append(function_docstr(fn))
-#
-#     return ({"name": module_name, "docstr": module_doc}, classes, functions)
-#
-#
-# def genapi(module, classes, functions, output_dir="./"):
-#     # setup
-#     api_filename = module["name"].replace(".", "_") + ".md"
-#     api_doc = open(os.path.join(output_dir, api_filename), "w")
-#
-#     # render api doc
-#     api_template = Template("""\
-# # {{module.name}}
-# {% if module.docstr %}{{module.docstr}}{% endif %}\
-#
-# {% if classes|length > 0 %}\
-# ## Classes
-#
-# {% for cl in classes %}\
-# - {{cl.name}}
-# {% endfor %}
-#
-# {% for cl in classes %}\
-# ### {{cl.name}}
-# {% if cl.docstr %}{{cl.docstr}}\n---{% endif %}
-# {% for method in cl.methods %}
-#     {{method.name}}{{method.args}}
-#
-# {% if method.docstr %}{{method.docstr}}{% endif %}
-# ---
-# {% endfor %}\
-# {% endfor %}\
-# {% endif %}\
-#
-# {% if functions|length > 1 %}
-# ## Functions
-#
-# {% for fn in functions %}\
-# - {{fn.name}}
-# {% endfor %}
-# ---
-#
-# {% for fn in functions %}
-#     {{fn.name}}{{fn.args}}
-#
-# {% if fn.docstr %}{{fn.docstr}}{% endif %}
-# ---
-# {% endfor %}\
-# {% endif %}\
-# """)
-#     api = api_template.render(module=module,
-#                               classes=classes,
-#                               functions=functions)
-#
-#     # output api to file
-#     api_doc.write(api)
-#     api_doc.close()
+def struct_doc(st):
+    # pre-check
+    if st["declaration_method"] != "struct":
+        return None
+
+    # setup
+    st_namespace = st["namespace"]
+    st_name = st["name"]
+    st_doc = clean_doc(st)
+
+    # iterate over public and private methods
+    public_methods = []
+    for mh in st["methods"]["public"]:
+        doc = method_doc(mh, st_name)
+        if doc:
+            public_methods.append(doc)
+    public_methods = group_definitions(public_methods)
+
+    # return class doc
+    return {"type": "struct",
+            "namespace": st_namespace,
+            "name": st_name,
+            "doc": st_doc,
+            "public_methods": public_methods}
+
+
+def parse_header(header_file):
+    header = CppHeaderParser.CppHeader(header_file)
+
+    # iterate over defines
+    defines = []
+    for df in header.defines:
+        df = clean_define(df)
+        if df:
+            defines.append(df)
+
+    # iterate over enum
+    enums = []
+    for em in header.enums:
+        doc = enum_doc(em)
+        if doc:
+            enums.append(doc)
+
+    # iterate over classes
+    classes = []
+    for cl_name in header.classes:
+        cl = header.classes[cl_name]
+        doc = class_doc(cl)
+        if doc:
+            classes.append(doc)
+
+    # iterate over struct
+    structs = []
+    for st_name in header.classes:
+        st = header.classes[st_name]
+        doc = struct_doc(st)
+        if doc:
+            structs.append(doc)
+
+    # iterate over functions
+    functions = []
+    for fn in header.functions:
+        functions.append(function_doc(fn))
+    functions = group_definitions(functions)
+
+    return (defines, enums, classes, structs, functions)
+
+
+def genapi(header_file, doc, output_dir="./"):
+    # setup
+
+    api_filename = header_file.lstrip("./")
+    api_filename = api_filename.replace("/", "_")
+    api_filename = api_filename.replace("include_", "")
+    api_filename += ".md"
+    api_doc = open(os.path.join(output_dir, api_filename), "w")
+
+    # render api doc
+    (defines, enums, classes, structs, functions) = doc
+    api_template = Template("""\
+{% if defines|length > 0 -%}
+## Defines
+
+{% for df in defines %}\
+    #define {{df}}
+{% endfor %}
+{% endif %}
+
+
+{% if enums|length > 0 -%}
+## Enums
+
+{% for em in enums -%}
+- `{{em.namespace}}{{em.name}}`
+{% endfor %}
+
+{% for em in enums -%}
+### {{em.namespace}}{{em.name}}
+
+{% if em.doc %}{{em.doc}}{% endif %}
+
+{% for v in em["values"] %}\
+    {{v.name}} {{v.value}}
+{% endfor %}
+
+{% endfor %}\
+{% endif %}\
+
+
+{% if classes|length > 0 -%}
+## Classes
+
+{% for cl in classes -%}
+- `{{cl.namespace}}::{{cl.name}}`
+{% endfor %}
+
+{% for cl in classes %}
+### {{cl.namespace}}::{{cl.name}}
+
+{%- if cl.doc -%}
+{{cl.doc}}
+{% endif %}
+
+**Member Variables**:
+
+{% for pp in cl.properties %}\
+    {{pp.type}} {{pp.name}}
+{% endfor %}
+
+{% if cl.public_methods|length > 0 -%}
+**Methods**:
+{% for methods in cl.public_methods %}
+{%- for api_string in methods.api_string %}
+    {{api_string}}
+{% endfor %}
+{% if methods.api_doc -%}{{methods.api_doc}}{% endif %}
+---
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if functions|length > 1 %}
+## Functions
+{% for fn in functions -%}
+{% for api_string in fn.api_string %}
+    {{api_string}}
+{% endfor %}
+{% if fn.api_doc %}{{fn.api_doc}}{% endif %}
+---
+{% endfor %}
+{% endif %}
+""")
+    api = api_template.render(defines=defines,
+                              enums=enums,
+                              classes=classes,
+                              functions=functions)
+
+    # output api to file
+    api_doc.write(api.lstrip("\n").rstrip("\n"))
+    api_doc.close()
 
 
 if __name__ == "__main__":
     files = walkdir(sys.argv[1])
+    # doc = parse_header("./include/yarl/utils/config.hpp")
+    # genapi("./include/yarl/utils/config.hpp", doc)
 
-    header = CppHeaderParser.CppHeader("./include/yarl/estimation/kf.hpp")
-
-    for cl_name in header.classes:  # iterate over classes
-        cl = header.classes[cl_name]
-
-        for fn in cl['methods']['public']:  # iterate over public functions
-            fn_name = clean_name(fn["debug"])
-            fn_docstr = clean_doc(fn)
-            print(fn_name)
-            print(fn_docstr)
-
-    # import pprint
-    # pprint.pprint(header.classes)
-
-    # for f in files:
-    #     module, classes, functions = docstr(f)
-    #     genapi(module, classes, functions, sys.argv[2])
+    for f in files:
+        print("-> {}".format(f))
+        doc = parse_header(f)
+        genapi(f, doc, sys.argv[2])

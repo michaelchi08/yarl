@@ -29,6 +29,9 @@ namespace yarl {
 #define ENOTVALUE -9
 #define EMULVALUE -10
 
+/**
+ * Data type of config parameter
+ */
 enum ConfigDataType {
   TYPE_NOT_SET = 0,
   // PRIMITIVES
