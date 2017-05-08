@@ -3,7 +3,6 @@
 
 #include <ceres/ceres.h>
 
-
 namespace yarl {
 
 struct AutoDiffCostFunctor {
@@ -52,6 +51,19 @@ private:
   const double y;
 };
 
+/**
+ * `yarl.ceres.ceres_examples` contains three functions `void
+ * runAutoDiffExample(void);`, `void runNumericalDiffExample(void);` and `void
+ * runAnalyticalDiffExample(void);` that run the automatic differentiation,
+ * numerical differentiation and analytical differentiation nonlinear least
+ * squares optimization problem on the following cost function.
+ *
+ * \begin{equation}
+ *   f(x) = (10 - x)
+ * \end{equation}
+ *
+ * Where the minimum is located at $x = 10$.
+ */
 void runAutoDiffExample();
 void runNumericalDiffExample();
 void runAnalyticalDiffExample();

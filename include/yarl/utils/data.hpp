@@ -57,10 +57,28 @@ public:
       angular_z(0) {}
 };
 
+/**
+ * Reads csv file at `file_path` where `csvrows()` and `csvcols()` returns the
+ * number of rows and columns respectively. If the function failed to open the
+ * csv file the function will return `-1`.
+ */
 int csvrows(const std::string &file_path);
 int csvcols(const std::string &file_path);
+
+/**
+ * Load csv file containing a matrix located at `file_path`, `header` denotes
+ * whether a header line exists in the csv file. The parsed matrix will be
+ * loaded to `data`. On success the function will return `0` else if an error
+ * occured a return value of `-1` will be given.
+ */
 int csvheader(const std::string &file_path, std::vector<std::string> &fields);
 int csv2mat(const std::string &file_path, bool header, MatX &data);
+
+/**
+ * Save `data` matrix to file in csv format to location defined by
+ * `file_path`. On success the function will return `0` else if an error
+ * occured a return value of `-1` will be given.
+ */
 int mat2csv(const std::string &file_path, MatX data);
 
 }  // end of yarl namespace

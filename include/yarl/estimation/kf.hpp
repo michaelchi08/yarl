@@ -10,7 +10,6 @@ namespace yarl {
 
 /**
  * Kalman Filter
- * Hello World!!
  */
 class KF {
 public:
@@ -46,14 +45,12 @@ public:
       S_p() {}
 
   /**
-   * Kalman Filter
-   * Hello World!!
+   * Configure
    */
   int configure(const VecX &mu, const MatX &R, const MatX &C, const MatX &Q);
 
   /**
-   * Kalman Filter
-   * Hello World!!
+   * Estimate
    */
   int estimate(const MatX &A, const VecX &y);
 };

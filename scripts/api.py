@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
+import collections
 
 from jinja2 import Template
 import CppHeaderParser
@@ -34,14 +35,14 @@ def clean_doc(element):
 
     # setup
     doc = element["doxygen"]
-    doc = doc.lstrip(" ")
 
     result = ""
     for line in doc.split("\n"):
         line = line.lstrip("/**")
-        line = line.lstrip("* ")
-        if len(line) > 0:
-            result += line.lstrip(" ") + "\n"
+        if len(line) and line[0] == " ":
+            result += line[1:] + "\n"
+        else:
+            result += line + "\n"
 
     return result
 
@@ -102,6 +103,7 @@ def function_doc(fn):
     # setup
     fn_name = fn["name"]
     fn_return = fn["rtnType"]
+    fn_line_number = fn["line_number"]
     fn_doc = clean_doc(fn)
 
     # parse parameters
@@ -114,6 +116,7 @@ def function_doc(fn):
             "return": fn_return,
             "name": fn_name,
             "params": fn_params,
+            "line_number": fn_line_number,
             "api_doc": fn_doc,
             "api_string": api_string(fn_return, fn_name, fn_params)}
 
@@ -133,6 +136,7 @@ def method_doc(mh, cl_name):
 
     # setup
     mh_name = mh["name"]
+    mh_line_number = mh["line_number"]
     mh_static = mh["static"]
     mh_return = mh["rtnType"]
     mh_template = mh["template"]
@@ -152,6 +156,7 @@ def method_doc(mh, cl_name):
             "template": mh_template,
             "virtual": mh_virtual,
             "name": mh_name,
+            "line_number": mh_line_number,
             "params": mh_params,
             "api_doc": mh_doc,
             "api_string": api_string(mh_return,
@@ -162,9 +167,9 @@ def method_doc(mh, cl_name):
 
 
 def group_definitions(definitions):
-    defs = {}
+    defs = collections.OrderedDict()
 
-    # group definitions
+    # group definitions with similar name
     for df in definitions:
         if df["name"] not in defs and df["type"] == "method":
             defs[df["name"]] = {
@@ -185,7 +190,7 @@ def group_definitions(definitions):
                 "return": [df["return"]],
                 "name": df["name"],
                 "params": [df["params"]],
-                "api_doc": df["doc"] if "doc" in df else None,
+                "api_doc": df["api_doc"],
                 "api_string": [df["api_string"]]
             }
 
@@ -320,10 +325,10 @@ def parse_header(header_file):
 
 def genapi(header_file, doc, output_dir="./"):
     # setup
-
     api_filename = header_file.lstrip("./")
     api_filename = api_filename.replace("/", "_")
     api_filename = api_filename.replace("include_", "")
+    api_filename = api_filename.replace(".hpp", "")
     api_filename += ".md"
     api_doc = open(os.path.join(output_dir, api_filename), "w")
 
@@ -369,7 +374,7 @@ def genapi(header_file, doc, output_dir="./"):
 {% for cl in classes %}
 ### {{cl.namespace}}::{{cl.name}}
 
-{%- if cl.doc -%}
+{% if cl.doc -%}
 {{cl.doc}}
 {% endif %}
 
@@ -414,10 +419,12 @@ def genapi(header_file, doc, output_dir="./"):
 
 
 if __name__ == "__main__":
+    # find header files
     files = walkdir(sys.argv[1])
-    # doc = parse_header("./include/yarl/utils/config.hpp")
-    # genapi("./include/yarl/utils/config.hpp", doc)
+    if len(files) == 0:
+        raise RuntimeError("No header files found!")
 
+    # generate api doc
     for f in files:
         print("-> {}".format(f))
         doc = parse_header(f)
