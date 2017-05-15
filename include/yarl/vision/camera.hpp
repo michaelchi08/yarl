@@ -35,9 +35,13 @@ public:
   }
 
   int configure(int capture_index, int image_width, int image_height);
+  int configure(const std::string &config_file);
   int getFrame(cv::Mat &frame);
   int getUndistortFrame(cv::Mat &frame);
   int saveFrame(const cv::Mat &frame, const std::string &save_path);
+  int showFPS(double &last_tic, int &frame_count);
+  int showImage(cv::Mat &image);
+  int run();
   void close();
 };
 

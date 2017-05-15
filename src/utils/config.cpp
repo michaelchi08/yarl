@@ -205,11 +205,9 @@ int ConfigParser::getXMLValues(const std::string &key,
 
 int ConfigParser::checkVector(const std::string &key,
                               enum ConfigDataType type) {
-  int retval;
-
   // check key
   std::string xml_value;
-  retval = this->getXMLValue(key + "/vec", xml_value);
+  int retval = this->getXMLValue(key + "/vec", xml_value);
   if (retval != 0) {
     return retval;
   }

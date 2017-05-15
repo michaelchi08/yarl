@@ -126,7 +126,36 @@ def constructor_doc(mh, cl_name):
     if mh["name"] != cl_name:
         return None
 
-    return method_doc(mh, cl_name)
+    # setup
+    mh_name = mh["name"]
+    mh_line_number = mh["line_number"]
+    mh_static = mh["static"]
+    mh_return = mh["rtnType"]
+    mh_template = mh["template"]
+    mh_virtual = mh["virtual"]
+    mh_doc = clean_doc(mh)
+
+    # parse parameters
+    mh_params = []
+    for param in mh["parameters"]:
+        mh_params.append({"name": param["name"],
+                          "type": param["type"]})
+
+    # api string
+    api_str = api_string(mh_return, mh_name, mh_params, mh_static, mh_virtual)
+    api_str = api_str.replace("void ", "")
+
+    # return method doc
+    return {"type": "method",
+            "static": mh_static,
+            "return": mh_return,
+            "template": mh_template,
+            "virtual": mh_virtual,
+            "name": mh_name,
+            "line_number": mh_line_number,
+            "params": mh_params,
+            "api_doc": mh_doc,
+            "api_string": api_str}
 
 
 def method_doc(mh, cl_name):
@@ -382,6 +411,12 @@ def genapi(header_file, doc, output_dir="./"):
 
 {% for pp in cl.properties %}\
     {{pp.type}} {{pp.name}}
+{% endfor %}
+
+**Constructors**:
+
+{% for cc in cl.constructors %}\
+    {{cc.api_string}}
 {% endfor %}
 
 {% if cl.public_methods|length > 0 -%}

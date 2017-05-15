@@ -23,7 +23,8 @@ int Camera::configure(int capture_index, int image_width, int image_height) {
   return 0;
 }
 
-int Camera::configure(const std::string &config_path) {
+int Camera::configure(const std::string &config_file) {
+  UNUSED(config_file);
   return 0;
 }
 
@@ -84,7 +85,7 @@ int Camera::showFPS(double &last_tic, int &frame_count) {
   double fps;
 
   frame_count++;
-  if (frame_count % 30 == 0 && this->config.showfps) {
+  if (frame_count % 30 == 0) {
     t = time_now();
     fps = 30.0 / (t - last_tic);
     printf("fps: %.2f\n", fps);
@@ -102,7 +103,7 @@ int Camera::showImage(cv::Mat &image) {
   }
 
   // show image
-  if (this->config.imshow && image.rows && image.cols) {
+  if (image.rows && image.cols) {
     cv::imshow("Camera", image);
     cv::waitKey(1);
   }
@@ -110,9 +111,8 @@ int Camera::showImage(cv::Mat &image) {
   return 0;
 }
 
-int Camera::run(void) {
+int Camera::run() {
   int frame_count;
-  double t;
   double last_tic;
 
   // pre-check
@@ -126,11 +126,12 @@ int Camera::run(void) {
 
   // run
   while (true) {
-    this->getFrame(this->image);
+    cv::Mat image;
+    this->getFrame(image);
 
     // show stats
     this->showFPS(last_tic, frame_count);
-    this->showImage(this->image);
+    this->showImage(image);
   }
 
   return 0;
