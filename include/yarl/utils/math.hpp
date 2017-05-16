@@ -27,8 +27,7 @@ int sign(double x);
 
 /**
  * Generates random integer or float with a upper bound `ub` and lower bound
- * `lb`
- * using a uniform random distribution.
+ * `lb` using a uniform random distribution.
  */
 int randi(int ub, int lb);
 double randf(double ub, double lb);
@@ -115,9 +114,7 @@ void inertial2body(const Vec3 &enu_if,
                    const Vec3 &orientation_if,
                    Vec3 &nwu_bf);
 
-/**
- * Wraps `euler_angle` to 180 or 360.
- */
+/// Wraps `euler_angle` to 180 or 360.
 double wrapTo180(double euler_angle);
 double wrapTo360(double euler_angle);
 

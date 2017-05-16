@@ -5,7 +5,7 @@ namespace yarl {
 namespace drivers {
 
 int MPU9250::configure() {
-  /* setup */
+  // setup
   this->i2c = drivers::I2C();
   this->i2c.setSlave(MPU9250_ADDRESS);
 
@@ -17,7 +17,7 @@ int MPU9250::configure() {
 int MPU9250::ping() {
   char data;
 
-  /* print mpu9250 address */
+  // print mpu9250 address
   this->i2c.setSlave(MPU9250_ADDRESS);
   this->i2c.readByte(MPU9250_WHO_AM_I, &data);
   printf("MPU9250 ADDRESS: 0x%02X\n", data);
@@ -29,12 +29,12 @@ int MPU9250::setGyroScale(int8_t scale) {
   char data;
   uint8_t retval;
 
-  /* pre-check */
+  // pre-check
   if (scale > 3 || scale < 0) {
     return -2;
   }
 
-  /* set gyro scale */
+  // set gyro scale
   data = scale << 3;
   this->i2c.setSlave(MPU9250_ADDRESS);
   retval = this->i2c.writeByte(MPU9250_GYRO_CONFIG, data);
@@ -49,7 +49,7 @@ int MPU9250::getGyroScale() {
   char data;
   uint8_t retval;
 
-  /* get gyro scale */
+  // get gyro scale
   data = 0x00;
   this->i2c.setSlave(MPU9250_ADDRESS);
   retval = this->i2c.readByte(MPU9250_GYRO_CONFIG, &data);
@@ -57,7 +57,7 @@ int MPU9250::getGyroScale() {
     return -1;
   }
 
-  /* get gyro scale bytes */
+  // get gyro scale bytes
   data = (data >> 3) & 0b00000011;
 
   return data;
@@ -67,12 +67,12 @@ int MPU9250::setAccelScale(int8_t scale) {
   char data;
   uint8_t retval;
 
-  /* pre-check */
+  // pre-check
   if (scale > 3 || scale < 0) {
     return -2;
   }
 
-  /* set accel scale */
+  // set accel scale
   data = scale << 3;
   this->i2c.setSlave(MPU9250_ADDRESS);
   retval = this->i2c.writeByte(MPU9250_ACCEL_CONFIG, data);
@@ -87,7 +87,7 @@ int MPU9250::getAccelScale() {
   char data;
   uint8_t retval;
 
-  /* get accel scale */
+  // get accel scale
   data = 0x00;
   this->i2c.setSlave(MPU9250_ADDRESS);
   retval = this->i2c.readByte(MPU9250_ACCEL_CONFIG, &data);
@@ -95,7 +95,7 @@ int MPU9250::getAccelScale() {
     return -1;
   }
 
-  /* get accel scale bytes */
+  // get accel scale bytes
   data = (data >> 3) & 0b00000011;
 
   return data;
@@ -105,7 +105,7 @@ int MPU9250::setAccelFchoice(int8_t fchoice) {
   char data;
   uint8_t retval;
 
-  /* set accel scale */
+  // set accel scale
   data = fchoice << 3;
   this->i2c.setSlave(MPU9250_ADDRESS);
   retval = this->i2c.writeByte(MPU9250_ACCEL_CONFIG2, data);
@@ -120,7 +120,7 @@ int MPU9250::getAccelFchoice() {
   char data;
   uint8_t retval;
 
-  /* get accel scale */
+  // get accel scale
   data = 0x00;
   this->i2c.setSlave(MPU9250_ADDRESS);
   retval = this->i2c.readByte(MPU9250_ACCEL_CONFIG2, &data);
@@ -128,7 +128,7 @@ int MPU9250::getAccelFchoice() {
     return -1;
   }
 
-  /* get accel scale bytes */
+  // get accel scale bytes
   data = (data >> 3) & 0b00000001;
 
   return data;

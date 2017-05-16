@@ -11,25 +11,17 @@
 
 namespace yarl {
 
-/**
- * Extract file name from `path`
- */
+/// Extract file name from `path`
 std::string basefile(const std::string &path);
 
-/**
- * Extract dir name from `path`
- */
+/// Extract dir name from `path`
 std::string basedir(const std::string &path);
 
-/**
- * Remove trailing slash
- */
+/// Remove trailing slash
 void rmtrailslash(std::string &path);
 std::string rmtrailslash(const std::string &path);
 
-/**
- * Check to see if `file_path` exists, returns boolean.
- */
+/// Check to see if `file_path` exists, returns boolean.
 bool file_exists(const std::string &file_path);
 
 /**
@@ -39,7 +31,7 @@ bool file_exists(const std::string &file_path);
 std::vector<std::string> path_split(const std::string &path);
 
 /**
- * Combines `path1` with `path2`, the result is written to `out`. This
+ * Combine `path1` with `path2`, the result is written to `out`. This
  * function is modeled after python's `os.path.join` function. Example usage:
  *
  *     paths_combine("/a/b", "c/d", out) --> out = "/a/b/c/d"

@@ -1,15 +1,11 @@
 #ifndef YARL_DRIVERS_SBGC_HPP
 #define YARL_DRIVERS_SBGC_HPP
 
-#include <errno.h>
-#include <fcntl.h>
-#include <string.h>
-#include <termios.h>
-#include <unistd.h>
-
 #include <iostream>
 
 #include <Eigen/Dense>
+
+#include "yarl/drivers/uart.hpp"
 
 namespace yarl {
 

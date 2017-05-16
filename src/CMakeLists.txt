@@ -15,6 +15,7 @@ ADD_LIBRARY(
   drivers/mpu9250.cpp
   drivers/pca9685.cpp
   drivers/sbgc.cpp
+  drivers/uart.cpp
   # ESTIMATION
   estimation/ekf.cpp
   estimation/kf.cpp
