@@ -5,6 +5,9 @@
 
 namespace yarl {
 
+/**
+ * Linear Regression
+ */
 int linreg(const std::vector<Eigen::Vector2d> &pts,
            double &m,
            double &b,

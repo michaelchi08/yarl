@@ -1,5 +1,5 @@
-#ifndef YARL_OPTIMIZATION_FACTOR_GRAPH_FACTOR_GRAPH_HPP
-#define YARL_OPTIMIZATION_FACTOR_GRAPH_FACTOR_GRAPH_HPP
+#ifndef YARL_OPTIMIZATION_FACTOR_GRAPH_GRAPH_HPP
+#define YARL_OPTIMIZATION_FACTOR_GRAPH_GRAPH_HPP
 
 #include <iostream>
 #include <fstream>
@@ -16,19 +16,20 @@ namespace yarl {
 
 class FactorGraph {
 public:
-  std::multimap<std::shared_ptr<Variable>, std::shared_ptr<Factor>> graph;
-  std::set<std::shared_ptr<Variable>> variables;
+  std::multimap<std::shared_ptr<FactorVariable>, std::shared_ptr<Factor>>
+    graph;
+  std::set<std::shared_ptr<FactorVariable>> variables;
   std::vector<std::shared_ptr<Factor>> factors;
 
-  FactorGraph() : graph{}, variables{}, factors{} {}
+  FactorGraph() {}
 
-  template <typename V, typename T>
-  int addUnaryFactor(size_t at, const T &z) {
+  template <typename V>
+  int addUnaryFactor(size_t at, const VecX &z) {
     // store variable and factor
     auto variable = std::make_shared<V>(at);
     this->variables.insert(variable);
 
-    auto factor = std::make_shared<UnaryFactor<T>>(variable, z);
+    auto factor = std::make_shared<Factor>(variable, z);
     this->factors.push_back(factor);
 
     // store key-factor pair
@@ -38,8 +39,8 @@ public:
     return 0;
   }
 
-  template <typename VA, typename VB, typename T>
-  int addBinaryFactor(size_t from, size_t to, const T &z) {
+  template <typename VA, typename VB>
+  int addBinaryFactor(size_t from, size_t to, const VecX &z) {
     // store variables and factor
     auto from_var = std::make_shared<VA>(from);
     this->variables.insert(from_var);
@@ -47,7 +48,7 @@ public:
     auto to_var = std::make_shared<VB>(to);
     this->variables.insert(to_var);
 
-    auto factor = std::make_shared<BinaryFactor<T>>(from_var, to_var, z);
+    auto factor = std::make_shared<Factor>(from_var, to_var, z);
     this->factors.push_back(factor);
 
     // store key-factor pairs
@@ -60,22 +61,22 @@ public:
     return 0;
   }
 
-  std::string toString() {
-    std::ostringstream oss;
-    int index = 0;
-
-    for (auto f : this->factors) {
-      oss << "f" << index << " -- ";
-      oss << f->toString() << std::endl;
-      index++;
-    }
-
-    return oss.str();
-  }
-
-  void print() {
-    std::cout << this->toString() << std::endl;
-  }
+  // std::string toString() {
+  //   std::ostringstream oss;
+  //   int index = 0;
+  //
+  //   for (auto f : this->factors) {
+  //     oss << "f" << index << " -- ";
+  //     oss << f->toString() << std::endl;
+  //     index++;
+  //   }
+  //
+  //   return oss.str();
+  // }
+  //
+  // void print() {
+  //   std::cout << this->toString() << std::endl;
+  // }
 };
 
 }  // end of yarl namespace

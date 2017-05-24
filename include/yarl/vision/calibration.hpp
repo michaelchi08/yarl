@@ -22,6 +22,9 @@ namespace yarl {
 // MACROS
 #define CALIBRATION_FILENAME "calibration.yaml"
 
+/**
+ * Calibration
+ */
 class Calibration {
 public:
   bool configured;

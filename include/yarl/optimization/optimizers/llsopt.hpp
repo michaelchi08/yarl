@@ -5,6 +5,9 @@
 
 namespace yarl {
 
+/**
+ * Linear Least Squares
+ */
 int llsopt_solve(const MatX &A, const MatX &b, VecX &x);
 
 }  // end of yarl namespace

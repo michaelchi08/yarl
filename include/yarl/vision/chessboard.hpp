@@ -9,6 +9,9 @@
 
 namespace yarl {
 
+/**
+ * Chessboard
+ */
 struct Chessboard {
   bool configured;
 

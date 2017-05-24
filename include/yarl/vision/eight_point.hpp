@@ -12,6 +12,9 @@
 
 namespace yarl {
 
+/**
+ * Eight Point Algorithm
+ */
 class EightPoint {
 public:
   bool configured;

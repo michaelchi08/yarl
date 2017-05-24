@@ -8,6 +8,9 @@
 
 namespace yarl {
 
+/**
+ * Camera
+ */
 class Camera {
 public:
   bool configured;

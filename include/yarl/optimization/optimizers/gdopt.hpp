@@ -10,6 +10,9 @@ namespace yarl {
 #define EGDC "GDOpt is not configured!"
 #define EGDF "Failed to execute GDOpt.f() [%s]"
 
+/**
+ * Gradient Desent Optimization
+ */
 class GDOpt {
 public:
   bool configured;

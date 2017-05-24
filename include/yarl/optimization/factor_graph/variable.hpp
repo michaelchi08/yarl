@@ -1,31 +1,30 @@
 #ifndef YARL_OPTIMIZATION_FACTOR_GRAPH_VARIABLE_HPP
 #define YARL_OPTIMIZATION_FACTOR_GRAPH_VARIABLE_HPP
 
+#include "yarl/utils/utils.hpp"
+
 namespace yarl {
 
-struct Variable {
-  size_t id;
-  size_t size;
+using VariableId = size_t;
 
-  Variable() : id{0}, size{0} {}
-  Variable(size_t id, size_t size) : id{id}, size{size} {}
+struct FactorVariable {
+  VariableId id;
+  VecX data;
 
-  std::string toString() {
-    std::ostringstream oss;
+  FactorVariable() : id{0}, data{VecX::Zero(1)} {}
+  FactorVariable(VariableId id, size_t size)
+    : id{id}, data{VecX::Zero(size)} {}
 
-    oss << "[";
-    oss << "id: " << this->id << ", ";
-    oss << "size: " << this->size;
-    oss << "]";
-
-    return oss.str();
+  friend std::ostream &operator<<(std::ostream &os,
+                                  const FactorVariable &var) {
+    os << "[";
+    os << "id: " << var.id << ", ";
+    os << "size: " << var.data.size();
+    os << "]";
+    return os;
   }
 
-  void print() {
-    std::cout << this->toString() << std::endl;
-  }
-
-  bool operator<(const Variable &other) const {
+  bool operator<(const FactorVariable &other) const {
     if (this->id < other.id) {
       return true;
     }
@@ -33,12 +32,12 @@ struct Variable {
   }
 };
 
-struct PoseVar : Variable {
-  PoseVar(size_t id) : Variable{id, 6} {}
+struct PoseVar : FactorVariable {
+  PoseVar(size_t id) : FactorVariable{id, 6} {}
 };
 
-struct LandmarkVar : Variable {
-  LandmarkVar(size_t id) : Variable{id, 3} {}
+struct LandmarkVar : FactorVariable {
+  LandmarkVar(size_t id) : FactorVariable{id, 3} {}
 };
 
 }  // end of yarl namespace

@@ -6,6 +6,9 @@
 
 namespace yarl {
 
+/**
+ * Fast Detector
+ */
 class FastDetector {
 public:
   bool configured;

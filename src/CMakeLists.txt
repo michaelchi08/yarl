@@ -58,6 +58,7 @@ ADD_LIBRARY(
   vision/eight_point.cpp
   vision/fast.cpp
   vision/good.cpp
+  vision/models.cpp
   vision/utils.cpp
   vision/vo.cpp
 )
