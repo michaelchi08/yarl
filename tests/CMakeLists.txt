@@ -13,14 +13,6 @@ ADD_EXECUTABLE(
   # OPTIMIZATION
   optimization/ceres/ba_test.cpp
   optimization/ceres/ceres_examples_test.cpp
-  optimization/gp/crossover_test.cpp
-  optimization/gp/data_test.cpp
-  optimization/gp/gpopt_test.cpp
-  optimization/gp/mutation_test.cpp
-  optimization/gp/node_test.cpp
-  optimization/gp/population_test.cpp
-  optimization/gp/selection_test.cpp
-  optimization/gp/tree_test.cpp
   optimization/optimizers/gdopt_test.cpp
   optimization/optimizers/llsopt_test.cpp
   optimization/optimizers/lmaopt_test.cpp
