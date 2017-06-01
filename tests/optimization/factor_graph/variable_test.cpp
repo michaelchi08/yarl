@@ -28,4 +28,4 @@ namespace yarl {
 //   EXPECT_EQ(2u, var.id);
 // }
 
-}  // end of yarl namespace
+}  // namespace yarl

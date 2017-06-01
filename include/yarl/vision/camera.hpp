@@ -48,5 +48,5 @@ public:
   void close();
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

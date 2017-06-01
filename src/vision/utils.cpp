@@ -51,4 +51,4 @@ void projection_matrix(const Mat3 &K, const Mat3 &R, const Vec3 &t, MatX &P) {
   P = K * extrinsics;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

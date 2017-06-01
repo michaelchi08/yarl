@@ -25,5 +25,5 @@ public:
   int detect(const cv::Mat &image, MatX &points);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

@@ -44,4 +44,4 @@ void split(const std::string s, char delim, std::vector<std::string> &out) {
   }
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

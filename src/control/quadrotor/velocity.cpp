@@ -138,4 +138,4 @@ void VelocityController::printErrors() {
 }
 
 }  // end of control namespace
-}  // end of yarl namespace
+}  // namespace yarl

@@ -99,4 +99,4 @@ int I2C::writeBytes(char reg_addr, char *data, size_t length) {
 }
 
 }  // end of drivers namespace
-}  // end of yarl namespace
+}  // namespace yarl

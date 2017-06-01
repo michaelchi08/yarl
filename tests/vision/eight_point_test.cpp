@@ -358,4 +358,4 @@ TEST(EightPoint, obtainPose2) {
   std::cout << "cv translation: \n" << vo.t << std::endl << std::endl;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

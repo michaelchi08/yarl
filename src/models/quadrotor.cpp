@@ -189,4 +189,4 @@ void QuadrotorModel::printState() {
   printf("psi: %f\n", psi);
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

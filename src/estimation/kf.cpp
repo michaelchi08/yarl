@@ -42,4 +42,4 @@ int KF::estimate(const MatX &A, const VecX &y) {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

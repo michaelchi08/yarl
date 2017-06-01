@@ -143,4 +143,4 @@ void Camera::close() {
   }
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

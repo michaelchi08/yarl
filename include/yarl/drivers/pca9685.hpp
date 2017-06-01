@@ -106,5 +106,5 @@ public:
 };
 
 }  // end of motor namespace
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

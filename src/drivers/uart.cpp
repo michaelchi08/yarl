@@ -126,4 +126,4 @@ void set_blocking(int fd, int should_block) {
   }
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

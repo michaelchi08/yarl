@@ -193,4 +193,4 @@ TEST(LMAOpt, optimize) {
   std::cout << opt.beta.transpose() << std::endl;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

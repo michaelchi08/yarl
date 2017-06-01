@@ -309,5 +309,5 @@ public:
   int load(const std::string &config_file);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

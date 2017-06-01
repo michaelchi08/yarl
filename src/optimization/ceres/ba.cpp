@@ -115,4 +115,4 @@ int BundleAdjustment::solve(MatX pts3d) {
 }
 
 }  // end of ceres namespace
-}  // end of yarl namespace
+}  // namespace yarl

@@ -36,4 +36,4 @@ namespace yarl {
 //   graph.print();
 // }
 
-}  // end of yarl namespace
+}  // namespace yarl

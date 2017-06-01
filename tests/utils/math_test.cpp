@@ -619,4 +619,4 @@ TEST(Utils, linear_interpolation) {
   std::cout << result << std::endl;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

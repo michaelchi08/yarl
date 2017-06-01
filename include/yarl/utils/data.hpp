@@ -80,5 +80,5 @@ int csv2mat(const std::string &file_path, bool header, MatX &data);
  */
 int mat2csv(const std::string &file_path, MatX data);
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

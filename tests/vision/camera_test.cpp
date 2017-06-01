@@ -37,4 +37,4 @@ TEST(Camera, getFrame) {
   camera.close();
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

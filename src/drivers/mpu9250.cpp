@@ -135,4 +135,4 @@ int MPU9250::getAccelFchoice() {
 }
 
 }  // end of drivers namespace
-}  // end of yarl namespace
+}  // namespace yarl

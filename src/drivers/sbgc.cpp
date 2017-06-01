@@ -607,4 +607,4 @@ int SBGC::setSpeedAngle(double roll,
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

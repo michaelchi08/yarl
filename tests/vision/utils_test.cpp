@@ -51,4 +51,4 @@ TEST(VisionUtils, projection_matrix) {
   std::cout << "f_img: " << f_img.transpose() << std::endl;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

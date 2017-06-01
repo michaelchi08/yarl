@@ -42,5 +42,5 @@ public:
                  MatX &pose);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

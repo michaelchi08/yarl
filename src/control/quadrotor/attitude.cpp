@@ -68,4 +68,4 @@ Vec4 AttitudeController::update(const Vec4 &psetpoints,
 }
 
 }  // end of control namespace
-}  // end of yarl namespace
+}  // namespace yarl

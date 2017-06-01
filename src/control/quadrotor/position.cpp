@@ -69,4 +69,4 @@ Vec4 PositionController::update(Vec3 setpoints,
 }
 
 }  // end of control namespace
-}  // end of yarl namespace
+}  // namespace yarl

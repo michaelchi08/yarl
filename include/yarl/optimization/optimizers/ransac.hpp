@@ -48,5 +48,5 @@ public:
   int optimize(MatX &data);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

@@ -39,4 +39,4 @@ int FastDetector::detect(const cv::Mat &image, MatX &points) {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

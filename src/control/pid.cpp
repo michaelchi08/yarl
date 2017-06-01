@@ -30,4 +30,4 @@ double PID::update(double setpoint, double actual, double dt) {
 }
 
 }  // end of control namespace
-}  // end of yarl namespace
+}  // namespace yarl

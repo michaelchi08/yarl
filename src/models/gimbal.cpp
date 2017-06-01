@@ -150,4 +150,4 @@ void GimbalModel::printState() {
   std::cout << std::setprecision(2) << this->states(3) << std::endl;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

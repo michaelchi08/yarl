@@ -14,5 +14,5 @@ double sphere(const VecX &x);
 double rosenbrock(const VecX &x, const VecX &beta);
 VecX rosenbrock_jacobian(const VecX &x, const VecX &beta);
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

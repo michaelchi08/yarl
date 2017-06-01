@@ -153,4 +153,4 @@ TEST(RANSAC, optimize) {
   // EXPECT_TRUE(ransac.model_params[1] > 8);
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

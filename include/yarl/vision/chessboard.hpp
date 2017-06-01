@@ -30,5 +30,5 @@ struct Chessboard {
   int configure(int nb_corners_columns, int nb_corners_rows);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

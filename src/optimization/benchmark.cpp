@@ -70,4 +70,4 @@ VecX rosenbrock_jacobian(const VecX &x, const VecX &beta) {
   return J;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

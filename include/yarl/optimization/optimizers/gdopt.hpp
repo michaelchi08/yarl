@@ -32,5 +32,5 @@ public:
   int optimize();
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

@@ -6,9 +6,13 @@
 
 #include <iostream>
 #include <numeric>
+#include <cerrno>
+#include <cstring>
 #include <string>
 #include <vector>
 #include <algorithm>
+
+#include "yarl/utils/log.hpp"
 
 namespace yarl {
 
@@ -19,7 +23,7 @@ std::string basefile(const std::string &path);
 std::string basedir(const std::string &path);
 
 /// Remove directory at `path`
-void rmdir(const std::string &path);
+int remove_dir(const std::string &path);
 
 /// Remove trailing slash
 void rmtrailslash(std::string &path);

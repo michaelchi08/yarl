@@ -168,4 +168,4 @@ int mat2csv(const std::string &file_path, MatX data) {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

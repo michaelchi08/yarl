@@ -2,7 +2,7 @@
 
 namespace yarl {
 
-bool TestCamera::update(double dt) {
+bool VOTestCamera::update(double dt) {
   this->dt += dt;
 
   if (this->dt > (1.0 / this->hz)) {
@@ -14,11 +14,12 @@ bool TestCamera::update(double dt) {
   return false;
 }
 
-int TestCamera::checkFeatures(double dt,
-                              const MatX &features,
-                              const Vec3 &rpy,
-                              const Vec3 &t,
-                              std::vector<std::pair<Vec2, Vec3>> &observed) {
+int VOTestCamera::checkFeatures(
+  double dt,
+  const MatX &features,
+  const Vec3 &rpy,
+  const Vec3 &t,
+  std::vector<std::pair<Vec2, Vec3>> &observed) {
   Vec3 f_2d, rpy_edn, t_edn;
   std::pair<Vec2, Vec3> obs;
   Vec4 f_3d, f_3d_edn;
@@ -75,7 +76,7 @@ int TestCamera::checkFeatures(double dt,
 }
 
 
-int TestDataset::configure(const std::string &config_file) {
+int VOTestDataset::configure(const std::string &config_file) {
   ConfigParser parser;
   double fx, fy, cx, cy;
 
@@ -133,15 +134,7 @@ static void record_observation(std::ofstream &output_file, const Vec3 &x) {
   output_file << std::endl;
 }
 
-void calculate_circle_angular_velocity(double r, double v, double &w) {
-  double dist, time;
-
-  dist = 2 * M_PI * r;
-  time = dist / v;
-  w = (2 * M_PI) / time;
-}
-
-int TestDataset::generateRandom3DFeatures(MatX &features) {
+int VOTestDataset::generateRandom3DFeatures(MatX &features) {
   Vec4 point;
 
   // pre-check
@@ -162,22 +155,19 @@ int TestDataset::generateRandom3DFeatures(MatX &features) {
   return 0;
 }
 
-int TestDataset::record3DFeatures(const std::string &output_path,
-                                  const MatX &features) {
+int VOTestDataset::record3DFeatures(const std::string &output_path,
+                                    const MatX &features) {
   return mat2csv(output_path,
                  features.block(0, 0, 3, features.cols()).transpose());
 }
 
-int TestDataset::recordObservedFeatures(
+int VOTestDataset::recordObservedFeatures(
   double time,
   const Vec3 &x,
   const std::string &output_path,
   std::vector<std::pair<Vec2, Vec3>> &observed) {
-  std::ofstream outfile(output_path);
-  Vec2 f_2d;
-  Vec3 f_3d;
-
   // open file
+  std::ofstream outfile(output_path);
   if (outfile.good() != true) {
     log_error("Failed to open file [%s] to record observed features!",
               output_path.c_str());
@@ -192,11 +182,11 @@ int TestDataset::recordObservedFeatures(
   // features
   for (auto feature : observed) {
     // feature in image frame
-    f_2d = feature.first.transpose();
+    Vec2 f_2d = feature.first.transpose();
     outfile << f_2d(0) << "," << f_2d(1) << std::endl;
 
     // feature in world frame
-    f_3d = feature.second.transpose();
+    Vec3 f_3d = feature.second.transpose();
     outfile << f_3d(0) << "," << f_3d(1) << "," << f_3d(2) << std::endl;
   }
 
@@ -206,7 +196,7 @@ int TestDataset::recordObservedFeatures(
   return 0;
 }
 
-int TestDataset::generateTestData(const std::string &save_path) {
+int VOTestDataset::generateTestData(const std::string &save_path) {
   // pre-check
   if (this->configured == false) {
     return -1;
@@ -233,30 +223,41 @@ int TestDataset::generateTestData(const std::string &save_path) {
   this->generateRandom3DFeatures(features);
   this->record3DFeatures(save_path + "/features.dat", features);
 
-  // initialize states
+  // calculate circle trajectory inputs
+  double circle_radius = 0.5;
+  double distance = 2 * M_PI * circle_radius;
+  double velocity = 1.0;
+  double t_end = distance / velocity;
+  double angular_velocity = (2 * M_PI) / t_end;
+  Vec2 u = Vec2{velocity, angular_velocity};
+
+  // simulate synthetic VO dataset
   double dt = 0.01;
   double time = 0.0;
-  double w = 0.0;
-  calculate_circle_angular_velocity(0.5, 1.0, w);
-  Vec3 x = Vec3{0.0, 0.0, 0.0};
-  Vec2 u = Vec2{1.0, w};
+  TwoWheelRobot2DModel robot{Vec3{0.0, 0.0, 0.0}};
 
   for (int i = 0; i < 300; i++) {
     // update state
-    x = two_wheel_model(x, u, dt);
+    Vec3 x = robot.update(u, dt);
     time += dt;
 
     // check features
     Vec3 rpy = Vec3{0.0, 0.0, x(2)};
     Vec3 t = Vec3{x(0), x(1), 0.0};
-
     std::vector<std::pair<Vec2, Vec3>> observed;
-    if (this->camera.checkFeatures(dt, features, rpy, t, observed) == 0) {
+
+    // convert rpy and t from NWU to EDN coordinate system
+    Vec3 rpy_edn, t_edn;
+    nwu2edn(rpy, rpy_edn);
+    nwu2edn(t, t_edn);
+
+    retval =
+      this->camera.checkFeatures(dt, features, rpy_edn, t_edn, observed);
+    if (retval == 0) {
       std::ostringstream oss;
       oss.str("");
       oss << save_path + "/observed_" << this->camera.frame << ".dat";
       this->recordObservedFeatures(time, x, oss.str(), observed);
-
       index_file << oss.str() << std::endl;
     }
 
@@ -270,4 +271,4 @@ int TestDataset::generateTestData(const std::string &save_path) {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

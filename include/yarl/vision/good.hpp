@@ -31,5 +31,5 @@ public:
   int detect(const cv::Mat &image, std::vector<cv::Point2f> &points);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

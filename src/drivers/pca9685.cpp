@@ -85,4 +85,4 @@ void PCA9685::reset() {
 }
 
 }  // end of drivers namespace
-}  // end of yarl namespace
+}  // namespace yarl

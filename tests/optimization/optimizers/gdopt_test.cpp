@@ -68,4 +68,4 @@ TEST(GDOpt, optimize) {
   EXPECT_TRUE(opt.x(1) <= 0.5);
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

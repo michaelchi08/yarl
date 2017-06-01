@@ -7,4 +7,4 @@ int llsopt_solve(const MatX &A, const MatX &b, VecX &x) {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

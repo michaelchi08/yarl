@@ -22,4 +22,4 @@ TEST(Factor, constructor) {
   // EXPECT_DOUBLE_EQ(100.0, f2.measurement);
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

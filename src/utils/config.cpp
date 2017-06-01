@@ -571,4 +571,4 @@ int ConfigParser::load(const std::string &config_file) {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

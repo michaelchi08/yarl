@@ -22,5 +22,5 @@ struct Factor {
     : arity{2}, variables{from, to} {}
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

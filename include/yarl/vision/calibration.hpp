@@ -62,5 +62,5 @@ public:
   int saveCalibrationOutputs();
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

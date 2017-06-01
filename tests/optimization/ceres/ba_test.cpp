@@ -123,4 +123,4 @@ TEST(BundleAdjustment, solve) {
   std::cout << std::endl;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

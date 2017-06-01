@@ -21,4 +21,4 @@ TEST(CeresExamples, runCurveFittingExample) {
   runCurveFittingExample();
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

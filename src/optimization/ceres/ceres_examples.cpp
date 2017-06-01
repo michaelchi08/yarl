@@ -141,4 +141,4 @@ void runCurveFittingExample() {
   std::cout << "Final   m: " << m << " c: " << c << "\n";
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

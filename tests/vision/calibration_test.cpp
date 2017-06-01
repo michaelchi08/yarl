@@ -114,4 +114,4 @@ TEST(Calibration, saveImage) {
 //   EXPECT_TRUE(yaml_file.good());
 // }
 
-}  // end of yarl namespace
+}  // namespace yarl

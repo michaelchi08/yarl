@@ -127,5 +127,5 @@ double closest_point(const Vec2 &p1,
                      Vec2 &closest);
 Vec2 linear_interpolation(const Vec2 &a, const Vec2 &b, double mu);
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

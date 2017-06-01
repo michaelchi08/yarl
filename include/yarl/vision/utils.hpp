@@ -51,5 +51,5 @@ void cvpts2mat(const std::vector<cv::Point2f> &points, MatX &mat);
  */
 void projection_matrix(const Mat3 &K, const Mat3 &R, const Vec3 &t, MatX &P);
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

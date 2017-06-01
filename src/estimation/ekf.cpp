@@ -35,4 +35,4 @@ int EKF::measurementUpdate(const VecX &h, const MatX &H, const VecX &y) {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

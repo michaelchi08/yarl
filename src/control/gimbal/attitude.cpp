@@ -26,4 +26,4 @@ VecX AttitudeController::update(const Vec3 &setpoints,
 }
 
 }  // end of control namespace
-}  // end of yarl namespace
+}  // namespace yarl

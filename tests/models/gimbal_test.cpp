@@ -335,4 +335,4 @@ TEST(GimbalModel, trackTarget) {
 }
 
 }  // end of models namespace
-}  // end of yarl namespace
+}  // namespace yarl

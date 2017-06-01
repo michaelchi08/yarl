@@ -11,7 +11,7 @@
 
 namespace yarl {
 
-class TestCamera {
+class VOTestCamera {
 public:
   int image_width;
   int image_height;
@@ -21,7 +21,7 @@ public:
   double dt;
   int frame;
 
-  TestCamera()
+  VOTestCamera()
     : image_width(-1), image_height(-1), K(), hz(-1), dt(0), frame(-1) {}
 
   bool update(double dt);
@@ -32,17 +32,17 @@ public:
                     std::vector<std::pair<Vec2, Vec3>> &observed);
 };
 
-class TestDataset {
+class VOTestDataset {
 public:
   bool configured;
 
-  TestCamera camera;
+  VOTestCamera camera;
   int nb_features;
   Vec2 feature_x_bounds;
   Vec2 feature_y_bounds;
   Vec2 feature_z_bounds;
 
-  TestDataset()
+  VOTestDataset()
     : configured(false),
       camera(),
       nb_features(-1),
@@ -60,5 +60,5 @@ public:
   int generateTestData(const std::string &output_path);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

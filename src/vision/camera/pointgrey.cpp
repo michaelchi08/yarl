@@ -456,4 +456,4 @@ int PointGreyCamera::run(void) {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

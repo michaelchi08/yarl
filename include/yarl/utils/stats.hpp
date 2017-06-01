@@ -13,5 +13,5 @@ int linreg(const std::vector<Eigen::Vector2d> &pts,
            double &b,
            double &r);
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

@@ -70,5 +70,5 @@ public:
   void printState();
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

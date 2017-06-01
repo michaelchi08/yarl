@@ -40,5 +40,5 @@ struct LandmarkVar : FactorVariable {
   LandmarkVar(size_t id) : FactorVariable{id, 3} {}
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

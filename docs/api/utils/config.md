@@ -42,7 +42,7 @@ The `yarl/utils/config.hpp` contains a useful `ConfigParser` class to simplify p
         CVMAT = 35
     };
 
-    }  // end of yarl namespace
+    }  // namespace yarl
 
 The `ConfigDataType` is an enum used by `ConfigParam` to denote the yaml value
 type. At current we support parsing of the following data types:
@@ -70,7 +70,7 @@ type. At current we support parsing of the following data types:
         ConfigParam();
     };
 
-    }  // end of yarl namespace
+    }  // namespace yarl
 
 Each parameter to be parsed in the yaml file is represented by a `ConfigParam`,
 where:
@@ -153,7 +153,7 @@ By default an instance of `ConfigParam` will have:
       int load(const std::string &config_file);
     };
 
-    }  // end of yarl namespace
+    }  // namespace yarl
 
 ### Constructor
 

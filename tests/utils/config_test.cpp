@@ -502,4 +502,4 @@ TEST(ConfigParser, load) {
   std::cout << std::endl;
 }
 
-}  // end of  yarl namespace
+}  // end of  namespace yarl

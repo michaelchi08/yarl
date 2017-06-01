@@ -3,12 +3,12 @@
 #include "yarl/vision/fast.hpp"
 #include "yarl/vision/utils.hpp"
 
-#define TEST_IMAGE_1 "tests/data/vo/left.jpg"
-#define TEST_IMAGE_2 "tests/data/vo/right.jpg"
-#define TEST_FRAME_1 "tests/data/vo/frame_1.jpg"
-#define TEST_FRAME_2 "tests/data/vo/frame_2.jpg"
-
 namespace yarl {
+
+const std::string TEST_IMAGE_1 = "tests/data/vo/left.jpg";
+const std::string TEST_IMAGE_2 = "tests/data/vo/right.jpg";
+const std::string TEST_FRAME_1 = "tests/data/vo/frame_1.jpg";
+const std::string TEST_FRAME_2 = "tests/data/vo/frame_2.jpg";
 
 // TEST(VisualOdometry, constructor) {
 //   VisualOdometry vo;
@@ -217,4 +217,4 @@ namespace yarl {
 //     // cv::waitKey(0);
 // }
 
-}  // end of yarl namespace
+}  // namespace yarl

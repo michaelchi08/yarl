@@ -44,4 +44,4 @@ TEST(GimbalAttitudeController, calculate) {
 }
 
 }  // end of gimbal namespace
-}  // end of yarl namespace
+}  // namespace yarl

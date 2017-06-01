@@ -55,5 +55,5 @@ public:
   int estimate(const MatX &A, const VecX &y);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

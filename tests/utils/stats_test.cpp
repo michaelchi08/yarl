@@ -29,4 +29,4 @@ TEST(Utils, linreg) {
   std::cout << "r: " << r << std::endl;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

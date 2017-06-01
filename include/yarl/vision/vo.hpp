@@ -38,5 +38,5 @@ public:
                       cv::Mat &output);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

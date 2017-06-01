@@ -142,4 +142,4 @@ int VisualOdometry::drawOpticalFlow(cv::Mat img_1,
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

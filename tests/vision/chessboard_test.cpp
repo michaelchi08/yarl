@@ -27,4 +27,4 @@ TEST(Chessboard, configure) {
   EXPECT_EQ(cv::Size(1, 2), chessboard.board_size);
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

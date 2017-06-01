@@ -39,5 +39,5 @@ struct EKF {
   int measurementUpdate(const VecX &h, const MatX &H, const VecX &y);
 };
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

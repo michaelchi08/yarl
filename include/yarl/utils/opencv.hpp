@@ -9,5 +9,5 @@ namespace yarl {
 
 bool cvMatIsEqual(const cv::Mat &m1, const cv::Mat &m2);
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

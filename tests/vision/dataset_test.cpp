@@ -6,8 +6,8 @@ namespace yarl {
 const std::string TEST_CONFIG = "tests/data/vision/dataset/vo_test.xml";
 const std::string TEST_OUTPUT = "/tmp/dataset_test";
 
-TEST(TestCamera, constructor) {
-  TestCamera camera;
+TEST(VOTestCamera, constructor) {
+  VOTestCamera camera;
 
   EXPECT_EQ(-1, camera.image_width);
   EXPECT_EQ(-1, camera.image_height);
@@ -17,8 +17,8 @@ TEST(TestCamera, constructor) {
   EXPECT_EQ(-1, camera.frame);
 }
 
-TEST(TestCamera, update) {
-  TestCamera camera;
+TEST(VOTestCamera, update) {
+  VOTestCamera camera;
   bool retval;
 
   // setup
@@ -31,8 +31,8 @@ TEST(TestCamera, update) {
   EXPECT_FLOAT_EQ(0.0, camera.dt);
 }
 
-TEST(TestCamera, checkFeatures) {
-  TestCamera camera;
+TEST(VOTestCamera, checkFeatures) {
+  VOTestCamera camera;
   MatX features;
   Vec3 rpy;
   Vec3 t;
@@ -57,15 +57,15 @@ TEST(TestCamera, checkFeatures) {
   camera.checkFeatures(0.1, features, rpy, t, observed);
 }
 
-TEST(TestDataset, constructor) {
-  TestDataset dataset;
+TEST(VOTestDataset, constructor) {
+  VOTestDataset dataset;
 
   EXPECT_EQ(-1, dataset.camera.image_width);
   EXPECT_EQ(-1, dataset.camera.image_height);
 }
 
-TEST(TestDataset, configure) {
-  TestDataset dataset;
+TEST(VOTestDataset, configure) {
+  VOTestDataset dataset;
   int retval;
 
   retval = dataset.configure(TEST_CONFIG);
@@ -78,14 +78,14 @@ TEST(TestDataset, configure) {
   EXPECT_FLOAT_EQ(0.0, dataset.camera.K(2, 1));
 }
 
-TEST(TestDataset, generateTestData) {
-  TestDataset dataset;
+TEST(VOTestDataset, generateTestData) {
+  VOTestDataset dataset;
 
-  rmdir(TEST_OUTPUT);
+  remove_dir(TEST_OUTPUT);
   dataset.configure(TEST_CONFIG);
   // int retval = dataset.generateTestData(TEST_OUTPUT);
 
   // EXPECT_EQ(0, retval);
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

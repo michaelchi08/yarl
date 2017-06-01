@@ -177,5 +177,5 @@ inline void EigenQuaternionProduct(const T z[4], const T w[4], T zw[4]) {
 
 }  // end of extensions namespace
 }  // end of ceres namespace
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

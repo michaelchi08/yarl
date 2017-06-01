@@ -46,5 +46,5 @@ public:
 };
 
 }  // end of control namespace
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

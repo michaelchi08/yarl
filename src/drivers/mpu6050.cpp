@@ -492,4 +492,4 @@ int MPU6050::record(std::string output_path, int nb_samples) {
 }
 
 }  // end of drivers namespace
-}  // end of yarl namespace
+}  // namespace yarl

@@ -141,4 +141,4 @@ int RANSAC::optimize(MatX &data) {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

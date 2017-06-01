@@ -125,4 +125,4 @@ int LMAOpt::optimize() {
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

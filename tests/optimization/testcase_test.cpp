@@ -131,4 +131,4 @@ TEST(TestCase, generateTestCase) {
   mat2csv("/tmp/pts3d.dat", pts3d);
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

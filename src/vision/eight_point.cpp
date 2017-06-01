@@ -249,4 +249,4 @@ int EightPoint::obtainPose(Vec3 &pt1,
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

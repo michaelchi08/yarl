@@ -274,5 +274,5 @@ public:
 };
 
 }  // end of ceres namespace
-}  // end of yarl namespace
+}  // namespace yarl
 #endif

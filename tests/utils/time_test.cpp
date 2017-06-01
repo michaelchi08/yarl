@@ -14,4 +14,4 @@ TEST(Utils, ticAndToc) {
   EXPECT_TRUE(mtoc(&start) > 9.0);
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

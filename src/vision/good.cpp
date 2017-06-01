@@ -20,4 +20,4 @@ int GoodDetector::detect(const cv::Mat &image,
   return 0;
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

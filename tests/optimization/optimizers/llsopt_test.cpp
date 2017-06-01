@@ -20,4 +20,4 @@ TEST(lls, solve) {
   EXPECT_FLOAT_EQ(x(1), 1.4);
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

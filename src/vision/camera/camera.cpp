@@ -187,4 +187,4 @@ int Camera::showImage(cv::Mat &image) {
   }
 }
 
-}  // end of yarl namespace
+}  // namespace yarl

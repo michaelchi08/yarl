@@ -69,5 +69,5 @@ void runNumericalDiffExample();
 void runAnalyticalDiffExample();
 void runCurveFittingExample();
 
-}  // end of yarl namespace
+}  // namespace yarl
 #endif
