@@ -10,6 +10,21 @@ std::string basedir(const std::string &path) {
   return path.substr(0, path.find_last_of("\\/"));
 }
 
+void rmdir(const std::string &path) {
+  DIR *dir = opendir(path.c_str());
+  struct dirent *next_file;
+  char filepath[256];
+
+  while ((next_file = readdir(dir)) != NULL) {
+    // build the path for each file in the folder
+    sprintf(filepath, "%s/%s", path.c_str(), next_file->d_name);
+    remove(filepath);
+  }
+
+  remove(path.c_str());
+  closedir(dir);
+}
+
 void rmtrailslash(std::string &path) {
   // pre-check
   if (path.length() <= 0) {

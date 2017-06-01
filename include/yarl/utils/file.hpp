@@ -2,6 +2,7 @@
 #define YARL_UTILS_FILESYSTEM_HPP
 
 #include <stdio.h>
+#include <dirent.h>
 
 #include <iostream>
 #include <numeric>
@@ -16,6 +17,9 @@ std::string basefile(const std::string &path);
 
 /// Extract dir name from `path`
 std::string basedir(const std::string &path);
+
+/// Remove directory at `path`
+void rmdir(const std::string &path);
 
 /// Remove trailing slash
 void rmtrailslash(std::string &path);

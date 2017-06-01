@@ -20,6 +20,7 @@ void runAutoDiffExample() {
   ceres::Solver::Options options;
   options.linear_solver_type = ceres::DENSE_QR;
   options.minimizer_progress_to_stdout = true;
+
   ceres::Solver::Summary summary;
   ceres::Solve(options, &problem, &summary);
 

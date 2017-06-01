@@ -6,18 +6,14 @@ int Calibration::configure(const std::string &save_path,
                            const Chessboard &chessboard,
                            const cv::Size &image_size,
                            int nb_max_samples) {
-  int retval;
-
   // setup
   std::string calib_dir = rmtrailslash(save_path);
 
   // mkdir calibration directory
-  retval = mkdir(calib_dir.c_str(), ACCESSPERMS);
+  int retval = mkdir(calib_dir.c_str(), ACCESSPERMS);
   if (retval != 0) {
     switch (errno) {
-      case EACCES:
-        log_error(MKDIR_PERMISSION_DENIED, save_path.c_str());
-        break;
+      case EACCES: log_error(MKDIR_PERMISSION, save_path.c_str()); break;
       case ENOTDIR: log_error(MKDIR_INVALID, save_path.c_str()); break;
       case EEXIST: log_error(MKDIR_EXISTS, save_path.c_str()); break;
       default: log_error(MKDIR_FAILED, save_path.c_str()); break;

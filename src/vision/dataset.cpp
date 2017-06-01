@@ -207,28 +207,16 @@ int TestDataset::recordObservedFeatures(
 }
 
 int TestDataset::generateTestData(const std::string &save_path) {
-  int retval;
-  Vec3 x, t, rpy;
-  Vec2 u;
-  MatX features;
-  double w, dt, time;
-  std::ofstream output_file;
-  std::ofstream index_file;
-  std::vector<std::pair<Vec2, Vec3>> observed;
-  std::ostringstream oss;
-
   // pre-check
   if (this->configured == false) {
     return -1;
   }
 
   // mkdir calibration directory
-  retval = mkdir(save_path.c_str(), ACCESSPERMS);
+  int retval = mkdir(save_path.c_str(), ACCESSPERMS);
   if (retval != 0) {
     switch (errno) {
-      case EACCES:
-        log_error(MKDIR_PERMISSION_DENIED, save_path.c_str());
-        break;
+      case EACCES: log_error(MKDIR_PERMISSION, save_path.c_str()); break;
       case ENOTDIR: log_error(MKDIR_INVALID, save_path.c_str()); break;
       case EEXIST: log_error(MKDIR_EXISTS, save_path.c_str()); break;
       default: log_error(MKDIR_FAILED, save_path.c_str()); break;
@@ -237,18 +225,21 @@ int TestDataset::generateTestData(const std::string &save_path) {
   }
 
   // setup
-  output_file.open(save_path + "/state.dat");
+  std::ofstream output_file(save_path + "/state.dat");
+  std::ofstream index_file(save_path + "/index.dat");
   prep_header(output_file);
-  index_file.open(save_path + "/index.dat");
-  calculate_circle_angular_velocity(0.5, 1.0, w);
+
+  MatX features;
   this->generateRandom3DFeatures(features);
-  this->record3DFeatures("/tmp/test/features.dat", features);
+  this->record3DFeatures(save_path + "/features.dat", features);
 
   // initialize states
-  dt = 0.01;
-  time = 0.0;
-  x << 0.0, 0.0, 0.0;
-  u << 1.0, w;
+  double dt = 0.01;
+  double time = 0.0;
+  double w = 0.0;
+  calculate_circle_angular_velocity(0.5, 1.0, w);
+  Vec3 x = Vec3{0.0, 0.0, 0.0};
+  Vec2 u = Vec2{1.0, w};
 
   for (int i = 0; i < 300; i++) {
     // update state
@@ -256,11 +247,14 @@ int TestDataset::generateTestData(const std::string &save_path) {
     time += dt;
 
     // check features
-    rpy << 0.0, 0.0, x(2);
-    t << x(0), x(1), 0.0;
+    Vec3 rpy = Vec3{0.0, 0.0, x(2)};
+    Vec3 t = Vec3{x(0), x(1), 0.0};
+
+    std::vector<std::pair<Vec2, Vec3>> observed;
     if (this->camera.checkFeatures(dt, features, rpy, t, observed) == 0) {
+      std::ostringstream oss;
       oss.str("");
-      oss << "/tmp/test/observed_" << this->camera.frame << ".dat";
+      oss << save_path + "/observed_" << this->camera.frame << ".dat";
       this->recordObservedFeatures(time, x, oss.str(), observed);
 
       index_file << oss.str() << std::endl;

@@ -12,7 +12,7 @@
 #include "yarl/utils/time.hpp"
 
 // ERROR MESSAGES
-#define MKDIR_PERMISSION_DENIED "Permission denied! Failed to mkdir [%s]!"
+#define MKDIR_PERMISSION "Permission denied! Failed to mkdir [%s]!"
 #define MKDIR_INVALID "[%s] is not a dir!"
 #define MKDIR_EXISTS "[%s] already exists!"
 #define MKDIR_FAILED "Failed to create [%s]!"
