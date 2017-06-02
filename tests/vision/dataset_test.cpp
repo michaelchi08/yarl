@@ -9,12 +9,12 @@ const std::string TEST_OUTPUT = "/tmp/dataset_test";
 TEST(VOTestCamera, constructor) {
   VOTestCamera camera;
 
-  EXPECT_EQ(-1, camera.image_width);
-  EXPECT_EQ(-1, camera.image_height);
-  EXPECT_EQ(-1, camera.hz);
+  EXPECT_EQ(0, camera.image_width);
+  EXPECT_EQ(0, camera.image_height);
+  EXPECT_EQ(0, camera.hz);
 
   EXPECT_EQ(0, camera.dt);
-  EXPECT_EQ(-1, camera.frame);
+  EXPECT_EQ(0, camera.frame);
 }
 
 TEST(VOTestCamera, update) {
@@ -27,7 +27,7 @@ TEST(VOTestCamera, update) {
   // test
   retval = camera.update(0.1);
   EXPECT_TRUE(retval);
-  EXPECT_EQ(0, camera.frame);
+  EXPECT_EQ(1, camera.frame);
   EXPECT_FLOAT_EQ(0.0, camera.dt);
 }
 
@@ -60,8 +60,8 @@ TEST(VOTestCamera, checkFeatures) {
 TEST(VOTestDataset, constructor) {
   VOTestDataset dataset;
 
-  EXPECT_EQ(-1, dataset.camera.image_width);
-  EXPECT_EQ(-1, dataset.camera.image_height);
+  EXPECT_EQ(0, dataset.camera.image_width);
+  EXPECT_EQ(0, dataset.camera.image_height);
 }
 
 TEST(VOTestDataset, configure) {
