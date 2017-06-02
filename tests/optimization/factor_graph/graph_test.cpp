@@ -4,36 +4,29 @@
 
 namespace yarl {
 
-// TEST(FactorGraph, addUnaryFactor) {
-//   FactorGraph graph;
-//   graph.addUnaryFactor<PoseVar, double>(1, 2.0);
-//   graph.addUnaryFactor<PoseVar, int>(1, 1);
-//
-//   EXPECT_EQ(2u, graph.graph.size());
-//   EXPECT_EQ(2u, graph.factors.size());
-// }
+TEST(FactorGraph, addVariable) {
+  FactorGraph graph;
+  auto var1 = new Pose3dVar(1);
+  auto var2 = new Pose3dVar(2);
 
-// TEST(FactorGraph, addBinaryFactor) {
-//   FactorGraph graph;
-//
-//   graph.addBinaryFactor<PoseVar, PoseVar, double>(1, 2, 2);
-//   EXPECT_EQ(2u, graph.graph.size());
-//   EXPECT_EQ(1u, graph.factors.size());
-// }
-//
-// TEST(FactorGraph, print) {
-//   FactorGraph graph;
-//
-//   graph.addUnaryFactor<PoseVar, int>(1, 1);
-//   graph.addBinaryFactor<PoseVar, PoseVar, int>(2, 3, 2);
-//   graph.addBinaryFactor<PoseVar, PoseVar, int>(3, 4, 3);
-//
-//   Vec2 z;
-//   z << 100.0, 200.0;
-//   graph.addBinaryFactor<PoseVar, PoseVar, Vec2>(1, 2, z);
-//   graph.addBinaryFactor<PoseVar, PoseVar, Vec2>(2, 3, z);
-//
-//   graph.print();
-// }
+  graph.addVariable(var1);
+  graph.addVariable(var2);
+
+  EXPECT_EQ(0u, graph.factors.size());
+  EXPECT_EQ(2u, graph.variables.size());
+}
+
+TEST(FactorGraph, addFactor) {
+  FactorGraph graph;
+  MatX m;
+  auto var1 = new Pose3dVar(1);
+  auto var2 = new Point3dVar(2);
+  auto vo_factor = new MonoVOFactor{var1, var2, m};
+
+  graph.addFactor(vo_factor);
+
+  EXPECT_EQ(1u, graph.factors.size());
+  EXPECT_EQ(2u, graph.variables.size());
+}
 
 }  // namespace yarl

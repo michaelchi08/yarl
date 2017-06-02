@@ -20,31 +20,24 @@ int VOTestCamera::checkFeatures(
   const Vec3 &rpy,
   const Vec3 &t,
   std::vector<std::pair<Vec2, Vec3>> &observed) {
-  Vec3 f_2d, rpy_edn, t_edn;
-  std::pair<Vec2, Vec3> obs;
-  Vec4 f_3d, f_3d_edn;
-  Mat3 R;
-  MatX P;
-
   // pre-check
   if (this->update(dt) == false) {
     return 1;
   }
 
-  // rotation matrix - convert from nwu to edn then to rotation matrix R
-  nwu2edn(rpy, rpy_edn);
-  euler2rot(rpy_edn, 123, R);
-
-  // translation - convert translation from nwu to edn
-  nwu2edn(t, t_edn);
+  // create rotation matrix from roll pitch yaw (EDN)
+  Mat3 R;
+  euler2rot(rpy, 123, R);
 
   // projection matrix
-  projection_matrix(this->K, R, -R * t_edn, P);
+  MatX P;
+  projection_matrix(this->K, R, -R * t, P);
 
   // check which features in 3d are observable from camera
   observed.clear();
   for (int i = 0; i < features.cols(); i++) {
     // convert feature in NWU to EDN coordinate system
+    Vec4 f_3d, f_3d_edn;
     f_3d = features.block(0, i, 4, 1);
     f_3d_edn(0) = -f_3d(1);
     f_3d_edn(1) = -f_3d(2);
@@ -52,7 +45,7 @@ int VOTestCamera::checkFeatures(
     f_3d_edn(3) = 1.0;
 
     // project 3D world point to 2D image plane
-    f_2d = P * f_3d_edn;
+    Vec3 f_2d = P * f_3d_edn;
 
     // check to see if feature is valid and infront of camera
     if (f_2d(2) >= 1.0) {
@@ -64,9 +57,8 @@ int VOTestCamera::checkFeatures(
       // check to see if feature observed is within image plane
       if ((f_2d(0) < this->image_width) && (f_2d(0) > 0)) {
         if ((f_2d(1) < this->image_height) && (f_2d(1) > 0)) {
-          obs =
-            std::make_pair(f_2d.block(0, 0, 2, 1), f_3d.block(0, 0, 3, 1));
-          observed.push_back(obs);
+          observed.push_back(
+            {f_2d.block(0, 0, 2, 1), f_3d.block(0, 0, 3, 1)});
         }
       }
     }
@@ -117,7 +109,7 @@ int VOTestDataset::configure(const std::string &config_file) {
   return 0;
 }
 
-static void prep_header(std::ofstream &output_file) {
+void VOTestDataset::prepHeader(std::ofstream &output_file) {
   // clang-format off
   output_file << "time_step" << ",";
   output_file << "x" << ",";
@@ -125,13 +117,6 @@ static void prep_header(std::ofstream &output_file) {
   output_file << "theta" << ",";
   output_file << std::endl;
   // clang-format on
-}
-
-static void record_observation(std::ofstream &output_file, const Vec3 &x) {
-  output_file << x(0) << ",";
-  output_file << x(1) << ",";
-  output_file << x(2) << ",";
-  output_file << std::endl;
 }
 
 int VOTestDataset::generateRandom3DFeatures(MatX &features) {
@@ -196,6 +181,16 @@ int VOTestDataset::recordObservedFeatures(
   return 0;
 }
 
+int VOTestDataset::recordRobotState(std::ofstream &output_file,
+                                    const Vec3 &x) {
+  output_file << x(0) << ",";
+  output_file << x(1) << ",";
+  output_file << x(2) << ",";
+  output_file << std::endl;
+
+  return 0;
+}
+
 int VOTestDataset::generateTestData(const std::string &save_path) {
   // pre-check
   if (this->configured == false) {
@@ -217,7 +212,7 @@ int VOTestDataset::generateTestData(const std::string &save_path) {
   // setup
   std::ofstream output_file(save_path + "/state.dat");
   std::ofstream index_file(save_path + "/index.dat");
-  prep_header(output_file);
+  this->prepHeader(output_file);
 
   MatX features;
   this->generateRandom3DFeatures(features);
@@ -262,7 +257,7 @@ int VOTestDataset::generateTestData(const std::string &save_path) {
     }
 
     // record state
-    record_observation(output_file, x);
+    this->recordRobotState(output_file, x);
   }
 
   // clean up
