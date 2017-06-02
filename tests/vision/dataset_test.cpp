@@ -78,14 +78,23 @@ TEST(VOTestDataset, configure) {
   EXPECT_FLOAT_EQ(0.0, dataset.camera.K(2, 1));
 }
 
+TEST(VOTestDataset, simulateVODataset) {
+  VOTestDataset dataset;
+
+  remove_dir(TEST_OUTPUT);
+  dataset.configure(TEST_CONFIG);
+  int retval = dataset.simulateVODataset();
+
+  EXPECT_EQ(0, retval);
+}
+
 TEST(VOTestDataset, generateTestData) {
   VOTestDataset dataset;
 
   remove_dir(TEST_OUTPUT);
   dataset.configure(TEST_CONFIG);
-  // int retval = dataset.generateTestData(TEST_OUTPUT);
-
-  // EXPECT_EQ(0, retval);
+  int retval = dataset.generateTestData(TEST_OUTPUT);
+  EXPECT_EQ(0, retval);
 }
 
 }  // namespace yarl

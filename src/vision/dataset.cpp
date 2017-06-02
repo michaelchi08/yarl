@@ -109,16 +109,6 @@ int VOTestDataset::configure(const std::string &config_file) {
   return 0;
 }
 
-void VOTestDataset::prepHeader(std::ofstream &output_file) {
-  // clang-format off
-  output_file << "time_step" << ",";
-  output_file << "x" << ",";
-  output_file << "y" << ",";
-  output_file << "theta" << ",";
-  output_file << std::endl;
-  // clang-format on
-}
-
 int VOTestDataset::generateRandom3DFeatures(MatX &features) {
   Vec4 point;
 
@@ -140,83 +130,128 @@ int VOTestDataset::generateRandom3DFeatures(MatX &features) {
   return 0;
 }
 
-int VOTestDataset::record3DFeatures(const std::string &output_path,
-                                    const MatX &features) {
-  return mat2csv(output_path,
-                 features.block(0, 0, 3, features.cols()).transpose());
-}
-
-int VOTestDataset::recordObservedFeatures(
-  double time,
-  const Vec3 &x,
-  const std::string &output_path,
-  std::vector<std::pair<Vec2, Vec3>> &observed) {
-  // open file
-  std::ofstream outfile(output_path);
-  if (outfile.good() != true) {
-    log_error("Failed to open file [%s] to record observed features!",
-              output_path.c_str());
+int VOTestDataset::output3DFeatures(const std::string &output_path) {
+  // pre-check
+  if (this->configured == false) {
     return -1;
+  } else if (this->features_world.cols() != this->nb_features) {
+    return -2;
   }
 
-  // time and number of observed features
-  outfile << time << std::endl;
-  outfile << observed.size() << std::endl;
-  outfile << x(0) << "," << x(1) << "," << x(2) << std::endl;
+  // output 3D features to file
+  int nb_features = this->features_world.cols();
+  MatX features =
+    this->features_world.block(0, 0, 3, nb_features).transpose();
+  if (mat2csv(output_path, features) != 0) {
+    return -2;
+  }
 
-  // features
-  for (auto feature : observed) {
-    // feature in image frame
-    Vec2 f_2d = feature.first.transpose();
-    outfile << f_2d(0) << "," << f_2d(1) << std::endl;
+  return 0;
+}
 
-    // feature in world frame
-    Vec3 f_3d = feature.second.transpose();
-    outfile << f_3d(0) << "," << f_3d(1) << "," << f_3d(2) << std::endl;
+int VOTestDataset::outputObservedFeatures(const std::string &output_dir) {
+  // pre-check
+  if (this->configured == false) {
+    return -1;
+  } else if (this->features_observed.size() == 0) {
+    return -2;
+  }
+
+  // output observed features
+  int index = 0;
+  std::ofstream index_file(output_dir + "/index.dat");
+
+  for (auto observed : this->features_observed) {
+    // build observed file path
+    std::ostringstream oss("");
+    oss << output_dir + "/observed_" << index << ".dat";
+    std::string obs_path = oss.str();
+
+    // create observed features file
+    std::ofstream obs_file(obs_path);
+    if (obs_file.good() != true) {
+      log_error("Failed to open [%s] to output observed features!",
+                obs_path.c_str());
+      return -2;
+    }
+
+    // output header
+    auto state = this->robot_state[index];
+    double time = state.first;
+    Vec3 x = state.second;
+    // clang-format off
+    obs_file << time << std::endl;             // time
+    obs_file << observed.size() << std::endl;  // number of features
+    obs_file << x(0) << "," << x(1) << "," << x(2) << std::endl;  // robot pose
+    // clang-format on
+
+    // output features
+    for (auto feature : observed) {
+      // feature in image frame
+      Vec2 f_2d = feature.first.transpose();
+      obs_file << f_2d(0) << "," << f_2d(1) << std::endl;
+
+      // feature in world frame
+      Vec3 f_3d = feature.second.transpose();
+      obs_file << f_3d(0) << "," << f_3d(1) << "," << f_3d(2) << std::endl;
+    }
+
+    // clean up and record features observed file path to index
+    obs_file.close();
+    index_file << oss.str() << std::endl;
+    index++;
   }
 
   // clean up
-  outfile.close();
+  index_file.close();
 
   return 0;
 }
 
-int VOTestDataset::recordRobotState(std::ofstream &output_file,
-                                    const Vec3 &x) {
-  output_file << x(0) << ",";
-  output_file << x(1) << ",";
-  output_file << x(2) << ",";
-  output_file << std::endl;
+int VOTestDataset::outputRobotState(const std::string &save_path) {
+  // pre-check
+  if (this->configured == false) {
+    return -1;
+  } else if (this->robot_state.size() == 0) {
+    return -2;
+  }
+
+  // setup
+  std::ofstream state_file(save_path);
+
+  // state header
+  // clang-format off
+  state_file << "time_step" << ",";
+  state_file << "x" << ",";
+  state_file << "y" << ",";
+  state_file << "theta" << ",";
+  state_file << std::endl;
+  // clang-format on
+
+  // output robot state
+  for (auto state : this->robot_state) {
+    double t = state.first;
+    Vec3 x = state.second;
+
+    state_file << t << ",";
+    state_file << x(0) << ",";
+    state_file << x(1) << ",";
+    state_file << x(2) << ",";
+    state_file << std::endl;
+  }
+  state_file.close();
 
   return 0;
 }
 
-int VOTestDataset::generateTestData(const std::string &save_path) {
+int VOTestDataset::simulateVODataset() {
   // pre-check
   if (this->configured == false) {
     return -1;
   }
 
-  // mkdir calibration directory
-  int retval = mkdir(save_path.c_str(), ACCESSPERMS);
-  if (retval != 0) {
-    switch (errno) {
-      case EACCES: log_error(MKDIR_PERMISSION, save_path.c_str()); break;
-      case ENOTDIR: log_error(MKDIR_INVALID, save_path.c_str()); break;
-      case EEXIST: log_error(MKDIR_EXISTS, save_path.c_str()); break;
-      default: log_error(MKDIR_FAILED, save_path.c_str()); break;
-    }
-    return -2;
-  }
-
-  // setup
-  std::ofstream output_file(save_path + "/state.dat");
-  std::ofstream index_file(save_path + "/index.dat");
-  this->prepHeader(output_file);
-
-  MatX features;
-  this->generateRandom3DFeatures(features);
-  this->record3DFeatures(save_path + "/features.dat", features);
+  // generate random 3D features
+  this->generateRandom3DFeatures(this->features_world);
 
   // calculate circle trajectory inputs
   double circle_radius = 0.5;
@@ -235,6 +270,7 @@ int VOTestDataset::generateTestData(const std::string &save_path) {
     // update state
     Vec3 x = robot.update(u, dt);
     time += dt;
+    std::cout << time << std::endl;
 
     // check features
     Vec3 rpy = Vec3{0.0, 0.0, x(2)};
@@ -246,24 +282,44 @@ int VOTestDataset::generateTestData(const std::string &save_path) {
     nwu2edn(rpy, rpy_edn);
     nwu2edn(t, t_edn);
 
-    retval =
-      this->camera.checkFeatures(dt, features, rpy_edn, t_edn, observed);
+    int retval = this->camera.checkFeatures(
+      dt, this->features_world, rpy_edn, t_edn, observed);
     if (retval == 0) {
-      std::ostringstream oss;
-      oss.str("");
-      oss << save_path + "/observed_" << this->camera.frame << ".dat";
-      this->recordObservedFeatures(time, x, oss.str(), observed);
-      index_file << oss.str() << std::endl;
+      this->robot_state.push_back({time, x});
+      this->features_observed.push_back(observed);
     }
-
-    // record state
-    this->recordRobotState(output_file, x);
   }
 
-  // clean up
-  output_file.close();
-  index_file.close();
   return 0;
+}
+
+int VOTestDataset::generateTestData(const std::string &output_dir) {
+  // pre-check
+  if (this->configured == false) {
+    return -1;
+  }
+
+  // mkdir calibration directory
+  int retval = mkdir(output_dir.c_str(), ACCESSPERMS);
+  if (retval != 0) {
+    switch (errno) {
+      case EACCES: log_error(MKDIR_PERMISSION, output_dir.c_str()); break;
+      case ENOTDIR: log_error(MKDIR_INVALID, output_dir.c_str()); break;
+      case EEXIST: log_error(MKDIR_EXISTS, output_dir.c_str()); break;
+      default: log_error(MKDIR_FAILED, output_dir.c_str()); break;
+    }
+    return -2;
+  }
+
+  // output synthetic vo dataset
+  this->simulateVODataset();
+  check(this->output3DFeatures(output_dir + "/features.dat") == 0, error);
+  check(this->outputRobotState(output_dir + "/state.dat") == 0, error);
+  check(this->outputObservedFeatures(output_dir) == 0, error);
+
+  return 0;
+error:
+  return -3;
 }
 
 }  // namespace yarl

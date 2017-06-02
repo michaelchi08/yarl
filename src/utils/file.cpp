@@ -17,7 +17,8 @@ int remove_dir(const std::string &path) {
 
   // pre-check
   if (dir == NULL) {
-    log_error("Failed to rmdir [%s]: %s", path.c_str(), std::strerror(errno));
+    // log_error("Failed to rmdir [%s]: %s", path.c_str(),
+    // std::strerror(errno));
     return -1;
   }
 

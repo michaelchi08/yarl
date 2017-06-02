@@ -23,4 +23,10 @@
     (void) (expr);   \
   } while (0)
 
+
+#define check(A, E) \
+  if (!(A)) {       \
+    goto E;         \
+  }
+
 #endif

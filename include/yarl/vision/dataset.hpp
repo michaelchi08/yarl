@@ -44,17 +44,18 @@ public:
   Vec2 feature_y_bounds = Vec2::Zero();
   Vec2 feature_z_bounds = Vec2::Zero();
 
+  MatX features_world = MatX::Zero(1, 1);
+  std::vector<std::pair<double, Vec3>> robot_state;
+  std::vector<std::vector<std::pair<Vec2, Vec3>>> features_observed;
+
   VOTestDataset() {}
 
   int configure(const std::string &config_file);
-  void prepHeader(std::ofstream &output_file);
   int generateRandom3DFeatures(MatX &features);
-  int record3DFeatures(const std::string &output_path, const MatX &features);
-  int recordObservedFeatures(double time,
-                             const Vec3 &x,
-                             const std::string &output_path,
-                             std::vector<std::pair<Vec2, Vec3>> &observed);
-  int recordRobotState(std::ofstream &output_file, const Vec3 &x);
+  int output3DFeatures(const std::string &output_path);
+  int outputObservedFeatures(const std::string &output_path);
+  int outputRobotState(const std::string &output_dir);
+  int simulateVODataset();
   int generateTestData(const std::string &output_path);
 };
 

@@ -48,6 +48,7 @@ struct Variable {
   }
 };
 
+/** Pose 3D variable **/
 struct Pose3dVar : Variable {
   Pose3dVar() : Variable(POSE3D, -1) {}
   Pose3dVar(VarId id) : Variable{POSE3D, id} {}
@@ -56,6 +57,7 @@ struct Pose3dVar : Variable {
   }
 };
 
+/** Point 3D variable **/
 struct Point3dVar : Variable {
   Point3dVar() : Variable(POINT3D, -1) {}
   Point3dVar(VarId id) : Variable{POINT3D, id} {}

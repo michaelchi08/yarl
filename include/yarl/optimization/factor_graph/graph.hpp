@@ -14,6 +14,7 @@
 
 namespace yarl {
 
+/** Factor Graph **/
 class FactorGraph {
 public:
   std::map<VarId, Variable *> variables;
@@ -33,6 +34,7 @@ public:
     }
   }
 
+  /** Add variable **/
   int addVariable(Variable *var) {
     auto retval = this->variables.insert({var->id, var});
     if (retval.second == false) {
@@ -41,11 +43,20 @@ public:
     return 0;
   }
 
-  void addFactor(Factor *fac) {
+  /** Add factor **/
+  int addFactor(Factor *fac) {
+    // pre-check
+    if (fac->valid == false) {
+      return -1;
+    }
+
+    // add factor
     this->factors.push_back(fac);
     for (auto var : fac->variables) {
       this->addVariable(var);
     }
+
+    return 0;
   }
 };
 
