@@ -1,7 +1,6 @@
 #include "yarl/optimization/ceres/ba.hpp"
 
 namespace yarl {
-namespace ceres {
 
 int BundleAdjustment::configure(Mat3 K, MatX x1_pts, MatX x2_pts) {
   this->configured = true;
@@ -31,35 +30,25 @@ int BundleAdjustment::configure(Mat3 K, MatX x1_pts, MatX x2_pts) {
   }
 
   // initialize 3D points (x, y, z)
-  Vec3 pt;
-  Vec3 x1;
-  Mat3 K_inv;
-
-  K_inv = this->K.inverse();
+  Mat3 K_inv = this->K.inverse();
   for (int i = 0; i < this->x1_pts.rows(); i++) {
-    x1 << this->x1_pts(i, 0), this->x1_pts(i, 1), 1.0;
-    pt = K_inv * x1;
+    Vec3 x1 = Vec3{this->x1_pts(i, 0), this->x1_pts(i, 1), 1.0};
+    Vec3 pt = K_inv * x1;
 
     this->x[i] = (double *) malloc(sizeof(double) * 3);
-    this->x[i][0] = pt(0);
-    this->x[i][1] = pt(1);
+    // this->x[i][0] = pt(0);
+    // this->x[i][1] = pt(1);
+    this->x[i][0] = 0;
+    this->x[i][1] = 0;
     this->x[i][2] = 1.0;
   }
 
   return 0;
 }
 
-int BundleAdjustment::solve(MatX pts3d) {
-  Vec2 pt1, pt2;
-  ::ceres::Problem problem;
+int BundleAdjustment::solve() {
+  // optimizer options
   ::ceres::Solver::Options options;
-  ::ceres::Solver::Summary summary;
-  ::ceres::AutoDiffCostFunction<BAResidual, 2, 4, 3, 3> *cost_func;
-  BAResidual *r;
-
-  UNUSED(pts3d);
-
-  // options
   options.max_num_iterations = 200;
   options.use_nonmonotonic_steps = false;
   options.use_inner_iterations = true;
@@ -68,51 +57,60 @@ int BundleAdjustment::solve(MatX pts3d) {
   options.parameter_tolerance = 1e-10;
   options.num_threads = 1;
   options.num_linear_solver_threads = 1;
-  // options.minimizer_progress_to_stdout = true;
+  options.minimizer_progress_to_stdout = true;
 
   ::ceres::LocalParameterization *quat_param;
   quat_param = new ceres::extensions::EigenQuaternionParameterization();
+  ::ceres::Problem problem;
 
   // image 1
   for (int i = 0; i < this->x1_pts.rows(); i++) {
-    pt1 << this->x1_pts(i, 0), this->x1_pts(i, 1);
-    r = new BAResidual(this->K, pt1, true);
+    // build residual
+    Vec2 pt1 = Vec2{this->x1_pts(i, 0), this->x1_pts(i, 1)};
+    auto residual = new BAResidual(this->K, pt1, true);
 
-    cost_func = new ::ceres::AutoDiffCostFunction<
+    // build cost function
+    auto cost_func = new ::ceres::AutoDiffCostFunction<
       BAResidual,
       2,  // size of residual
       4,  // size of 1st parameter - quaternion
       3,  // size of 2nd parameter - camera center (x, y, z)
       3   // size of 3rd parameter - 3d point in world (x, y, z)
-      >(r);
+      >(residual);
+
+    // add to problem
     problem.AddResidualBlock(
       cost_func, NULL, this->q[0], this->c[0], this->x[i]);
   }
   problem.SetParameterization(q[0], quat_param);
 
   // image 2
-  for (int i = 0; i < this->x1_pts.rows(); i++) {
-    pt2 << this->x2_pts(i, 0), this->x2_pts(i, 1);
-    r = new BAResidual(this->K, pt2, false);
+  for (int i = 0; i < this->x2_pts.rows(); i++) {
+    // build residual
+    Vec2 pt2 = Vec2{this->x2_pts(i, 0), this->x2_pts(i, 1)};
+    auto residual = new BAResidual(this->K, pt2, false);
 
-    cost_func = new ::ceres::AutoDiffCostFunction<
+    // build cost function
+    auto cost_func = new ::ceres::AutoDiffCostFunction<
       BAResidual,
       2,  // size of residual
       4,  // size of 1st parameter - quaternion
       3,  // size of 2nd parameter - camera center (x, y, z)
       3   // size of 3rd parameter - 3d point in world (x, y, z)
-      >(r);
+      >(residual);
+
+    // add to problem
     problem.AddResidualBlock(
       cost_func, NULL, this->q[1], this->c[1], this->x[i]);
   }
   problem.SetParameterization(q[1], quat_param);
 
   // solve
+  ::ceres::Solver::Summary summary;
   ::ceres::Solve(options, &problem, &summary);
   std::cout << summary.FullReport() << "\n";
 
   return 0;
 }
 
-}  // end of ceres namespace
 }  // namespace yarl
