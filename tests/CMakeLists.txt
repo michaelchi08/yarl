@@ -33,6 +33,7 @@ ADD_EXECUTABLE(
   vision/chessboard_test.cpp
   vision/dataset_test.cpp
   vision/eight_point_test.cpp
+  vision/models_test.cpp
   vision/utils_test.cpp
   vision/vo_test.cpp
   # TEST RUNNER

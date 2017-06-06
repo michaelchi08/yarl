@@ -9,8 +9,8 @@
     <cy>320.0</cy>
     <hz>10</hz>
   </camera>
-  <feature_points>
-    <nb_features>5000</nb_features>
+  <landmarks>
+    <nb_landmarks>5000</nb_landmarks>
     <x>
       <min>-20.0</min>
       <max>20.0</max>
@@ -23,5 +23,5 @@
       <min>-1.0</min>
       <max>1.0</max>
     </z>
-  </feature_points>
+  </landmarks>
 </config>

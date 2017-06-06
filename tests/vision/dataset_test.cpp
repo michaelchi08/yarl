@@ -11,6 +11,7 @@ TEST(VOTestCamera, constructor) {
 
   EXPECT_EQ(0, camera.image_width);
   EXPECT_EQ(0, camera.image_height);
+  EXPECT_TRUE(camera.K.isApprox(Mat3::Identity()));
   EXPECT_EQ(0, camera.hz);
 
   EXPECT_EQ(0, camera.dt);
@@ -32,19 +33,18 @@ TEST(VOTestCamera, update) {
 }
 
 TEST(VOTestCamera, checkFeatures) {
-  VOTestCamera camera;
-  MatX features;
-  Vec3 rpy;
-  Vec3 t;
-  std::vector<std::pair<Vec2, Vec3>> observed;
-
   // setup
-  features.resize(4, 1);
-  features.block(0, 0, 4, 1) << 10, 0, 0, 1;
-  rpy << 0, 0, 0;
-  t << 0, 0, 0;
+  Vec3 rpy{0, 0, 0};
+  Vec3 t{0, 0, 0};
+
+  std::map<Vec3, int, VecComparator> landmarks;
+  landmarks.insert({Vec3::Random(), 1});
+  landmarks.insert({Vec3::Random(), 2});
+  landmarks.insert({Vec3::Random(), 3});
+  landmarks.insert({Vec3::Random(), 4});
 
   // clang-format off
+  VOTestCamera camera;
   camera.hz = 60;
   camera.image_width = 640;
   camera.image_height = 640;
@@ -54,7 +54,8 @@ TEST(VOTestCamera, checkFeatures) {
   // clang-format on
 
   // test
-  camera.checkFeatures(0.1, features, rpy, t, observed);
+  std::vector<std::pair<Vec2, int>> observed;
+  camera.checkFeatures(0.1, landmarks, rpy, t, observed);
 }
 
 TEST(VOTestDataset, constructor) {
@@ -81,7 +82,6 @@ TEST(VOTestDataset, configure) {
 TEST(VOTestDataset, simulateVODataset) {
   VOTestDataset dataset;
 
-  remove_dir(TEST_OUTPUT);
   dataset.configure(TEST_CONFIG);
   int retval = dataset.simulateVODataset();
 

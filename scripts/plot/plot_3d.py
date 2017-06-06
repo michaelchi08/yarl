@@ -9,7 +9,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Rectangle
 from matplotlib.patches import PathPatch
 
-DATASET_PATH = "/tmp/test"
+DATASET_PATH = "/tmp/dataset_test"
 FEATURE_DATA_FILE = "features.dat"
 
 

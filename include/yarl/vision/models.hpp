@@ -5,27 +5,39 @@
 
 namespace yarl {
 
+
+/**
+ * Base Camera Model
+ */
+class CameraModel {
+public:
+  Vec3 t;
+  union {
+    Mat3 R;
+    Quaternion q;
+  };
+
+  CameraModel() : t{Vec3::Zero()}, R{Mat3::Identity()} {}
+  CameraModel(const Vec3 &t, const Mat3 &R) : t{t}, R{R} {}
+  CameraModel(const Vec3 &t, const Quaternion &q) : t{t}, q{q} {}
+};
+
 /**
  * Pinhole Camera Model
  */
-class PinholeModel {
+class PinholeModel : public CameraModel {
 public:
   Mat3 K;
-  Mat3 R;
-  Vec3 t;
 
-  PinholeModel()
-    : K{Mat3::Identity()}, R{Mat3::Identity()}, t{Vec3::Zero()} {}
+  PinholeModel() : CameraModel{}, K{Mat3::Identity()} {}
+  explicit PinholeModel(const Mat3 &K) : CameraModel{}, K{K} {}
+  PinholeModel(const Mat3 &K, const Vec3 &t, const Mat3 &R)
+    : CameraModel{t, R}, K{K} {}
 
   /**
    * Project
    */
   int project();
-
-  /**
-   * Normalize
-   */
-  int normalize();
 };
 
 

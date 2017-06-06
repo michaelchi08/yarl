@@ -23,6 +23,27 @@ typedef Eigen::MatrixXd MatX;
 typedef Eigen::Quaterniond Quaternion;
 #endif
 
+/**
+ * Eigen vector comparator
+ */
+struct VecComparator {
+  bool operator()(const VecX &a, const VecX &b) const {
+    return std::lexicographical_compare(
+      a.data(), a.data() + a.size(), b.data(), b.data() + b.size());
+  }
+};
+
+/**
+ * Eigen matrix comparator
+ */
+struct MatComparator {
+  bool operator()(const MatX &a, const MatX &b) const {
+    return std::lexicographical_compare(
+      a.data(), a.data() + a.size(), b.data(), b.data() + b.size());
+  }
+};
+
+
 int sign(double x);
 
 /**

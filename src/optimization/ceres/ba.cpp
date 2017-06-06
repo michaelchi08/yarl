@@ -2,112 +2,60 @@
 
 namespace yarl {
 
-int BundleAdjustment::configure(Mat3 K, MatX x1_pts, MatX x2_pts) {
-  this->configured = true;
+int BundleAdjustment::addCamera(const Mat3 &K,
+                                const MatX &features,
+                                Vec3 &cam_t,
+                                Quaternion &cam_q,
+                                MatX &landmarks) {
+  // create a residual block for each image feature
+  for (int i = 0; i < features.rows(); i++) {
+    // build residual
+    Vec2 feature{features(i, 0), features(i, 1)};
+    auto residual = new BAResidual(K, feature);
 
-  this->K = K;
-  this->x1_pts = x1_pts;
-  this->x2_pts = x2_pts;
+    // build cost function
+    auto cost_func = new ceres::AutoDiffCostFunction<
+      BAResidual,  // Residual type
+      2,           // size of residual
+      4,           // size of 1st parameter - quaternion
+      3,           // size of 2nd parameter - camera center (x, y, z)
+      3            // size of 3rd parameter - 3d point in world (x, y, z)
+      >(residual);
 
-  this->q = (double **) malloc(sizeof(double *) * 2);
-  this->c = (double **) malloc(sizeof(double *) * 2);
-  this->x = (double **) malloc(sizeof(double *) * this->x1_pts.rows());
+    Vec3 lm;
 
-  // initialize quaternion and camera center position
-  for (int i = 0; i < 2; i++) {
-    // quaternion q = (x, y, z, w)
-    this->q[i] = (double *) malloc(sizeof(double) * 4);
-    this->q[i][0] = 0.0;
-    this->q[i][1] = 0.0;
-    this->q[i][2] = 0.0;
-    this->q[i][3] = 1.0;
-
-    // camera center c = (x, y, z)
-    this->c[i] = (double *) malloc(sizeof(double) * 3);
-    this->c[i][0] = 0.0;
-    this->c[i][1] = 0.0;
-    this->c[i][2] = 0.0;
+    // add residual block to problem
+    this->problem.AddResidualBlock(
+      cost_func,              // cost function
+      NULL,                   // loss function
+      cam_q.coeffs().data(),  // camera quaternion
+      cam_t.data(),           // camera translation
+      // landmarks.block(i, 0, 1, 3).data());  // landmark
+      lm.data());  // landmark
   }
 
-  // initialize 3D points (x, y, z)
-  Mat3 K_inv = this->K.inverse();
-  for (int i = 0; i < this->x1_pts.rows(); i++) {
-    Vec3 x1 = Vec3{this->x1_pts(i, 0), this->x1_pts(i, 1), 1.0};
-    Vec3 pt = K_inv * x1;
-
-    this->x[i] = (double *) malloc(sizeof(double) * 3);
-    // this->x[i][0] = pt(0);
-    // this->x[i][1] = pt(1);
-    this->x[i][0] = 0;
-    this->x[i][1] = 0;
-    this->x[i][2] = 1.0;
-  }
+  // add quaternion local parameterization
+  // ceres::LocalParameterization *quat_param;
+  // quat_param = new yarl::EigenQuaternionParameterization();
+  // this->problem.SetParameterization(cam_q.coeffs().data(), quat_param);
 
   return 0;
 }
 
 int BundleAdjustment::solve() {
-  // optimizer options
-  ::ceres::Solver::Options options;
-  options.max_num_iterations = 200;
-  options.use_nonmonotonic_steps = false;
-  options.use_inner_iterations = true;
-  options.preconditioner_type = ::ceres::SCHUR_JACOBI;
-  options.linear_solver_type = ::ceres::SPARSE_SCHUR;
-  options.parameter_tolerance = 1e-10;
-  options.num_threads = 1;
-  options.num_linear_solver_threads = 1;
-  options.minimizer_progress_to_stdout = true;
-
-  ::ceres::LocalParameterization *quat_param;
-  quat_param = new ceres::extensions::EigenQuaternionParameterization();
-  ::ceres::Problem problem;
-
-  // image 1
-  for (int i = 0; i < this->x1_pts.rows(); i++) {
-    // build residual
-    Vec2 pt1 = Vec2{this->x1_pts(i, 0), this->x1_pts(i, 1)};
-    auto residual = new BAResidual(this->K, pt1, true);
-
-    // build cost function
-    auto cost_func = new ::ceres::AutoDiffCostFunction<
-      BAResidual,
-      2,  // size of residual
-      4,  // size of 1st parameter - quaternion
-      3,  // size of 2nd parameter - camera center (x, y, z)
-      3   // size of 3rd parameter - 3d point in world (x, y, z)
-      >(residual);
-
-    // add to problem
-    problem.AddResidualBlock(
-      cost_func, NULL, this->q[0], this->c[0], this->x[i]);
-  }
-  problem.SetParameterization(q[0], quat_param);
-
-  // image 2
-  for (int i = 0; i < this->x2_pts.rows(); i++) {
-    // build residual
-    Vec2 pt2 = Vec2{this->x2_pts(i, 0), this->x2_pts(i, 1)};
-    auto residual = new BAResidual(this->K, pt2, false);
-
-    // build cost function
-    auto cost_func = new ::ceres::AutoDiffCostFunction<
-      BAResidual,
-      2,  // size of residual
-      4,  // size of 1st parameter - quaternion
-      3,  // size of 2nd parameter - camera center (x, y, z)
-      3   // size of 3rd parameter - 3d point in world (x, y, z)
-      >(residual);
-
-    // add to problem
-    problem.AddResidualBlock(
-      cost_func, NULL, this->q[1], this->c[1], this->x[i]);
-  }
-  problem.SetParameterization(q[1], quat_param);
+  // set options
+  this->options.max_num_iterations = 200;
+  this->options.use_nonmonotonic_steps = false;
+  this->options.use_inner_iterations = true;
+  this->options.preconditioner_type = ceres::SCHUR_JACOBI;
+  this->options.linear_solver_type = ceres::SPARSE_SCHUR;
+  this->options.parameter_tolerance = 1e-10;
+  this->options.num_threads = 1;
+  this->options.num_linear_solver_threads = 1;
+  this->options.minimizer_progress_to_stdout = true;
 
   // solve
-  ::ceres::Solver::Summary summary;
-  ::ceres::Solve(options, &problem, &summary);
+  ceres::Solve(this->options, &this->problem, &this->summary);
   std::cout << summary.FullReport() << "\n";
 
   return 0;
