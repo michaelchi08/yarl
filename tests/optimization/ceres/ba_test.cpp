@@ -49,73 +49,129 @@ TEST(BAResidual, test) {
   std::cout << e[1] << std::endl;
 
   EXPECT_TRUE(retval);
-  // EXPECT_FLOAT_EQ(0.0, e[0]);
-  // EXPECT_FLOAT_EQ(0.0, e[1]);
+  EXPECT_FLOAT_EQ(0.0, e[0]);
+  EXPECT_FLOAT_EQ(0.0, e[1]);
 }
 
-TEST(BundleAdjustment, addCamera) {
-  Mat3 K = Mat3::Identity();
-  MatX features = MatX::Random(10, 2);
-  Vec3 cam_t{0.0, 0.0, 0.0};
-  Quaternion cam_q{1.0, 0.0, 0.0, 0.0};
-  MatX landmarks = MatX::Random(10, 3);
+// TEST(BundleAdjustment, addCamera) {
+//   // setup
+//   Mat3 K = Mat3::Identity();
+//   MatX features = MatX::Random(10, 2);
+//   VecX landmark_ids = VecX::Random(10);
+//   Vec3 cam_t{0.0, 0.0, 0.0};
+//   Quaternion cam_q{1.0, 0.0, 0.0, 0.0};
+//   double **landmarks = (double **) malloc(sizeof(double **) * 5);
+//   landmarks[0] = (double *) malloc(sizeof(double *) * 3);
+//   landmarks[1] = (double *) malloc(sizeof(double *) * 3);
+//   landmarks[2] = (double *) malloc(sizeof(double *) * 3);
+//   landmarks[3] = (double *) malloc(sizeof(double *) * 3);
+//   landmarks[4] = (double *) malloc(sizeof(double *) * 3);
+//
+//   // test and assert
+//   BundleAdjustment ba;
+//   ba.addCamera(K, features, landmark_ids, cam_t, cam_q, landmarks);
+//
+//   // clean up
+//   free(landmarks[0]);
+//   free(landmarks[1]);
+//   free(landmarks[2]);
+//   free(landmarks[3]);
+//   free(landmarks[4]);
+//   free(landmarks);
+// }
 
-  BundleAdjustment ba;
-  ba.addCamera(K, features, cam_t, cam_q, landmarks);
+static double **build_landmark_matrix(const VOTestDataset &dataset) {
+  size_t nb_landmarks = dataset.landmarks.size();
+  double **landmarks = (double **) malloc(sizeof(double *) * nb_landmarks);
+
+  for (auto landmark : dataset.landmarks) {
+    int landmark_id = landmark.second;
+    Vec3 point = landmark.first;
+
+    landmarks[landmark_id] = (double *) malloc(sizeof(double) * 3);
+    landmarks[landmark_id][0] = point(0);
+    landmarks[landmark_id][1] = point(1);
+    landmarks[landmark_id][2] = point(2);
+  }
+
+  return landmarks;
+}
+
+static VecX build_landmark_ids(
+  const std::vector<std::pair<Vec2, int>> &features_observed) {
+  VecX landmark_ids{features_observed.size()};
+
+  for (size_t i = 0; i < features_observed.size(); i++) {
+    landmark_ids(i) = features_observed[i].second;
+  }
+
+  return landmark_ids;
+}
+
+static MatX build_feature_matrix(
+  const std::vector<std::pair<Vec2, int>> &features_observed) {
+  MatX features(features_observed.size(), 2);
+
+  for (size_t i = 0; i < features_observed.size(); i++) {
+    features.block(i, 0, 1, 2) = features_observed[i].first.transpose();
+  }
+
+  return features;
+}
+
+static void print_vector3(double *vector) {
+  std::cout << "(";
+  std::cout << vector[0] << ", ";
+  std::cout << vector[1] << ", ";
+  std::cout << vector[2];
+  std::cout << ")" << std::endl;
 }
 
 TEST(BundleAdjustment, solve) {
-  // int retval;
+  // create vo dataset
+  VOTestDataset dataset;
+  dataset.configure(TEST_CONFIG);
+  dataset.simulateVODataset();
+  double **landmarks = build_landmark_matrix(dataset);
 
-  // // create vo dataset
-  // VOTestDataset dataset;
-  // dataset.configure(TEST_CONFIG);
-  // dataset.simulateVODataset();
-  //
-  // // build bundle adjustment problem
-  // BundleAdjustment ba;
-  // std::vector<Vec3> translations;
-  // std::vector<Quaternion> rotations;
+  // build bundle adjustment problem
+  BundleAdjustment ba;
+  std::vector<double *> translations;
+  std::vector<double *> rotations;
 
-  // for (auto features : dataset.features_observed) {
-  //   // translation
-  //   Vec3 t{0.0, 0.0, 0.0};
-  //   translations.push_back(t);
-  //
-  //   // rotation
-  //   Quaternion q{1.0, 0.0, 0.0, 0.0};
-  //   rotations.push_back(q);
-  //
-  //   // add camera
-  //   // ba.addCamera(dataset.camera.K, t, q, landmarks, features.first);
-  // }
+  // for (size_t i = 0; i < dataset.robot_state.size(); i++) {
+  for (size_t i = 0; i < 2; i++) {
+    // translation
+    Vec3 t = dataset.robot_state[i].second;
+    double *t_vec = (double *) malloc(sizeof(double *) * 3);
+    t_vec[0] = t(0);
+    t_vec[1] = t(1);
+    t_vec[2] = 0.0;
+    translations.push_back(t_vec);
+
+    // rotation
+    Quaternion q = Eigen::AngleAxisd(0.0, Vec3::UnitX()) *
+                   Eigen::AngleAxisd(0.0, Vec3::UnitY()) *
+                   Eigen::AngleAxisd(t(2), Vec3::UnitZ());
+    double *q_vec = (double *) malloc(sizeof(double *) * 4);
+    q_vec[0] = q.x();
+    q_vec[1] = q.y();
+    q_vec[2] = q.z();
+    q_vec[3] = q.w();
+    rotations.push_back(q_vec);
+
+    // // add camera
+    VecX landmark_ids = build_landmark_ids(dataset.features_observed[i]);
+    MatX features = build_feature_matrix(dataset.features_observed[i]);
+    ba.addCamera(
+      dataset.camera.K, features, landmark_ids, t_vec, q_vec, landmarks);
+  }
 
   // test
-  // struct timespec t;
+  ba.solve();
 
-  // tic(&t);
-  // ba.solve();
-
-  // std::cout << mtoc(&t) << " ms" << std::endl << std::endl;
-  //
-  // std::cout << "q: (";
-  // std::cout << ba.q[1][0] << ", ";
-  // std::cout << ba.q[1][1] << ", ";
-  // std::cout << ba.q[1][2] << ", ";
-  // std::cout << ba.q[1][3] << ")";
-  // std::cout << std::endl;
-  //
-  // std::cout << "c: (";
-  // std::cout << ba.c[1][0] << ", ";
-  // std::cout << ba.c[1][1] << ", ";
-  // std::cout << ba.c[1][2] << ")";
-  // std::cout << std::endl;
-  //
-  // std::cout << "x: (";
-  // std::cout << ba.x[1][0] << ", ";
-  // std::cout << ba.x[1][1] << ", ";
-  // std::cout << ba.x[1][2] << ")";
-  // std::cout << std::endl;
+  print_vector3(translations[0]);
+  print_vector3(translations[1]);
 }
 
 }  // namespace yarl

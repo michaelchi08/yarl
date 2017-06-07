@@ -82,9 +82,10 @@ public:
 
   int addCamera(const Mat3 &K,
                 const MatX &features,
-                Vec3 &cam_t,
-                Quaternion &cam_q,
-                MatX &landmarks);
+                const VecX &landmark_ids,
+                double *cam_t,
+                double *cam_q,
+                double **landmarks);
   int solve();
 };
 
