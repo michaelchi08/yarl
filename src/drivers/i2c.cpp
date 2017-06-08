@@ -1,6 +1,5 @@
 #include "yarl/drivers/i2c.hpp"
 
-
 namespace yarl {
 namespace drivers {
 

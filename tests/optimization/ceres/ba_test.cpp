@@ -20,7 +20,11 @@ TEST(BAResidual, constructor) {
 
   // TEST CONSTRUCTOR WITH PARAMETERS
   Mat3 K;
-  K << 1.0, 0.0, 3.0, 0.0, 2.0, 4.0, 0.0, 0.0, 1.0;
+  // clang-format off
+  K << 1.0, 0.0, 3.0,
+       0.0, 2.0, 4.0,
+       0.0, 0.0, 1.0;
+  // clang-format on
   Vec2 x = Vec2{130, 62};
 
   BAResidual residual2(K, x);
@@ -41,8 +45,7 @@ TEST(BAResidual, test) {
   double x[3] = {10.0, 10.0, 1.0};
   double e[2] = {0.0, 0.0};
 
-  BAResidual residual;
-  residual = BAResidual(K, p);
+  auto residual = BAResidual(K, p);
   bool retval = residual(q, c, x, e);
 
   std::cout << e[0] << std::endl;
@@ -127,6 +130,15 @@ static void print_vector3(double *vector) {
   std::cout << ")" << std::endl;
 }
 
+static void print_vector4(double *vector) {
+  std::cout << "(";
+  std::cout << vector[0] << ", ";
+  std::cout << vector[1] << ", ";
+  std::cout << vector[2] << ", ";
+  std::cout << vector[3];
+  std::cout << ")" << std::endl;
+}
+
 TEST(BundleAdjustment, solve) {
   // create vo dataset
   VOTestDataset dataset;
@@ -139,39 +151,78 @@ TEST(BundleAdjustment, solve) {
   std::vector<double *> translations;
   std::vector<double *> rotations;
 
-  // for (size_t i = 0; i < dataset.robot_state.size(); i++) {
-  for (size_t i = 0; i < 2; i++) {
-    // translation
-    Vec3 t = dataset.robot_state[i].second;
-    double *t_vec = (double *) malloc(sizeof(double *) * 3);
-    t_vec[0] = t(0);
-    t_vec[1] = t(1);
-    t_vec[2] = 0.0;
-    translations.push_back(t_vec);
+  Vec2 feature = dataset.features_observed[0][0].first;
+  int landmark_id = dataset.features_observed[0][0].second;
+  BAResidual residual{dataset.camera.K, feature};
 
-    // rotation
-    Quaternion q = Eigen::AngleAxisd(0.0, Vec3::UnitX()) *
-                   Eigen::AngleAxisd(0.0, Vec3::UnitY()) *
-                   Eigen::AngleAxisd(t(2), Vec3::UnitZ());
-    double *q_vec = (double *) malloc(sizeof(double *) * 4);
-    q_vec[0] = q.x();
-    q_vec[1] = q.y();
-    q_vec[2] = q.z();
-    q_vec[3] = q.w();
-    rotations.push_back(q_vec);
+  std::cout << dataset.camera.K << std::endl;
 
-    // // add camera
-    VecX landmark_ids = build_landmark_ids(dataset.features_observed[i]);
-    MatX features = build_feature_matrix(dataset.features_observed[i]);
-    ba.addCamera(
-      dataset.camera.K, features, landmark_ids, t_vec, q_vec, landmarks);
-  }
+  Vec3 t = dataset.robot_state[0].second;
+  double *t_vec = (double *) malloc(sizeof(double *) * 3);
+  t_vec[0] = -t(1);
+  t_vec[1] = 0.0;
+  t_vec[2] = t(0);
 
-  // test
-  ba.solve();
+  Quaternion q = Eigen::AngleAxisd(0.0, Vec3::UnitX()) *
+                 Eigen::AngleAxisd(0.0, Vec3::UnitY()) *
+                 Eigen::AngleAxisd(0.0, Vec3::UnitZ());
+  double *q_vec = (double *) malloc(sizeof(double *) * 4);
+  q_vec[0] = q.w();
+  q_vec[1] = q.x();
+  q_vec[2] = q.y();
+  q_vec[3] = q.z();
 
-  print_vector3(translations[0]);
-  print_vector3(translations[1]);
+  print_vector3(t_vec);
+  print_vector4(q_vec);
+
+  double e[2] = {0.0, 0.0};
+  residual(q_vec, t_vec, landmarks[landmark_id], e);
+  std::cout << "landmark_id: " << landmark_id << std::endl;
+  std::cout << "landmark: ";
+  print_vector3(landmarks[landmark_id]);
+  std::cout << std::endl;
+  std::cout << e[0] << std::endl;
+  std::cout << e[1] << std::endl;
+
+  // // for (size_t i = 0; i < dataset.robot_state.size(); i++) {
+  // for (size_t i = 0; i < 2; i++) {
+  //   // translation
+  //   Vec3 t = dataset.robot_state[i].second;
+  //   double *t_vec = (double *) malloc(sizeof(double *) * 3);
+  //   // t_vec[0] = t(0);
+  //   // t_vec[1] = t(1);
+  //   // t_vec[2] = 0.0;
+  //   t_vec[0] = -t(1);
+  //   t_vec[1] = 0.0;
+  //   t_vec[2] = t(0);
+  //   translations.push_back(t_vec);
+  //
+  //   // rotation
+  //   // Quaternion q = Eigen::AngleAxisd(0.0, Vec3::UnitX()) *
+  //   //                Eigen::AngleAxisd(0.0, Vec3::UnitY()) *
+  //   //                Eigen::AngleAxisd(t(2), Vec3::UnitZ());
+  //   Quaternion q = Eigen::AngleAxisd(0.0, Vec3::UnitX()) *
+  //                  Eigen::AngleAxisd(-t(2), Vec3::UnitY()) *
+  //                  Eigen::AngleAxisd(0.0, Vec3::UnitZ());
+  //   double *q_vec = (double *) malloc(sizeof(double *) * 4);
+  //   q_vec[0] = q.x();
+  //   q_vec[1] = q.y();
+  //   q_vec[2] = q.z();
+  //   q_vec[3] = q.w();
+  //   rotations.push_back(q_vec);
+  //
+  //   // // add camera
+  //   VecX landmark_ids = build_landmark_ids(dataset.features_observed[i]);
+  //   MatX features = build_feature_matrix(dataset.features_observed[i]);
+  //   ba.addCamera(
+  //     dataset.camera.K, features, landmark_ids, t_vec, q_vec, landmarks);
+  // }
+  //
+  // // test
+  // ba.solve();
+  //
+  // print_vector3(translations[0]);
+  // print_vector3(translations[1]);
 }
 
 }  // namespace yarl

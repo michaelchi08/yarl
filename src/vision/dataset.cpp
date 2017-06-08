@@ -134,7 +134,7 @@ int VOTestDataset::outputLandmarks(const std::string &output_path) {
   for (auto const &landmark : this->landmarks) {
     Vec3 point = landmark.first;
     int landmark_id = landmark.second;
-    data.block(landmark_id, 0, 1, 3) = point;
+    data.block(landmark_id, 0, 1, 3) = point.transpose();
   }
 
   // output landmarks to file
@@ -265,7 +265,6 @@ int VOTestDataset::simulateVODataset() {
   for (int i = 0; i < 300; i++) {
     // update state
     Vec3 x = robot.update(u, dt);
-    time += dt;
 
     // check features
     Vec3 rpy = Vec3{0.0, 0.0, x(2)};
@@ -273,16 +272,20 @@ int VOTestDataset::simulateVODataset() {
     std::vector<std::pair<Vec2, int>> observed;
 
     // convert rpy and t from NWU to EDN coordinate system
-    Vec3 rpy_edn, t_edn;
+    Vec3 rpy_edn, t_edn, x_edn;
     nwu2edn(rpy, rpy_edn);
     nwu2edn(t, t_edn);
+    nwu2edn(x, x_edn);
 
     int retval = this->camera.checkFeatures(
       dt, this->landmarks, rpy_edn, t_edn, observed);
     if (retval == 0) {
-      this->robot_state.push_back({time, x});
+      this->robot_state.push_back({time, x_edn});
       this->features_observed.push_back(observed);
     }
+
+    // update
+    time += dt;
   }
 
   return 0;
@@ -308,7 +311,7 @@ int VOTestDataset::generateTestData(const std::string &output_dir) {
 
   // output synthetic vo dataset
   this->simulateVODataset();
-  // check(this->outputLandmarks(output_dir + "/landmarks.dat") == 0, error);
+  check(this->outputLandmarks(output_dir + "/landmarks.dat") == 0, error);
   check(this->outputRobotState(output_dir + "/state.dat") == 0, error);
   check(this->outputObservedFeatures(output_dir) == 0, error);
 

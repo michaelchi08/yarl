@@ -5,7 +5,6 @@
 
 #include <ceres/ceres.h>
 
-#include "yarl/optimization/ceres/extensions.hpp"
 #include "yarl/utils/utils.hpp"
 
 namespace yarl {
@@ -32,13 +31,25 @@ public:
                   T *residual) const {
     // build camera intrinsics matrix K
     Eigen::Matrix<T, 3, 3> K;
-    K(0, 0) = T(this->fx);
+    // K(0, 0) = T(this->fx);
+    // K(0, 1) = T(0.0);
+    // K(0, 2) = T(this->cx);
+    //
+    // K(1, 0) = T(0.0);
+    // K(1, 1) = T(this->fy);
+    // K(1, 2) = T(this->cy);
+    //
+    // K(2, 0) = T(0.0);
+    // K(2, 1) = T(0.0);
+    // K(2, 2) = T(1.0);
+
+    K(0, 0) = T(1.0);
     K(0, 1) = T(0.0);
-    K(0, 2) = T(this->cx);
+    K(0, 2) = T(0.0);
 
     K(1, 0) = T(0.0);
-    K(1, 1) = T(this->fy);
-    K(1, 2) = T(this->cy);
+    K(1, 1) = T(1.0);
+    K(1, 2) = T(0.0);
 
     K(2, 0) = T(0.0);
     K(2, 1) = T(0.0);
@@ -47,6 +58,9 @@ public:
     // build rotation matrix from quaternion q = (w, x, y, z)
     Eigen::Quaternion<T> q{cam_q[3], cam_q[0], cam_q[1], cam_q[2]};
     Eigen::Matrix<T, 3, 3> R = q.toRotationMatrix();
+    std::cout << R(0, 0) << std::endl;
+    std::cout << R(1, 1) << std::endl;
+    std::cout << R(2, 2) << std::endl;
 
     // build translation vector
     Eigen::Matrix<T, 3, 1> C{cam_t[0], cam_t[1], cam_t[2]};
@@ -67,6 +81,9 @@ public:
     // diff between measured and estimated projection point
     residual[0] = ceres::abs(T(this->x) - est_pixel(0));
     residual[1] = ceres::abs(T(this->y) - est_pixel(1));
+
+    printf("predicted: (%f, %f)\n", est_pixel(0), est_pixel(1));
+    printf("actual: (%f, %f)\n", this->x, this->y);
 
     return true;
   }

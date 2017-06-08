@@ -29,5 +29,5 @@ double PID::update(double setpoint, double actual, double dt) {
   return output;
 }
 
-}  // end of control namespace
+}  // namespace control
 }  // namespace yarl
