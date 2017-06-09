@@ -29,11 +29,11 @@ public:
     : image_width{image_width}, image_height{image_height}, K{K}, hz{hz} {}
 
   bool update(double dt);
-  int checkFeatures(double dt,
-                    const std::map<Vec3, int, VecComparator> landmarks,
-                    const Vec3 &rpy,
-                    const Vec3 &t,
-                    std::vector<std::pair<Vec2, int>> &observed);
+  int checkLandmarks(double dt,
+                     const std::map<Vec3, int, VecComparator> &landmarks,
+                     const Vec3 &rpy,
+                     const Vec3 &t,
+                     std::vector<std::pair<Vec2, int>> &observed);
 };
 
 class VOTestDataset {
@@ -55,7 +55,7 @@ public:
   int configure(const std::string &config_file);
   int generateLandmarks();
   int outputLandmarks(const std::string &output_path);
-  int outputObservedFeatures(const std::string &output_path);
+  int outputObserved(const std::string &output_path);
   int outputRobotState(const std::string &output_dir);
   int simulateVODataset();
   int generateTestData(const std::string &output_path);

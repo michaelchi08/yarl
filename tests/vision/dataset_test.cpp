@@ -32,7 +32,7 @@ TEST(VOTestCamera, update) {
   EXPECT_FLOAT_EQ(0.0, camera.dt);
 }
 
-TEST(VOTestCamera, checkFeatures) {
+TEST(VOTestCamera, checkLandmarks) {
   // setup
   Vec3 rpy{0, 0, 0};
   Vec3 t{0, 0, 0};
@@ -55,7 +55,7 @@ TEST(VOTestCamera, checkFeatures) {
 
   // test
   std::vector<std::pair<Vec2, int>> observed;
-  camera.checkFeatures(0.1, landmarks, rpy, t, observed);
+  camera.checkLandmarks(0.1, landmarks, rpy, t, observed);
 }
 
 TEST(VOTestDataset, constructor) {

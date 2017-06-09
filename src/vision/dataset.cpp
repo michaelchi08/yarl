@@ -14,9 +14,9 @@ bool VOTestCamera::update(double dt) {
   return false;
 }
 
-int VOTestCamera::checkFeatures(
+int VOTestCamera::checkLandmarks(
   double dt,
-  const std::map<Vec3, int, VecComparator> landmarks,
+  const std::map<Vec3, int, VecComparator> &landmarks,
   const Vec3 &rpy,
   const Vec3 &t,
   std::vector<std::pair<Vec2, int>> &observed) {
@@ -25,7 +25,7 @@ int VOTestCamera::checkFeatures(
     return 1;
   }
 
-  // create rotation matrix from roll pitch yaw (EDN)
+  // create rotation matrix from roll pitch yaw
   Mat3 R;
   euler2rot(rpy, 123, R);
 
@@ -145,7 +145,7 @@ int VOTestDataset::outputLandmarks(const std::string &output_path) {
   return 0;
 }
 
-int VOTestDataset::outputObservedFeatures(const std::string &output_dir) {
+int VOTestDataset::outputObserved(const std::string &output_dir) {
   // pre-check
   if (this->configured == false) {
     return -1;
@@ -177,8 +177,8 @@ int VOTestDataset::outputObservedFeatures(const std::string &output_dir) {
     Vec3 x = state.second;
     // clang-format off
     obs_file << time << std::endl;             // time
-    obs_file << observed.size() << std::endl;  // number of features
     obs_file << x(0) << "," << x(1) << "," << x(2) << std::endl;  // robot pose
+    obs_file << observed.size() << std::endl;  // number of features
     // clang-format on
 
     // output observed features
@@ -277,10 +277,10 @@ int VOTestDataset::simulateVODataset() {
     nwu2edn(t, t_edn);
     nwu2edn(x, x_edn);
 
-    int retval = this->camera.checkFeatures(
+    int retval = this->camera.checkLandmarks(
       dt, this->landmarks, rpy_edn, t_edn, observed);
     if (retval == 0) {
-      this->robot_state.push_back({time, x_edn});
+      this->robot_state.push_back({time, x});
       this->features_observed.push_back(observed);
     }
 
@@ -313,7 +313,7 @@ int VOTestDataset::generateTestData(const std::string &output_dir) {
   this->simulateVODataset();
   check(this->outputLandmarks(output_dir + "/landmarks.dat") == 0, error);
   check(this->outputRobotState(output_dir + "/state.dat") == 0, error);
-  check(this->outputObservedFeatures(output_dir) == 0, error);
+  check(this->outputObserved(output_dir) == 0, error);
 
   return 0;
 error:

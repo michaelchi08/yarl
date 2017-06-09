@@ -23,7 +23,6 @@ int BundleAdjustment::addCamera(const Mat3 &K,
       3            // size of 3rd parameter - 3d point in world (x, y, z)
       >(residual);
 
-
     // add residual block to problem
     this->problem.AddResidualBlock(
       cost_func,                          // cost function

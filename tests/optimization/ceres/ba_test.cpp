@@ -40,7 +40,7 @@ TEST(BAResidual, test) {
   Mat3 K = Mat3::Identity();
   Vec2 p = Vec2{10, 10};
 
-  double q[4] = {0.0, 0.0, 0.0, 1.0};
+  double q[4] = {1.0, 0.0, 0.0, 0.0};
   double c[3] = {0.0, 0.0, 0.0};
   double x[3] = {10.0, 10.0, 1.0};
   double e[2] = {0.0, 0.0};
@@ -83,45 +83,6 @@ TEST(BAResidual, test) {
 //   free(landmarks);
 // }
 
-static double **build_landmark_matrix(const VOTestDataset &dataset) {
-  size_t nb_landmarks = dataset.landmarks.size();
-  double **landmarks = (double **) malloc(sizeof(double *) * nb_landmarks);
-
-  for (auto landmark : dataset.landmarks) {
-    int landmark_id = landmark.second;
-    Vec3 point = landmark.first;
-
-    landmarks[landmark_id] = (double *) malloc(sizeof(double) * 3);
-    landmarks[landmark_id][0] = point(0);
-    landmarks[landmark_id][1] = point(1);
-    landmarks[landmark_id][2] = point(2);
-  }
-
-  return landmarks;
-}
-
-static VecX build_landmark_ids(
-  const std::vector<std::pair<Vec2, int>> &features_observed) {
-  VecX landmark_ids{features_observed.size()};
-
-  for (size_t i = 0; i < features_observed.size(); i++) {
-    landmark_ids(i) = features_observed[i].second;
-  }
-
-  return landmark_ids;
-}
-
-static MatX build_feature_matrix(
-  const std::vector<std::pair<Vec2, int>> &features_observed) {
-  MatX features(features_observed.size(), 2);
-
-  for (size_t i = 0; i < features_observed.size(); i++) {
-    features.block(i, 0, 1, 2) = features_observed[i].first.transpose();
-  }
-
-  return features;
-}
-
 static void print_vector3(double *vector) {
   std::cout << "(";
   std::cout << vector[0] << ", ";
@@ -139,10 +100,57 @@ static void print_vector4(double *vector) {
   std::cout << ")" << std::endl;
 }
 
+
+static double **build_landmark_matrix(const VOTestDataset &dataset) {
+  size_t nb_landmarks = dataset.landmarks.size();
+  double **landmarks = (double **) malloc(sizeof(double *) * nb_landmarks);
+
+  MatX data = MatX::Zero(nb_landmarks, 3);
+  for (auto const &landmark : dataset.landmarks) {
+    Vec3 point = landmark.first;
+    int landmark_id = landmark.second;
+    data.block(landmark_id, 0, 1, 3) = point.transpose();
+  }
+
+  for (int i = 0; i < data.rows(); i++) {
+    landmarks[i] = (double *) malloc(sizeof(double) * 3);
+
+    Vec3 point = data.block(i, 0, 1, 3).transpose();
+    landmarks[i][0] = -point(1);
+    landmarks[i][1] = -point(2);
+    landmarks[i][2] = point(0);
+  }
+
+  return landmarks;
+}
+
+// static VecX build_landmark_ids(
+//   const std::vector<std::pair<Vec2, int>> &features_observed) {
+//   VecX landmark_ids{features_observed.size()};
+//
+//   for (size_t i = 0; i < features_observed.size(); i++) {
+//     landmark_ids(i) = features_observed[i].second;
+//   }
+//
+//   return landmark_ids;
+// }
+//
+// static MatX build_feature_matrix(
+//   const std::vector<std::pair<Vec2, int>> &features_observed) {
+//   MatX features(features_observed.size(), 2);
+//
+//   for (size_t i = 0; i < features_observed.size(); i++) {
+//     features.block(i, 0, 1, 2) = features_observed[i].first.transpose();
+//   }
+//
+//   return features;
+// }
+
 TEST(BundleAdjustment, solve) {
   // create vo dataset
   VOTestDataset dataset;
   dataset.configure(TEST_CONFIG);
+  // dataset.generateTestData("/tmp/test");
   dataset.simulateVODataset();
   double **landmarks = build_landmark_matrix(dataset);
 
@@ -155,28 +163,32 @@ TEST(BundleAdjustment, solve) {
   int landmark_id = dataset.features_observed[0][0].second;
   BAResidual residual{dataset.camera.K, feature};
 
-  std::cout << dataset.camera.K << std::endl;
-
   Vec3 t = dataset.robot_state[0].second;
+  Vec3 t_edn;
+  nwu2edn(Vec3{t(0), t(1), 0.0}, t_edn);
   double *t_vec = (double *) malloc(sizeof(double *) * 3);
-  t_vec[0] = -t(1);
-  t_vec[1] = 0.0;
-  t_vec[2] = t(0);
+  t_vec[0] = t_edn(0);
+  t_vec[1] = t_edn(1);
+  t_vec[2] = t_edn(2);
 
-  Quaternion q = Eigen::AngleAxisd(0.0, Vec3::UnitX()) *
-                 Eigen::AngleAxisd(0.0, Vec3::UnitY()) *
-                 Eigen::AngleAxisd(0.0, Vec3::UnitZ());
+  Vec3 euler{0.0, 0.0, t(2)};
+  Vec3 euler_edn;
+  nwu2edn(euler, euler_edn);
+  Quaternion q;
+  euler2quat(euler_edn, 123, q);
   double *q_vec = (double *) malloc(sizeof(double *) * 4);
   q_vec[0] = q.w();
   q_vec[1] = q.x();
   q_vec[2] = q.y();
   q_vec[3] = q.z();
-
-  print_vector3(t_vec);
+  std::cout << "quaternion: ";
   print_vector4(q_vec);
 
   double e[2] = {0.0, 0.0};
   residual(q_vec, t_vec, landmarks[landmark_id], e);
+  std::cout << "t_edn: " << t_edn.transpose() << std::endl;
+  std::cout << "euler_edn: " << euler_edn.transpose() << std::endl;
+  std::cout << "feature: " << feature.transpose() << std::endl;
   std::cout << "landmark_id: " << landmark_id << std::endl;
   std::cout << "landmark: ";
   print_vector3(landmarks[landmark_id]);
