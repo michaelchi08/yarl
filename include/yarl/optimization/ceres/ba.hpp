@@ -52,31 +52,31 @@ public:
     K(2, 2) = T(1.0);
 
     // build rotation matrix from quaternion q = (w, x, y, z)
-    // Eigen::Quaternion<T> q{cam_q[0], cam_q[1], cam_q[2], cam_q[3]};
-    // Eigen::Matrix<T, 3, 3> R = q.toRotationMatrix();
+    Eigen::Quaternion<T> q{cam_q[0], cam_q[1], cam_q[2], cam_q[3]};
+    Eigen::Matrix<T, 3, 3> R = q.toRotationMatrix();
 
-    // rotation matrix from quaternion q = (x, y, z, w)
-    Eigen::Matrix<T, 3, 3> R;
-    T qw = cam_q[0];
-    T qx = cam_q[1];
-    T qy = cam_q[2];
-    T qz = cam_q[3];
-
-    T qx2 = pow(qx, 2);
-    T qy2 = pow(qy, 2);
-    T qz2 = pow(qz, 2);
-
-    R(0, 0) = T(1.0) - T(2.0) * qy2 - T(2.0) * qz2;
-    R(0, 1) = T(2.0) * qx * qy + T(2.0) * qz * qw;
-    R(0, 2) = T(2.0) * qx * qz - T(2.0) * qy * qw;
-
-    R(1, 0) = T(2.0) * qx * qy - T(2.0) * qz * qw;
-    R(1, 1) = T(1.0) - T(2.0) * qx2 - T(2.0) * qz2;
-    R(1, 2) = T(2.0) * qy * qz + T(2.0) * qx * qw;
-
-    R(2, 0) = T(2.0) * qx * qz + T(2.0) * qy * qw;
-    R(2, 1) = T(2.0) * qy * qz - T(2.0) * qx * qw;
-    R(2, 2) = T(1.0) - T(2.0) * qx2 - T(2.0) * qy2;
+    // rotation matrix from quaternion q = (w, x, y, z)
+    // Eigen::Matrix<T, 3, 3> R;
+    // T qw = cam_q[0];
+    // T qx = cam_q[1];
+    // T qy = cam_q[2];
+    // T qz = cam_q[3];
+    //
+    // T qx2 = pow(qx, 2);
+    // T qy2 = pow(qy, 2);
+    // T qz2 = pow(qz, 2);
+    //
+    // R(0, 0) = T(1.0) - T(2.0) * qy2 - T(2.0) * qz2;
+    // R(0, 1) = T(2.0) * qx * qy + T(2.0) * qz * qw;
+    // R(0, 2) = T(2.0) * qx * qz - T(2.0) * qy * qw;
+    //
+    // R(1, 0) = T(2.0) * qx * qy - T(2.0) * qz * qw;
+    // R(1, 1) = T(1.0) - T(2.0) * qx2 - T(2.0) * qz2;
+    // R(1, 2) = T(2.0) * qy * qz + T(2.0) * qx * qw;
+    //
+    // R(2, 0) = T(2.0) * qx * qz + T(2.0) * qy * qw;
+    // R(2, 1) = T(2.0) * qy * qz - T(2.0) * qx * qw;
+    // R(2, 2) = T(1.0) - T(2.0) * qx2 - T(2.0) * qy2;
 
     // build translation vector
     Eigen::Matrix<T, 3, 1> C{cam_t[0], cam_t[1], cam_t[2]};
@@ -85,7 +85,7 @@ public:
     Eigen::Matrix<T, 3, 1> X{world_pt[0], world_pt[1], world_pt[2]};
 
     // project 3D point to image plane
-    Eigen::Matrix<T, 3, 1> est = K * R * (X - C);
+    Eigen::Matrix<T, 3, 1> est = K * R.transpose() * (X - C);
 
     // convert projected 2d point in homogenous coordinates to image
     // coordinates

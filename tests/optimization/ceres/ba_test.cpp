@@ -174,6 +174,11 @@ TEST(BundleAdjustment, solve) {
   Vec3 euler{0.0, 0.0, t(2)};
   Vec3 euler_edn;
   nwu2edn(euler, euler_edn);
+
+  // Quaternion q = Eigen::AngleAxisd(euler_edn(0), Vec3::UnitX()) *
+  //                Eigen::AngleAxisd(euler_edn(1), Vec3::UnitY()) *
+  //                Eigen::AngleAxisd(euler_edn(2), Vec3::UnitZ());
+
   Quaternion q;
   euler2quat(euler_edn, 123, q);
   double *q_vec = (double *) malloc(sizeof(double *) * 4);
