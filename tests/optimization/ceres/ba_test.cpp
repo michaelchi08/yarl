@@ -179,15 +179,21 @@ TEST(BundleAdjustment, solve) {
     Vec3 t_edn;
     nwu2edn(Vec3{t(0), t(1), 0.0}, t_edn);
     double *t_vec = (double *) malloc(sizeof(double *) * 3);
-    t_vec[0] = t_edn(0);
-    t_vec[1] = t_edn(1);
-    t_vec[2] = t_edn(2);
+    // t_vec[0] = t_edn(0);
+    // t_vec[1] = t_edn(1);
+    // t_vec[2] = t_edn(2);
+    t_vec[0] = t_edn(0) + randf(-0.1, 0.1);
+    t_vec[1] = t_edn(1) + randf(-0.1, 0.1);
+    t_vec[2] = t_edn(2) + randf(-0.1, 0.1);
     translations.push_back(t_vec);
 
     // rotation
     Vec3 euler{0.0, 0.0, t(2)};
     Vec3 euler_edn;
     nwu2edn(euler, euler_edn);
+    euler_edn(0) = euler_edn(0) + randf(-0.1, 0.1);
+    euler_edn(1) = euler_edn(1) + randf(-0.1, 0.1);
+    euler_edn(2) = euler_edn(2) + randf(-0.1, 0.1);
 
     Quaternion q;
     euler2quat(euler_edn, 123, q);
@@ -207,7 +213,7 @@ TEST(BundleAdjustment, solve) {
   }
 
   // test
-  // ba.solve();
+  ba.solve();
 
   // clean up
   free_2darray(landmarks, dataset.landmarks.size());
