@@ -77,42 +77,83 @@ void load_matrix(const MatX &A, std::vector<double> &x) {
 }
 
 int euler2quat(const Vec3 &euler, int euler_seq, Quaternion &q) {
-  double alpha, beta, gamma;
-  double c1, c2, c3, s1, s2, s3;
+  // double alpha, beta, gamma;
+  // double c1, c2, c3, s1, s2, s3;
+  // double w, x, y, z;
+  //
+  // alpha = euler(0);
+  // beta = euler(1);
+  // gamma = euler(2);
+  //
+  // c1 = cos(alpha / 2.0);
+  // c2 = cos(beta / 2.0);
+  // c3 = cos(gamma / 2.0);
+  // s1 = sin(alpha / 2.0);
+  // s2 = sin(beta / 2.0);
+  // s3 = sin(gamma / 2.0);
+  //
+  // switch (euler_seq) {
+  //   case 123:
+  //     // euler 1-2-3 to quaternion
+  //     w = c1 * c2 * c3 - s1 * s2 * s3;
+  //     x = s1 * c2 * c3 + c1 * s2 * s3;
+  //     y = c1 * s2 * c3 - s1 * c2 * s3;
+  //     z = c1 * c2 * s3 + s1 * s2 * c3;
+  //     break;
+  //
+  //   case 321:
+  //     // euler 3-2-1 to quaternion
+  //     w = c1 * c2 * c3 + s1 * s2 * s3;
+  //     x = s1 * c2 * c3 - c1 * s2 * s3;
+  //     y = c1 * s2 * c3 + s1 * c2 * s3;
+  //     z = c1 * c2 * s3 - s1 * s2 * c3;
+  //     break;
+  //
+  //   default:
+  //     printf("Error! Invalid euler sequence [%d]\n", euler_seq);
+  //     return -1;
+  //     break;
+  // }
+  //
+  // q.w() = w;
+  // q.x() = x;
+  // q.y() = y;
+  // q.z() = z;
+
   double w, x, y, z;
+  if (euler_seq == 123) {
+    double t1 = euler(0);
+    double t2 = euler(1);
+    double t3 = euler(2);
 
-  alpha = euler(0);
-  beta = euler(1);
-  gamma = euler(2);
+    double c1 = cos(t1 / 2.0);
+    double c2 = cos(t2 / 2.0);
+    double c3 = cos(t3 / 2.0);
+    double s1 = sin(t1 / 2.0);
+    double s2 = sin(t2 / 2.0);
+    double s3 = sin(t3 / 2.0);
 
-  c1 = cos(alpha / 2.0);
-  c2 = cos(beta / 2.0);
-  c3 = cos(gamma / 2.0);
-  s1 = sin(alpha / 2.0);
-  s2 = sin(beta / 2.0);
-  s3 = sin(gamma / 2.0);
+    w = -s1 * s2 * s3 + c1 * c2 * c3;
+    x = s1 * c2 * c3 + s2 * s3 * c1;
+    y = -s1 * s3 * c2 + s2 * c1 * c3;
+    z = s1 * s2 * c3 + s3 * c1 * c2;
 
-  switch (euler_seq) {
-    case 123:
-      // euler 1-2-3 to quaternion
-      w = c1 * c2 * c3 - s1 * s2 * s3;
-      x = s1 * c2 * c3 + c1 * s2 * s3;
-      y = c1 * s2 * c3 - s1 * c2 * s3;
-      z = c1 * c2 * s3 + s1 * s2 * c3;
-      break;
+  } else if (euler_seq == 321) {
+    double t3 = euler(0);
+    double t2 = euler(1);
+    double t1 = euler(2);
 
-    case 321:
-      // euler 3-2-1 to quaternion
-      w = c1 * c2 * c3 + s1 * s2 * s3;
-      x = s1 * c2 * c3 - c1 * s2 * s3;
-      y = c1 * s2 * c3 + s1 * c2 * s3;
-      z = c1 * c2 * s3 - s1 * s2 * c3;
-      break;
+    double c1 = cos(t1 / 2.0);
+    double c2 = cos(t2 / 2.0);
+    double c3 = cos(t3 / 2.0);
+    double s1 = sin(t1 / 2.0);
+    double s2 = sin(t2 / 2.0);
+    double s3 = sin(t3 / 2.0);
 
-    default:
-      printf("Error! Invalid euler sequence [%d]\n", euler_seq);
-      return -1;
-      break;
+    w = s1 * s2 * s3 + c1 * c2 * c3;
+    x = -s1 * s2 * c3 + s3 * c1 * c2;
+    y = s1 * s3 * c2 + s2 * c1 * c3;
+    z = s1 * c2 * c3 - s1 * s3 * c1;
   }
 
   q.w() = w;
@@ -163,7 +204,11 @@ int euler2rot(const Vec3 &euler, int euler_seq, Mat3 &R) {
     return -1;
   }
 
-  R << R11, R12, R13, R21, R22, R23, R31, R32, R33;
+  // clang-format off
+  R << R11, R12, R13,
+       R21, R22, R23,
+       R31, R32, R33;
+  // clang-format on
 
   return 0;
 }

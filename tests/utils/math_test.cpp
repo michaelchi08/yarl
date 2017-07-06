@@ -3,6 +3,36 @@
 
 namespace yarl {
 
+TEST(Utils, sandbox2) {
+  double roll = 0.1;
+  double pitch = 0.2;
+  double yaw = 0.3;
+  Eigen::AngleAxisd rollAngle(roll, Eigen::Vector3d::UnitX());
+  Eigen::AngleAxisd yawAngle(yaw, Eigen::Vector3d::UnitY());
+  Eigen::AngleAxisd pitchAngle(pitch, Eigen::Vector3d::UnitZ());
+  Eigen::Quaternion<double> q1 = rollAngle * pitchAngle * yawAngle;
+
+  Vec3 euler{0.1, 0.2, 0.3};
+  Quaternion q2;
+  euler2quat(euler, 123, q2);
+
+  std::cout << q1.w() << std::endl;
+  std::cout << q1.x() << std::endl;
+  std::cout << q1.y() << std::endl;
+  std::cout << q1.z() << std::endl;
+  std::cout << std::endl;
+
+  std::cout << q2.w() << std::endl;
+  std::cout << q2.x() << std::endl;
+  std::cout << q2.y() << std::endl;
+  std::cout << q2.z() << std::endl;
+
+  // Eigen::Matrix3d rotationMatrix = q.toRotationMatrix();
+  // Vec3 v{1.0, 2.0, 3.0};
+  // std::cout << rotationMatrix << std::endl;
+  // std::cout << rotationMatrix * v.normalized() << std::endl;
+}
+
 TEST(Utils, median) {
   std::vector<double> v;
 
